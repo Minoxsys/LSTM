@@ -7,7 +7,6 @@ using Persistence.Conventions;
 using FluentNHibernate.Cfg.Db;
 using FluentNHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using System.Data.SqlServerCe;
 using System.IO;
 
 namespace IntegrationTests
@@ -28,24 +27,6 @@ namespace IntegrationTests
 
                 return _sessionFactory;
             }
-        }
-
-        private static void ConnectWithSqlCe(FluentConfiguration config)
-        {
-            if (!File.Exists(_databaseFilename))
-            {
-                var engine = new SqlCeEngine(_connectionstring);
-
-                engine.CreateDatabase();
-            }
-
-            config.Database(
-                FluentNHibernate.Cfg.Db.MsSqlCeConfiguration.
-                Standard.
-                ConnectionString(c => c.Is(_connectionstring)
-            ).ShowSql());
-
-            config.ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true));
         }
 
         private static void ConnectWithMySql(FluentConfiguration config)
