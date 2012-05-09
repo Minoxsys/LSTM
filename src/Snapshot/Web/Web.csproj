@@ -147,6 +147,8 @@
   <ItemGroup>
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\DrugstoreController.cs" />
+    <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\CountryController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\DistrictController.cs" />
@@ -1973,6 +1975,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\AnalysisManagement\Models\" />
+    <Folder Include="Areas\MessagesManagement\Models\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
     <Folder Include="Areas\ServicesManagement\Models\" />
   </ItemGroup>
@@ -2040,6 +2043,10 @@
     <Content Include="Areas\ServicesManagement\Views\Shared\_ServicesAdministrationSideBar.cshtml" />
     <Content Include="Areas\ServicesManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ServicesManagement\Views\Web.config" />
+    <Content Include="Areas\MessagesManagement\Views\Web.config" />
+    <Content Include="Areas\MessagesManagement\Views\Drugstore\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\Shared\_MessagesSideBar.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
@@ -2060,6 +2067,7 @@
     <None Include="Assets\sass\panel-template.scss" />
     <None Include="ClassDiagram1.cd" />
     <Content Include="Views\Shared\_EmptySideBar.cshtml" />
+    <Content Include="Views\Shared\_EmptySubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />

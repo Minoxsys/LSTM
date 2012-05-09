@@ -1,5 +1,7 @@
 ﻿@using Web.Areas.OutpostManagement;
 @using Web.Areas.ServicesManagement;
+@using Web.Areas.MessagesManagement;
+@using Web.Areas.MessagesManagement.Controllers;
 @using Web.Areas.ServicesManagement.Controllers;
 @using Web.Areas.OutpostManagement.Controllers;
 @using Web.Areas.AnalysisManagement.Controllers;
@@ -47,7 +49,8 @@
             clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             analysisAndReports: '@(Url.RouteUrl<AnalysisController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
-            diagnosis: '@(Url.RouteUrl<DiagnosisController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))'
+            diagnosis: '@(Url.RouteUrl<DiagnosisController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))',
+            drugstore: '@(Url.RouteUrl<DrugstoreController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))'
         },
         header:{
             id:'Header',
@@ -57,8 +60,7 @@
                 logo: 'Logo',
                 dashboard:'Dashboard',
                 administration: 'Administration',
-                outpostStockLevel: 'OutpostStockLevel',
-                alerts: 'Alerts',
+                drugstore: 'Messages',
                 analysisAndReports:'AnalysisAndReports'
 
             },
@@ -146,7 +148,7 @@
                             },
                             {
                                 xtype: 'button',
-                                id: res.header.navigation.messages,
+                                id: res.header.navigation.drugstore,
                                 height: 70,
                                 padding: '0 0 0 5',
                                 width: 140,
@@ -155,10 +157,10 @@
                                 ui: 'snapshot-navigation-btn',
                                 toggleGroup: res.header.navigation.toggleGroup,
                                 handler: function () {
-                                    navigateTo(res.link.messages);
+                                    navigateTo(res.link.drugstore);
                                 },
                                 enableToggle: true,
-                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Meesages'
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Messages'
                             },
                             {
                                 xtype: 'button',

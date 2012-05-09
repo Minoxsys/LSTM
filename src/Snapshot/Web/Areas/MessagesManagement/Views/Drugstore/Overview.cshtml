@@ -1,0 +1,146 @@
+﻿
+@using Microsoft.Web.Mvc;
+
+@section page_title{
+    Diagnosis Item: Overview
+}
+@{
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_MessagesSideBar");
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+
+        var messagesBtnId = window.res.header.navigation.drugstore;
+        var messagesBtn = Ext.getCmp(messagesBtnId);
+        messagesBtn.toggle(true);
+
+        var drugshopSideBarBtnId = window.res.content.maincontent.sidebar.drugstore;
+        var drugshopBtn = Ext.getCmp(drugshopSideBarBtnId);
+        drugshopBtn.toggle(true);
+
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 0 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                height: 60,
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
+                    height: 70,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/CurrentProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 10'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Messages received from drugstore'
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    height: 80,
+                    items: [{
+                        xtype: 'textfield',
+                        itemId: window.feature.searchProductGroupName,
+                        width: 200,
+                        frame: true,
+                        cls: 'text-field-rounded',
+                        emptyText: 'Message Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                            'keyup': {
+                                fn: function (key) {
+
+                                }
+                            }
+                        }
+                    }]
+
+                }]
+            }, {
+                xtype: 'gridpanel',
+                cls: 'white-border',
+                itemId: window.feature.gridProductGroupId,
+                store: window.feature.diagnosisStore,
+                loadMask: true,
+                disableSelection: true,
+                flex: 3,
+                autoScroll: true,
+                columns: [{
+                    header: "Diagnosis",
+                    dataIndex: 'Name',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    text: "Initials of the person",
+                    dataIndex: 'ProductsNo',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: false
+                }, {
+                    text: "Gender",
+                    dataIndex: 'ProductsNo',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: false
+                }, {
+                    text: "Age",
+                    dataIndex: 'ProductsNo',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: false
+                }, {
+                    text: "Drugshop",
+                    dataIndex: 'ProductsNo',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: false
+                }, {
+                    text: "Date",
+                    dataIndex: 'ProductsNo',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: false
+                }]
+            }]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+    });
+
+</script>
