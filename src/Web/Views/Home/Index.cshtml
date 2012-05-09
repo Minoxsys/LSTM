@@ -1,0 +1,133 @@
+﻿@model Web.Models.Home.IndexModel
+@section page_title{
+Snapshot Application
+}
+
+
+<script type="text/javascript">
+    window.res.header.subnavigation.buttonTabs = {
+        id: 'ButtonTabs',
+        group:'AdministrationButtonsGroup',
+        outpost: 'ButtonTabs-OutpostAdministration-Button',
+        service: 'ButtonTabs-ServiceAdministration-Button',
+        user: 'ButtonTabs-UserAdministration-Button'
+    };
+
+    Ext.onReady(function () {
+        var content = Ext.getCmp(window.res.content.id);
+
+        content.add({
+            xtype: 'image',
+            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/dashboard_image.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+            cls: "dashboard-img",
+            width: 1140,
+            height: 390
+        });
+
+    });
+</script>
+
+
+<script type="text/javascript">
+    Ext.onReady(function () {
+        var subNavRes = window.res.header.subnavigation;
+        var subnav = Ext.getCmp(subNavRes.id);
+
+        subnav.add([{
+            xtype: 'container',
+            id: subNavRes.buttonTabs.id,
+            margin: 0,
+            padding: 0,
+            width: 500,
+            layout: {
+                align: 'stretch',
+                padding: 0,
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                items: [{
+                    xtype: 'label',
+                    html: '&nbsp;' 
+                }]
+            },{
+                xtype: 'container',
+                layout: {
+                    type: 'column'
+                },
+                flex: 1,
+                items: []
+            }]
+        }, {
+           xtype: 'container',
+                id: 'userInfo',
+                flex: 2,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        pack: 'end',
+                        type: 'hbox'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        width: 380,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [{
+                            xtype: 'label',
+                            style:'text-align:right;',  
+                            margin: '25, 20, 7, 0',
+                            text: '@Html.Action("UserDetails","Home")',
+                            cls: 'x-username-label' 
+                        },{
+                            xtype: 'container',
+                            style:'text-align:right;', 
+                            items: [{
+                                xtype: 'label', 
+                                margin: '0, 20, 0, 0',
+                                cls: 'x-userMenu-label',
+                                text: 'Help'
+                            },{
+                                xtype: 'label', 
+                                margin: '0, 20, 0, 0',
+                                cls: 'x-userMenu-label',
+                                text: ' · Account Options ·'
+                            },{
+                                xtype: 'label', 
+                                text: 'Log Out',
+                                margin: '0, 20, 0, 0',
+                                cls: 'x-userMenu-label',
+                                autoEl: {tag: 'a', href: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Account", action = "LogOff" })'}
+                            },{xtype: 'image',
+                                               src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logout.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                              margin: '-4 10 0 -15',
+                                               style: {float:'right'}
+                                           
+                                             }]
+                        }]
+                    },{
+                        xtype: 'container',
+                        margin: '14, 0, 0, 0',
+                        itemId: 'userPhoto',
+                        width: 161,
+                        items: [{ 
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+                        }]
+                    }]
+                }]
+            }]);
+                        
+        subnav.ownerCt.doLayout();
+
+    });
+</script>

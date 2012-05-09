@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="PrepareDeployment" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<BuildDirectory>Web</BuildDirectory>
+		<DeploymentDirectory>..\deploy\evozonhr</DeploymentDirectory>
+	</PropertyGroup>
+	<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+	<Target Name="PrepareDeployment">
+		<ItemGroup>
+			<File Include=".\$(BuildDirectory)\**\*.cshtml" />
+			<File Include=".\$(BuildDirectory)\**\*.config" />
+			<File Include=".\$(BuildDirectory)\*bin*\*.dll" />
+			<File Include=".\$(BuildDirectory)\Global.asax" />
+			<File Include=".\$(BuildDirectory)\Global.asax.cs" />
+			<File Include=".\$(BuildDirectory)\*Assets*\**\*.*" />
+		</ItemGroup>
+		<RemoveDir Directories="$(DeploymentDirectory)"/>
+		<Copy
+			SourceFiles="@(File)"
+			DestinationFolder="$(DeploymentDirectory)\%(RecursiveDir)">
+		</Copy>
+		
+	</Target>
+</Project>

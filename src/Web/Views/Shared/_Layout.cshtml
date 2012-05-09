@@ -1,0 +1,208 @@
+﻿@using Web.Areas.OutpostManagement;
+@using Web.Areas.ServicesManagement;
+@using Web.Areas.ServicesManagement.Controllers;
+@using Web.Areas.OutpostManagement.Controllers;
+@using Web.Areas.AnalysisManagement.Controllers;
+@using Web.Areas.AnalysisManagement;
+@using Web.Bootstrap.Routes;
+
+<!DOCTYPE html>
+    <html>
+<head>
+    <meta charset="utf-8" />
+    <title>@RenderSection("page_title", required: true)</title>
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("theme"), ScriptsRoutesRegistrar.CSS))"
+        rel="stylesheet" type="text/css" media="screen,projection" />
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("button"), ScriptsRoutesRegistrar.CSS))"
+        rel="stylesheet" type="text/css" media="screen,projection" />
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("toolbar"), ScriptsRoutesRegistrar.CSS))"
+        rel="stylesheet" type="text/css" media="screen,projection" />
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("window"), ScriptsRoutesRegistrar.CSS))"
+        rel="stylesheet" type="text/css" media="screen,projection" />
+    <!--[if IE]>
+    <link href="@(Url.RouteUrl<CssController>(req => req.Index("ie"), ScriptsRoutesRegistrar.CSS))"
+        rel="stylesheet" type="text/css" media="screen, projection" />
+    <![endif]-->
+    <script src="@(Url.RouteUrl<JavascriptController>(req => req.Index("frameworks"), ScriptsRoutesRegistrar.JAVASCRIPT))"
+        language="javascript" type="text/javascript"> </script>
+</head>
+<body>
+ <script type="text/javascript">
+    function navigateTo(endpoint){
+        var loc = window.location;
+
+        window.location.href = loc.protocol + '//' +  loc.host + endpoint;
+    }
+    function _t(text){
+        return text;
+    }
+    window.res = {
+        viewport: 'SnapshotViewport',
+        link:{
+            dashboard:'@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "Home", action = "Index" })',
+            administration:'@(Url.RouteUrl<CountryController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            regionOverview:'@(Url.RouteUrl<RegionController>( x => x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            district: '@(Url.RouteUrl<DistrictController>( x=>x.Overview() ,  OutpostManagementAreaRegistration.DEFAULT_ROUTE ))',
+            usersOverview: '@(Url.RouteUrl<UserManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
+            clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
+            rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
+            analysisAndReports: '@(Url.RouteUrl<AnalysisController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
+            diagnosis: '@(Url.RouteUrl<DiagnosisController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))'
+        },
+        header:{
+            id:'Header',
+            navigation:{
+                id:'Navigation',
+                toggleGroup: 'navigation-toggle-group',
+                logo: 'Logo',
+                dashboard:'Dashboard',
+                administration: 'Administration',
+                outpostStockLevel: 'OutpostStockLevel',
+                alerts: 'Alerts',
+                analysisAndReports:'AnalysisAndReports'
+
+            },
+            subnavigation:{
+                id:'SubNavigation'
+            }
+        },
+        content:{
+            id:'Content'
+        }
+    }
+   
+    Ext.onReady(function(){
+        var viewport = Ext.create('Ext.container.Viewport', {
+            id: res.viewport,
+            renderTo:Ext.getBody(),
+                margin: '0 auto',
+                padding: '0',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+             items: [
+                {
+                    xtype: 'container',
+                    scollable: true,
+                    height: 160,
+                    id: res.header.id,
+                    itemId: '',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: [
+                        {
+                            xtype: 'container',
+                            height: 70,
+                            id: res.header.navigation.id,
+                            cls: 'x-add-navigation-gradient',
+                            layout:'column',
+                            items:[
+                            {
+                                xtype: 'container',
+                                height: 70,
+                                margin: '15 60 0 20',
+                                id: res.header.navigation.logo,
+                                padding: 0,
+                                width: 150,
+                                items:[{ xtype: 'image',
+                                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logo.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+                                }]
+                            },
+                            {
+                                xtype: 'button',
+                                id: res.header.navigation.dashboard,
+                                height: 70,
+                                padding: '0 0 0 0',
+                                width: 135,
+                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Dashboard.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconAlign: 'left',
+                                ui: 'snapshot-navigation-btn',
+                                toggleGroup:res.header.navigation.toggleGroup,
+                                enableToggle:true,
+                                pressed:true,
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Dashboard',
+                                 handler:function(){
+                                    navigateTo( res.link.dashboard ); 
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: res.header.navigation.administration,
+                                height: 70,
+                                padding: '0 0 0 5',
+                                width: 170,
+                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Administration.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconAlign: 'left',
+                                ui: 'snapshot-navigation-btn',
+                                toggleGroup:res.header.navigation.toggleGroup,
+                                handler:function(){
+                                    navigateTo( res.link.administration ); 
+                                },
+                                enableToggle:true,
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Administration'
+                            },
+                            {
+                                xtype: 'button',
+                                id: res.header.navigation.messages,
+                                height: 70,
+                                padding: '0 0 0 5',
+                                width: 140,
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/OutpostProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconAlign: 'left',
+                                ui: 'snapshot-navigation-btn',
+                                toggleGroup: res.header.navigation.toggleGroup,
+                                handler: function () {
+                                    navigateTo(res.link.messages);
+                                },
+                                enableToggle: true,
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;Meesages'
+                            },
+                            {
+                                xtype: 'button',
+                                id: res.header.navigation.analysisAndReports,
+                                height: 70,
+                                padding: '0 0 0 5',
+                                width: 215,
+                                icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Menu/Analysis.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                iconAlign: 'left',
+                                ui: 'snapshot-navigation-btn',
+                                toggleGroup:res.header.navigation.toggleGroup,
+                                enableToggle:true,
+                                text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Analysis and Reports',
+                                handler:function(){
+                                    navigateTo( res.link.analysisAndReports ); 
+                                }
+                            }] 
+                        },
+                        {
+                            xtype: 'container',
+                            id: res.header.subnavigation.id,
+                            flex: 1,
+                             layout: {
+                                align: 'stretch',
+                                type: 'hbox'
+                            }
+                        }
+                    ]
+                },
+                {
+                    xtype: 'container',
+                    id: res.content.id,
+                    layout: {
+                        type: 'fit'
+                    },
+                    flex: 1
+                }
+            ]
+        });
+
+    });
+
+    </script>
+
+    @RenderBody()
+</body>
+</html>
