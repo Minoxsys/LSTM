@@ -11,7 +11,8 @@ namespace Migrations
     {
         public override void Down()
         {
-            Delete.RemoveForeignKey("Diagnosis");
+            Delete.RemoveForeignKey("Diagnosiss");
+            Delete.RemoveClientForeignKey("Diagnosiss");
 
             Delete.Table("Diagnosiss");
         }
@@ -21,11 +22,14 @@ namespace Migrations
             Create.Table("Diagnosiss")
                 .WithCommonColumns()
                 .WithClientColumn()
-                .WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("CodeDS").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Display").AsString(ConstraintUtility.NAME_LENGTH);
+                .WithColumn("ServiceNeeded").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+                
+                
 
-            
+            Create.AddForeignKey("Diagnosiss");
+            Create.AddClientForeignKey("Diagnosiss");
         }
     }
 }

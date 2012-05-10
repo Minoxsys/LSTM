@@ -37,26 +37,26 @@ Outpost Management Regions: Overview
         window.feature.formregionnameid = 'formRegionNameTextFieldId';
 
         window.feature.regionStore = Ext.create('Ext.data.Store', {
-            pageSize: 50,
-            remoteSuport: true,
-            fields: ['Id','Name', 'CountryId', 'NumberOfDistricts'],
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetRegions" })',
-                reader: {
-                    type: 'json',
-                    root: 'Regions',
-                    totalProperty: 'TotalItems'
-                },
-                extraParams: { countryId: '' },
-                simpleSortMode: true
-            },
-            remoteSort: true,
-            sorters: [{
-                property: 'Name',
-                direction: 'ASC'
-            }]
-        });
+-            pageSize: 50,
+-            remoteSuport: true,
+-            fields: ['Id','Name', 'CountryId', 'NumberOfDistricts'],
+-            proxy: {
+-                type: 'ajax',
+-                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetRegions" })',
+-                reader: {
+-                    type: 'json',
+-                    root: 'Regions',
+-                    totalProperty: 'TotalItems'
+-                },
+-                extraParams: { countryId: '' },
+-                simpleSortMode: true
+-            },
+-            remoteSort: true,
+-            sorters: [{
+-                property: 'Name',
+-                direction: 'ASC'
+-            }]
+-        });
 
         window.feature.countryStore = Ext.create('Ext.data.Store', {
             remoteSuport: true,

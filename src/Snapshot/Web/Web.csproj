@@ -193,6 +193,10 @@
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\DiagnosisController.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\DiagnosisIndexModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\DiagnosisIndexOuputModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\DiagnosisInputModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\DiagnosisModel.cs" />
     <Compile Include="Areas\ServicesManagement\ServicesManagementAreaRegistration.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
@@ -1977,7 +1981,6 @@
     <Folder Include="Areas\AnalysisManagement\Models\" />
     <Folder Include="Areas\MessagesManagement\Models\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
-    <Folder Include="Areas\ServicesManagement\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

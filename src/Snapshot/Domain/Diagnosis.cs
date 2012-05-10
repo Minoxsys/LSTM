@@ -8,9 +8,9 @@ namespace Domain
 {
     public class Diagnosis : DomainEntity
     {
-        public virtual string Name { get; set; }
-        public virtual string CodeDS { get; set; }
-        public virtual string Display {get; set;}
-
+        public virtual string ServiceNeeded {get; set;}
+        public virtual string Code { get; set; }
+        public virtual string Description { get; set; }
+        public virtual Client Client { get; set; }
     }
 }

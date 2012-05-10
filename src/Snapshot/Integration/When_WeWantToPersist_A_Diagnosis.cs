@@ -10,24 +10,24 @@ namespace IntegrationTests
 {
     public class When_WeWantToPersist_A_Diagnosis : GivenAPersistenceSpecification<Diagnosis>
     {
-        const string DIAGNOSIS_NAME = "Itching";
-        const string DIAGNOSIS_CODEDS = "Symp-1";
-        const string DIAGNOSIS_DISPLAY = "CG+; CG-";
+        const string DIAGNOSIS_CODE = "CG+; CG-";
+        const string DIAGNOSIS_SERVICE = "Chlamydia/Gonorrhoea test/Rx - STI";
+        const string DIAGNOSIS_DESCRIPTION = "Itching";
 
         [Test]
         public void It_ShouldSuccessfullyPersist_A_Country()
         {
 
-            var diagnosis = Specs.CheckProperty(e => e.Name, DIAGNOSIS_NAME)
-                .CheckProperty(c => c.CodeDS, DIAGNOSIS_CODEDS)
-                .CheckProperty(c => c.Display, DIAGNOSIS_DISPLAY)
+            var diagnosis = Specs.CheckProperty(e => e.Description, DIAGNOSIS_DESCRIPTION)
+                .CheckProperty(c => c.Code, DIAGNOSIS_CODE)
+                .CheckProperty(c => c.ServiceNeeded, DIAGNOSIS_SERVICE)
                 .VerifyTheMappings();
 
             Assert.IsNotNull(diagnosis);
             Assert.IsInstanceOf<Guid>(diagnosis.Id);
-            Assert.AreEqual(diagnosis.Name, DIAGNOSIS_NAME);
-            Assert.AreEqual(diagnosis.CodeDS, DIAGNOSIS_CODEDS);
-            Assert.AreEqual(diagnosis.Display, DIAGNOSIS_DISPLAY);
+            Assert.AreEqual(diagnosis.Description, DIAGNOSIS_DESCRIPTION);
+            Assert.AreEqual(diagnosis.Code, DIAGNOSIS_CODE);
+            Assert.AreEqual(diagnosis.ServiceNeeded, DIAGNOSIS_SERVICE);
 
             session.Delete(diagnosis);
             session.Flush();
