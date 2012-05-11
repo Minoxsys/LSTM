@@ -193,10 +193,15 @@
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\DiagnosisController.cs" />
+    <Compile Include="Areas\ServicesManagement\Controllers\TreatmentController.cs" />
     <Compile Include="Areas\ServicesManagement\Models\DiagnosisIndexModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\DiagnosisIndexOuputModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\DiagnosisInputModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\DiagnosisModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\Treatment\TreatmentIndexModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\Treatment\TreatmentIndexOuputModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\Treatment\TreatmentInputModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\Treatment\TreatmentModel.cs" />
     <Compile Include="Areas\ServicesManagement\ServicesManagementAreaRegistration.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
@@ -2050,6 +2055,7 @@
     <Content Include="Areas\MessagesManagement\Views\Drugstore\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\Shared\_MessagesSideBar.cshtml" />
+    <Content Include="Areas\ServicesManagement\Views\Treatment\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

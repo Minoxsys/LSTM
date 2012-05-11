@@ -15,7 +15,7 @@ namespace IntegrationTests
         const string DIAGNOSIS_DESCRIPTION = "Itching";
 
         [Test]
-        public void It_ShouldSuccessfullyPersist_A_Country()
+        public void It_ShouldSuccessfullyPersist_A_Diagnosis()
         {
 
             var diagnosis = Specs.CheckProperty(e => e.Description, DIAGNOSIS_DESCRIPTION)

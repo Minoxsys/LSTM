@@ -131,6 +131,11 @@
     <Compile Include="Unit\Controllers\Areas\ServicesManagement\DiagnosisControllerTests\EditMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\ServicesManagement\DiagnosisControllerTests\GetDiagnosisMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\ServicesManagement\DiagnosisControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\TreatmentControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\TreatmentControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\TreatmentControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\TreatmentControllerTests\GetTreatmentsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\TreatmentControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\ClientManagerControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\ClientManagerControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\ClientManagerControllerTests\EditMethod.cs" />

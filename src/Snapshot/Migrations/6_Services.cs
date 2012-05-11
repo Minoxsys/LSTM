@@ -13,8 +13,11 @@ namespace Migrations
         {
             Delete.RemoveForeignKey("Diagnosiss");
             Delete.RemoveClientForeignKey("Diagnosiss");
-
             Delete.Table("Diagnosiss");
+
+            Delete.RemoveForeignKey("Treatments");
+            Delete.RemoveClientForeignKey("Treatments");
+            Delete.Table("Treatments");
         }
 
         public override void Up()
@@ -26,10 +29,18 @@ namespace Migrations
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
                 
-                
-
             Create.AddForeignKey("Diagnosiss");
             Create.AddClientForeignKey("Diagnosiss");
+
+            Create.Table("Treatments")
+                .WithCommonColumns()
+                .WithClientColumn()
+                .WithColumn("Advice").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+
+            Create.AddForeignKey("Treatments");
+            Create.AddClientForeignKey("Treatments");
         }
     }
 }

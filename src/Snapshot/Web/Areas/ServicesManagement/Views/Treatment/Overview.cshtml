@@ -1,0 +1,372 @@
+﻿@using Web.Areas.ServicesManagement;
+@using Web.Areas.ServicesManagement.Controllers;
+@using Microsoft.Web.Mvc;
+
+@section page_title{
+    Treatment Item: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_ServicesAdministrationSideBar");
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var treatmentSideBarBtnId = window.res.content.maincontent.sidebar.treatment;
+        var treatmentBtn = Ext.getCmp(treatmentSideBarBtnId);
+        treatmentBtn.toggle(true);
+        
+        var serviceAdministrationBtnId = window.res.header.subnavigation.buttonTabs.diagnosis;
+        var serviceAdministrationBtn = Ext.getCmp(serviceAdministrationBtnId);
+        serviceAdministrationBtn.toggle(true);
+        serviceAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.formTreatmentCodeId = "Form-Treatment-Code-Id";
+        window.feature.formTreatmentAdviceId = "Form-Treatment-Service-Needed-Id";
+        itemId: window.feature.formTreatmentDescriptionId = "Form-Treatment-Description-Id";
+        window.feature.searchTreatment = "Search-Treatment-Id";
+
+        window.feature.treatmentStore = Ext.create('Ext.data.Store', {
+            pageSize: 2,
+            fields: ['Id', 'Code', 'Advice', 'Description'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Treatment", action = "GetTreatments" })',
+                reader: {
+                    type: 'json',
+                    root: 'Treatments',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'Code',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.modal = Ext.define('Ext.feature.treatment.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            height: 260,
+            width: 390,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+
+            initComponent: function () {
+                var me = this;
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'Code',
+                        fieldLabel: 'Code',
+                        anchor: '100%',
+                        itemId: window.feature.formTreatmentCodeId
+                    }, {
+                        xtype: 'textfield',
+                        name: 'Advice',
+                        fieldLabel: 'Advice',
+                        anchor: '100%',
+                        itemId: window.feature.formTreatmentAdviceId
+                    }, {
+                        xtype: 'textareafield',
+                        name: 'Description',
+                        fieldLabel: 'Description',
+                        grow: true,
+                        anchor: '100%',
+                        itemId: window.feature.formTreatmentDescriptionId
+                    }]
+                });
+
+                me.callParent(arguments);
+            }
+        });
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function () {
+            window.feature.treatmentStore.loadPage(1);
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 0 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                height: 60,
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
+                    height: 70,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 10'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Treatment'
+                    }, {
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        //disabled: @(ViewBag.HasNoRightsToAdd),
+                        text: 'Add New Treatment',
+                        handler: function () {
+                            var winAdd = new window.feature.modal({
+                                title: 'Add New Treatment',
+                                buttons: [{
+                                    text: 'Cancel',
+                                    margin: '10 10 20 0',
+                                    ui: 'snapshot-cancel-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () { winAdd.close(); winAdd.destroy(); }
+                                }, {
+                                    text: 'Save',
+                                    margin: '0 20 20 10',
+                                    ui: 'snapshot-add-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () {
+                                        var treatmentCode = winAdd.down('#' + window.feature.formTreatmentCodeId);
+                                        var treatmentAdvice = winAdd.down('#' + window.feature.formTreatmentAdviceId);
+                                        var treatmentDescription = winAdd.down('#' + window.feature.formTreatmentDescriptionId);
+
+                                        if (treatmentCode.getValue() == '') {
+                                            treatmentCode.markInvalid('Field Code is required!');
+                                            treatmentCode.setValue(null);
+                                        } else {
+                                            var values = {
+                                                Code: treatmentCode.getValue(),
+                                                Advice: treatmentAdvice.getValue(),
+                                                Description: treatmentDescription.getValue()
+                                            };
+                                            var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Treatment", action = "Create" })';
+                                            var action = $.post(postToUrl, values);
+
+                                            action.success(function (serverResponse) {
+                                                if (serverResponse.CloseModal == false) {
+                                                    var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                } else {
+                                                    winAdd.close();
+                                                    winAdd.destroy();
+                                                    window.feature.treatmentStore.loadPage(1);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }]
+                            });
+                            winAdd.show();
+                        }
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    height: 80,
+                    items: [{
+                        xtype: 'textfield',
+                        itemId: window.feature.searchTreatment,
+                        width: 200,
+                        frame: true,
+                        cls: 'text-field-rounded',
+                        emptyText: 'Treatment Code Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                            'keyup': {
+                                fn: function (key) {
+                                    var searchValue = window.feature.container.down('#' + window.feature.searchTreatment).getValue();
+                                    window.feature.treatmentStore.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.doSearch.delay(500);
+                                }
+                            }
+                        }
+                    }]
+
+                }]
+            }, {
+                xtype: 'gridpanel',
+                cls: 'white-border',
+                itemId: window.feature.gridTreatmentId,
+                store: window.feature.treatmentStore,
+                loadMask: true,
+                disableSelection: true,
+                flex: 3,
+                autoScroll: true,
+                columns: [{
+                    header: "Code",
+                    dataIndex: 'Code',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    text: "Advice",
+                    dataIndex: 'Advice',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    text: "Description",
+                    dataIndex: 'Description',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    xtype: 'actioncolumn',
+                    text: 'Actions',
+                    flex: 1,
+                    menuDisabled: true,
+                    items: [{
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        action: 'Edit',
+                        handler: function (grid, rowIndex, colIndex) {
+                            var rec = grid.getStore().getAt(rowIndex);
+
+                            var winEdit = new window.feature.modal({
+                                title: 'Edit Treatment',
+                                buttons: [{
+                                    text: 'Cancel',
+                                    margin: '10 10 20 0',
+                                    ui: 'snapshot-cancel-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () { winEdit.close(); winEdit.destroy(); }
+                                }, {
+                                    text: 'Save',
+                                    margin: '0 20 20 10',
+                                    ui: 'snapshot-add-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () {
+                                        var treatmentCode = winEdit.down('#' + window.feature.formTreatmentCodeId);
+                                        var treatmentAdvice = winEdit.down('#' + window.feature.formTreatmentAdviceId);
+                                        var treatmentDescription = winEdit.down('#' + window.feature.formTreatmentDescriptionId);
+
+                                        if (treatmentCode.getValue() == '') {
+                                            treatmentCode.markInvalid('Field Code is required!');
+                                            treatmentCode.setValue(null);
+                                        } else {
+                                            var values = {
+                                                Id: rec.get('Id'),
+                                                Code: treatmentCode.getValue(),
+                                                Advice: treatmentAdvice.getValue(),
+                                                Description: treatmentDescription.getValue()
+                                            };
+                                            var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Treatment", action = "Edit" })';
+                                            var action = $.post(postToUrl, values);
+                                            action.success(function (serverResponse) {
+                                                if (serverResponse.CloseModal == false) {
+                                                    var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                }
+                                                else {
+
+                                                    winEdit.close();
+                                                    winEdit.destroy();
+                                                    window.feature.treatmentStore.loadPage(1);
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                }]
+                            });
+
+                            winEdit.down('#' + window.feature.formTreatmentCodeId).setValue(rec.get('Code'));
+                            winEdit.down('#' + window.feature.formTreatmentAdviceId).setValue(rec.get('Advice'));
+                            winEdit.down('#' + window.feature.formTreatmentDescriptionId).setValue(rec.get('Description'));
+
+                            winEdit.show();
+                        }
+                    }, {
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        action: 'Delete',
+                        handler: function (grid, rowIndex, colIndex) {
+                            var rec = grid.getStore().getAt(rowIndex);
+
+                            var msgConfirm = Ext.Msg;
+                            msgConfirm.ui = 'snapshot-popup-window';
+                            msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                            msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                            msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete treatment {0} ?', rec.get('Code')), function (btn) {
+                                if (btn == 'yes') {
+                                    var values = { id: rec.get('Id') };
+                                    var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Treatment", action = "Delete" })';
+                                    var action = $.post(postToUrl, values);
+
+                                    action.success(function (serverResponse) {
+                                        if (serverResponse.Status == "Error") {
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                            msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                        }
+                                        window.feature.treatmentStore.loadPage(1);
+                                    });
+                                }
+
+                            });
+                        }
+                    }]
+                }],
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: window.feature.treatmentStore,
+                    displayInfo: true,
+                    displayMsg: 'Displaying topics {0} - {1} of {2}',
+                    emptyMsg: "No topics to display",
+                    ui: 'snapshot-pagination-toolbar'
+                })
+            }]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.treatmentStore.loadPage(1);
+    });
+
+</script>

@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="When_Loading_A_Country_It_ShouldAlsoBring_TheRegionNo_InOneQuery.cs" />
+    <Compile Include="When_WeWantToPersisi_A_Treatment.cs" />
     <Compile Include="When_WeWantToPersist_An_SmsRequest.cs" />
     <Compile Include="SessionFactory.cs" />
     <Compile Include="GivenAPersistenceSpecification.cs" />
