@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 
-namespace Web.Areas.ServicesManagement.Models
+namespace Web.Areas.ServicesManagement.Models.Diagnosis
 {
     public class DiagnosisInputModel
     {

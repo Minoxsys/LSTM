@@ -35,7 +35,7 @@
         window.feature.searchTreatment = "Search-Treatment-Id";
 
         window.feature.treatmentStore = Ext.create('Ext.data.Store', {
-            pageSize: 2,
+            pageSize: 50,
             fields: ['Id', 'Code', 'Advice', 'Description'],
             proxy: {
                 type: 'ajax',

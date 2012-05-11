@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Web.Areas.ServicesManagement.Models;
 using Web.Models.Shared;
 using Domain;
 using Rhino.Mocks;
+using Web.Areas.ServicesManagement.Models.Diagnosis;
 
 namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTests
 {

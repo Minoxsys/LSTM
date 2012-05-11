@@ -8,7 +8,7 @@ using Domain;
 using Core.Domain;
 using Rhino.Mocks;
 using MvcContrib.TestHelper.Fakes;
-using Web.Areas.ServicesManagement.Models;
+using Web.Areas.ServicesManagement.Models.Diagnosis;
 
 namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTests
 {

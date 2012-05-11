@@ -4,12 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web.Security;
-using Web.Areas.ServicesManagement.Models;
 using Core.Persistence;
 using Domain;
 using Core.Domain;
 using Web.Models.Shared;
 using AutoMapper;
+using Web.Areas.ServicesManagement.Models.Diagnosis;
 
 namespace Web.Areas.ServicesManagement.Controllers
 {

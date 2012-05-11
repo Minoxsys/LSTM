@@ -18,14 +18,12 @@
 
         var diagnosisSideBarBtnId = window.res.content.maincontent.sidebar.diagnosis;
         var diagnosisBtn = Ext.getCmp(diagnosisSideBarBtnId);
-
         diagnosisBtn.toggle(true);
 
-
-        var diagnosisAdministrationBtnId = window.res.header.subnavigation.buttonTabs.diagnosis;
-        var diagnosisAdministrationBtn = Ext.getCmp(diagnosisAdministrationBtnId);
-        diagnosisAdministrationBtn.toggle(true);
-        diagnosisAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+        var serviceAdministrationBtnId = window.res.header.subnavigation.buttonTabs.diagnosis;
+        var serviceAdministrationBtn = Ext.getCmp(serviceAdministrationBtnId);
+        serviceAdministrationBtn.toggle(true);
+        serviceAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
     });
 </script>
 <script type="text/javascript">
@@ -354,7 +352,14 @@
                             });
                         }
                     }]
-                }]
+                }],
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: window.feature.diagnosisStore,
+                    displayInfo: true,
+                    displayMsg: 'Displaying topics {0} - {1} of {2}',
+                    emptyMsg: "No topics to display",
+                    ui: 'snapshot-pagination-toolbar'
+                })
             }]
         });
 
