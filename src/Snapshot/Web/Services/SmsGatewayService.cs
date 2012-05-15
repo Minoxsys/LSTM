@@ -13,25 +13,23 @@ namespace Web.Services
 {
     public class SmsGatewayService : ISmsGatewayService
     {
-        private const string CONTENT_FRAGMENTATION_REGEX = @"^(?<ProductGroupReferenceCode>([A-Z]|[a-z])+)\s+(?<ProductStockLevels>((([A-Z]|[a-z])+(\d)+)\s*)+)";
-        private const string PRODUCT_STOCK_LEVEL_REGEX = @"(?<ProductStockLevel>((?<ProductReferenceCode>([A-Z|a-z]+))(?<StockLevel>\d+))\s*)";
-        private const string PRODUCT_GROUP_REFERENCE_CODE = "ProductGroupReferenceCode";
-        private const string PRODUCT_STOCK_LEVELS = "ProductStockLevels";
-        private const string PRODUCT_REFERENCE_CODE = "ProductReferenceCode";
-        private const string STOCK_LEVEL = "StockLevel";
+        private const string CONTENT_FROMDRUGSHOP_REGEX = @"^([A-Za-z]{2}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;/]+)$";
+        private const string CONTENT_FROMDISPENSARY_REGEX = @"^([0-9]{9}[A-Za-z0-9 +-;]+)$";
 
         private IHttpService httpService;
         private ISmsGatewaySettingsService smsGatewaySettingsService;
         private IQueryOutposts queryOutposts;
+        private IQueryService<Diagnosis> queryDiagnosis;
 
         private IQueryService<Contact> queryServiceContact;
 
-        public SmsGatewayService(ISmsGatewaySettingsService smsGatewaySettingsService, IHttpService httpService, IQueryOutposts queryOutposts, IQueryService<Contact> queryServiceContact)
+        public SmsGatewayService(ISmsGatewaySettingsService smsGatewaySettingsService, IHttpService httpService, IQueryOutposts queryOutposts, IQueryService<Contact> queryServiceContact, IQueryService<Diagnosis> queryDiagnosis)
         {
             this.httpService = httpService;
             this.smsGatewaySettingsService = smsGatewaySettingsService;
             this.queryOutposts = queryOutposts;
             this.queryServiceContact = queryServiceContact;
+            this.queryDiagnosis = queryDiagnosis;
         }
 
         public string SendSmsRequest(SmsRequest smsRequest)
@@ -41,43 +39,9 @@ namespace Web.Services
             return postResponse;
         }
 
-        public RawSmsReceived AssignOutpostToRawSmsReceivedBySenderNumber(RawSmsReceived rawSmsReceived)
+        private string GetPostDataFromSettingsAndSmsRequest(SmsRequest smsRequest)
         {
-            string number = rawSmsReceived.Sender;
-            Contact contact = queryServiceContact.Query().Where(
-                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(number)).FirstOrDefault();
-            Outpost outpost = queryOutposts.GetAllContacts().Where(o => o.Contacts.Contains(contact)).FirstOrDefault();
-            if (outpost != null)
-            {
-                rawSmsReceived.OutpostId = outpost.Id;
-            }
-            return rawSmsReceived;
-        }
-
-        public RawSmsReceivedParseResult ParseRawSmsReceived(RawSmsReceived rawSmsReceived)
-        {
-            ReceivedContentFragments contentFragments = GetContentFragments(rawSmsReceived.Content.Trim().ToUpper());
-
-            RawSmsReceivedParseResult parseResult = new RawSmsReceivedParseResult();
-            SmsReceived smsReceived = new SmsReceived();
-
-            smsReceived.Number = rawSmsReceived.Sender;
-
-            if (!string.IsNullOrEmpty(contentFragments.ProductStockLevels))
-            {
-                smsReceived.RawSmsReceivedId = rawSmsReceived.Id;
-                smsReceived.ProductGroupReferenceCode = GetProductGroupReferenceCodeFromSplitContent(contentFragments);
-                smsReceived.ReceivedStockLevels = GetReceivedStockLevelsFromContent(contentFragments);
-
-                parseResult.ParseSucceeded = true;
-                parseResult.SmsReceived = smsReceived;
-            }
-            else
-            {
-                parseResult.ParseSucceeded = false;
-                parseResult.ParseErrorMessage = "Sms was not parsed correctly!";
-            }
-            return parseResult;
+            return GetPostDataForSmsRequestFromSettings() + "&" + GetPostDataFromSmsRequest(smsRequest);
         }
 
         private string GetPostDataForSmsRequestFromSettings()
@@ -102,62 +66,96 @@ namespace Web.Services
             return postDataBuilder.ToString();
         }
 
-        private string GetPostDataFromSettingsAndSmsRequest(SmsRequest smsRequest)
+        public RawSmsReceived AssignOutpostToRawSmsReceivedBySenderNumber(RawSmsReceived rawSmsReceived)
         {
-            return GetPostDataForSmsRequestFromSettings() + "&" + GetPostDataFromSmsRequest(smsRequest);
+            string number = rawSmsReceived.Sender;
+            Contact contact = queryServiceContact.Query().Where(
+                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(number)).FirstOrDefault();
+            Outpost outpost = queryOutposts.GetAllContacts().Where(o => o.Contacts.Contains(contact)).FirstOrDefault();
+            if (outpost != null)
+            {
+                rawSmsReceived.OutpostId = outpost.Id;
+            }
+            return rawSmsReceived;
         }
 
-        private ReceivedContentFragments GetContentFragments(string content)
+        public RawSmsReceivedParseResult ParseRawSmsReceived(RawSmsReceived rawSmsReceived)
         {
-            ReceivedContentFragments splitContent = new ReceivedContentFragments();
+            //XY150697F RX1 RX2                 ^([A-Za-z]{2}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;]+)$
+            //123432144 TR1 TR2                 ^([0-9]{9}[A-Za-z0-9 +-;]+)$
 
-            foreach (Match myMatch in Matches(CONTENT_FRAGMENTATION_REGEX, content))
+            Regex regexFromDrugshop   = new Regex(CONTENT_FROMDRUGSHOP_REGEX);
+            Regex regexFromDispensary = new Regex(CONTENT_FROMDISPENSARY_REGEX);
+
+            if (regexFromDrugshop.IsMatch(rawSmsReceived.Content))
             {
-                if (myMatch.Success)
+                //getData from message content
+                string initials = rawSmsReceived.Content.Substring(0, 2);
+                string stringDate = rawSmsReceived.Content.Substring(2, 6);
+                string gender = rawSmsReceived.Content.Substring(8, 1);
+                string[] diagnosis = rawSmsReceived.Content.Substring(10).Trim().Split(' ');
+
+                foreach (var diagnostic in diagnosis)
                 {
-                    splitContent.ProductGroupReferenceCode = myMatch.Groups[PRODUCT_GROUP_REFERENCE_CODE].Value;
-                    splitContent.ProductStockLevels = myMatch.Groups[PRODUCT_STOCK_LEVELS].Value;
+                    var existDiagnosis = queryDiagnosis.Query().Where(it => it.Code == diagnostic).Any();
+                    if (!existDiagnosis)
+                    {
+                        //eroare parsare -> diagnostic nu exista
+                    }
+                    else
+                    {
+                        //salveaza
+                    }
                 }
+                //validate diagnosis
+                //generate message idcode
+                //compose message (initials, birthDate, gender, diagnosis, codeId, sentDate, outpostId, rawsmsid)
+                //save message
+                //send message to dispensary
+            }else
+
+            if (regexFromDispensary.IsMatch(rawSmsReceived.Content))
+            {
+                //getData from content
+                string messageId = rawSmsReceived.Content.Substring(0, 9);
+                string[] treatments = rawSmsReceived.Content.Substring(10).Trim().Split(' ');
+
+                //validate treatments
+                //get message with Id
+                //compose message (codeId, treatment, sentDate, outpostId, rawsmsid)
+                //save message
             }
 
-            return splitContent;
-        }
-
-        private string GetProductGroupReferenceCodeFromSplitContent(ReceivedContentFragments fragmentedContent)
-        {
-            return fragmentedContent.ProductGroupReferenceCode;
-        }
-
-        private List<ReceivedStockLevel> GetReceivedStockLevelsFromContent(ReceivedContentFragments fragmentedContent)
-        {
-            List<ReceivedStockLevel> receivedStockLevels = new List<ReceivedStockLevel>();
-
-            foreach (Match myMatch in Matches(PRODUCT_STOCK_LEVEL_REGEX, fragmentedContent.ProductStockLevels))
+            else
             {
-                if (myMatch.Success)
-                {
-                    ReceivedStockLevel receivedStockLevel = new ReceivedStockLevel();
-                    receivedStockLevel.ProductSmsReference = myMatch.Groups[PRODUCT_REFERENCE_CODE].Value;
-                    receivedStockLevel.StockLevel = int.Parse(myMatch.Groups[STOCK_LEVEL].Value);
-                    receivedStockLevels.Add(receivedStockLevel);
-                }
+                //no format
             }
 
-            return receivedStockLevels;
+
+
+
+
+            //RawSmsReceivedParseResult parseResult = new RawSmsReceivedParseResult();
+            //SmsReceived smsReceived = new SmsReceived();
+
+            //smsReceived.Number = rawSmsReceived.Sender;
+
+            //if (!string.IsNullOrEmpty(contentFragments.ProductStockLevels))
+            //{
+            //    smsReceived.RawSmsReceivedId = rawSmsReceived.Id;
+            //    smsReceived.ProductGroupReferenceCode = GetProductGroupReferenceCodeFromSplitContent(contentFragments);
+            //    smsReceived.ReceivedStockLevels = GetReceivedStockLevelsFromContent(contentFragments);
+
+            //    parseResult.ParseSucceeded = true;
+            //    parseResult.SmsReceived = smsReceived;
+            //}
+            //else
+            //{
+            //    parseResult.ParseSucceeded = false;
+            //    parseResult.ParseErrorMessage = "Sms was not parsed correctly!";
+            //}
+            return null;
         }
 
-        private IEnumerable Matches(string strRegex, string content)
-        {
-            RegexOptions myRegexOptions = RegexOptions.None;
-            Regex myRegex = new Regex(strRegex, myRegexOptions);
-
-            return myRegex.Matches(content);
-        }
-
-        private struct ReceivedContentFragments
-        {
-            public string ProductGroupReferenceCode;
-            public string ProductStockLevels;
-        }
     }
 }

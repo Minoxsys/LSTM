@@ -45,8 +45,6 @@ namespace Web.Controllers
             LoadUserAndClient();
             SmsRequestCreateModel model = new SmsRequestCreateModel();
 
-            model.Outposts = GetListOfAllOutposts();
-
             return View(model);
         }
 
@@ -58,44 +56,26 @@ namespace Web.Controllers
 
    
 
-        public ActionResult ReceiveSms(string sender, string content, string inNumber, string email, string credits)
+        public ActionResult ReceiveSms(string sender, string content, DateTime date, string inNumber, string email, string credits)
         {
             RawSmsReceived rawSmsReceived = new RawSmsReceived();
             rawSmsReceived.Sender = sender;
             rawSmsReceived.Content = content;
             rawSmsReceived.Credits = credits;
-
-            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-
+            rawSmsReceived.Date = date;
             rawSmsReceived = SmsGatewayService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
-            RawSmsReceivedParseResult parseResult = SmsGatewayService.ParseRawSmsReceived(rawSmsReceived);
+            //SaveCommandRawSmsReceived.Execute(rawSmsReceived);
 
+            RawSmsReceivedParseResult parseResult = SmsGatewayService.ParseRawSmsReceived(rawSmsReceived);
             rawSmsReceived.ParseSucceeded = parseResult.ParseSucceeded;
+
             SaveCommandRawSmsReceived.Execute(rawSmsReceived);
 
             if (parseResult.ParseSucceeded)
-            {
                 SmsRequestService.UpdateOutpostStockLevelsWithValuesReceivedBySms(parseResult.SmsReceived);
-            }
 
             return null;
-        }
-
-        private List<SelectListItem> GetListOfAllOutposts()
-        {
-            var outPosts = new List<SelectListItem>();
-            var queryResultOutposts = QueryOutpost.Query().Where(o => o.Client == _client);
-            if (queryResultOutposts != null)
-                queryResultOutposts.ToList().ForEach(itemOutpost => outPosts.Add(new SelectListItem { Text = itemOutpost.Name, Value = itemOutpost.Id.ToString() }));
-            return outPosts;
-        }
-
-        private List<SelectListItem> GetListOfAllProductGroups()
-        {
-            var groupProducts = new List<SelectListItem>();
-            
-            return groupProducts;
         }
 
     }

@@ -11,6 +11,7 @@ namespace Domain
         public virtual string Sender { get; set; }
         public virtual string Content { get; set; }
         public virtual string Credits { get; set; }
+        public virtual DateTime Date { get; set; }
         public virtual Guid OutpostId { get; set; }
         public virtual bool ParseSucceeded { get; set; }
         public virtual string ParseErrorMessage { get; set; }

@@ -53,7 +53,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             objectMother.smsRequestService.Expect(call => call.UpdateOutpostStockLevelsWithValuesReceivedBySms(objectMother.smsReceived));
 
             // Act
-            ActionResult result = objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, ObjectMother.IN_NUMBER, ObjectMother.EMAIL, ObjectMother.CREDITS);
+            ActionResult result = objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, DateTime.UtcNow, ObjectMother.IN_NUMBER, ObjectMother.EMAIL, ObjectMother.CREDITS);
 
             // Assert
             objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
@@ -89,7 +89,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTest
             objectMother.smsRequestService.Expect(call => call.UpdateOutpostStockLevelsWithValuesReceivedBySms(objectMother.smsReceived));
 
             // Act
-            objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, ObjectMother.IN_NUMBER, ObjectMother.EMAIL, ObjectMother.CREDITS);
+            objectMother.controller.ReceiveSms(ObjectMother.MOBILE_NUMBER, ObjectMother.SMS_CONTENT, DateTime.UtcNow, ObjectMother.IN_NUMBER, ObjectMother.EMAIL, ObjectMother.CREDITS);
 
             // Assert
             objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
