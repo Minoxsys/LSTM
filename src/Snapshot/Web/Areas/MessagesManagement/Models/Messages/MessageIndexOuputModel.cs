@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Areas.MessagesManagement.Models.Drugstore
+namespace Web.Areas.MessagesManagement.Models.Messages
 {
-    public class DrugstoreIndexOuputModel
+    public class MessageIndexOuputModel
     {
-        public DrugstoreModel[] Messages { get; set; }
+        public MessageModel[] Messages { get; set; }
         public int TotalItems { get; set; }
     }
 }

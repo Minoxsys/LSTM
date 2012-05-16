@@ -16,24 +16,24 @@
         var messagesBtn = Ext.getCmp(messagesBtnId);
         messagesBtn.toggle(true);
 
-        var drugshopSideBarBtnId = window.res.content.maincontent.sidebar.drugstore;
-        var drugshopBtn = Ext.getCmp(drugshopSideBarBtnId);
-        drugshopBtn.toggle(true);
+        var dispensarySideBarBtnId = window.res.content.maincontent.sidebar.dispensary;
+        var dispensaryBtn = Ext.getCmp(dispensarySideBarBtnId);
+        dispensaryBtn.toggle(true);
 
     });
 </script>
 <script type="text/javascript">
     Ext.onReady(function () {
         window.feature = {};
-        window.feature.searchMessage = "Search-Message-From-Drugstore-Id";
-        window.feature.gridMessagesFromDrugstoreId = "Grid-Messages-From-Drugstore-Id";
+        window.feature.searchMessage = "Search-Message-From-Dispensary-Id";
+        window.feature.gridMessagesFromDispensaryId = "Grid-Messages-From-Dispensary-Id";
 
-        window.feature.messageFromDrugStore = Ext.create('Ext.data.Store', {
+        window.feature.messageFromDispensaryStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             fields: ['Id', 'Sender', 'OutpostName', 'Date', 'Content', 'ParseSucceeded', 'ParseErrorMessage'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Drugstore", action = "GetMessagesFromDrugstore" })',
+                url: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Dispensary", action = "GetMessagesFromDispensary" })',
                 reader: {
                     type: 'json',
                     root: 'Messages',
@@ -50,7 +50,7 @@
         });
 
         window.feature.doSearch = new Ext.util.DelayedTask(function () {
-            window.feature.messageFromDrugStore.loadPage(1);
+            window.feature.messageFromDispensaryStore.loadPage(1);
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
@@ -82,12 +82,12 @@
                         html: '&nbsp;'
                     }, {
                         xtype: 'image',
-                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/CurrentProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/OutpostStockLevel/HistoricalProductLevel.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                         margin: '0 10 10 10'
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Messages received from drug shop'
+                        text: 'Messages received from dispensary'
                     }]
                 }, {
                     xtype: 'container',
@@ -109,7 +109,7 @@
                             'keyup': {
                                 fn: function (key) {
                                     var searchValue = window.feature.container.down('#' + window.feature.searchMessage).getValue();
-                                    window.feature.messageFromDrugStore.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.messageFromDispensaryStore.proxy.extraParams.searchValue = searchValue;
                                     window.feature.doSearch.delay(500);
                                 }
                             }
@@ -120,8 +120,8 @@
             }, {
                 xtype: 'gridpanel',
                 cls: 'white-border',
-                itemId: window.feature.gridMessagesFromDrugstoreId,
-                store: window.feature.messageFromDrugStore,
+                itemId: window.feature.gridMessagesFromDispensaryId,
+                store: window.feature.messageFromDispensaryStore,
                 loadMask: true,
                 disableSelection: true,
                 flex: 3,
@@ -133,7 +133,7 @@
                     menuDisabled: true,
                     sortable: true
                 }, {
-                    header: "Drug shop",
+                    header: "Dispensary",
                     dataIndex: 'OutpostName',
                     flex: 1,
                     menuDisabled: true,
@@ -168,7 +168,7 @@
                     sortable: false
                 }],
                 bbar: Ext.create('Ext.PagingToolbar', {
-                    store: window.feature.messageFromDrugStore,
+                    store: window.feature.messageFromDispensaryStore,
                     displayInfo: true,
                     displayMsg: 'Displaying topics {0} - {1} of {2}',
                     emptyMsg: "No topics to display",
@@ -181,7 +181,7 @@
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.messageFromDrugStore.loadPage(1);
+        window.feature.messageFromDispensaryStore.loadPage(1);
     });
 
 </script>

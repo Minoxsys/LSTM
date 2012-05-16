@@ -147,11 +147,12 @@
   <ItemGroup>
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\DispensaryController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\DrugstoreController.cs" />
     <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\Drugstore\DrugstoreIndexOuputModel.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\Drugstore\DrugstoreModel.cs" />
-    <Compile Include="Areas\MessagesManagement\Models\MessagesIndexModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\Messages\MessageModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\Messages\MessagesIndexModel.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\CountryController.cs" />
     <Compile Include="Areas\OutpostManagement\Controllers\DistrictController.cs" />
@@ -2058,6 +2059,7 @@
     <Content Include="Areas\MessagesManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\Shared\_MessagesSideBar.cshtml" />
     <Content Include="Areas\ServicesManagement\Views\Treatment\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\Dispensary\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

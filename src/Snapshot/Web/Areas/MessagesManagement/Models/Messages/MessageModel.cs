@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Areas.MessagesManagement.Models.Drugstore
+namespace Web.Areas.MessagesManagement.Models.Messages
 {
-    public class DrugstoreModel
+    public class MessageModel
     {
         public string Sender { get; set; }
         public string OutpostName { get; set; }

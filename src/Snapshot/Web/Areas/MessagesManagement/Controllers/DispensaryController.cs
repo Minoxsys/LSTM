@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Web.Areas.MessagesManagement.Models;
+using Web.Areas.MessagesManagement.Models.Messages;
 using Domain;
 using Core.Persistence;
-using Web.Areas.MessagesManagement.Models.Messages;
 
 namespace Web.Areas.MessagesManagement.Controllers
 {
-    public class DrugstoreController : Controller
+    public class DispensaryController : Controller
     {
         public IQueryService<RawSmsReceived> QueryRawSms { get; set; }
 
@@ -25,10 +24,10 @@ namespace Web.Areas.MessagesManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetMessagesFromDrugstore(MessagesIndexModel indexModel)
+        public JsonResult GetMessagesFromDispensary(MessagesIndexModel indexModel)
         {
             var pageSize = indexModel.limit.Value;
-            var rawDataQuery = this.QueryRawSms.Query().Where(it => it.IsDispensary == false);
+            var rawDataQuery = this.QueryRawSms.Query().Where(it => it.IsDispensary == true);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<RawSmsReceived>>>()
             {
@@ -58,15 +57,15 @@ namespace Web.Areas.MessagesManagement.Controllers
                 .Skip(indexModel.start.Value);
 
             var messagesModelListProjection = (from message in rawDataQuery.ToList()
-                                                select new MessageModel
-                                                {
-                                                    Sender = message.Sender,
-                                                    OutpostName = message.OutpostName,
-                                                    Date = message.ReceivedDate.ToShortDateString(),
-                                                    Content = message.Content,
-                                                    ParseSucceeded = message.ParseSucceeded,
-                                                    ParseErrorMessage = message.ParseErrorMessage
-                                                }).ToArray();
+                                               select new MessageModel
+                                               {
+                                                   Sender = message.Sender,
+                                                   OutpostName = message.OutpostName,
+                                                   Date = message.ReceivedDate.ToShortDateString(),
+                                                   Content = message.Content,
+                                                   ParseSucceeded = message.ParseSucceeded,
+                                                   ParseErrorMessage = message.ParseErrorMessage
+                                               }).ToArray();
 
 
             return Json(new MessageIndexOuputModel
@@ -75,5 +74,6 @@ namespace Web.Areas.MessagesManagement.Controllers
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

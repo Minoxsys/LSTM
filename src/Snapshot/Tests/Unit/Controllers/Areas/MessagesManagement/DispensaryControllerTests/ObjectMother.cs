@@ -3,56 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Web.Areas.MessagesManagement.Controllers;
-using Core.Persistence;
 using Domain;
+using Core.Persistence;
 using Rhino.Mocks;
-using Web.Areas.MessagesManagement.Models;
 using Web.Areas.MessagesManagement.Models.Messages;
 
-namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTests
+namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTests
 {
     public class ObjectMother
     {
-        public DrugstoreController controller;
+        public DispensaryController controller;
         public IQueryService<RawSmsReceived> queryRawSms;
 
-        public Guid rawSmsId;
-        public RawSmsReceived rawSms;
-
-        private const string SENDER = "0747548965";
-        private const string CONTENT = "FTT452518G RS!GDD11";
+        private const string SENDER = "0748523666";
+        private const string CONTENT = "123456 Tr1 Tr2";
         private DateTime DATE = DateTime.UtcNow;
         private const string CREDITS = "10";
         private Guid OUTPOSTID = Guid.NewGuid();
-        private const string OUTPOSTNAME = "Spitalul Judetean";
+        private const string OUTPOSTNAME = "Dispensary";
         private const string ERRORMESSAGE = "Not parse correct";
 
         public void Init()
         {
             MockServices();
             Setup_Controller();
-            SetUp_StubData();
-        }
-
-        private void SetUp_StubData()
-        {
-            rawSmsId = Guid.NewGuid();
-            rawSms = MockRepository.GeneratePartialMock<RawSmsReceived>();
-            rawSms.Stub(c => c.Id).Return(rawSmsId);
-            rawSms.Content = CONTENT;
-            rawSms.Credits = CREDITS;
-            rawSms.IsDispensary = false;
-            rawSms.OutpostId = OUTPOSTID;
-            rawSms.OutpostName = OUTPOSTNAME;
-            rawSms.ParseErrorMessage = ERRORMESSAGE;
-            rawSms.ParseSucceeded = false;
-            rawSms.ReceivedDate = DATE;
-            rawSms.Sender = SENDER;
         }
 
         private void Setup_Controller()
         {
-            controller = new DrugstoreController();
+            controller = new DispensaryController();
             controller.QueryRawSms = queryRawSms;
         }
 
@@ -71,21 +50,21 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                 {
                     Content = CONTENT + "-" + i,
                     Credits = CREDITS,
-                    IsDispensary = false,
+                    IsDispensary = true,
                     OutpostId = Guid.NewGuid(),
                     OutpostName = "Outpost" + i,
                     ParseErrorMessage = "Parse error no." + i,
                     ParseSucceeded = false,
                     ReceivedDate = DateTime.UtcNow.AddDays(-i),
                     Sender = SENDER,
-                    
-                    
+
+
                 });
             }
             return rawSMSList.AsQueryable();
         }
 
-        public IQueryable<RawSmsReceived> PageOfDrugstoreData(MessagesIndexModel indexModel)
+        public IQueryable<RawSmsReceived> PageOfDispensaryData(MessagesIndexModel indexModel)
         {
             List<RawSmsReceived> rawSMSList = new List<RawSmsReceived>();
 
@@ -95,7 +74,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                 {
                     Content = CONTENT + "-" + i,
                     Credits = CREDITS,
-                    IsDispensary = (i %2 == 0),
+                    IsDispensary = (i % 2 == 0),
                     OutpostId = Guid.NewGuid(),
                     OutpostName = "Outpost" + i,
                     ParseErrorMessage = "Parse error no." + i,
@@ -108,7 +87,5 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             }
             return rawSMSList.AsQueryable();
         }
-
-
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Web.Areas.MessagesManagement.Models
+namespace Web.Areas.MessagesManagement.Models.Messages
 {
     public class MessagesIndexModel
     {
