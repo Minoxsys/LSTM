@@ -62,18 +62,19 @@ namespace Web.Controllers
             rawSmsReceived.Sender = sender;
             rawSmsReceived.Content = content;
             rawSmsReceived.Credits = credits;
-            rawSmsReceived.Date = date;
+            rawSmsReceived.ReceivedDate = date;
             rawSmsReceived = SmsGatewayService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
-
-            //SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-
-            RawSmsReceivedParseResult parseResult = SmsGatewayService.ParseRawSmsReceived(rawSmsReceived);
-            rawSmsReceived.ParseSucceeded = parseResult.ParseSucceeded;
 
             SaveCommandRawSmsReceived.Execute(rawSmsReceived);
 
-            if (parseResult.ParseSucceeded)
-                SmsRequestService.UpdateOutpostStockLevelsWithValuesReceivedBySms(parseResult.SmsReceived);
+            //RawSmsReceivedParseResult parseResult = SmsGatewayService.ParseRawSmsReceived(rawSmsReceived);
+            //rawSmsReceived.ParseSucceeded = parseResult.ParseSucceeded;
+            rawSmsReceived = SmsGatewayService.ParseRawSmsReceived(rawSmsReceived);
+
+            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
+
+            //if (parseResult.ParseSucceeded)
+            //    SmsRequestService.UpdateOutpostStockLevelsWithValuesReceivedBySms(parseResult.SmsReceived);
 
             return null;
         }

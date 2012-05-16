@@ -11,7 +11,6 @@ namespace Migrations
     {
         public override void Down()
         {
-            Delete.RemoveForeignKey("RawSmsReceiveds", "OutpostId", "Outposts");
             Delete.RemoveForeignKey("RawSmsReceiveds");
             Delete.Table("RawSmsReceiveds");
         }
@@ -23,12 +22,14 @@ namespace Migrations
                 .WithColumn("Sender").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("Content").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("Credits").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("ReceivedDate").AsDateTime().Nullable()
                 .WithColumn("OutpostId").AsGuid().Nullable()
+                .WithColumn("OutpostName").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("IsDispensary").AsBoolean().Nullable()
                 .WithColumn("ParseSucceeded").AsBoolean().Nullable()
                 .WithColumn("ParseErrorMessage").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
 
             Create.AddForeignKey("RawSmsReceiveds");
-            Create.AddForeignKey("RawSmsReceiveds", "OutpostId", "Outposts");
         }
     }
 }

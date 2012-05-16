@@ -95,6 +95,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Controllers\AccountControllerTest.cs" />
+    <Compile Include="Unit\Controllers\Areas\MessagesManagement\DrugstoreControllerTests\GetMessagesFromDrugstoreMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\MessagesManagement\DrugstoreControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\ContactControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\ContactControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\CreateMethod.cs" />
@@ -153,8 +155,6 @@
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\GetPermissionsForRoleMethod.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\RoleManagerControllerTests\OverviewMethod.cs" />
-    <Compile Include="Unit\Controllers\SmsRequestControllerTest\ObjectMother.cs" />
-    <Compile Include="Unit\Controllers\SmsRequestControllerTest\ReceiveSmsMethod.cs" />
     <Compile Include="Unit\Controllers\UnautorizedAccessController_Tests.cs" />
     <Compile Include="Unit\Controllers\CssControllerTests.cs" />
     <Compile Include="Unit\Controllers\JavascriptControllerTests.cs" />

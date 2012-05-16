@@ -75,11 +75,14 @@ namespace Web.Services
             if (outpost != null)
             {
                 rawSmsReceived.OutpostId = outpost.Id;
+                rawSmsReceived.OutpostName = outpost.Name;
+                rawSmsReceived.IsDispensary = outpost.IsWarehouse;
             }
+
             return rawSmsReceived;
         }
 
-        public RawSmsReceivedParseResult ParseRawSmsReceived(RawSmsReceived rawSmsReceived)
+        public RawSmsReceived ParseRawSmsReceived(RawSmsReceived rawSmsReceived)
         {
             //XY150697F RX1 RX2                 ^([A-Za-z]{2}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;]+)$
             //123432144 TR1 TR2                 ^([0-9]{9}[A-Za-z0-9 +-;]+)$
@@ -97,14 +100,15 @@ namespace Web.Services
 
                 foreach (var diagnostic in diagnosis)
                 {
-                    var existDiagnosis = queryDiagnosis.Query().Where(it => it.Code == diagnostic).Any();
-                    if (!existDiagnosis)
+                    if (!string.IsNullOrEmpty(diagnostic))
                     {
-                        //eroare parsare -> diagnostic nu exista
-                    }
-                    else
-                    {
-                        //salveaza
+                        var existDiagnosis = queryDiagnosis.Query().Where(it => it.Code == diagnostic).Any();
+                        if (!existDiagnosis)
+                        {
+                            rawSmsReceived.ParseSucceeded = false;
+                            rawSmsReceived.ParseErrorMessage = "Diagnosis " + diagnostic + " does not exist!";
+                            return rawSmsReceived;
+                        }
                     }
                 }
                 //validate diagnosis
@@ -112,6 +116,9 @@ namespace Web.Services
                 //compose message (initials, birthDate, gender, diagnosis, codeId, sentDate, outpostId, rawsmsid)
                 //save message
                 //send message to dispensary
+
+                rawSmsReceived.ParseSucceeded = true;
+                return rawSmsReceived;
             }else
 
             if (regexFromDispensary.IsMatch(rawSmsReceived.Content))
@@ -154,7 +161,7 @@ namespace Web.Services
             //    parseResult.ParseSucceeded = false;
             //    parseResult.ParseErrorMessage = "Sms was not parsed correctly!";
             //}
-            return null;
+            return rawSmsReceived;
         }
 
     }

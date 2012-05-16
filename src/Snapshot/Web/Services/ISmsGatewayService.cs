@@ -12,6 +12,6 @@ namespace Web.Services
 
         RawSmsReceived AssignOutpostToRawSmsReceivedBySenderNumber(RawSmsReceived rawSmsReceived);
 
-        RawSmsReceivedParseResult ParseRawSmsReceived(RawSmsReceived rawSmsReceived);
+        RawSmsReceived ParseRawSmsReceived(RawSmsReceived rawSmsReceived);
     }
 }
