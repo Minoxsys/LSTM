@@ -30,13 +30,13 @@
     Ext.onReady(function () {
         window.feature = {};
         window.feature.formDiagnosisCodeId = "Form-Diagnosis-Code-Id";
-        window.feature.formServiceNeededId = "Form-Diagnosis-Service-Needed-Id";
+        window.feature.formKeywordId = "Form-Diagnosis-Keyword-Id";
         itemId: window.feature.formDiagnosisDescriptionId = "Form-Diagnosis-Description-Id";
         window.feature.searchDiagnosis = "Search-Diagnosis-Id";
 
         window.feature.diagnosisStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
-            fields: ['Id', 'ServiceNeeded', 'Code', 'Description'],
+            fields: ['Id', 'Keyword', 'Code', 'Description'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Diagnosis", action = "GetDiagnosis" })',
@@ -73,10 +73,10 @@
                 Ext.applyIf(me, {
                     items: [{
                         xtype: 'textfield',
-                        name: 'Service needed',
-                        fieldLabel: 'ServiceNeeded',
+                        name: 'Keyword',
+                        fieldLabel: 'Keyword',
                         anchor: '100%',
-                        itemId: window.feature.formServiceNeededId
+                        itemId: window.feature.formKeywordId
                     }, {
                         xtype: 'textfield',
                         name: 'Code',
@@ -158,7 +158,7 @@
                                     ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
-                                        var diagnosisServiceNeeded = winAdd.down('#' + window.feature.formServiceNeededId);
+                                        var diagnosisKeyword = winAdd.down('#' + window.feature.formKeywordId);
                                         var diagnosisCode = winAdd.down('#' + window.feature.formDiagnosisCodeId);
                                         var diagnosisDescription = winAdd.down('#' + window.feature.formDiagnosisDescriptionId);
 
@@ -167,7 +167,7 @@
                                             diagnosisCode.setValue(null);
                                         } else {
                                             var values = {
-                                                ServiceNeeded: diagnosisServiceNeeded.getValue(),
+                                                Keyword: diagnosisKeyword.getValue(),
                                                 Code: diagnosisCode.getValue(),
                                                 Description: diagnosisDescription.getValue()
                                             };
@@ -232,8 +232,8 @@
                 flex: 3,
                 autoScroll: true,
                 columns: [{
-                    header: "Service needed",
-                    dataIndex: 'ServiceNeeded',
+                    header: "Keyword",
+                    dataIndex: 'Keyword',
                     flex: 1,
                     menuDisabled: true,
                     sortable: true
@@ -275,7 +275,7 @@
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
 
-                                        var diagnosisServiceNeeded = winEdit.down('#' + window.feature.formServiceNeededId);
+                                        var diagnosisKeyword = winEdit.down('#' + window.feature.formKeywordId);
                                         var diagnosisCode = winEdit.down('#' + window.feature.formDiagnosisCodeId);
                                         var diagnosisDescription = winEdit.down('#' + window.feature.formDiagnosisDescriptionId);
 
@@ -285,7 +285,7 @@
                                         } else {
                                             var values = {
                                                 Id: rec.get('Id'),
-                                                ServiceNeeded: diagnosisServiceNeeded.getValue(),
+                                                Keyword: diagnosisKeyword.getValue(),
                                                 Code: diagnosisCode.getValue(),
                                                 Description: diagnosisDescription.getValue()
                                             };
@@ -313,7 +313,7 @@
                             });
 
                             winEdit.down('#' + window.feature.formDiagnosisCodeId).setValue(rec.get('Code'));
-                            winEdit.down('#' + window.feature.formServiceNeededId).setValue(rec.get('ServiceNeeded'));
+                            winEdit.down('#' + window.feature.formKeywordId).setValue(rec.get('Keyword'));
                             winEdit.down('#' + window.feature.formDiagnosisDescriptionId).setValue(rec.get('Description'));
 
                             winEdit.show();

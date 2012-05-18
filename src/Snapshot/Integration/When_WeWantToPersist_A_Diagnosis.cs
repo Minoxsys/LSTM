@@ -11,7 +11,7 @@ namespace IntegrationTests
     public class When_WeWantToPersist_A_Diagnosis : GivenAPersistenceSpecification<Diagnosis>
     {
         const string DIAGNOSIS_CODE = "CG+; CG-";
-        const string DIAGNOSIS_SERVICE = "Chlamydia/Gonorrhoea test/Rx - STI";
+        const string DIAGNOSIS_KEYWORD = "Chlamydia";
         const string DIAGNOSIS_DESCRIPTION = "Itching";
 
         [Test]
@@ -20,14 +20,14 @@ namespace IntegrationTests
 
             var diagnosis = Specs.CheckProperty(e => e.Description, DIAGNOSIS_DESCRIPTION)
                 .CheckProperty(c => c.Code, DIAGNOSIS_CODE)
-                .CheckProperty(c => c.ServiceNeeded, DIAGNOSIS_SERVICE)
+                .CheckProperty(c => c.Keyword, DIAGNOSIS_KEYWORD)
                 .VerifyTheMappings();
 
             Assert.IsNotNull(diagnosis);
             Assert.IsInstanceOf<Guid>(diagnosis.Id);
             Assert.AreEqual(diagnosis.Description, DIAGNOSIS_DESCRIPTION);
             Assert.AreEqual(diagnosis.Code, DIAGNOSIS_CODE);
-            Assert.AreEqual(diagnosis.ServiceNeeded, DIAGNOSIS_SERVICE);
+            Assert.AreEqual(diagnosis.Keyword, DIAGNOSIS_KEYWORD);
 
             session.Delete(diagnosis);
             session.Flush();

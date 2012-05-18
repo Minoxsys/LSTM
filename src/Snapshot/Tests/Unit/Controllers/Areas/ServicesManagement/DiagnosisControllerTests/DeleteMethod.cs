@@ -52,7 +52,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
             Assert.IsNotNull(jsonResult);
             var response = jsonResult.Data as JsonActionResponse;
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Diagnosis with code CHL/GON+;  CHL/GON- was removed."));
+            Assert.That(response.Message, Is.EqualTo("Diagnosis with code CHL/GON+ was removed."));
         }
     }
 }

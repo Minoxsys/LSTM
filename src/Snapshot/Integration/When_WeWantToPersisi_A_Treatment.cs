@@ -10,8 +10,8 @@ namespace IntegrationTests
 {
     public class When_WeWantToPersisi_A_Treatment : GivenAPersistenceSpecification<Treatment>
     {
-        const string TREATMENT_CODE = "RX1; RX2; NOT/AV.";
-        const string TREATMENT_ADVICE = "A1; A2; A3; A4";
+        const string TREATMENT_CODE = "RX1";
+        const string TREATMENT_KEYWORD = "Clamidya";
         const string TREATMENT_DESCRIPTION = "Itching";
 
         [Test]
@@ -20,14 +20,14 @@ namespace IntegrationTests
 
             var treatment = Specs.CheckProperty(e => e.Description, TREATMENT_DESCRIPTION)
                 .CheckProperty(c => c.Code, TREATMENT_CODE)
-                .CheckProperty(c => c.Advice, TREATMENT_ADVICE)
+                .CheckProperty(c => c.Keyword, TREATMENT_KEYWORD)
                 .VerifyTheMappings();
 
             Assert.IsNotNull(treatment);
             Assert.IsInstanceOf<Guid>(treatment.Id);
             Assert.AreEqual(treatment.Description, TREATMENT_DESCRIPTION);
             Assert.AreEqual(treatment.Code, TREATMENT_CODE);
-            Assert.AreEqual(treatment.Advice, TREATMENT_ADVICE);
+            Assert.AreEqual(treatment.Keyword, TREATMENT_KEYWORD);
 
             session.Delete(treatment);
             session.Flush();

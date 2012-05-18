@@ -37,12 +37,12 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
         }
 
         [Test]
-        public void Returns_JSON_With_ErrorMessage_When_Diagnosis_Code_AND_ServiceNeeded_AlreadyExists()
+        public void Returns_JSON_With_ErrorMessage_When_Diagnosis_Code_AND_Keyword_AlreadyExists()
         {
             //Arrange
             DiagnosisInputModel diagnosisInputModel = new DiagnosisInputModel()
             {
-                ServiceNeeded = objectMother.diagnosis.ServiceNeeded,
+                Keyword = objectMother.diagnosis.Keyword,
                 Code = objectMother.diagnosis.Code,
                 Description = "new description"
             };
@@ -63,8 +63,8 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
             //Arrange
             DiagnosisInputModel diagnosisInputModel = new DiagnosisInputModel()
             {
-                ServiceNeeded = "Genital Warts test/Rx - STI",
-                Code = "WART+; WART-",
+                Keyword = "Genital Warts",
+                Code = "WART+",
                 Description = "Bump genital"
             };
             objectMother.queryDiagnosis.Expect(call => call.Query()).Return(new Diagnosis[] { objectMother.diagnosis }.AsQueryable());
@@ -80,7 +80,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Diagnosis WART+; WART- has been saved."));
+            Assert.That(response.Message, Is.EqualTo("Diagnosis WART+ has been saved."));
         }
     }
 }

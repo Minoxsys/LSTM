@@ -51,14 +51,14 @@ namespace Web.Areas.ServicesManagement.Controllers
             }
 
             var queryTreatmentValidation = QueryTreatments.Query().Where(p => p.Client == _client);
-            if (queryTreatmentValidation.Where(it => it.Code == treatmentInputModel.Code && it.Advice == treatmentInputModel.Advice).Count() > 0)
+            if (queryTreatmentValidation.Where(it => it.Code == treatmentInputModel.Code && it.Keyword == treatmentInputModel.Keyword).Count() > 0)
             {
                 return Json(
                     new ToModalJsonActionResponse
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already a treatment with code {0} and advice {1}", treatmentInputModel.Code, treatmentInputModel.Advice)
+                        Message = string.Format("There is already a treatment with code {0} and keyword {1}", treatmentInputModel.Code, treatmentInputModel.Keyword)
                     });
 
             }
@@ -111,7 +111,7 @@ namespace Web.Areas.ServicesManagement.Controllers
 
             if (queryTreatmentValidation.Where(it =>
                                                     it.Code == treatmentInputModel.Code &&
-                                                    it.Advice == treatmentInputModel.Advice &&
+                                                    it.Keyword == treatmentInputModel.Keyword &&
                                                     it.Id != treatmentInputModel.Id).Count() > 0)
             {
                 return Json(
@@ -119,7 +119,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already a treatment with code {0} and advice {1}", treatmentInputModel.Code, treatmentInputModel.Advice)
+                        Message = string.Format("There is already a treatment with code {0} and keyword {1}", treatmentInputModel.Code, treatmentInputModel.Keyword)
                     });
 
             }
@@ -181,8 +181,8 @@ namespace Web.Areas.ServicesManagement.Controllers
             {
                 { "Code-ASC", () => treatmentDataQuery.OrderBy(c => c.Code) },
                 { "Code-DESC", () => treatmentDataQuery.OrderByDescending(c => c.Code) },
-                { "Advice-ASC", () => treatmentDataQuery.OrderBy(c => c.Advice) },
-                { "Advice-DESC", () => treatmentDataQuery.OrderByDescending(c => c.Advice) },
+                { "Keyword-ASC", () => treatmentDataQuery.OrderBy(c => c.Keyword) },
+                { "Keyword-DESC", () => treatmentDataQuery.OrderByDescending(c => c.Keyword) },
                 { "Description-ASC", () => treatmentDataQuery.OrderBy(c => c.Description) },
                 { "Description-DESC", () => treatmentDataQuery.OrderByDescending(c => c.Description) }
             };
@@ -203,7 +203,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                                                 select new TreatmentModel
                                                 {
                                                     Id = treatment.Id,
-                                                    Advice = treatment.Advice,
+                                                    Keyword = treatment.Keyword,
                                                     Code = treatment.Code,
                                                     Description = treatment.Description
                                                 }).ToArray();

@@ -48,7 +48,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
         }
 
         [Test]
-        public void Returns_Treatment_OrderBy_Advice_DESC()
+        public void Returns_Treatment_OrderBy_Keyword_DESC()
         {
             //Arrange
             var indexModel = new TreatmentIndexModel
@@ -57,7 +57,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
                 limit = 50,
                 page = 1,
                 start = 0,
-                sort = "Advice"
+                sort = "Keyword"
             };
 
             var pageOfData = objectMother.PageOfTreatmentData(indexModel);
@@ -71,7 +71,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
             objectMother.queryTreatment.VerifyAllExpectations();
 
             var jsonData = jsonResult.Data as TreatmentIndexOuputModel;
-            Assert.That(jsonData.Treatments[0].Advice, Is.EqualTo("Advice9"));
+            Assert.That(jsonData.Treatments[0].Keyword, Is.EqualTo("Keyword9"));
         }
 
         [Test]

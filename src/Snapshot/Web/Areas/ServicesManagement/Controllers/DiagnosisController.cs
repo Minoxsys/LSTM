@@ -52,14 +52,14 @@ namespace Web.Areas.ServicesManagement.Controllers
             }
 
             var queryDiagnosisValidation = QueryDiagnosis.Query().Where(p => p.Client == _client);
-            if (queryDiagnosisValidation.Where(it => it.Code == diagnosisInputModel.Code && it.ServiceNeeded == diagnosisInputModel.ServiceNeeded).Count() > 0 )
+            if (queryDiagnosisValidation.Where(it => it.Code == diagnosisInputModel.Code && it.Keyword == diagnosisInputModel.Keyword).Count() > 0 )
             {
                 return Json(
                     new ToModalJsonActionResponse
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already a diagnosis with code {0} and service {1}", diagnosisInputModel.Code, diagnosisInputModel.ServiceNeeded)
+                        Message = string.Format("There is already a diagnosis with code {0} and service {1}", diagnosisInputModel.Code, diagnosisInputModel.Keyword)
                     });
 
             }
@@ -112,7 +112,7 @@ namespace Web.Areas.ServicesManagement.Controllers
 
             if (queryDiagnosisValidation.Where(it => 
                                                     it.Code == diagnosisInputModel.Code && 
-                                                    it.ServiceNeeded == diagnosisInputModel.ServiceNeeded &&
+                                                    it.Keyword == diagnosisInputModel.Keyword &&
                                                     it.Id != diagnosisInputModel.Id).Count() > 0)
             {
                 return Json(
@@ -120,7 +120,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already a diagnosis with code {0} and service {1}", diagnosisInputModel.Code, diagnosisInputModel.ServiceNeeded)
+                        Message = string.Format("There is already a diagnosis with code {0} and service {1}", diagnosisInputModel.Code, diagnosisInputModel.Keyword)
                     });
 
             }
@@ -182,8 +182,8 @@ namespace Web.Areas.ServicesManagement.Controllers
             {
                 { "Code-ASC", () => diagnosisDataQuery.OrderBy(c => c.Code) },
                 { "Code-DESC", () => diagnosisDataQuery.OrderByDescending(c => c.Code) },
-                { "ServiceNeeded-ASC", () => diagnosisDataQuery.OrderBy(c => c.ServiceNeeded) },
-                { "ServiceNeeded-DESC", () => diagnosisDataQuery.OrderByDescending(c => c.ServiceNeeded) },
+                { "Keyword-ASC", () => diagnosisDataQuery.OrderBy(c => c.Keyword) },
+                { "Keyword-DESC", () => diagnosisDataQuery.OrderByDescending(c => c.Keyword) },
                 { "Description-ASC", () => diagnosisDataQuery.OrderBy(c => c.Description) },
                 { "Description-DESC", () => diagnosisDataQuery.OrderByDescending(c => c.Description) }
             };
@@ -204,7 +204,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                                              select new DiagnosisModel
                                              {
                                                  Id = diagnosis.Id,
-                                                 ServiceNeeded = diagnosis.ServiceNeeded,
+                                                 Keyword = diagnosis.Keyword,
                                                  Code = diagnosis.Code,
                                                  Description = diagnosis.Description
                                              }).ToArray();

@@ -30,13 +30,13 @@
     Ext.onReady(function () {
         window.feature = {};
         window.feature.formTreatmentCodeId = "Form-Treatment-Code-Id";
-        window.feature.formTreatmentAdviceId = "Form-Treatment-Service-Needed-Id";
+        window.feature.formTreatmentKeywordId = "Form-Treatment-Keyword-Id";
         itemId: window.feature.formTreatmentDescriptionId = "Form-Treatment-Description-Id";
         window.feature.searchTreatment = "Search-Treatment-Id";
 
         window.feature.treatmentStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
-            fields: ['Id', 'Code', 'Advice', 'Description'],
+            fields: ['Id', 'Code', 'Keyword', 'Description'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Treatment", action = "GetTreatments" })',
@@ -73,16 +73,16 @@
                 Ext.applyIf(me, {
                     items: [{
                         xtype: 'textfield',
+                        name: 'Keyword',
+                        fieldLabel: 'Keyword',
+                        anchor: '100%',
+                        itemId: window.feature.formTreatmentKeywordId
+                    }, {
+                        xtype: 'textfield',
                         name: 'Code',
                         fieldLabel: 'Code',
                         anchor: '100%',
                         itemId: window.feature.formTreatmentCodeId
-                    }, {
-                        xtype: 'textfield',
-                        name: 'Advice',
-                        fieldLabel: 'Advice',
-                        anchor: '100%',
-                        itemId: window.feature.formTreatmentAdviceId
                     }, {
                         xtype: 'textareafield',
                         name: 'Description',
@@ -159,7 +159,7 @@
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
                                         var treatmentCode = winAdd.down('#' + window.feature.formTreatmentCodeId);
-                                        var treatmentAdvice = winAdd.down('#' + window.feature.formTreatmentAdviceId);
+                                        var treatmentKeyword = winAdd.down('#' + window.feature.formTreatmentKeywordId);
                                         var treatmentDescription = winAdd.down('#' + window.feature.formTreatmentDescriptionId);
 
                                         if (treatmentCode.getValue() == '') {
@@ -168,7 +168,7 @@
                                         } else {
                                             var values = {
                                                 Code: treatmentCode.getValue(),
-                                                Advice: treatmentAdvice.getValue(),
+                                                Keyword: treatmentKeyword.getValue(),
                                                 Description: treatmentDescription.getValue()
                                             };
                                             var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Treatment", action = "Create" })';
@@ -232,14 +232,14 @@
                 flex: 3,
                 autoScroll: true,
                 columns: [{
-                    header: "Code",
-                    dataIndex: 'Code',
+                    text: "Keyword",
+                    dataIndex: 'Keyword',
                     flex: 1,
                     menuDisabled: true,
                     sortable: true
                 }, {
-                    text: "Advice",
-                    dataIndex: 'Advice',
+                    header: "Code",
+                    dataIndex: 'Code',
                     flex: 1,
                     menuDisabled: true,
                     sortable: true
@@ -275,7 +275,7 @@
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
                                         var treatmentCode = winEdit.down('#' + window.feature.formTreatmentCodeId);
-                                        var treatmentAdvice = winEdit.down('#' + window.feature.formTreatmentAdviceId);
+                                        var treatmentKeyword = winEdit.down('#' + window.feature.formTreatmentKeywordId);
                                         var treatmentDescription = winEdit.down('#' + window.feature.formTreatmentDescriptionId);
 
                                         if (treatmentCode.getValue() == '') {
@@ -285,7 +285,7 @@
                                             var values = {
                                                 Id: rec.get('Id'),
                                                 Code: treatmentCode.getValue(),
-                                                Advice: treatmentAdvice.getValue(),
+                                                Keyword: treatmentKeyword.getValue(),
                                                 Description: treatmentDescription.getValue()
                                             };
                                             var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Treatment", action = "Edit" })';
@@ -312,7 +312,7 @@
                             });
 
                             winEdit.down('#' + window.feature.formTreatmentCodeId).setValue(rec.get('Code'));
-                            winEdit.down('#' + window.feature.formTreatmentAdviceId).setValue(rec.get('Advice'));
+                            winEdit.down('#' + window.feature.formTreatmentKeywordId).setValue(rec.get('Keyword'));
                             winEdit.down('#' + window.feature.formTreatmentDescriptionId).setValue(rec.get('Description'));
 
                             winEdit.show();

@@ -48,7 +48,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
         }
 
         [Test]
-        public void Returns_Diagnosis_OrderBy_ServiceNeeded_DESC()
+        public void Returns_Diagnosis_OrderBy_Keyword_DESC()
         {
             //Arrange
             var indexModel = new DiagnosisIndexModel
@@ -57,7 +57,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
                 limit = 50,
                 page = 1,
                 start = 0,
-                sort = "ServiceNeeded"
+                sort = "Keyword"
             };
 
             var pageOfData = objectMother.PageOfDiagnosisData(indexModel);
@@ -71,7 +71,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
             objectMother.queryDiagnosis.VerifyAllExpectations();
 
             var jsonData = jsonResult.Data as DiagnosisIndexOuputModel;
-            Assert.That(jsonData.Diagnosis[0].ServiceNeeded, Is.EqualTo("Chlamydia Test9"));
+            Assert.That(jsonData.Diagnosis[0].Keyword, Is.EqualTo("Chlamydia9"));
         }
 
         [Test]

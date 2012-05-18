@@ -9,7 +9,7 @@ namespace Web.Areas.ServicesManagement.Models.Treatment
     {
         public Guid Id { get; set; }
         public string Code { get; set; }
-        public string Advice { get; set; }
+        public string Keyword { get; set; }
         public string Description { get; set; }
     }
 }

@@ -37,12 +37,12 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
         }
 
         [Test]
-        public void Returns_JSON_With_ErrorMessage_When_Treatment_CodeandAdvice_AlreadyExists()
+        public void Returns_JSON_With_ErrorMessage_When_Treatment_CodeandKeyword_AlreadyExists()
         {
             //Arrange
             TreatmentInputModel treatmentModel = new TreatmentInputModel()
             {
-                Advice = objectMother.treatment.Advice,
+                Keyword = objectMother.treatment.Keyword,
                 Code = objectMother.treatment.Code,
                 Description = "new description"
             };
@@ -63,7 +63,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
             //Arrange
             TreatmentInputModel treatmentModel = new TreatmentInputModel()
             {
-                Advice = "Advice",
+                Keyword = "Keyword",
                 Code = "Code",
                 Description = "Description"
             };

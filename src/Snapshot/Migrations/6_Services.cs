@@ -25,7 +25,7 @@ namespace Migrations
             Create.Table("Diagnosiss")
                 .WithCommonColumns()
                 .WithClientColumn()
-                .WithColumn("ServiceNeeded").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
                 
@@ -35,7 +35,7 @@ namespace Migrations
             Create.Table("Treatments")
                 .WithCommonColumns()
                 .WithClientColumn()
-                .WithColumn("Advice").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
 

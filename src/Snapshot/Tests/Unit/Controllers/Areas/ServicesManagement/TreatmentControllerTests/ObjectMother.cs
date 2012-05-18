@@ -32,7 +32,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
         public User user;
 
         private const string TREATMENT_CODE = "RX1; RX2; NOT/AV.";
-        private const string TREATMENT_ADVICE = "A1; A2; A3; A4";
+        private const string TREATMENT_KEYWORD = "A1; A2; A3; A4";
         private const string TREATMENT_DESCRIPTION = "Discharge";
         private const string CLIENT_NAME = "Ion";
         private const string USER_NAME = "IonPopescu";
@@ -89,7 +89,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
             treatment = MockRepository.GeneratePartialMock<Treatment>();
             treatment.Stub(c => c.Id).Return(treatmentId);
             treatment.Code = TREATMENT_CODE;
-            treatment.Advice = TREATMENT_ADVICE;
+            treatment.Keyword = TREATMENT_KEYWORD;
             treatment.Description = TREATMENT_DESCRIPTION;
             treatment.Client = client;
         }
@@ -104,7 +104,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
                 {
                     Code = "Code" + i,
                     Description = "some Description",
-                    Advice = "Advice" + i,
+                    Keyword = "Keyword" + i,
                     Client = client
                 });
             }

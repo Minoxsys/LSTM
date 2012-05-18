@@ -37,14 +37,14 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
         }
 
         [Test]
-        public void Returns_JSON_With_ErrorMessage_When_ThereIsAllreadyADiagnosis_WithTheSame_Code_and_ServiceNeeded()
+        public void Returns_JSON_With_ErrorMessage_When_ThereIsAllreadyADiagnosis_WithTheSame_Code_and_Keyword()
         {
             //Arrange
             DiagnosisInputModel diagnosisModel = new DiagnosisInputModel()
             {
                 Id = Guid.NewGuid(),
                 Code = objectMother.diagnosis.Code,
-                ServiceNeeded = objectMother.diagnosis.ServiceNeeded,
+                Keyword = objectMother.diagnosis.Keyword,
                 Description = objectMother.diagnosis.Description
             };
             objectMother.queryDiagnosis.Expect(call => call.Query()).Return(new Diagnosis[] { objectMother.diagnosis }.AsQueryable());
@@ -64,7 +64,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
             {
                 Id = objectMother.diagnosis.Id,
                 Code = "new Code",
-                ServiceNeeded = "new Service",
+                Keyword = "new keyword",
                 Description = "new description"
             };
             objectMother.queryDiagnosis.Expect(call => call.Query()).Return(new Diagnosis[] { objectMother.diagnosis }.AsQueryable());

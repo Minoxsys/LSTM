@@ -37,14 +37,14 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
         }
 
         [Test]
-        public void Returns_JSON_With_ErrorMessage_When_ThereIsAllreadyATreatment_WithTheSame_CodeandAdvice()
+        public void Returns_JSON_With_ErrorMessage_When_ThereIsAllreadyATreatment_WithTheSame_CodeandKeyword()
         {
             //Arrange
             TreatmentInputModel treatmentModel = new TreatmentInputModel()
             {
                 Id = Guid.NewGuid(),
                 Code = objectMother.treatment.Code,
-                Advice = objectMother.treatment.Advice,
+                Keyword = objectMother.treatment.Keyword,
                 Description = objectMother.treatment.Description
             };
             objectMother.queryTreatment.Expect(call => call.Query()).Return(new Treatment[] { objectMother.treatment }.AsQueryable());
@@ -64,7 +64,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.TreatmentControllerTes
             {
                 Id = objectMother.treatment.Id,
                 Code = "new Code",
-                Advice = "new Advice",
+                Keyword = "new keyword",
                 Description = "new description"
             };
             objectMother.queryTreatment.Expect(call => call.Query()).Return(new Treatment[] { objectMother.treatment }.AsQueryable());

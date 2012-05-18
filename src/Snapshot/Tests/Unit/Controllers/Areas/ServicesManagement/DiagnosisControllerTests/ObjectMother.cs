@@ -30,8 +30,8 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
         public Guid userId;
         public User user;
 
-        private const string DIAGNOSIS_CODE = "CHL/GON+;  CHL/GON-";
-        private const string DIAGNOSIS_SERVICENEEDED = "Chlamydia/Gonorrhoea test/Rx - STI ";
+        private const string DIAGNOSIS_CODE = "CHL/GON+";
+        private const string DIAGNOSIS_KEYWORD = "Chlamydia";
         private const string DIAGNOSIS_DESCRIPTION = "Discharge";
         private const string CLIENT_NAME = "Ion";
         private const string USER_NAME = "IonPopescu";
@@ -88,7 +88,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
             diagnosis = MockRepository.GeneratePartialMock<Diagnosis>();
             diagnosis.Stub(c => c.Id).Return(diagnosisId);
             diagnosis.Code = DIAGNOSIS_CODE;
-            diagnosis.ServiceNeeded = DIAGNOSIS_SERVICENEEDED;
+            diagnosis.Keyword = DIAGNOSIS_KEYWORD;
             diagnosis.Description = DIAGNOSIS_DESCRIPTION;
             diagnosis.Client = client;
         }
@@ -103,7 +103,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.DiagnosisControllerTes
                 {
                     Code = "CHL/GON+" + i,
                     Description = "some Description",
-                    ServiceNeeded = "Chlamydia Test" + i,
+                    Keyword = "Chlamydia" + i,
                     Client = client
                 });
             }
