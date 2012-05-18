@@ -8,7 +8,7 @@ using FluentNHibernate.Testing;
 
 namespace IntegrationTests
 {
-    public class When_WeWhantToPersist_A_ServiceNeeded : GivenAPersistenceSpecification<ServiceNeeded>
+    public class When_WeWantToPersist_A_ServiceNeeded : GivenAPersistenceSpecification<ServiceNeeded>
     {
         const string SERVICENEEDED_CODE = "Symp-1";
         const string SERVICENEEDED_KEYWORD = "Itching";
@@ -18,18 +18,18 @@ namespace IntegrationTests
         public void It_ShouldSuccessfullyPersist_A_ServiceNeeded()
         {
 
-            var diagnosis = Specs.CheckProperty(e => e.Description, SERVICENEEDED_DESCRIPTION)
+            var serviceNeeded = Specs.CheckProperty(e => e.Description, SERVICENEEDED_DESCRIPTION)
                 .CheckProperty(c => c.Code, SERVICENEEDED_CODE)
                 .CheckProperty(c => c.Keyword, SERVICENEEDED_KEYWORD)
                 .VerifyTheMappings();
 
-            Assert.IsNotNull(diagnosis);
-            Assert.IsInstanceOf<Guid>(diagnosis.Id);
-            Assert.AreEqual(diagnosis.Description, SERVICENEEDED_DESCRIPTION);
-            Assert.AreEqual(diagnosis.Code, SERVICENEEDED_CODE);
-            Assert.AreEqual(diagnosis.Keyword, SERVICENEEDED_KEYWORD);
+            Assert.IsNotNull(serviceNeeded);
+            Assert.IsInstanceOf<Guid>(serviceNeeded.Id);
+            Assert.AreEqual(serviceNeeded.Description, SERVICENEEDED_DESCRIPTION);
+            Assert.AreEqual(serviceNeeded.Code, SERVICENEEDED_CODE);
+            Assert.AreEqual(serviceNeeded.Keyword, SERVICENEEDED_KEYWORD);
 
-            session.Delete(diagnosis);
+            session.Delete(serviceNeeded);
             session.Flush();
 
 

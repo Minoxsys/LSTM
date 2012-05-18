@@ -30,7 +30,7 @@
     Ext.onReady(function () {
         window.feature = {};
         window.feature.formDiagnosisCodeId = "Form-Diagnosis-Code-Id";
-        window.feature.formKeywordId = "Form-Diagnosis-Keyword-Id";
+        window.feature.formDiagnosisKeywordId = "Form-Diagnosis-Keyword-Id";
         itemId: window.feature.formDiagnosisDescriptionId = "Form-Diagnosis-Description-Id";
         window.feature.searchDiagnosis = "Search-Diagnosis-Id";
 
@@ -76,7 +76,7 @@
                         name: 'Keyword',
                         fieldLabel: 'Keyword',
                         anchor: '100%',
-                        itemId: window.feature.formKeywordId
+                        itemId: window.feature.formDiagnosisKeywordId
                     }, {
                         xtype: 'textfield',
                         name: 'Code',
@@ -158,7 +158,7 @@
                                     ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
-                                        var diagnosisKeyword = winAdd.down('#' + window.feature.formKeywordId);
+                                        var diagnosisKeyword = winAdd.down('#' + window.feature.formDiagnosisKeywordId);
                                         var diagnosisCode = winAdd.down('#' + window.feature.formDiagnosisCodeId);
                                         var diagnosisDescription = winAdd.down('#' + window.feature.formDiagnosisDescriptionId);
 
@@ -208,7 +208,7 @@
                         width: 200,
                         frame: true,
                         cls: 'text-field-rounded',
-                        emptyText: 'Diagnosis Code Search',
+                        emptyText: 'Code Search',
                         enableKeyEvents: true,
                         listeners: {
                             'keyup': {
@@ -275,7 +275,7 @@
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
 
-                                        var diagnosisKeyword = winEdit.down('#' + window.feature.formKeywordId);
+                                        var diagnosisKeyword = winEdit.down('#' + window.feature.formDiagnosisKeywordId);
                                         var diagnosisCode = winEdit.down('#' + window.feature.formDiagnosisCodeId);
                                         var diagnosisDescription = winEdit.down('#' + window.feature.formDiagnosisDescriptionId);
 
@@ -313,7 +313,7 @@
                             });
 
                             winEdit.down('#' + window.feature.formDiagnosisCodeId).setValue(rec.get('Code'));
-                            winEdit.down('#' + window.feature.formKeywordId).setValue(rec.get('Keyword'));
+                            winEdit.down('#' + window.feature.formDiagnosisKeywordId).setValue(rec.get('Keyword'));
                             winEdit.down('#' + window.feature.formDiagnosisDescriptionId).setValue(rec.get('Description'));
 
                             winEdit.show();

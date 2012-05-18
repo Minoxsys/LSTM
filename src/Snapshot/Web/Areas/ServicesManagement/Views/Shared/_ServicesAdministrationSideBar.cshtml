@@ -6,7 +6,8 @@
             group: 'SideBarGroup',
             serviceneeded: 'Sidebar-ServiceAdministration-ServiceNeeded-Button',
             diagnosis: 'Sidebar-ServiceAdministration-Diagnosis-Button',
-            treatment: 'Sidebar-ServiceAdministration-Treatment-Button'
+            treatment: 'Sidebar-ServiceAdministration-Treatment-Button',
+            advice: 'Sidebar-ServiceAdministration-Advice-Button'
         }
     };
     Ext.onReady(function () {
@@ -78,6 +79,19 @@
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.treatment);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.advice,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Advice',
+                                height: 30,
+                                enableToggle: true,
+                                margin: '0 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.advice);
                                 }
 
                             }

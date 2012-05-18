@@ -130,6 +130,11 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\GetRegionsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\RegionControllerTests\OverviewMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\AdviceControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\AdviceControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\AdviceControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\AdviceControllerTests\GetAdvicesMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ServicesManagement\AdviceControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\ServicesManagement\DiagnosisControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\ServicesManagement\DiagnosisControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\ServicesManagement\DiagnosisControllerTests\EditMethod.cs" />

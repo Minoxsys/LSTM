@@ -196,9 +196,13 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Controllers\AdviceController.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\DiagnosisController.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\ServiceNeededController.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\TreatmentController.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\Advice\AdviceIndexModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\Advice\AdviceIndexOuputModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\Advice\AdviceModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Diagnosis\DiagnosisIndexModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Diagnosis\DiagnosisIndexOuputModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Diagnosis\DiagnosisInputModel.cs" />
@@ -2065,6 +2069,7 @@
     <Content Include="Areas\ServicesManagement\Views\Treatment\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\Dispensary\Overview.cshtml" />
     <Content Include="Areas\ServicesManagement\Views\ServiceNeeded\Overview.cshtml" />
+    <Content Include="Areas\ServicesManagement\Views\Advice\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
