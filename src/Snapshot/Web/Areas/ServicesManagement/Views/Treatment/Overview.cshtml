@@ -19,8 +19,8 @@
         var treatmentSideBarBtnId = window.res.content.maincontent.sidebar.treatment;
         var treatmentBtn = Ext.getCmp(treatmentSideBarBtnId);
         treatmentBtn.toggle(true);
-        
-        var serviceAdministrationBtnId = window.res.header.subnavigation.buttonTabs.diagnosis;
+
+        var serviceAdministrationBtnId = window.res.header.subnavigation.buttonTabs.services;
         var serviceAdministrationBtn = Ext.getCmp(serviceAdministrationBtnId);
         serviceAdministrationBtn.toggle(true);
         serviceAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');

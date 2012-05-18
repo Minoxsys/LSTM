@@ -4,8 +4,9 @@
         sidebar: {
             id: 'SideBar',
             group: 'SideBarGroup',
-            diagnosis: 'Sidebar-ProductAdministration-Diagnosis-Button',
-            treatment: 'Sidebar-ProductAdministration-Treatment-Button'
+            serviceneeded: 'Sidebar-ServiceAdministration-ServiceNeeded-Button',
+            diagnosis: 'Sidebar-ServiceAdministration-Diagnosis-Button',
+            treatment: 'Sidebar-ServiceAdministration-Treatment-Button'
         }
     };
     Ext.onReady(function () {
@@ -42,11 +43,24 @@
                         items: [
                             {
                                 xtype: 'button',
+                                id: contentRes.maincontent.sidebar.serviceneeded,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'Service needed',
+                                margin: '45 50 0 0',
+                                height: 30,
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.serviceneeded);
+                                }
+                            },
+                            {
+                                xtype: 'button',
                                 id: contentRes.maincontent.sidebar.diagnosis,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Diagnosis',
-                                margin: '45 50 0 0',
+                                margin: '0 50 0 0',
                                 height: 30,
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {

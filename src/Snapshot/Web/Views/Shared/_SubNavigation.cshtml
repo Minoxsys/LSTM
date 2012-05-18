@@ -3,7 +3,7 @@
         id: 'ButtonTabs',
         group: 'AdministrationButtonsGroup',
         outpost: 'OutpostAdministration',
-        diagnosis: 'ServicesAdministration',
+        services: 'ServicesAdministration',
         user: 'UserAdministration'
     };
 
@@ -59,7 +59,7 @@
                             },
                             {
                                 xtype: 'button',
-                                id: subNavRes.buttonTabs.diagnosis,
+                                id: subNavRes.buttonTabs.services,
                                 toggleGroup: subNavRes.buttonTabs.group,
                                 enableToggle: true,
                                 height: 38,
@@ -67,11 +67,11 @@
                                 padding: '0 0 0 10',
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
-                                text: 'Services Administration',
+                                text: 'Service Administration',
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     SetUnselectedImagesToButtons();
-                                    navigateTo(res.link.diagnosis); 
+                                    navigateTo(res.link.serviceneeded); 
                                 }
                             },
                             {

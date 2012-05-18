@@ -197,11 +197,15 @@
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\DiagnosisController.cs" />
+    <Compile Include="Areas\ServicesManagement\Controllers\ServiceNeededController.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\TreatmentController.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Diagnosis\DiagnosisIndexModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Diagnosis\DiagnosisIndexOuputModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Diagnosis\DiagnosisInputModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Diagnosis\DiagnosisModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\ServiceNeeded\ServiceNeededIndexModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\ServiceNeeded\ServiceNeededIndexOuputModel.cs" />
+    <Compile Include="Areas\ServicesManagement\Models\ServiceNeeded\ServiceNeededModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Treatment\TreatmentIndexModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Treatment\TreatmentIndexOuputModel.cs" />
     <Compile Include="Areas\ServicesManagement\Models\Treatment\TreatmentInputModel.cs" />
@@ -2060,6 +2064,7 @@
     <Content Include="Areas\MessagesManagement\Views\Shared\_MessagesSideBar.cshtml" />
     <Content Include="Areas\ServicesManagement\Views\Treatment\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\Dispensary\Overview.cshtml" />
+    <Content Include="Areas\ServicesManagement\Views\ServiceNeeded\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

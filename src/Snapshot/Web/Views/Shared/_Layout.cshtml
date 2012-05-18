@@ -49,6 +49,7 @@
             clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             analysisAndReports: '@(Url.RouteUrl<AnalysisController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
+            serviceneeded: '@(Url.RouteUrl<ServiceNeededController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))',
             diagnosis: '@(Url.RouteUrl<DiagnosisController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))',
             treatment: '@(Url.RouteUrl<TreatmentController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))',
             drugstore: '@(Url.RouteUrl<DrugstoreController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))',

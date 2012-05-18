@@ -30,9 +30,6 @@ namespace IntegrationTests
             Assert.AreEqual(diagnosis.Keyword, DIAGNOSIS_KEYWORD);
 
             session.Delete(diagnosis);
-            session.Flush();
-
-
         }
     }
 }

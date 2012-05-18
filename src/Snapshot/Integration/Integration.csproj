@@ -98,6 +98,7 @@
     <Compile Include="When_WeWantToPersist_A_Permission.cs" />
     <Compile Include="When_WeWantToPersist_A_WorldCountryRecord.cs" />
     <Compile Include="When_WeWantToSave_A_Role.cs" />
+    <Compile Include="When_WeWhantToPersist_A_ServiceNeeded.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

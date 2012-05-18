@@ -3,7 +3,7 @@
 @using Microsoft.Web.Mvc;
 
 @section page_title{
-    Diagnosis Item: Overview
+    Service Needed Item: Overview
 }
 @{
     Html.RenderPartial("_SubNavigation");
@@ -16,9 +16,9 @@
         var administrationBtn = Ext.getCmp(administrationBtnId);
         administrationBtn.toggle(true);
 
-        var diagnosisSideBarBtnId = window.res.content.maincontent.sidebar.diagnosis;
-        var diagnosisBtn = Ext.getCmp(diagnosisSideBarBtnId);
-        diagnosisBtn.toggle(true);
+        var serviceNeededSideBarBtnId = window.res.content.maincontent.sidebar.serviceneeded;
+        var serviceneededBtn = Ext.getCmp(serviceNeededSideBarBtnId);
+        serviceneededBtn.toggle(true);
 
         var serviceAdministrationBtnId = window.res.header.subnavigation.buttonTabs.services;
         var serviceAdministrationBtn = Ext.getCmp(serviceAdministrationBtnId);
@@ -29,20 +29,20 @@
 <script type="text/javascript">
     Ext.onReady(function () {
         window.feature = {};
-        window.feature.formDiagnosisCodeId = "Form-Diagnosis-Code-Id";
-        window.feature.formKeywordId = "Form-Diagnosis-Keyword-Id";
-        itemId: window.feature.formDiagnosisDescriptionId = "Form-Diagnosis-Description-Id";
-        window.feature.searchDiagnosis = "Search-Diagnosis-Id";
+        window.feature.formServiceNeededCodeId = "Form-ServiceNeeded-Code-Id";
+        window.feature.formKeywordId = "Form-ServiceNeeded-Keyword-Id";
+        itemId: window.feature.formServiceNeededDescriptionId = "Form-ServiceNeeded-Description-Id";
+        window.feature.searchServiceNeeded = "Search-ServiceNeeded-Id";
 
-        window.feature.diagnosisStore = Ext.create('Ext.data.Store', {
+        window.feature.serviceNeededStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             fields: ['Id', 'Keyword', 'Code', 'Description'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Diagnosis", action = "GetDiagnosis" })',
+                url: '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ServiceNeeded", action = "GetServiceNeeded" })',
                 reader: {
                     type: 'json',
-                    root: 'Diagnosis',
+                    root: 'ServiceNeeded',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { searchValue: '' },
@@ -55,7 +55,7 @@
             }]
         });
 
-        window.feature.modal = Ext.define('Ext.feature.diagnosis.Modal', {
+        window.feature.modal = Ext.define('Ext.feature.serviceNeeded.Modal', {
             extend: 'Ext.window.Window',
             modal: true,
             ui: 'snapshot-popup-window',
@@ -82,14 +82,14 @@
                         name: 'Code',
                         fieldLabel: 'Code',
                         anchor: '100%',
-                        itemId: window.feature.formDiagnosisCodeId
+                        itemId: window.feature.formServiceNeededCodeId
                     }, {
                         xtype: 'textareafield',
                         name: 'Description',
                         fieldLabel: 'Description',
                         grow: true,
                         anchor: '100%',
-                        itemId: window.feature.formDiagnosisDescriptionId
+                        itemId: window.feature.formServiceNeededDescriptionId
                     }]
                 });
 
@@ -98,7 +98,7 @@
         });
 
         window.feature.doSearch = new Ext.util.DelayedTask(function () {
-            window.feature.diagnosisStore.loadPage(1);
+            window.feature.serviceNeededStore.loadPage(1);
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
@@ -135,17 +135,17 @@
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Diagnosis'
+                        text: 'ServiceNeeded'
                     }, {
                         xtype: 'button',
                         margin: '0 0 0 20',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
                         //disabled: @(ViewBag.HasNoRightsToAdd),
-                        text: 'Add New Diagnosis',
+                        text: 'Add New Service Needed',
                         handler: function () {
                             var winAdd = new window.feature.modal({
-                                title: 'Add New Diagnosis',
+                                title: 'Add New Service Needed',
                                 buttons: [{
                                     text: 'Cancel',
                                     margin: '10 10 20 0',
@@ -158,20 +158,20 @@
                                     ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
-                                        var diagnosisKeyword = winAdd.down('#' + window.feature.formKeywordId);
-                                        var diagnosisCode = winAdd.down('#' + window.feature.formDiagnosisCodeId);
-                                        var diagnosisDescription = winAdd.down('#' + window.feature.formDiagnosisDescriptionId);
+                                        var serviceNeededKeyword = winAdd.down('#' + window.feature.formKeywordId);
+                                        var serviceNeededCode = winAdd.down('#' + window.feature.formServiceNeededCodeId);
+                                        var serviceNeededDescription = winAdd.down('#' + window.feature.formServiceNeededDescriptionId);
 
-                                        if (diagnosisCode.getValue() == '') {
-                                            diagnosisCode.markInvalid('Field Code is required!');
-                                            diagnosisCode.setValue(null);
+                                        if (serviceNeededCode.getValue() == '') {
+                                            serviceNeededCode.markInvalid('Field Code is required!');
+                                            serviceNeededCode.setValue(null);
                                         } else {
                                             var values = {
-                                                Keyword: diagnosisKeyword.getValue(),
-                                                Code: diagnosisCode.getValue(),
-                                                Description: diagnosisDescription.getValue()
+                                                Keyword: serviceNeededKeyword.getValue(),
+                                                Code: serviceNeededCode.getValue(),
+                                                Description: serviceNeededDescription.getValue()
                                             };
-                                            var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Diagnosis", action = "Create" })';
+                                            var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ServiceNeeded", action = "Create" })';
                                             var action = $.post(postToUrl, values);
 
                                             action.success(function (serverResponse) {
@@ -184,7 +184,7 @@
                                                 } else {
                                                     winAdd.close();
                                                     winAdd.destroy();
-                                                    window.feature.diagnosisStore.loadPage(1);
+                                                    window.feature.serviceNeededStore.loadPage(1);
                                                 }
                                             });
                                         }
@@ -204,17 +204,17 @@
                     height: 80,
                     items: [{
                         xtype: 'textfield',
-                        itemId: window.feature.searchDiagnosis,
+                        itemId: window.feature.searchServiceNeeded,
                         width: 200,
                         frame: true,
                         cls: 'text-field-rounded',
-                        emptyText: 'Diagnosis Code Search',
+                        emptyText: 'Code Search',
                         enableKeyEvents: true,
                         listeners: {
                             'keyup': {
                                 fn: function (key) {
-                                    var searchValue = window.feature.container.down('#' + window.feature.searchDiagnosis).getValue();
-                                    window.feature.diagnosisStore.proxy.extraParams.searchValue = searchValue;
+                                    var searchValue = window.feature.container.down('#' + window.feature.searchServiceNeeded).getValue();
+                                    window.feature.serviceNeededStore.proxy.extraParams.searchValue = searchValue;
                                     window.feature.doSearch.delay(500);
                                 }
                             }
@@ -225,8 +225,8 @@
             }, {
                 xtype: 'gridpanel',
                 cls: 'white-border',
-                itemId: window.feature.gridDiagnosisId,
-                store: window.feature.diagnosisStore,
+                itemId: window.feature.gridServiceNeededId,
+                store: window.feature.serviceNeededStore,
                 loadMask: true,
                 disableSelection: true,
                 flex: 3,
@@ -261,7 +261,7 @@
                             var rec = grid.getStore().getAt(rowIndex);
 
                             var winEdit = new window.feature.modal({
-                                title: 'Edit Diagnosis',
+                                title: 'Edit Service Needed',
                                 buttons: [{
                                     text: 'Cancel',
                                     margin: '10 10 20 0',
@@ -275,21 +275,21 @@
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
 
-                                        var diagnosisKeyword = winEdit.down('#' + window.feature.formKeywordId);
-                                        var diagnosisCode = winEdit.down('#' + window.feature.formDiagnosisCodeId);
-                                        var diagnosisDescription = winEdit.down('#' + window.feature.formDiagnosisDescriptionId);
+                                        var serviceNeededKeyword = winEdit.down('#' + window.feature.formKeywordId);
+                                        var serviceNeededCode = winEdit.down('#' + window.feature.formServiceNeededCodeId);
+                                        var serviceNeededDescription = winEdit.down('#' + window.feature.formServiceNeededDescriptionId);
 
-                                        if (diagnosisCode.getValue() == '') {
-                                            diagnosisCode.markInvalid('Field Code is required!');
-                                            diagnosisCode.setValue(null);
+                                        if (serviceNeededCode.getValue() == '') {
+                                            serviceNeededCode.markInvalid('Field Code is required!');
+                                            serviceNeededCode.setValue(null);
                                         } else {
                                             var values = {
                                                 Id: rec.get('Id'),
-                                                Keyword: diagnosisKeyword.getValue(),
-                                                Code: diagnosisCode.getValue(),
-                                                Description: diagnosisDescription.getValue()
+                                                Keyword: serviceNeededKeyword.getValue(),
+                                                Code: serviceNeededCode.getValue(),
+                                                Description: serviceNeededDescription.getValue()
                                             };
-                                            var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Diagnosis", action = "Edit" })';
+                                            var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ServiceNeeded", action = "Edit" })';
                                             var action = $.post(postToUrl, values);
                                             action.success(function (serverResponse) {
                                                 if (serverResponse.CloseModal == false) {
@@ -303,7 +303,7 @@
 
                                                     winEdit.close();
                                                     winEdit.destroy();
-                                                    window.feature.diagnosisStore.loadPage(1);
+                                                    window.feature.serviceNeededStore.loadPage(1);
                                                 }
                                             });
                                         }
@@ -312,9 +312,9 @@
                                 }]
                             });
 
-                            winEdit.down('#' + window.feature.formDiagnosisCodeId).setValue(rec.get('Code'));
+                            winEdit.down('#' + window.feature.formServiceNeededCodeId).setValue(rec.get('Code'));
                             winEdit.down('#' + window.feature.formKeywordId).setValue(rec.get('Keyword'));
-                            winEdit.down('#' + window.feature.formDiagnosisDescriptionId).setValue(rec.get('Description'));
+                            winEdit.down('#' + window.feature.formServiceNeededDescriptionId).setValue(rec.get('Description'));
 
                             winEdit.show();
                         }
@@ -331,10 +331,10 @@
                             msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
                             msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
                             msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
-                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete diagnosis {0} ?', rec.get('Code')), function (btn) {
+                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete service needed {0} ?', rec.get('Code')), function (btn) {
                                 if (btn == 'yes') {
                                     var values = { id: rec.get('Id') };
-                                    var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Diagnosis", action = "Delete" })';
+                                    var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ServiceNeeded", action = "Delete" })';
                                     var action = $.post(postToUrl, values);
 
                                     action.success(function (serverResponse) {
@@ -345,7 +345,7 @@
                                             msgAlert.msgButtons['ok'].margin = '10 10 20 0',
                                             msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                         }
-                                        window.feature.diagnosisStore.loadPage(1);
+                                        window.feature.serviceNeededStore.loadPage(1);
                                     });
                                 }
 
@@ -354,7 +354,7 @@
                     }]
                 }],
                 bbar: Ext.create('Ext.PagingToolbar', {
-                    store: window.feature.diagnosisStore,
+                    store: window.feature.serviceNeededStore,
                     displayInfo: true,
                     displayMsg: 'Displaying topics {0} - {1} of {2}',
                     emptyMsg: "No topics to display",
@@ -367,7 +367,7 @@
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.diagnosisStore.loadPage(1);
+        window.feature.serviceNeededStore.loadPage(1);
     });
 
 </script>

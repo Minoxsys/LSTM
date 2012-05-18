@@ -18,6 +18,14 @@ namespace Migrations
             Delete.RemoveForeignKey("Treatments");
             Delete.RemoveClientForeignKey("Treatments");
             Delete.Table("Treatments");
+
+            Delete.RemoveForeignKey("ServiceNeededs");
+            Delete.RemoveClientForeignKey("ServiceNeededs");
+            Delete.Table("ServiceNeededs");
+
+            Delete.RemoveForeignKey("Advices");
+            Delete.RemoveClientForeignKey("Advices");
+            Delete.Table("Advices");
         }
 
         public override void Up()
@@ -41,6 +49,26 @@ namespace Migrations
 
             Create.AddForeignKey("Treatments");
             Create.AddClientForeignKey("Treatments");
+
+            Create.Table("ServiceNeededs")
+                .WithCommonColumns()
+                .WithClientColumn()
+                .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+
+            Create.AddForeignKey("ServiceNeededs");
+            Create.AddClientForeignKey("ServiceNeededs");
+
+            Create.Table("Advices")
+                .WithCommonColumns()
+                .WithClientColumn()
+                .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+
+            Create.AddForeignKey("Advices");
+            Create.AddClientForeignKey("Advices");
         }
     }
 }
