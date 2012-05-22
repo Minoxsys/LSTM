@@ -30,7 +30,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				RegionId = Guid.NewGuid(),
 				DistrictId = Guid.NewGuid(),
 				WarehouseId = Guid.NewGuid(),
-				IsWarehouse = false
+                OutpostTypeId = Guid.NewGuid()
 			};
 
 			_.ExpectSaveToBeCalledWithValuesFrom(model);
@@ -51,7 +51,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				RegionId = Guid.NewGuid(),
 				DistrictId = Guid.NewGuid(),
 				WarehouseId = Guid.NewGuid(),
-				IsWarehouse = false
+                OutpostTypeId = Guid.NewGuid()
 			};
 
 			_.ExpectSaveToBeCalledWithValuesFrom(model);
@@ -76,7 +76,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				RegionId = Guid.NewGuid(),
 				DistrictId = Guid.NewGuid(),
 				WarehouseId = Guid.NewGuid(),
-				IsWarehouse = false
+                OutpostTypeId = Guid.NewGuid()
 			};
 
 			_.controller.Create(model);
@@ -95,7 +95,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				RegionId = Guid.NewGuid(),
 				DistrictId = Guid.NewGuid(),
 				WarehouseId = Guid.NewGuid(),
-				IsWarehouse = false
+                OutpostTypeId = Guid.NewGuid()
 			};
 
 			_.controller.Create(model);
@@ -115,7 +115,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				RegionId = Guid.NewGuid(),
 				DistrictId = Guid.NewGuid(),
 				WarehouseId = Guid.NewGuid(),
-				IsWarehouse = false
+                OutpostTypeId = Guid.NewGuid()
 			};
 
 			_.controller.Create(model);
@@ -134,13 +134,32 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				RegionId = Guid.NewGuid(),
 				DistrictId = Guid.NewGuid(),
 				WarehouseId = Guid.NewGuid(),
-				IsWarehouse = false
+                OutpostTypeId = Guid.NewGuid()
 			};
 
 			_.controller.Create(model);
 
 			Mock.Get(_.controller.QueryService).Verify(c => c.Load(model.WarehouseId.Value));
 		}
+
+        [Test]
+        public void Loads_OutpostTypes()
+        {
+            var model = new CreateOutpostInputModel
+            {
+                Coordinates = "22.23 234.30",
+                Name = "Warehouse",
+                CountryId = Guid.NewGuid(),
+                RegionId = Guid.NewGuid(),
+                DistrictId = Guid.NewGuid(),
+                WarehouseId = Guid.NewGuid(),
+                OutpostTypeId = Guid.NewGuid()
+            };
+
+            _.controller.Create(model);
+
+            Mock.Get(_.controller.QueryOutpostTypes).Verify(c => c.Load(model.OutpostTypeId.Value));
+        }
 
 	}
 }

@@ -11,10 +11,9 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 		public Guid? RegionId { get; set; }
 		public Guid? DistrictId { get; set; }
 		public Guid? WarehouseId { get; set; }
+        public Guid? OutpostTypeId { get; set; }
 
 		public string Name { get; set; }
 		public string Coordinates { get; set; }
-
-		public bool? IsWarehouse { get; set; }
 	}
 }

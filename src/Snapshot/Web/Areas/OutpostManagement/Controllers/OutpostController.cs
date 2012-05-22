@@ -27,6 +27,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 		public IQueryService<Client> LoadClient { get; set; }
 		public IQueryService<User> QueryUsers { get; set; }
 		public IQueryService<Contact> QueryContact { get; set; }
+        public IQueryService<OutpostType> QueryOutpostTypes { get; set; }
 
 		public ISaveOrUpdateCommand<Outpost> SaveOrUpdateCommand { get; set; }
 		public ISaveOrUpdateCommand<Contact> SaveOrUpdateCommandContact { get; set; }
@@ -135,6 +136,11 @@ namespace Web.Areas.OutpostManagement.Controllers
 				outpostsQueryData = outpostsQueryData.Where(o => o.Name.Contains(input.search));
 			}
 
+            if (input.outpostTypeId.HasValue)
+            {
+                outpostsQueryData = outpostsQueryData.Where( o => o.OutpostType.Id == input.outpostTypeId.Value);
+            }
+
 			var orderByColumnDirection = new Dictionary<string, Func<IQueryable<Outpost>>>()
 			{
 				{ "Name-ASC", () => outpostsQueryData.OrderBy(c => c.Name) },
@@ -154,13 +160,14 @@ namespace Web.Areas.OutpostManagement.Controllers
 			{
 				Id = o.Id.ToString(),
 				Name = o.Name,
-				IsWarehouse = o.IsWarehouse,
 				WarehouseName = o.Warehouse != null ? o.Warehouse.Name : string.Empty,
 				Coordinates = o.Latitude + "" + o.Longitude, // TODO drop this and just add a simple Coordintates property, the client should have accepted it in the first place
 				ContactMethod = o.DetailMethod,
 				CountryId = o.Country.Id.ToString(),
 				RegionId = o.Region.Id.ToString(),
 				DistrictId = o.District.Id.ToString(),
+                OutpostTypeId = o.OutpostType.Id.ToString(),
+                OutpostTypeName = o.OutpostType.Name,
 				WarehouseId = o.Warehouse != null ? o.Warehouse.Id.ToString() : string.Empty
 			}).ToArray();
 
@@ -186,22 +193,46 @@ namespace Web.Areas.OutpostManagement.Controllers
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-		public JsonResult GetWarehouses()
-		{
-			var model = new GetWarehousesOutputModel();
-			LoadUserAndClient();
+        [HttpGet]
+        public JsonResult GetOutpostTypes()
+        {
+            LoadUserAndClient();
 
-			var warehouseQueryData = QueryService.Query()
-												 .Where(c => c.Client == this._client && c.IsWarehouse == true)
-												 .OrderBy(w => w.Name);
-			model.Warehouses = (from w in warehouseQueryData.ToList() select new GetWarehousesOutputModel.WarehouseModel
-			{
-				Id = w.Id.ToString(),
-				Name = w.Name
-			}).ToArray();
+            var outpostTypes = QueryOutpostTypes.Query();
+            int totalItems = outpostTypes.Count();
 
-			return Json(model, JsonRequestBehavior.AllowGet);
-		}
+            var outpostTypesModelListProjection = (from type in outpostTypes.ToList()
+                                              select new OutpostTypeModel
+                                              {
+                                                  Id = type.Id,
+                                                  Name = type.Name
+                                              }).ToArray();
+
+
+            return Json(new OutpostTypesIndexOutputModel
+            {
+                OutpostTypes = outpostTypesModelListProjection,
+                TotalItems = totalItems
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetWarehouses()
+        {
+            var model = new GetWarehousesOutputModel();
+            LoadUserAndClient();
+
+            var warehouseQueryData = QueryService.Query()
+                                                 .Where(c => c.Client == this._client && c.OutpostType.Name != "Drug shop")
+                                                 .OrderBy(w => w.Name);
+            model.Warehouses = (from w in warehouseQueryData.ToList()
+                                select new GetWarehousesOutputModel.WarehouseModel
+                                    {
+                                        Id = w.Id.ToString(),
+                                        Name = w.Name
+                                    }).ToArray();
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
 		private void LoadUserAndClient()
 		{
@@ -310,7 +341,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 		private void MapInputToOutpost(CreateOutpostInputModel model, ref Outpost outpost)
 		{
 			outpost. Name = model.Name;
-			outpost. IsWarehouse = model.IsWarehouse.Value;
+            outpost.OutpostType = QueryOutpostTypes.Load(model.OutpostTypeId.Value);
 			outpost. Latitude = model.Coordinates;
 			outpost. Client = _client;
 			outpost. ByUser = _user;

@@ -119,6 +119,7 @@
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\FromDistrictsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetDistrictsMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetOutpostsMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetOutpostTypesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\GetWarehousesMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\OutpostControllerTests\OverviewMethod.cs" />

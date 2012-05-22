@@ -76,7 +76,6 @@ namespace Web.Services
             {
                 rawSmsReceived.OutpostId = outpost.Id;
                 rawSmsReceived.OutpostName = outpost.Name;
-                rawSmsReceived.IsDispensary = outpost.IsWarehouse;
             }
 
             return rawSmsReceived;

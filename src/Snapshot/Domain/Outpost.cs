@@ -12,13 +12,13 @@ namespace Domain
         public virtual string DetailMethod { get; set; }
         public virtual string Longitude { get; set; }
         public virtual string Latitude { get; set; }
-        public virtual bool IsWarehouse { get; set; }
         public virtual Outpost Warehouse { get; set; }
         public virtual IList<Domain.Contact> Contacts { get; set; }
-        public virtual Domain.Country Country { get; set; }
-        public virtual Domain.Region Region { get; set; }
-        public virtual Domain.District District { get; set; }
-        public virtual Domain.Client Client { get; set; }
+        public virtual OutpostType OutpostType { get; set; }
+        public virtual Country Country { get; set; }
+        public virtual Region Region { get; set; }
+        public virtual District District { get; set; }
+        public virtual Client Client { get; set; }
 
 
         public Outpost()

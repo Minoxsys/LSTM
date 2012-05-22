@@ -25,8 +25,11 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		private Mock<User> userMock;
 		public Mock<Client> clientMock;
 		public Guid regionId;
+        public Guid outpostTypeId;
 		private Mock<Region> regionMock;
+        private Mock<OutpostType> outpostTypeMock;
 		private District[] districts;
+        private OutpostType[] outpostTypes;
 
 		internal void Init()
 		{
@@ -88,6 +91,17 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			return districts;
 		}
 
+        internal OutpostType[] ExpectOutpostTypesToBeQueried()
+        {
+            StubOutpostTypes();
+            var queryOutpostTypes = Mock.Get(this.controller.QueryOutpostTypes);
+
+            queryOutpostTypes.Setup(c => c.Query()).Returns(
+                outpostTypes.AsQueryable());
+
+            return outpostTypes;
+        }
+
 		private void StubDistrictsRegion()
 		{
 			this.regionId = Guid.NewGuid();
@@ -112,6 +126,31 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			};
 
 		}
+
+        private void StubOutpostTypes()
+        {
+            this.outpostTypeId = Guid.NewGuid();
+            this.outpostTypeMock = new Mock<OutpostType>();
+            this.outpostTypeMock.SetupGet(r => r.Id).Returns(this.outpostTypeId);
+            this.outpostTypeMock.SetupGet(r => r.Name).Returns("OutpostType");
+
+            this.outpostTypes = new OutpostType[]{
+				new OutpostType{
+					Name = "Dispensary",
+				},
+
+				new OutpostType{
+					Name = "Drug Shop",
+				}
+			};
+
+        }
+
+        internal void VerifyThatOutpostTypesHaveBeenQueried()
+        {
+            var queryOutpostTypes = Mock.Get(this.controller.QueryOutpostTypes);
+            queryOutpostTypes.Verify(c => c.Query());
+        }
 
 		internal void VerifyThatDistrictsHaveBeenQueried()
 		{
@@ -148,6 +187,8 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			fakeRegion.Setup(c => c.Id).Returns(Guid.NewGuid());
 			var fakeDistrict = new Mock<District>();
 			fakeDistrict.Setup(c => c.Id).Returns(Guid.NewGuid());
+            var fakeOutpostType = new Mock<OutpostType>();
+            fakeOutpostType.Setup(c => c.Id).Returns(Guid.NewGuid());
 
 			for (int i = 0; i < 500; i++)
 			{
@@ -167,13 +208,12 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 					}else
 						outpost.Setup(c => c.Name).Returns("Beta Outpost " + i);
 				}
-
-				outpost.Setup(c => c.IsWarehouse).Returns(true);
 				outpost.Setup(c => c.Client).Returns(clientMock.Object);
 
 				outpost.Setup(c => c.Country).Returns(fakeCountry.Object);
 				outpost.Setup(c => c.Region).Returns(fakeRegion.Object);
 				outpost.Setup(c => c.District).Returns(fakeDistrict.Object);
+                outpost.Setup(c => c.OutpostType).Returns(fakeOutpostType.Object);
 
 				listOfOutposts.Add(outpost.Object);
 			}
@@ -200,7 +240,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 			{
 				var warehouse = new Mock<Outpost>();
 				warehouse.SetupGet(c=>c.Id).Returns(Guid.NewGuid());
-				warehouse.SetupGet(c => c.IsWarehouse).Returns(true);
 				warehouse.SetupGet(c => c.Name).Returns("Warehouse " + i);
 				listOfWarehouses.Add(warehouse.Object);
 			}
@@ -217,8 +256,10 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		internal void ExpectSaveToBeCalledWithValuesFrom(CreateOutpostInputModel model)
 		{
 			var saveCommand = Mock.Get(controller.SaveOrUpdateCommand);
-			saveCommand.Setup(c => c.Execute(Moq.It.Is<Outpost>(
-				o => o.Name == model.Name && o.IsWarehouse == model.IsWarehouse)));
+            saveCommand.Setup(c => c.Execute(Moq.It.Is<Outpost>(
+                o => o.Name == model.Name && 
+                     o.Latitude == model.Coordinates
+            )));
 		}
 
 		internal void VerifyThatSaveHasBeendCalled()

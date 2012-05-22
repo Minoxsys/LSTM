@@ -17,7 +17,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 		}
 
 		[Test]
-		public void Gets_All_Outposts_That_Have_IsWarehouse_true()
+		public void Gets_All_Outposts_That_Ane_Not_DrugShops()
 		{
 			_.ExpectWarehousesToBeQueried();
 
@@ -25,5 +25,6 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 
 			_.VerifyThatWarehousesHaveBeenQueried();
 		}
+
 	}
 }

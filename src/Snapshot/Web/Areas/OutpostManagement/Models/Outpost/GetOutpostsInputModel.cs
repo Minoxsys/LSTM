@@ -21,6 +21,7 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
 		public Guid? countryId { get; set; }
 		public Guid? regionId { get; set; }
 		public Guid? districtId { get; set; }
+        public Guid? outpostTypeId { get; set; }
 
         public string search { get; set; }
     }

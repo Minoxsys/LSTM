@@ -15,7 +15,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
         public string DetailMethod { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public bool IsWarehouse { get; set; }
         public RegionModel Region { get; set; }
         public DistrictModel District { get; set; }
         public ClientModel Client { get; set; }

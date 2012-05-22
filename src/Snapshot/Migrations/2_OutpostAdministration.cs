@@ -24,12 +24,15 @@ namespace Migrations
 			Delete.RemoveClientForeignKey("Districts");
 			Delete.RemoveForeignKey("Districts", "Region_FK", "Regions");
 
+            Delete.RemoveForeignKey("OutpostTypes");
+
 			Delete.RemoveForeignKey("Outposts");
 			Delete.RemoveClientForeignKey("Outposts");
 			Delete.RemoveForeignKey("Outposts", "Country_FK", "Countries");
 			Delete.RemoveForeignKey("Outposts", "Region_FK", "Regions");
 			Delete.RemoveForeignKey("Outposts", "District_FK", "Districts");
 			Delete.RemoveForeignKey("Outposts", "Warehouse_FK", "Outposts");
+            Delete.RemoveForeignKey("Outposts", "OutpostType_FK", "OutpostTypes");
 
 			Delete.RemoveClientForeignKey("Contacts");
 			Delete.RemoveForeignKey("Contacts", "Outpost_FK", "Outposts");
@@ -42,6 +45,7 @@ namespace Migrations
 
 			Delete.Table("Contacts");
 			Delete.Table("Outposts");
+            Delete.Table("OutpostTypes");
 
 			Delete.Table("Clients");
 		}
@@ -88,6 +92,12 @@ namespace Migrations
 			Create.AddForeignKey("Districts");
 			Create.AddForeignKey("Districts", "Region_FK", "Regions");
 			Create.AddClientForeignKey("Districts");
+
+            Create.Table("OutpostTypes")
+                .WithCommonColumns()
+                .WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH);
+
+            Create.AddForeignKey("OutpostTypes");
 				
 
 			Create.Table("Outposts")
@@ -97,7 +107,7 @@ namespace Migrations
 				.WithColumn("Coordinates").AsString(ConstraintUtility.COORDINATES_LENGTH).Nullable()
 				.WithColumn("Longitude").AsString(ConstraintUtility.COORDINATES_LENGTH).Nullable()
 				.WithColumn("Latitude").AsString(ConstraintUtility.COORDINATES_LENGTH).Nullable()
-				.WithColumn("IsWarehouse").AsBoolean()
+                .WithColumn("OutpostType_FK").AsGuid()
 				.WithColumn("DetailMethod").AsString(255).Nullable()
 				.WithColumn("Country_FK").AsGuid()
 				.WithColumn("Warehouse_FK").AsGuid().Nullable()
@@ -109,6 +119,7 @@ namespace Migrations
 			Create.AddForeignKey("Outposts", "Region_FK", "Regions");
 			Create.AddForeignKey("Outposts", "District_FK", "Districts");
 			Create.AddForeignKey("Outposts", "Warehouse_FK", "Outposts");
+            Create.AddForeignKey("Outposts", "OutpostType_FK", "OutpostTypes");
 			Create.AddClientForeignKey("Outposts");
 
 			Create.Table("Contacts")

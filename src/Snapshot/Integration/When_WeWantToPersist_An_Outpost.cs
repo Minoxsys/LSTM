@@ -17,89 +17,45 @@ namespace IntegrationTests
 
     class When_WeWantToPersist_An_Outpost : GivenAPersistenceSpecification<Outpost>
     {
-       readonly string OUTPOST_NAME = "Outpost Test";
-       readonly string OUTPOST_TYPE = "Facility";
-       readonly string OUTPOST_DETAIL = "a.b@evozon.com";
-       readonly string OUTPOST_METHOD = "e-mail";
-       readonly Guid CLIENT_ID =new Guid("BEEC53CE-A73C-4F03-A354-C617F68BC813");
-       readonly List<Contact> Phones;
-       //Guid OUTPOST_ID = Guid.Empty;
+        private const string OUTPOST_NAME = "Cluj";
+        private const string OUTPOST_DETAILMETHOD = "EMAIL";
+        private Country COUNTRY = new Country { Name = "Romania" };
+        private Region REGION = new Region { Name = "TRANSILVANIA" };
+        private District DISTRICT = new District { Name = "NORD" };
+        private Outpost WAREHOUSE = new Outpost { Name = "BAIA MARE" };
+        private OutpostType OUTPOSTTYPE = new OutpostType { Name = "DRUG SHOP" };
 
-
-       [Test]
-       public void It_ShouldSuccessfullyPersist_An_Outpost()
-       {
-           var outpost = Specs
-                    .CheckProperty(e => e.Name, OUTPOST_NAME)
-                    .CheckProperty(e => e.DetailMethod, OUTPOST_DETAIL)
-                   
-                    //.CheckProperty(e => e.Client, OUTPOST_METHOD)
-
-                    .VerifyTheMappings();
+        [Test]
+        public void It_Should_Successfully_Persist_AN_Outpost()
+        {
+            var outpost = Specs
+                .CheckProperty(e => e.Name, OUTPOST_NAME)
+                .CheckProperty(c => c.DetailMethod, OUTPOST_DETAILMETHOD)
+                .CheckReference(c => c.Country, COUNTRY)
+                .CheckReference(c => c.Region, REGION)
+                .CheckReference(c => c.District, DISTRICT)
+                .CheckReference(c => c.Warehouse, WAREHOUSE)
+                .CheckReference(c => c.OutpostType, OUTPOSTTYPE)
+                .CheckReference(c => c.Country, COUNTRY)
+                .VerifyTheMappings();
 
             Assert.IsNotNull(outpost);
             Assert.IsInstanceOf<Guid>(outpost.Id);
             Assert.AreEqual(outpost.Name, OUTPOST_NAME);
-            //Assert.AreEqual(outpost.Client.Id, CLIENT_ID);
-           
+            Assert.AreEqual(outpost.DetailMethod, OUTPOST_DETAILMETHOD);
+            Assert.IsInstanceOf<Country>(outpost.Country);
+            Assert.AreEqual(outpost.Country.Name, COUNTRY.Name);
+            Assert.IsInstanceOf<Region>(outpost.Region);
+            Assert.AreEqual(outpost.Region.Name, REGION.Name);
+            Assert.IsInstanceOf<District>(outpost.District);
+            Assert.AreEqual(outpost.District.Name, DISTRICT.Name);
+            Assert.IsInstanceOf<Outpost>(outpost.Warehouse);
+            Assert.AreEqual(outpost.Warehouse.Name, WAREHOUSE.Name);
+            Assert.IsInstanceOf<OutpostType>(outpost.OutpostType);
+            Assert.AreEqual(outpost.OutpostType.Name, OUTPOSTTYPE.Name);
 
             session.Delete(outpost);
             session.Flush();
-
-
-       }
-
-       [Test]
-       public void It_ShouldSuccessfullyPersist_An_Outpost_WithOnePhone()
-       {
-
-        //   //var client = Specs.CheckProperty(e => e.Name, "Alin Stan").VerifyTheMappings();
-
-        //   //Assert.IsNotNull(client);
-        //   //Assert.AreEqual(client.Name, "Alin Stan");
-
-        //   var outpost = Specs
-        //            .CheckProperty(e => e.Name, OUTPOST_NAME)
-        //            .CheckProperty(e => e.OutpostType, OUTPOST_TYPE)
-        //            .CheckProperty(e => e.DetailMethod, OUTPOST_DETAIL)
-        //            //.CheckProperty(e => e.Client.Id, CLIENT_ID)
-
-        //            .VerifyTheMappings();
-
-        //   var phone = new Contact
-        //   {
-        //       ContactDetail = "07888888"
-        //   };
-        //   var phone1 = new Contact
-        //   {
-        //       ContactDetail = "0743 955034"
-        //   };
-
-        //   session.Save(phone);
-        //   session.Save(phone1);
-        //   outpost.AddContact(phone);
-        //   outpost.AddContact(phone1);
-        //   //session.Save(outpost);
-        //   //session.Flush();
-
-        ////outpost = (from _outpost in session.Query<Outpost>().FetchMany(o => o.Name == OUTPOST_NAME)
-        ////            where _outpost.Id == outpost.Id
-        ////            select _outpost).FirstOrDefault();
-
-        //   Assert.IsNotNull(outpost.Contacts);
-
-        //   Assert.IsNotNull(outpost);
-        //   Assert.IsInstanceOf<Guid>(outpost.Id);
-        //   Assert.AreEqual(outpost.Name, OUTPOST_NAME);
-        //   Assert.AreEqual(outpost.OutpostType, OUTPOST_TYPE);
-        //   Assert.AreEqual(outpost.DetailMethod, OUTPOST_DETAIL);
-        //   // Assert.AreEqual(outpost.Client, CLIENT_ID);
-
-
-        //   session.Delete(outpost);
-        //   session.Flush();
-
-
-       }
+        }
     }
 }

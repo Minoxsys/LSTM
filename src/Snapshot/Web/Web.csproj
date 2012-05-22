@@ -184,6 +184,8 @@
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\District\DistrictOverviewModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOverviewModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostTypeModel.cs" />
+    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostTypesIndexOutputModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\PagingInfo.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\FromCountryModel.cs" />
     <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexModel.cs" />

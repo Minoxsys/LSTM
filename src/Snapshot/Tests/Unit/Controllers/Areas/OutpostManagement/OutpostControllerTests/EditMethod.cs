@@ -30,7 +30,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				CountryId = Guid.NewGuid(),
 				RegionId = Guid.NewGuid(),
 				DistrictId = Guid.NewGuid(),
-				IsWarehouse = false,
+                OutpostTypeId = Guid.NewGuid(),
 				Name = "New Outpost Name"
 			});
 
@@ -50,7 +50,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
 				CountryId = Guid.NewGuid(),
 				RegionId = Guid.NewGuid(),
 				DistrictId = Guid.NewGuid(),
-				IsWarehouse = false,
+                OutpostTypeId = Guid.NewGuid(),
 				Name = "New Outpost Name"
 			});
 

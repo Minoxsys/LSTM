@@ -13,6 +13,7 @@
     window.feature.countryOverviewComboId = "outpost-country-overview-combobox-id";
     window.feature.regionOverviewComboId = "outpost-region-overview-combobox-id";
     window.feature.districtOverviewComboId = "outpost-region-district-combobox-id";
+    window.feature.outpostTypeOverviewComboId = "outpost-types-combobox-id";
 </script>
 <script type="text/javascript">
     Ext.onReady(function () {
@@ -24,7 +25,7 @@
         var outpostAdministrationBtn = Ext.getCmp(outpostAdministrationBtnId);
         outpostAdministrationBtn.toggle(true);
         outpostAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/LocationSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
-    
+
         var outpostBtnId = window.res.content.maincontent.sidebar.outpost;
         var outpostBtn = Ext.getCmp(outpostBtnId);
         outpostBtn.toggle(true);
@@ -90,11 +91,26 @@
             listeners: allowUserToClearValue
     
         });
+
+        window.feature.outpostTypeStore = Ext.create('Ext.data.Store', {
+            fields: ['Id','Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetOutpostTypes" })',
+                reader: {
+                    type: 'json',
+                    root: 'OutpostTypes'
+                },
+                simpleSortMode: true
+            },
+            listeners: allowUserToClearValue
+        });
+
         window.feature.outpostsStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             remoteSuport: true,
             fields: [
-                'Id','Name', 'Coordinates', 'ContactMethod', 'IsWarehouse', 'WarehouseName',
+                'Id','Name', 'Coordinates', 'ContactMethod', 'OutpostTypeId', 'OutpostTypeName', 'WarehouseName',
                 'CountryId', 'RegionId', 'DistrictId', 'WarehouseId'
             ],
             proxy: {
@@ -109,6 +125,7 @@
                     districtId: null,
                     countryId:null,
                     regionId:null,
+                    outpostTypeId:null,
                     search:null
                 },
                 simpleSortMode: true
@@ -141,15 +158,7 @@
                 }
             ]
         });
-    
-        window.feature.isWarehouseStore = Ext.create('Ext.data.Store', {
-            fields:['Value', 'Text'],
-            data:[
-                {Value:'false', Text:'No'},
-                {Value:'true', Text:'Yes'}
-            ]
-        });
-    
+        
         window.feature.comboBoxFilters= {};
         window.feature.comboBoxFilters.listeners={
             specialkey: function(field, e){
@@ -169,6 +178,11 @@
                         field.itemId === window.feature.modalIds.countryId){
                         window.feature.resetCountryDependencies();
                     }
+
+                    if (field.itemId === window.feature.comboBoxFilters.outpostType.itemId ||
+                        field.itemId === window.feature.modalIds.outpostTypeId){
+                        window.feature.resetOutpostTypeDependencies();
+                    }
                 }
             }
         };
@@ -177,10 +191,7 @@
             'select':{
                 country:function(combo, record){
                     window.feature.resetRegionDependencies();
-    
-                    window.feature.outpostsStore.getProxy().extraParams = {
-                        countryId: combo.getValue()
-                    };
+                    window.feature.outpostsStore.getProxy().extraParams.countryId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
     
                     window.feature.regionsStore.load({
@@ -192,9 +203,7 @@
                 region:function(combo, record){
                     window.feature.resetDistrictDependencies();
     
-                    window.feature.outpostsStore.getProxy().extraParams = {
-                        regionId: combo.getValue()
-                    };
+                    window.feature.outpostsStore.getProxy().extraParams.regionId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
     
                     window.feature.districtsStore.load({
@@ -204,11 +213,14 @@
                     });
                 },
                 district:function(combo, record){
-                    window.feature.outpostsStore.getProxy().extraParams = {
-                        districtId: combo.getValue()
-                    };
+                    window.feature.outpostsStore.getProxy().extraParams.districtId = combo.getValue();
                     window.feature.outpostsStore.loadPage(1);
-                }
+                },
+
+                outpostType:function(combo, record){
+                    window.feature.outpostsStore.getProxy().extraParams.outpostTypeId = combo.getValue();
+                    window.feature.outpostsStore.loadPage(1);
+                },
             }
         };
     
@@ -265,6 +277,25 @@
                 'select': window.feature.on.select.district
             } 
         });
+
+        window.feature.comboBoxFilters.outpostType = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.outpostTypeOverviewComboId,
+            store: window.feature.outpostTypeStore,
+            margin: '0 0 0 20',
+            queryMode:'local',
+            displayField: 'Name',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Type',
+            labelClsExtra: 'combo-label',
+            valueField:'Id',
+            emptyText: 'Selected Type', 
+            typeAhead: true,
+            listeners:{
+                specialkey: window.feature.comboBoxFilters.listeners.specialkey,
+                'select': window.feature.on.select.outpostType
+            } 
+        });
     
         window.feature.resetCountryDependencies = function () {
             window.feature.comboBoxFilters.country.setValue(null);
@@ -284,17 +315,29 @@
             window.feature.outpostsStore.getProxy().extraParams.districtId = null;
     
         };
+
+        window.feature.resetOutpostTypeDependencies  = function () {
+            window.feature.comboBoxFilters.outpostType.setValue(null);
+            window.feature.outpostsStore.getProxy().extraParams.outpostTypeId = null;
+            window.feature.outpostsStore.loadPage(1);
+        };
     
         window.feature.doSearch = new Ext.util.DelayedTask(function(){
             window.feature.outpostsStore.loadPage(1);
         });
-     
+    
+        Ext.QuickTips.init();
+    
+        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
+            meta.tdAttr = 'data-qtip="' + "Click on the outpost name to assign a product group" + '"' ;
+            return '<u>' + val + '</u>';
+        };  
     
         window.feature.modalIds={
             countryId:'window-feature-combobox-country-id',
             regionId:'window-feature-combobox-region-id',
             districtId:'window-feature-combobox-district-id',
-            isWarehouseId:'window-feature-combobox-is-warehouse-id',
+            outpostTypeId:'window-feature-combobox-outpost-type-id',
             warehouseId:'window-feature-combobox-warehouse',
             nameId:'window-feature-textfield-name',
             entityId: 'window-feature-hiddenfield-entityId',
@@ -436,6 +479,7 @@
                                     else{
     
                                         me.postContactsFromMemoryProxy(serverResponse.OutpostId || me.entityId);
+                                        window.feature.outpostsStore.loadPage(1);
                                         me.close();
                                         me.destroy();
                                     }
@@ -613,19 +657,24 @@
                                         },{
                                             xtype: 'combobox',
                                             columnWidth: 1 / 3,
-                                            itemId: window.feature.modalIds.isWarehouseId,
-                                            name: 'IsWarehouse',
-                                            fieldLabel: 'Is dispensary',
-                                            editable:false,
-                                            displayField: 'Text',
-                                            valueField: 'Value',
-                                            value: 'false',
-                                            store: window.feature.isWarehouseStore,
-                                            queryMode:'local',
+                                            itemId: window.feature.modalIds.outpostTypeId,
+                                            name: 'OutpostTypeId',
+                                            fieldLabel: 'Type',
+                                            emptyText: 'Select Type', 
+                                            displayField: 'Name',
+                                            valueField: 'Id',
+                                            store: window.feature.outpostTypeStore,
+                                            typeAhead: true,
+                                            allowBlank:false,
                                             listeners:{
+                                                specialkey: window.feature.comboBoxFilters.listeners.specialkey,
                                                 'select': function(combo, record){
+                                                    window.feature.comboBoxFilters.outpostType.setValue(combo.getValue());   
+                                                    window.feature.on.select.outpostType(combo, record);
+
                                                     me.down('#' + window.feature.modalIds.warehouseId).setDisabled(false);
-                                                    if (combo.getValue() === 'true'){
+
+                                                    if (combo.getRawValue() !== 'Drug shop'){
                                                         me.down('#' + window.feature.modalIds.warehouseId).setValue(null);
                                                         me.down('#' + window.feature.modalIds.warehouseId).setDisabled(true);
                                                     }
@@ -636,9 +685,9 @@
                                             columnWidth: 1 / 3,
                                             itemId: window.feature.modalIds.warehouseId,
                                             name: 'WarehouseId',
-                                            fieldLabel: 'Dispensary',
-                                            disabled:false,
-                                            emptyText: 'Select Dispensary', 
+                                            fieldLabel: 'Dispensary / Health Center',
+                                            disabled: false,
+                                            emptyText: 'Select Dispensary or Health Center', 
                                             displayField: 'Name',
                                             valueField: 'Id',
                                             store: window.feature.warehouseOutpostStore,
@@ -752,7 +801,11 @@
                                                 var winAdd = new window.feature.modal({
                                                     url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Create" })'
                                                 });
-                                                winAdd.show();       
+
+                                                winAdd.show();
+                                                  
+                                                var outpostTypeId = window.feature.comboBoxFilters.outpostType.getValue();
+                                                winAdd.down('#' + window.feature.modalIds.outpostTypeId).setValue(outpostTypeId);     
                                             }
                                         }
                                     ]
@@ -817,7 +870,8 @@
                                 },
                                 window.feature.comboBoxFilters.country,
                                 window.feature.comboBoxFilters.region,
-                                window.feature.comboBoxFilters.district							
+                                window.feature.comboBoxFilters.district,
+                                window.feature.comboBoxFilters.outpostType						
                             ]
                         }
                     ]
@@ -840,7 +894,32 @@
                             dataIndex: 'Name',
                             flex: 1,
                             menuDisabled: true,
-                            sortable: true
+                            sortable: true,
+                            renderer: addTooltip,
+                            processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
+                                if (type == 'click'){
+                                    if (@(ViewBag.HasNoRightsToAdd) === true){
+                                        var msgAlert = Ext.Msg;
+                                        msgAlert.ui = 'snapshot-popup-window';
+                                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                        msgAlert.alert("Alert", "You have no rights for this action!");
+                                    }
+                                    else{
+    
+                                        var rec = view.panel.store.getAt(recordIndex);
+	
+                                        var assignProducts = new window.feature.assignProductsModal({
+                                            outpostId: rec.get('Id'),
+                                            outpostName: rec.get('Name')
+                                        });
+                                        assignProducts.show();
+    
+                                        return false;
+                                    }
+                                    return true;
+                                }
+                            }
                         },{
                             text: "Contact method",
                             dataIndex: 'ContactMethod',
@@ -854,17 +933,14 @@
                             menuDisabled: true,
                             sortable: false
                         },{
-                            xtype: 'booleancolumn',
-                            trueText: 'Yes',
-                            falseText: 'No', 
-                            align:'center',
-                            text: "Is dispensary",
-                            dataIndex: 'IsWarehouse',
+                            text: "Type",
+                            dataIndex: 'OutpostTypeName',
                             flex: 1,
+                            align:'center',
                             menuDisabled:true,
                             sortable: false
                         },{
-                            text: "Dispensary name",
+                            text: "Dispensary / Health Center",
                             dataIndex: 'WarehouseName',
                             flex: 1,
                             align:'center',
@@ -897,19 +973,22 @@
                                                         var countryId = rec.get('CountryId');
                                                         var regionId = rec.get('RegionId');
                                                         var districtId = rec.get('DistrictId');
+                                                        var outpostTypeId = rec.get('OutpostTypeId');
                                                         var warehouseId = rec.get('WarehouseId');
+
                                                         window.feature.countryStore.load();
                                                         window.feature.regionsStore.load({params:{countryId: countryId}});
                                                         window.feature.districtsStore.load({params:{regionId:regionId}});
                                                         window.feature.warehouseOutpostStore.load();
+                                                        window.feature.outpostTypeStore.load();
     
                                                         win.down('#' + modalIds.countryId).setValue(countryId);
                                                         win.down('#' + modalIds.regionId).setValue(regionId);
                                                         win.down('#' + modalIds.districtId).setValue(districtId);
                                                         win.down('#' + modalIds.warehouseId).setValue(warehouseId);
-                                                        win.down('#' + modalIds.isWarehouseId).setValue(rec.get('IsWarehouse') ? 'true' : 'false');
                                                         win.down('#' + modalIds.nameId).setValue(rec.get('Name'));
                                                         win.down('#' + modalIds.coordinatesId).setValue(rec.get('Coordinates'));
+                                                        win.down('#' + modalIds.outpostTypeId).setValue(outpostTypeId);
                                                     }
                                                 },
                                                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Edit" })'
@@ -1006,6 +1085,7 @@
         }
     
         window.feature.outpostsStore.loadPage(1);
+        window.feature.outpostTypeStore.load();
     
         function getGooglePositionFromText(coordinates) {
             return new google.maps.LatLng(
