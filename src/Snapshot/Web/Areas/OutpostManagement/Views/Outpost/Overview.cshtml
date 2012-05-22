@@ -326,12 +326,6 @@
             window.feature.outpostsStore.loadPage(1);
         });
     
-        Ext.QuickTips.init();
-    
-        function addTooltip(val, meta, rec, rowIdx, colIdx, ds){
-            meta.tdAttr = 'data-qtip="' + "Click on the outpost name to assign a product group" + '"' ;
-            return '<u>' + val + '</u>';
-        };  
     
         window.feature.modalIds={
             countryId:'window-feature-combobox-country-id',
@@ -894,32 +888,7 @@
                             dataIndex: 'Name',
                             flex: 1,
                             menuDisabled: true,
-                            sortable: true,
-                            renderer: addTooltip,
-                            processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
-                                if (type == 'click'){
-                                    if (@(ViewBag.HasNoRightsToAdd) === true){
-                                        var msgAlert = Ext.Msg;
-                                        msgAlert.ui = 'snapshot-popup-window';
-                                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                        msgAlert.alert("Alert", "You have no rights for this action!");
-                                    }
-                                    else{
-    
-                                        var rec = view.panel.store.getAt(recordIndex);
-	
-                                        var assignProducts = new window.feature.assignProductsModal({
-                                            outpostId: rec.get('Id'),
-                                            outpostName: rec.get('Name')
-                                        });
-                                        assignProducts.show();
-    
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                            }
+                            sortable: true
                         },{
                             text: "Contact method",
                             dataIndex: 'ContactMethod',
