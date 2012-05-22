@@ -798,8 +798,14 @@
 
                                                 winAdd.show();
                                                   
-                                                var outpostTypeId = window.feature.comboBoxFilters.outpostType.getValue();
-                                                winAdd.down('#' + window.feature.modalIds.outpostTypeId).setValue(outpostTypeId);     
+                                                var outpostTypeId = window.feature.comboBoxFilters.outpostType;
+                                                winAdd.down('#' + window.feature.modalIds.outpostTypeId).setValue(outpostTypeId.getValue());  
+                                                winAdd.down('#' + window.feature.modalIds.warehouseId).setDisabled(false);
+
+                                                if (outpostTypeId.getRawValue() !== 'Drug shop'){
+                                                    winAdd.down('#' + window.feature.modalIds.warehouseId).setValue(null);
+                                                    winAdd.down('#' + window.feature.modalIds.warehouseId).setDisabled(true);
+                                                }   
                                             }
                                         }
                                     ]
@@ -944,6 +950,7 @@
                                                         var districtId = rec.get('DistrictId');
                                                         var outpostTypeId = rec.get('OutpostTypeId');
                                                         var warehouseId = rec.get('WarehouseId');
+                                                        var outpostTypeName = rec.get('OutpostTypeName');
 
                                                         window.feature.countryStore.load();
                                                         window.feature.regionsStore.load({params:{countryId: countryId}});
@@ -958,6 +965,13 @@
                                                         win.down('#' + modalIds.nameId).setValue(rec.get('Name'));
                                                         win.down('#' + modalIds.coordinatesId).setValue(rec.get('Coordinates'));
                                                         win.down('#' + modalIds.outpostTypeId).setValue(outpostTypeId);
+
+                                                        win.down('#' + modalIds.warehouseId).setDisabled(false);
+
+                                                        if (outpostTypeName !== 'Drug shop'){
+                                                            win.down('#' + modalIds.warehouseId).setValue(null);
+                                                            win.down('#' + modalIds.warehouseId).setDisabled(true);
+                                                        }
                                                     }
                                                 },
                                                 url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Edit" })'
