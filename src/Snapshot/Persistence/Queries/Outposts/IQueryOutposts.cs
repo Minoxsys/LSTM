@@ -12,5 +12,7 @@ namespace Persistence.Queries.Outposts
         IQueryable<Outpost> GetAllRegions();
         IQueryable<Outpost> GetAllDistricts();
         IQueryable<Outpost> GetAllContacts();
+        string GetOutpostName(Guid Id);
+        Outpost GetWarehouse(Guid Id);
     }
 }

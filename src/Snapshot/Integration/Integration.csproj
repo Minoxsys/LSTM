@@ -93,11 +93,13 @@
     <Compile Include="When_WeWantToPersist_A_Diagnosis.cs" />
     <Compile Include="When_WeWantToPersist_A_District.cs" />
     <Compile Include="When_WeWantToPersist_A_Contact.cs" />
+    <Compile Include="When_WeWantToPersist_A_MessageFromDispensary.cs" />
     <Compile Include="When_WeWantToPersist_A_RawSmsReceived.cs" />
     <Compile Include="When_WeWantToPersist_A_Region.cs" />
     <Compile Include="When_WeWantToPersist_A_User.cs" />
     <Compile Include="When_WeWantToPersist_A_Permission.cs" />
     <Compile Include="When_WeWantToPersist_A_WorldCountryRecord.cs" />
+    <Compile Include="When_WeWantToPersis_A_MessageFromDrugShop.cs" />
     <Compile Include="When_WeWantToSave_A_Role.cs" />
     <Compile Include="When_WeWantToPersist_A_ServiceNeeded.cs" />
   </ItemGroup>

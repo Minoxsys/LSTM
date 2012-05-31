@@ -46,6 +46,8 @@
     <Compile Include="Country.cs" />
     <Compile Include="Diagnosis.cs" />
     <Compile Include="District.cs" />
+    <Compile Include="MessageFromDispensary.cs" />
+    <Compile Include="MessageFromDrugShop.cs" />
     <Compile Include="Outpost.cs" />
     <Compile Include="OutpostType.cs" />
     <Compile Include="ProductLevelRequestDetail.cs" />

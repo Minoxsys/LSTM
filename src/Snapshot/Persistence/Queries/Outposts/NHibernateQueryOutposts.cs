@@ -31,5 +31,15 @@ namespace Persistence.Queries.Outposts
         {
             return _query.Query().Fetch(it => it.Contacts);
         }
+
+        public string GetOutpostName(Guid Id)
+        {
+            return _query.Load(Id).Name;
+        }
+
+        public Outpost GetWarehouse(Guid Id)
+        {
+            return _query.Load(Id).Warehouse;
+        }
     }
 }

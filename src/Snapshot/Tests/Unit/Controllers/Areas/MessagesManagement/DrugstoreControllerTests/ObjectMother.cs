@@ -43,7 +43,6 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             rawSms.Credits = CREDITS;
             rawSms.IsDispensary = false;
             rawSms.OutpostId = OUTPOSTID;
-            rawSms.OutpostName = OUTPOSTNAME;
             rawSms.ParseErrorMessage = ERRORMESSAGE;
             rawSms.ParseSucceeded = false;
             rawSms.ReceivedDate = DATE;
@@ -73,7 +72,6 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                     Credits = CREDITS,
                     IsDispensary = false,
                     OutpostId = Guid.NewGuid(),
-                    OutpostName = "Outpost" + i,
                     ParseErrorMessage = "Parse error no." + i,
                     ParseSucceeded = false,
                     ReceivedDate = DateTime.UtcNow.AddDays(-i),
@@ -97,7 +95,6 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                     Credits = CREDITS,
                     IsDispensary = (i %2 == 0),
                     OutpostId = Guid.NewGuid(),
-                    OutpostName = "Outpost" + i,
                     ParseErrorMessage = "Parse error no." + i,
                     ParseSucceeded = false,
                     ReceivedDate = DateTime.UtcNow.AddDays(-i),

@@ -33,8 +33,6 @@ namespace Web.Areas.MessagesManagement.Controllers
             {
                 { "Sender-ASC", () => rawDataQuery.OrderBy(c => c.Sender) },
                 { "Sender-DESC", () => rawDataQuery.OrderByDescending(c => c.Sender) },
-                { "OutpostName-ASC", () => rawDataQuery.OrderBy(c => c.OutpostName) },
-                { "OutpostName-DESC", () => rawDataQuery.OrderByDescending(c => c.OutpostName) },
                 { "Date-ASC", () => rawDataQuery.OrderBy(c => c.ReceivedDate) },
                 { "Date-DESC", () => rawDataQuery.OrderByDescending(c => c.ReceivedDate) },
                 { "Content-ASC", () => rawDataQuery.OrderBy(c => c.Content) },
@@ -60,7 +58,6 @@ namespace Web.Areas.MessagesManagement.Controllers
                                                select new MessageModel
                                                {
                                                    Sender = message.Sender,
-                                                   OutpostName = message.OutpostName,
                                                    Date = message.ReceivedDate.ToShortDateString(),
                                                    Content = message.Content,
                                                    ParseSucceeded = message.ParseSucceeded,

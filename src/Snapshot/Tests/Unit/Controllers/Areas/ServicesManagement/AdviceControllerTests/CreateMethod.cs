@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Web.Areas.ServicesManagement.Models.Advice;
 using Web.Models.Shared;
-using Rhino.Mocks;
 using Domain;
 
 namespace Tests.Unit.Controllers.Areas.ServicesManagement.AdviceControllerTests

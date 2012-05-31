@@ -75,6 +75,8 @@
     <Compile Include="NHibernateSessionFactory.cs" />
     <Compile Include="NHibernateUnitOfWork.cs" />
     <Compile Include="NHibernateWorkItemRepository.cs" />
+    <Compile Include="Overrides\MessagesFromDispensaryOverride.cs" />
+    <Compile Include="Overrides\MessagesFromDrugShopOverride.cs" />
     <Compile Include="Overrides\WorkItemAutoMappingOverride.cs" />
     <Compile Include="Overrides\CountryAutoMappingOverride.cs" />
     <Compile Include="Overrides\ContactAutoMappingOverride.cs" />
@@ -94,6 +96,10 @@
     <Compile Include="Queries\Countries\NHibernateQueryCountry.cs" />
     <Compile Include="Queries\Districts\IQueryDistrict.cs" />
     <Compile Include="Queries\Districts\NHibernateQueryDistrict.cs" />
+    <Compile Include="Queries\MessagesFromDispensary\IQueryMessageFromDispensary.cs" />
+    <Compile Include="Queries\MessagesFromDispensary\NHibernateQueryMessageFromDispensary.cs" />
+    <Compile Include="Queries\MessagesFromDrugShop\IQueryMessageFromDrugShop.cs" />
+    <Compile Include="Queries\MessagesFromDrugShop\NHibernateQueryMessageFromDrugShop.cs" />
     <Compile Include="Queries\Outposts\IQueryOutposts.cs" />
     <Compile Include="Queries\Outposts\NHibernateQueryOutposts.cs" />
     <Compile Include="Queries\Regions\IQueryRegion.cs" />

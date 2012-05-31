@@ -293,6 +293,7 @@
     <Compile Include="Models\Shared\InputModel.cs" />
     <Compile Include="Models\Shared\ListQuery.cs" />
     <Compile Include="Models\Shared\RazorExtensions.cs" />
+    <Compile Include="Models\SmsRequest\ParsedSmsReceived.cs" />
     <Compile Include="Models\SmsRequest\ReferenceModel.cs" />
     <Compile Include="Models\SmsRequest\SmsRequestCreateModel.cs" />
     <Compile Include="Models\UnauthorizedAccess\Index.cs" />
@@ -313,6 +314,8 @@
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
     <Compile Include="Security\SecurePassword.cs" />
+    <Compile Include="Services\IManageReceivedSmsService.cs" />
+    <Compile Include="Services\ManageReceivedSmsService.cs" />
     <Compile Include="Services\PathService.cs" />
     <Compile Include="Services\IPathService.cs" />
     <Compile Include="Services\EmailService.cs" />
@@ -327,11 +330,11 @@
     <Compile Include="Services\ISmsGatewaySettingsService.cs" />
     <Compile Include="Services\ISmsRequestService.cs" />
     <Compile Include="Services\RawSmsReceivedParseResult.cs" />
-    <Compile Include="Services\ReceivedStockLevel.cs" />
     <Compile Include="Services\SmsGatewayService.cs" />
     <Compile Include="Services\SmsGatewaySettingsService.cs" />
     <Compile Include="Services\SmsReceived.cs" />
     <Compile Include="Services\IURLService.cs" />
+    <Compile Include="Services\SmsRequestService.cs" />
     <Compile Include="Services\URLService.cs" />
     <Compile Include="Validation\Account\MembershipStatusCodeConverter.cs" />
     <Compile Include="Validation\Account\PropertiesMustMatchAttribute.cs" />

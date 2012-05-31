@@ -12,6 +12,5 @@ namespace Web.Services
         public virtual string ProductGroupReferenceCode { get; set; }
         public virtual string Number { get; set; }
         public virtual Guid RawSmsReceivedId { get; set; }
-        public virtual List<ReceivedStockLevel> ReceivedStockLevels { get; set; }
     }
 }
