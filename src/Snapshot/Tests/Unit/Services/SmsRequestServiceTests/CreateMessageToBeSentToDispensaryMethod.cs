@@ -30,7 +30,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
             //Assert
             objectMother.queryOutposts.VerifyAllExpectations();
             Assert.IsInstanceOf<string>(result);
-            Assert.AreEqual(ObjectMother.CORRECTMESSAGE, result);
+            Assert.AreEqual(objectMother.CORRECTMESSAGE, result);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
         public const string CORRECTNUMBER = "0747858959";
         public const string WRONGNUMBER = "0000000000";
         public const string MESSAGE = "Some message here";
-        public const string CORRECTMESSAGE = "10000008 250512DrugShop1 XY250592F S0 S1 S2";
+        public string CORRECTMESSAGE = "10000008 " + DateTime.UtcNow.ToString("ddMMyy") + "DrugShop1 XY" + DateTime.UtcNow.AddYears(-20).ToString("ddMMyy") + "F S0 S1 S2";
 
         public Guid outpostId;
         public Outpost outpost;

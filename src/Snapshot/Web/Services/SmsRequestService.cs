@@ -31,7 +31,7 @@ namespace Web.Services
 
             try
             {
-                //smsGatewayService.SendSmsRequest(request);
+                smsGatewayService.SendSmsRequest(request);
                 return true;
             }
             catch (Exception)
