@@ -148,6 +148,7 @@
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\DrugShopLevelController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\GoogleMapReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\DrugShopLevel\InputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\DrugShopLevel\ReportDrugShopLevelTreeModel.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\DispensaryController.cs" />
@@ -2004,6 +2005,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\AnalysisManagement\Models\GoogleMapReport\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -2080,6 +2082,7 @@
     <Content Include="Areas\ServicesManagement\Views\Advice\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\DrugShopLevel\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\HealthCenter\Overview.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\GoogleMapReport\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

@@ -1,0 +1,110 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@using Web.Areas.AnalysisManagement;
+@using Web.Areas.OutpostManagement;
+
+@section page_title{
+Analysis: Product level information at district level
+}
+
+@{
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_EmptySideBar");
+    Html.RenderPartial("SelectPositionGoogleMapWindow");
+}
+
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+
+        var analysisBtnId = window.res.header.navigation.analysisAndReports;
+        var analysisBtn = Ext.getCmp(analysisBtnId);
+        analysisBtn.toggle(true);
+    });
+
+</script>
+<script type="text/javascript">
+    var allowUserToClearValue = {
+        'load': function () {
+            //this.insert(0, {Id:'@Guid.Empty', Name:'All'});
+        }
+    };
+    Ext.onReady(function () {
+        window.feature = {};
+        
+        var googleMapPanelConfig = {
+            flex: 1,
+            margin: '0 0 10 0',
+
+        };
+        googleMapPanelConfig.centerPosition = new google.maps.LatLng(-6.063063980580725, 35.083722392578125);
+        googleMapPanelConfig.zoom = 6;
+        var googleMapPanel = Ext.create('Ext.feature.GoogleMapPanel', googleMapPanelConfig);
+        var latLng = new google.maps.LatLng(-7.367547420958276, 34.13573425000004);
+
+        googleMapPanel.addMarker({
+            position: latLng,
+            title: "Outpost"
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 0 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'hbox'
+            },
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    height: 50,
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            type: 'column'
+                        },
+                        items: [{
+                            xtype: 'container',
+                            height: 30,
+                            width: 30,
+                            html: '&nbsp;'
+                        }, {
+                            xtype: 'label',
+                            cls: 'x-title-label',
+                            text: 'Information at drug shop level'
+                        }]
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: [
+                        googleMapPanel
+                    ]
+                }]
+            }]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+
+    });
+</script>
