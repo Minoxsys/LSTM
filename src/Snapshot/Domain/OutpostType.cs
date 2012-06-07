@@ -9,5 +9,10 @@ namespace Domain
     public class OutpostType : DomainEntity
     {
         public virtual string Name { get; set; }
+
+        // 0 - Drug shop
+        // 1 - Dispensary
+        // 2 - Health Center
+        public virtual int Type { get; set; } 
     }
 }

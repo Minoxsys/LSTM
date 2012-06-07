@@ -3,7 +3,7 @@
 @using Microsoft.Web.Mvc;
 
 @section page_title{
-    Dispensary Item: Overview
+    Health Center Item: Overview
 }
 @{
     Html.RenderPartial("_EmptySubNavigation");
@@ -16,24 +16,24 @@
         var messagesBtn = Ext.getCmp(messagesBtnId);
         messagesBtn.toggle(true);
 
-        var dispensarySideBarBtnId = window.res.content.maincontent.sidebar.dispensary;
-        var dispensaryBtn = Ext.getCmp(dispensarySideBarBtnId);
-        dispensaryBtn.toggle(true);
+        var healthCenterSideBarBtnId = window.res.content.maincontent.sidebar.healthcenter;
+        var healthcenterBtn = Ext.getCmp(healthCenterSideBarBtnId);
+        healthcenterBtn.toggle(true);
 
     });
 </script>
 <script type="text/javascript">
     Ext.onReady(function () {
         window.feature = {};
-        window.feature.searchMessage = "Search-Message-From-Dispensary-Id";
-        window.feature.gridMessagesFromDispensaryId = "Grid-Messages-From-Dispensary-Id";
+        window.feature.searchMessage = "Search-Message-From-Healthcenter-Id";
+        window.feature.gridMessagesFromHealthcenterId = "Grid-Messages-From-Healthcenter-Id";
 
-        window.feature.messageFromDispensaryStore = Ext.create('Ext.data.Store', {
+        window.feature.messageFromHealthcenterStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             fields: ['Id', 'Sender', 'OutpostName', 'Date', 'Content', 'ParseSucceeded', 'ParseErrorMessage'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Dispensary", action = "GetMessagesFromDispensary" })',
+                url: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthCenter", action = "GetMessagesFromHealthCenter" })',
                 reader: {
                     type: 'json',
                     root: 'Messages',
@@ -50,7 +50,7 @@
         });
 
         window.feature.doSearch = new Ext.util.DelayedTask(function () {
-            window.feature.messageFromDispensaryStore.loadPage(1);
+            window.feature.messageFromHealthcenterStore.loadPage(1);
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
@@ -87,7 +87,7 @@
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Messages received from dispensary'
+                        text: 'Messages received from health center'
                     }]
                 }, {
                     xtype: 'container',
@@ -109,7 +109,7 @@
                             'keyup': {
                                 fn: function (key) {
                                     var searchValue = window.feature.container.down('#' + window.feature.searchMessage).getValue();
-                                    window.feature.messageFromDispensaryStore.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.messageFromHealthcenterStore.proxy.extraParams.searchValue = searchValue;
                                     window.feature.doSearch.delay(500);
                                 }
                             }
@@ -120,8 +120,8 @@
             }, {
                 xtype: 'gridpanel',
                 cls: 'white-border',
-                itemId: window.feature.gridMessagesFromDispensaryId,
-                store: window.feature.messageFromDispensaryStore,
+                itemId: window.feature.gridMessagesFromHealthcenterId,
+                store: window.feature.messageFromHealthcenterStore,
                 loadMask: true,
                 disableSelection: true,
                 flex: 3,
@@ -133,7 +133,7 @@
                     menuDisabled: true,
                     sortable: true
                 }, {
-                    header: "Dispensary",
+                    header: "Health Center",
                     dataIndex: 'OutpostName',
                     flex: 1,
                     menuDisabled: true,
@@ -168,7 +168,7 @@
                     sortable: false
                 }],
                 bbar: Ext.create('Ext.PagingToolbar', {
-                    store: window.feature.messageFromDispensaryStore,
+                    store: window.feature.messageFromHealthcenterStore,
                     displayInfo: true,
                     displayMsg: 'Displaying topics {0} - {1} of {2}',
                     emptyMsg: "No topics to display",
@@ -181,7 +181,7 @@
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.messageFromDispensaryStore.loadPage(1);
+        window.feature.messageFromHealthcenterStore.loadPage(1);
     });
 
 </script>

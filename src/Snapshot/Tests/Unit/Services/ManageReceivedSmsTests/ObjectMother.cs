@@ -27,7 +27,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public const string IN_NUMBER = "1234";
         public const string OPERATOR = "Operator";
         public const string DATE = "2008-10-10%2013:30:10";
-        public const string WRONGCONTENTDRUGSHOP = "XRTDRDR485478 RETFF";
+        public const string WRONGCONTENTDRUGSHOP = "XRTDRDR485478654651354 RETFF";
         public const string WRONGDATEMESSAGEFROMDRUGSHOP = "XY231398F RX1 RX2";
         public const string WRONGSERVICEMESSAGEFROMDRUGSHOP = "XY230498F RX1 RX2";
         public const string CORRECTMESSAGEFROMDRUGSHOP = "XYXX230498F    S1 S5  S6   ";
@@ -43,6 +43,8 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public RawSmsReceived rawSmsReceived;
         public Guid messageFromDrugShopId;
         public MessageFromDrugShop messageFromDrugShop;
+        public Guid outpostTypeId;
+        public OutpostType outpostType;
         
         public void Init()
         {
@@ -60,16 +62,23 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             contact.ContactDetail = MOBILE_NUMBER;
             contact.IsMainContact = true;
 
+            outpostTypeId = Guid.NewGuid();
+            outpostType = MockRepository.GeneratePartialMock<OutpostType>();
+            outpostType.Stub(c => c.Id).Return(outpostTypeId);
+            outpostType.Name = "Dispensary";
+            outpostType.Type = 1;
+
             outpostId = Guid.NewGuid();
             outpost = MockRepository.GeneratePartialMock<Outpost>();
             outpost.Stub(c => c.Id).Return(outpostId);
             outpost.Contacts = new Contact[] { contact };
+            outpost.OutpostType = outpostType;
 
             rawSmsReceivedId = Guid.NewGuid();
             rawSmsReceived = MockRepository.GeneratePartialMock<RawSmsReceived>();
             rawSmsReceived.Stub(c => c.Id).Return(rawSmsReceivedId);
             rawSmsReceived.Content = CORRECTMESSAGEFROMDRUGSHOP;
-            rawSmsReceived.IsDispensary = false;
+            rawSmsReceived.OutpostType = 1;
             rawSmsReceived.OutpostId = outpostId;
             rawSmsReceived.ParseErrorMessage = null;
             rawSmsReceived.ParseSucceeded = true;

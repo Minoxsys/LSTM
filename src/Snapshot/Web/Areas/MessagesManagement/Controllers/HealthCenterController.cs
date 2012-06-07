@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Web.Areas.MessagesManagement.Models.Messages;
-using Domain;
 using Core.Persistence;
+using Domain;
+using Web.Areas.MessagesManagement.Models.Messages;
 
 namespace Web.Areas.MessagesManagement.Controllers
 {
-    public class DispensaryController : Controller
+    public class HealthCenterController : Controller
     {
         public IQueryService<RawSmsReceived> QueryRawSms { get; set; }
         public IQueryService<Outpost> QueryOutpost { get; set; }
@@ -25,10 +25,10 @@ namespace Web.Areas.MessagesManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetMessagesFromDispensary(MessagesIndexModel indexModel)
+        public JsonResult GetMessagesFromHealthCenter(MessagesIndexModel indexModel)
         {
             var pageSize = indexModel.limit.Value;
-            var rawDataQuery = this.QueryRawSms.Query().Where(it => it.OutpostType == 1);
+            var rawDataQuery = this.QueryRawSms.Query().Where(it => it.OutpostType == 2);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<RawSmsReceived>>>()
             {

@@ -147,8 +147,12 @@
   <ItemGroup>
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\DrugShopLevelController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\DrugShopLevel\InputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\DrugShopLevel\ReportDrugShopLevelTreeModel.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\DispensaryController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\DrugstoreController.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\HealthCenterController.cs" />
     <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageModel.cs" />
@@ -2000,7 +2004,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\AnalysisManagement\Models\" />
     <Folder Include="Areas\OutpostManagement\Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -2075,6 +2078,8 @@
     <Content Include="Areas\MessagesManagement\Views\Dispensary\Overview.cshtml" />
     <Content Include="Areas\ServicesManagement\Views\ServiceNeeded\Overview.cshtml" />
     <Content Include="Areas\ServicesManagement\Views\Advice\Overview.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\DrugShopLevel\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\HealthCenter\Overview.cshtml" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />

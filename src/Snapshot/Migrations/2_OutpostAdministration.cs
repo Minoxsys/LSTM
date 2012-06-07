@@ -95,7 +95,8 @@ namespace Migrations
 
             Create.Table("OutpostTypes")
                 .WithCommonColumns()
-                .WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH);
+                .WithColumn("Name").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("Type").AsInt32();
 
             Create.AddForeignKey("OutpostTypes");
 				

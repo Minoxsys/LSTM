@@ -5,7 +5,8 @@
             id: 'SideBar',
             group: 'SideBarGroup',
             drugstore: 'Sidebar-Messages-DrugStore-Button',
-            dispensary: 'Sidebar-Messages-Dispensary-Button'
+            dispensary: 'Sidebar-Messages-Dispensary-Button',
+            healthcenter: 'Sidebar-Messages-Health-Center-Button'
         }
     };
     Ext.onReady(function () {
@@ -64,6 +65,20 @@
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.dispensary);
+                                }
+
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.healthcenter,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Health Center',
+                                height: 30,
+                                enableToggle: true,
+                                margin: '0 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.healthcenter);
                                 }
 
                             }

@@ -11,6 +11,7 @@ namespace Domain
         public virtual MessageFromDrugShop MessageFromDrugShop { get; set; }
         public virtual DateTime SentDate { get; set; }
         public virtual Guid OutpostId { get; set; }
+        public virtual int OutpostType { get; set; }
         public virtual IList<Diagnosis> Diagnosises { get; set; }
         public virtual IList<Treatment> Treatments { get; set; }
         public virtual IList<Advice> Advices { get; set; }

@@ -36,7 +36,7 @@ namespace Migrations
                 .WithColumn("Credits").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("ReceivedDate").AsDateTime().Nullable()
                 .WithColumn("OutpostId").AsGuid().Nullable()
-                .WithColumn("IsDispensary").AsBoolean().Nullable()
+                .WithColumn("OutpostType").AsInt32().Nullable()
                 .WithColumn("ParseSucceeded").AsBoolean().Nullable()
                 .WithColumn("ParseErrorMessage").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
 
@@ -56,11 +56,12 @@ namespace Migrations
             Create.Table("MessageFromDispensarys")
                 .WithCommonColumns()
                 .WithColumn("OutpostId").AsGuid().Nullable()
+                .WithColumn("OutpostType").AsInt32().Nullable()
                 .WithColumn("SentDate").AsDateTime().Nullable()
                 .WithColumn("MessageFromDrugShop_FK").AsGuid();
 
             Create.AddForeignKey("MessageFromDispensarys");
-            Create.AddForeignKey("MessageFromDispensarys", "MessageFromDrugShop_FK", "MessageFromDispensarys");
+            Create.AddForeignKey("MessageFromDispensarys", "MessageFromDrugShop_FK", "MessageFromDrugShops");
 
             Create.Table("MessageFromDrugShopServiceNeededs")
                 .WithColumn("ServiceNeeded_FK").AsGuid().NotNullable()

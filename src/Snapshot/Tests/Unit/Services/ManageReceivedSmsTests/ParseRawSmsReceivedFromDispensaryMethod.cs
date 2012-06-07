@@ -24,7 +24,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         {
             //Arrange
             RawSmsReceived smsReceived = new RawSmsReceived { Content = ObjectMother.WRONGCONTENTDRUGSHOP };
-
+            
             //Act
             var result = objectMother.service.ParseRawSmsReceivedFromDispensary(smsReceived);
 

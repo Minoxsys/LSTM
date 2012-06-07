@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Web.Areas.MessagesManagement.Models;
-using Rhino.Mocks;
 using Web.Areas.MessagesManagement.Models.Messages;
+using Rhino.Mocks;
 
-namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTests
+namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterControllerTests
 {
     [TestFixture]
-    public class GetMessagesFromDrugstoreMethod
+    public class GetMessagesFromHealthCenterMethod
     {
         public ObjectMother objectMother = new ObjectMother();
 
@@ -36,7 +35,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDrugstore(indexModel);
+            var jsonResult = objectMother.controller.GetMessagesFromHealthCenter(indexModel);
 
             //Assert
             objectMother.queryRawSms.VerifyAllExpectations();
@@ -49,7 +48,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
         }
 
         [Test]
-        public void Returns_OnlyMessagesFromDrugstores()
+        public void Returns_OnlyMessagesFromHealthCenters()
         {
             //Arrange
             var indexModel = new MessagesIndexModel
@@ -64,7 +63,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDrugstore(indexModel);
+            var jsonResult = objectMother.controller.GetMessagesFromHealthCenter(indexModel);
 
             //Assert
             objectMother.queryRawSms.VerifyAllExpectations();
@@ -73,11 +72,11 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
             Assert.IsNotNull(jsonData);
 
-            Assert.AreEqual(pageOfData.Count() / 2, jsonData.TotalItems);
+            Assert.AreEqual(pageOfData.Count() / 3, jsonData.TotalItems);
         }
 
         [Test]
-        public void Returns_OnlyMessagesFromDrugstores_Order_DESC_by_Content()
+        public void Returns_OnlyMessagesFromHealthCenter_Order_DESC_by_Content()
         {
             //Arrange
             var indexModel = new MessagesIndexModel
@@ -92,16 +91,16 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDrugstore(indexModel);
+            var jsonResult = objectMother.controller.GetMessagesFromHealthCenter(indexModel);
 
             //Assert
             objectMother.queryRawSms.VerifyAllExpectations();
 
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
-            Assert.That(jsonData.Messages[0].Content, Is.EqualTo(objectMother.rawSms.Content+ "-8"));
+            Assert.That(jsonData.Messages[0].Content, Is.EqualTo(objectMother.rawSms.Content + "-8"));
         }
         [Test]
-        public void Returns_OnlyMessagesFromDrugstores_WhereContentContains_SearchValue()
+        public void Returns_OnlyMessagesFromHealthCenter_WhereContentContains_SearchValue()
         {
             //Arrange
             var indexModel = new MessagesIndexModel
@@ -118,7 +117,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDrugstore(indexModel);
+            var jsonResult = objectMother.controller.GetMessagesFromHealthCenter(indexModel);
 
             //Assert
             objectMother.queryRawSms.VerifyAllExpectations();
@@ -128,6 +127,5 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             Assert.IsNotNull(jsonData);
             Assert.AreEqual(1, jsonData.TotalItems);
         }
-
     }
 }

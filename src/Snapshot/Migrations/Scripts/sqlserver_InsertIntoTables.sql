@@ -4,10 +4,12 @@ if not exists(select [Name] from OutpostTypes where [Name]=N'Drug shop')
 begin
 INSERT  INTO OutpostTypes
            (Id
-           ,Name)
+           ,Name
+		   ,Type)
      VALUES
            ('461e581b-e60b-4dfd-a5a8-88229f143790'
-           ,N'Drug shop')
+           ,N'Drug shop'
+		   ,'0')
 end	
 
 GO
@@ -15,10 +17,12 @@ if not exists(select [Name] from OutpostTypes where [Name]=N'Dispensary')
 begin
 INSERT  INTO OutpostTypes
            (Id
-           ,Name)
+           ,Name
+		   ,Type)
      VALUES
            ('461e581b-e60b-4dfd-a5a8-88229f143791'
-           ,N'Dispensary')
+           ,N'Dispensary'
+		   ,'1')
 end	
 
 GO
@@ -26,10 +30,12 @@ if not exists(select [Name] from OutpostTypes where [Name]=N'Health Center')
 begin
 INSERT  INTO OutpostTypes
            (Id
-           ,Name)
+           ,Name
+		   ,Type)
      VALUES
            ('461e581b-e60b-4dfd-a5a8-88229f143792'
-           ,N'Health Center')
+           ,N'Health Center'
+		   ,'2')
 end	
 
 

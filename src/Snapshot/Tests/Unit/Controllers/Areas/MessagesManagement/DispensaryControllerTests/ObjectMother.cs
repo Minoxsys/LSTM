@@ -14,6 +14,8 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
     {
         public DispensaryController controller;
         public IQueryService<RawSmsReceived> queryRawSms;
+        public IQueryService<Outpost> queryOutposts;
+        public IQueryService<MessageFromDrugShop> queryMessageFromDrugShop;
 
         private const string SENDER = "0748523666";
         private const string CONTENT = "123456 Tr1 Tr2";
@@ -33,11 +35,13 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
         {
             controller = new DispensaryController();
             controller.QueryRawSms = queryRawSms;
+            controller.QueryOutpost = queryOutposts;
         }
 
         private void MockServices()
         {
             queryRawSms = MockRepository.GenerateMock<IQueryService<RawSmsReceived>>();
+            queryOutposts = MockRepository.GenerateMock<IQueryService<Outpost>>();
         }
 
         public IQueryable<RawSmsReceived> PageOfData(MessagesIndexModel indexModel)
@@ -50,7 +54,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 {
                     Content = CONTENT + "-" + i,
                     Credits = CREDITS,
-                    IsDispensary = true,
+                    OutpostType = 1,
                     OutpostId = Guid.NewGuid(),
                     ParseErrorMessage = "Parse error no." + i,
                     ParseSucceeded = false,
@@ -73,7 +77,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 {
                     Content = CONTENT + "-" + i,
                     Credits = CREDITS,
-                    IsDispensary = (i % 2 == 0),
+                    OutpostType = i % 2,
                     OutpostId = Guid.NewGuid(),
                     ParseErrorMessage = "Parse error no." + i,
                     ParseSucceeded = false,

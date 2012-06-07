@@ -8,7 +8,7 @@ using FluentNHibernate.Testing;
 
 namespace IntegrationTests
 {
-    public class When_WeWantToPersisi_A_Treatment : GivenAPersistenceSpecification<Treatment>
+    public class When_WeWantToPersist_A_Treatment : GivenAPersistenceSpecification<Treatment>
     {
         const string TREATMENT_CODE = "RX1";
         const string TREATMENT_KEYWORD = "Clamidya";

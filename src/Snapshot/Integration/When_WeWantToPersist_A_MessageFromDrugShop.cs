@@ -8,7 +8,7 @@ using FluentNHibernate.Testing;
 
 namespace IntegrationTests
 {
-    public class When_WeWantToPersis_A_MessageFromDrugShop : GivenAPersistenceSpecification<MessageFromDrugShop>
+    public class When_WeWantToPersist_A_MessageFromDrugShop : GivenAPersistenceSpecification<MessageFromDrugShop>
     {
         [Test]
         public void It_ShouldBeAbleTo_Save_ThenLoad_ThenDelete_A_MesageFromDrugShop()
@@ -18,7 +18,7 @@ namespace IntegrationTests
             const string GENDER = "F";
             Guid OUTPOSTID = Guid.NewGuid();
             DateTime SENTDATE = DateTime.UtcNow.AddDays(-1);
-            const string IDCODE = "123456";
+            string IDCODE = Guid.NewGuid().ToString().Substring(0,9);
             ServiceNeeded SERVICENEEDED = new ServiceNeeded() { Keyword = "Hiv", Code = "D3" };
 
             var message = Specs

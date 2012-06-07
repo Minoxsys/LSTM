@@ -96,7 +96,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
             objectMother.queryRawSms.VerifyAllExpectations();
 
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
-            Assert.That(jsonData.Messages[0].Content, Is.EqualTo("123456 Tr1 Tr2-8"));
+            Assert.That(jsonData.Messages[0].Content, Is.EqualTo("123456 Tr1 Tr2-9"));
         }
         [Test]
         public void Returns_OnlyMessagesFromDispensaries_WhereContentContains_SearchValue()
@@ -109,7 +109,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 page = 1,
                 start = 0,
                 sort = "Sender",
-                searchValue = "8"
+                searchValue = "-9"
             };
 
             var pageOfData = objectMother.PageOfDispensaryData(indexModel);
@@ -124,7 +124,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
             Assert.IsInstanceOf<MessageIndexOuputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
             Assert.IsNotNull(jsonData);
-            Assert.AreEqual(5, jsonData.TotalItems);
+            Assert.AreEqual(1, jsonData.TotalItems);
         }
     }
 }

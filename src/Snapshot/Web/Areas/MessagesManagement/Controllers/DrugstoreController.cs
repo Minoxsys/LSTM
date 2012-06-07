@@ -13,6 +13,7 @@ namespace Web.Areas.MessagesManagement.Controllers
     public class DrugstoreController : Controller
     {
         public IQueryService<RawSmsReceived> QueryRawSms { get; set; }
+        public IQueryService<Outpost> QueryOutpost { get; set; }
 
         [HttpGet]
         //[Requires(Permissions = "Diagnosis.View")]
@@ -28,7 +29,7 @@ namespace Web.Areas.MessagesManagement.Controllers
         public JsonResult GetMessagesFromDrugstore(MessagesIndexModel indexModel)
         {
             var pageSize = indexModel.limit.Value;
-            var rawDataQuery = this.QueryRawSms.Query().Where(it => it.IsDispensary == false);
+            var rawDataQuery = this.QueryRawSms.Query().Where(it => it.OutpostType == 0);
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<RawSmsReceived>>>()
             {
@@ -62,7 +63,8 @@ namespace Web.Areas.MessagesManagement.Controllers
                                                     Date = message.ReceivedDate.ToShortDateString(),
                                                     Content = message.Content,
                                                     ParseSucceeded = message.ParseSucceeded,
-                                                    ParseErrorMessage = message.ParseErrorMessage
+                                                    ParseErrorMessage = message.ParseErrorMessage,
+                                                    OutpostName = QueryOutpost.Load(message.OutpostId) != null ? QueryOutpost.Load(message.OutpostId).Name : null
                                                 }).ToArray();
 
 

@@ -582,12 +582,11 @@
                                         },{
                                             xtype: 'textfield',
                                             columnWidth: 1 / 4,
-                                            labelAlign:'left',
-                                            margin:'20 10 0 10',
+                                            labelAlign:'top',
                                             itemId: window.feature.modalIds.nameId,
                                             name: 'Name',
                                             allowBlank:false,
-                                            fieldLabel: 'Outpost Name'
+                                            fieldLabel: 'Health Facility Name'
                                         },{ 
                                             xtype:'container',
                                             columnWidth: 1 / 3,
@@ -783,11 +782,11 @@
                                         },{
                                             xtype: 'label',
                                             cls: 'x-title-label',
-                                            text: 'Outpost Administration'
+                                            text: 'Health Facility Administration'
                                         },{
                                             xtype: 'button',
                                             margin: '0 0 0 20',
-                                            text: 'Add New Outpost',
+                                            text: 'Add New Health Facility',
                                             disabled: @(ViewBag.HasNoRightsToAdd),
                                             ui: 'snapshot-add-btn',
                                             cls: 'x-add-button-gradient',
@@ -822,7 +821,7 @@
                                             id: window.feature.searchTextFieldId,
                                             width: 200,
                                             frame: true,
-                                            emptyText: 'Outpost Search',
+                                            emptyText: 'Health Facility Search',
                                             enableKeyEvents: true,
                                             listeners: {
                                                 specialkey: function (field, e) {
@@ -890,7 +889,7 @@
                     },
                     columns: [
                         {
-                            text: "Outpost Name",
+                            text: "Health Facility Name",
                             dataIndex: 'Name',
                             flex: 1,
                             menuDisabled: true,

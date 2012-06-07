@@ -68,7 +68,7 @@ Analysis
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Product level information at region level' },
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<DrugShopLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Reports at drug shop level' },
                                     margin: '70 30 10 80'
                                    }, { xtype: 'label',
                                     margin: '0 0 10 80',
@@ -90,10 +90,57 @@ Analysis
                                 },
                                 items: [{ xtype: 'box',
                                     margin: '70 30 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Product level information at district level' }
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Reports at dispensary level' }
                                 }, { xtype: 'label',
                                     margin: '0 0 10 80',
                                     text: 'This report will show you the latest data of products level at the district level'
+                                }]
+                            }]
+                        }]
+                    },{ xtype: 'container',
+                        //align: 'center',
+                        layout: {
+                            type: 'hbox'
+                        },
+                        items: [{ xtype: 'container',
+                            //align: 'center',
+                            layout: {
+                                type: 'hbox'
+                            },
+                            items: [{ xtype: 'image',
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                margin: '60 0 0 40'
+                            }, { xtype: 'container',
+                                width:400,
+                                layout: {
+                                    type: 'vbox'
+                                },
+                                items: [{ xtype: 'box',
+                                    margin: '70 0 10 80',
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Reports at health center level' }
+                                 }, { xtype: 'label',
+                                    margin: '0 0 10 80',
+                                    text: 'Report description'
+                                }]
+                            }]
+                        }, { xtype: 'container',
+                            //align: 'center',
+                            layout: {
+                                type: 'hbox'
+                            },
+                            items: [{ xtype: 'image',
+                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                margin: '60 0 0 140'
+                            }, { xtype: 'container',
+                                layout: {
+                                    type: 'vbox'
+                                },
+                                items: [{ xtype: 'box',
+                                    margin: '70 0 10 90',
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Reports at district level' }
+                                    }, { xtype: 'label',
+                                    margin: '0 0 10 90',
+                                    text: 'Report description'
                                 }]
                             }]
                         }]
@@ -117,7 +164,7 @@ Analysis
                                 },
                                 items: [{ xtype: 'box',
                                     margin: '70 0 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Activity report for an outpost' }
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Reports at region level' }
                                  }, { xtype: 'label',
                                     margin: '0 0 10 80',
                                     text: 'Report description'

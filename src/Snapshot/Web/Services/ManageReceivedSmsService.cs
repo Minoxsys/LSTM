@@ -13,7 +13,7 @@ namespace Web.Services
     public class ManageReceivedSmsService : IManageReceivedSmsService
     {
         private const string CONTENT_FROMDRUGSHOP_REGEX = @"^([A-Za-z]{2,4}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;/]+)$";
-        private const string CONTENT_FROMDISPENSARY_REGEX = @"^([0-9]{8}[A-Za-z0-9 +-;]+)$";
+        private const string CONTENT_FROMDISPENSARY_REGEX = @"^([0-9A-Za-z]{8}[ \t][A-Za-z0-9 +-;]+)$";
         private const string DateFormat = "ddMMyy";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
 
@@ -43,16 +43,22 @@ namespace Web.Services
         }
 
 
-        public Guid AssignOutpostToRawSmsReceivedBySenderNumber(Domain.RawSmsReceived rawSmsReceived)
+        public RawSmsReceived AssignOutpostToRawSmsReceivedBySenderNumber(Domain.RawSmsReceived rawSmsReceived)
         {
             string number = rawSmsReceived.Sender;
             Contact contact = queryServiceContact.Query().Where(
                 c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(number)).FirstOrDefault();
             Outpost outpost = queryOutposts.GetAllContacts().Where(o => o.Contacts.Contains(contact)).FirstOrDefault();
             if (outpost != null)
-                return outpost.Id;
+            {
+                rawSmsReceived.OutpostId = outpost.Id;
+                rawSmsReceived.OutpostType = outpost.OutpostType.Type;
+                return rawSmsReceived;
+            }
 
-            return Guid.Empty;
+            rawSmsReceived.OutpostId = Guid.Empty;
+            rawSmsReceived.OutpostType = 0;
+            return rawSmsReceived;
         }
 
         public RawSmsReceived ParseRawSmsReceivedFromDrugShop(RawSmsReceived rawSmsReceived)
@@ -171,6 +177,7 @@ namespace Web.Services
             string IdCode = parsedLine[0].Substring(0, 8);
 
             message.OutpostId = rawSmsReceived.OutpostId;
+            message.OutpostType = rawSmsReceived.OutpostType;
             message.MessageFromDrugShop = queryMessageFromDrugShop.Query().Where(it => it.IDCode == IdCode).FirstOrDefault();
             message.SentDate = rawSmsReceived.ReceivedDate;
 

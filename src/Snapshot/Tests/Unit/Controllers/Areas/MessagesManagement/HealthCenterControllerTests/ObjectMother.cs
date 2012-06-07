@@ -9,11 +9,11 @@ using Rhino.Mocks;
 using Web.Areas.MessagesManagement.Models;
 using Web.Areas.MessagesManagement.Models.Messages;
 
-namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTests
+namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterControllerTests
 {
     public class ObjectMother
     {
-        public DrugstoreController controller;
+        public HealthCenterController controller;
         public IQueryService<RawSmsReceived> queryRawSms;
         public IQueryService<Outpost> queryOutposts;
 
@@ -52,7 +52,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
 
         private void Setup_Controller()
         {
-            controller = new DrugstoreController();
+            controller = new HealthCenterController();
             controller.QueryRawSms = queryRawSms;
             controller.QueryOutpost = queryOutposts;
         }
@@ -73,14 +73,14 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                 {
                     Content = CONTENT + "-" + i,
                     Credits = CREDITS,
-                    OutpostType = 0,
+                    OutpostType = 2,
                     OutpostId = Guid.NewGuid(),
                     ParseErrorMessage = "Parse error no." + i,
                     ParseSucceeded = false,
                     ReceivedDate = DateTime.UtcNow.AddDays(-i),
                     Sender = SENDER,
-                    
-                    
+
+
                 });
             }
             return rawSMSList.AsQueryable();
@@ -96,7 +96,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                 {
                     Content = CONTENT + "-" + i,
                     Credits = CREDITS,
-                    OutpostType = i % 2,
+                    OutpostType = i % 3,
                     OutpostId = Guid.NewGuid(),
                     ParseErrorMessage = "Parse error no." + i,
                     ParseSucceeded = false,

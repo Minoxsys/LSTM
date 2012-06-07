@@ -51,8 +51,8 @@ namespace Web.Controllers
                 rawSmsReceived.ReceivedDate = dateRetult;
             else
                 rawSmsReceived.ReceivedDate = DateTime.UtcNow;
-            
-            rawSmsReceived.OutpostId = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
+
+            rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
             if (rawSmsReceived.OutpostId == Guid.Empty)
             {
@@ -65,7 +65,7 @@ namespace Web.Controllers
             }
             SaveCommandRawSmsReceived.Execute(rawSmsReceived);
 
-            if (!rawSmsReceived.IsDispensary)
+            if (rawSmsReceived.OutpostType == 0)
             {
                 rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDrugShop(rawSmsReceived);
                 SaveCommandRawSmsReceived.Execute(rawSmsReceived);

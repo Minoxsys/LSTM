@@ -8,7 +8,7 @@ namespace Web.Services
 {
     public interface IManageReceivedSmsService
     {
-        Guid AssignOutpostToRawSmsReceivedBySenderNumber(RawSmsReceived rawSmsReceived);
+        RawSmsReceived AssignOutpostToRawSmsReceivedBySenderNumber(RawSmsReceived rawSmsReceived);
         RawSmsReceived ParseRawSmsReceivedFromDrugShop(RawSmsReceived rawSmsReceived);
         RawSmsReceived ParseRawSmsReceivedFromDispensary(RawSmsReceived rawSmsReceived);
         MessageFromDrugShop CreateMessageFromDrugShop(RawSmsReceived rawSmsReceived);

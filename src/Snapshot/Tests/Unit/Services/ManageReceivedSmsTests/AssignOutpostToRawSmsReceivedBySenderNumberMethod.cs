@@ -20,7 +20,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         }
 
         [Test]
-        public void WhenWeWantToGetAnOutpostIdBy_WrondPhoneNumber_ItReturnsAnEmptyGuid()
+        public void WhenWeWantToAssociateAnOutpostBy_WrondPhoneNumber_ToRawsSmS_ItReturnsRawsmsWithEmptyOutpostId()
         {
             //Arrange
             objectMother.queryServiceContact.Expect(call => call.Query()).Return(new Contact[] { objectMother.contact }.AsQueryable<Contact>());
@@ -33,12 +33,14 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             objectMother.queryServiceContact.VerifyAllExpectations();
             objectMother.queryOutposts.VerifyAllExpectations();
-            Assert.IsInstanceOf<Guid>(result);
-            Assert.AreEqual(Guid.Empty, result);
+            Assert.IsInstanceOf<RawSmsReceived>(result);
+            Assert.AreNotEqual(null, result);
+            Assert.AreEqual(Guid.Empty, result.OutpostId);
+            Assert.AreEqual(0, result.OutpostType);
         }
 
         [Test]
-        public void WhenWeWantToGetAnOutpostIdBy_ExistingPhoneNumber_ItReturnsAValidOutpostId()
+        public void WhenWeWantToAssociateAnOutpostIdBy_ExistingPhoneNumber_ItReturnsARawSmsWithValidOutpostId()
         {
             //Arrange
             objectMother.queryServiceContact.Expect(call => call.Query()).Return(new Contact[] { objectMother.contact }.AsQueryable<Contact>());
@@ -51,8 +53,9 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             objectMother.queryServiceContact.VerifyAllExpectations();
             objectMother.queryOutposts.VerifyAllExpectations();
-            Assert.IsInstanceOf<Guid>(result);
-            Assert.AreEqual(objectMother.outpostId, result);
+            Assert.IsInstanceOf<RawSmsReceived>(result);
+            Assert.AreEqual(objectMother.outpostId, result.OutpostId);
+            Assert.AreEqual(objectMother.outpostType.Type, result.OutpostType);
         }
     }
 }

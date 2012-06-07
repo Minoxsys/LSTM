@@ -15,6 +15,7 @@ namespace IntegrationTests
         {
             MessageFromDrugShop MESSAGE = new MessageFromDrugShop { Initials = "XY", BirthDate = DateTime.UtcNow, Gender = "F", IDCode = "123456", OutpostId = Guid.NewGuid(), SentDate = DateTime.UtcNow};
             Guid OUTPOSTID = Guid.NewGuid();
+            int OUTPOSTTYPE = 1;
             DateTime SENTDATE = DateTime.UtcNow.AddDays(-1);
             Diagnosis DIAGNOSIS = new Diagnosis { Code = "D1" };
             Treatment TREATMENT = new Treatment { Code = "T1" };
@@ -23,6 +24,7 @@ namespace IntegrationTests
             var message = Specs
                 .CheckReference(p => p.MessageFromDrugShop, MESSAGE)
                 .CheckProperty(p => p.OutpostId, OUTPOSTID)
+                .CheckProperty(p => p.OutpostType, OUTPOSTTYPE)
                 .CheckList(p => p.Diagnosises, new List<Diagnosis> { DIAGNOSIS })
                 .CheckList(p => p.Treatments, new List<Treatment> { TREATMENT })
                 .CheckList(p => p.Advices, new List<Advice> { ADVICE })
@@ -36,6 +38,7 @@ namespace IntegrationTests
             Assert.AreEqual(message.MessageFromDrugShop.Initials, MESSAGE.Initials);
 
             Assert.AreEqual(OUTPOSTID, message.OutpostId);
+            Assert.AreEqual(OUTPOSTTYPE, message.OutpostType);
 
             Assert.IsNotNull(message.Diagnosises);
             Assert.AreEqual(1, message.Diagnosises.Count);

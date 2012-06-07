@@ -13,7 +13,7 @@ namespace Domain
         public virtual string Credits { get; set; }
         public virtual DateTime ReceivedDate { get; set; }
         public virtual Guid OutpostId { get; set; }
-        public virtual bool IsDispensary { get; set; }
+        public virtual int OutpostType { get; set; }
         public virtual bool ParseSucceeded { get; set; }
         public virtual string ParseErrorMessage { get; set; }
     }
