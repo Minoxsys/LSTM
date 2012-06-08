@@ -68,11 +68,11 @@ Analysis
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<DrugShopLevelController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Reports at drug shop level' },
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Reports at Health Facility Level' },
                                     margin: '70 30 10 80'
                                    }, { xtype: 'label',
                                     margin: '0 0 10 80',
-                                    text: 'This report will show you the latest data of products level at the region level'
+                                    text: 'This report will show you the number of patients received at different health facitities'
                                 }]
                             }]
                         }, { xtype: 'container',

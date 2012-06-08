@@ -1,0 +1,564 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@using Web.Areas.AnalysisManagement;
+@using Web.Areas.OutpostManagement;
+
+@section page_title{
+Analysis: Product level information at district level
+}
+
+@{
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_EmptySideBar");
+}
+
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+
+        var analysisBtnId = window.res.header.navigation.analysisAndReports;
+        var analysisBtn = Ext.getCmp(analysisBtnId);
+        analysisBtn.toggle(true);
+    });
+
+</script>
+<script type="text/javascript">
+    var allowUserToClearValue = {
+        'load': function () {
+            //this.insert(0, {Id:'@Guid.Empty', Name:'All'});
+        }
+    };
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.countryComboboxId = 'Overview-Combobox-Country-Health-Facility-Level';
+        window.feature.regionComboboxId = 'Overview-Combobox-Region-Health-Facility-Level';
+        window.feature.districtComboboxId = 'Overview-Combobox-District-Health-Facility-Level';
+        window.feature.outpostTypeComboboxId = 'Overview-Combobox-Outpost-Type-Health-Facility-Level';
+        window.feature.StartDateId = 'Start-Date-Health-Facility-Level';
+        window.feature.EndDateId = 'End-Date-Health-Facility-Level';
+        window.feature.gridHealthFacilityLevelId = "Grid-Health-Facility-Level-Id";
+        DivChartContainer = "Chart-Health-Facility-Level-Id";
+
+        window.feature.reportStore = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            fields: ['OutpostName', 'NumberOfPatients', 'Male', 'Female'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "GetHealthFacilityReport" })',
+                reader: {
+                    type: 'json',
+                    root: 'Outposts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    startDate: '',
+                    endDate: '',
+                    outpostType: ''
+                },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'OutpostName',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.countryStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
+                reader: {
+                    type: 'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
+                reader: {
+                    type: 'json',
+                    root: 'regions',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.districtStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Districts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { regionId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.outpostTypeStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Name', 'Type'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetOutpostTypes" })',
+                reader: {
+                    type: 'json',
+                    root: 'OutpostTypes'
+                },
+                simpleSortMode: true
+            },
+            listeners: allowUserToClearValue
+        });
+
+        function ResetCountryDependencies() {
+            var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
+            regionCombobox.setValue(null);
+
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue(null);
+
+            window.feature.reportStore.proxy.extraParams.regionId = "";
+            window.feature.reportStore.proxy.extraParams.districtId = "";
+            window.feature.reportStore.loadPage(1);
+            window.feature.execute.delay(500);
+
+        };
+
+        function ResetRegionDependencies() {
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue(null);
+
+            window.feature.reportStore.proxy.extraParams.districtId = "";
+            window.feature.reportStore.loadPage(1);
+            window.feature.execute.delay(500);
+        };
+
+        window.feature.country = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.countryComboboxId,
+            store: window.feature.countryStore,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Country',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'Country List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    ResetCountryDependencies();
+
+                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.regionStore.load();
+
+                    window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.reportStore.loadPage(1);
+                    window.feature.execute.delay(500);
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        ResetCountryDependencies();
+                    }
+                }
+            }
+        });
+        window.feature.region = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.regionComboboxId,
+            store: window.feature.regionStore,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Region',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'Region List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    ResetRegionDependencies();
+
+                    window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.districtStore.load();
+
+                    window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.reportStore.loadPage(1);
+                    window.feature.execute.delay(500);
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        ResetRegionDependencies();
+                    }
+                }
+            }
+        });
+
+        window.feature.district = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.districtComboboxId,
+            store: window.feature.districtStore,
+            labelAlign: 'top',
+            fieldLabel: 'Selected District',
+            displayField: 'Name',
+            labelClsExtra: 'combo-label',
+            valueField: 'Id',
+            emptyText: 'District List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
+                    window.feature.reportStore.loadPage(1);
+                    window.feature.execute.delay(500);
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                    }
+                }
+            }
+        });
+
+        window.feature.outpostType = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.outpostTypeComboboxId,
+            store: window.feature.outpostTypeStore,
+            margin: '2 0 0 0',
+            queryMode: 'local',
+            displayField: 'Name',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Health Facility',
+            labelClsExtra: 'combo-label',
+            initialValue: 0,
+            valueField: 'Type',
+            emptyText: 'Type List',
+            typeAhead: true,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                    }
+                },
+                'select': function (combo, record) {
+                    window.feature.reportStore.proxy.extraParams.outpostType = combo.getValue();
+                    window.feature.reportStore.loadPage(1);
+
+                    window.feature.execute.delay(500);
+                }
+            }
+        });
+
+
+        Ext.define('Ext.chart.theme.MyTheme', {
+            extend: 'Ext.chart.theme.Base',
+            colors: ['rgb(255, 	130, 	171)', 'rgb(126, 	192, 	238)'],
+            constructor: function (config) {
+                this.callParent([Ext.apply({
+                    colors: this.colors
+                }, config)]);
+            }
+        });
+
+        var chartStore = Ext.create('Ext.data.ArrayStore', {
+            fields: [
+                { name: 'outpostName' },
+                { name: 'Female', type: 'int' },
+                { name: 'Male', type: 'int' }
+            ]
+        });
+
+        function GenerateData() {
+            dataStore = [];
+            var rowNo = window.feature.reportStore.count();
+            var i = 0;
+            var row = [];
+            while (i < rowNo) {
+                row = [];
+                row.push(window.feature.reportStore.getAt(i).get('OutpostName'));
+                row.push(window.feature.reportStore.getAt(i).get('Female'));
+                row.push(window.feature.reportStore.getAt(i).get('Male'));
+                dataStore.push(row);
+                i++;
+            }
+            return dataStore;
+        };
+
+        window.feature.execute = new Ext.util.DelayedTask(function () {
+            var cont = Ext.getCmp('DivChartContainer');
+            var chart = Ext.getCmp('chartIdRemove');
+            cont.remove(chart);
+
+            var myData = GenerateData();
+            chartStore.loadData(myData);
+
+            cont.add({
+                id: 'chartIdRemove',
+                xtype: 'chart',
+                animate: true,
+                shadow: true,
+                style: 'background:#fff',
+                minHeight: 580,
+                maxHeight: 600,
+                flex: 1,
+                store: chartStore,
+                theme: 'MyTheme',
+                axes: [{
+                    type: 'Category',
+                    position: 'left',
+                    fields: ['outpostName'],
+                    title: 'Health Facility'
+                }, {
+                    type: 'Numeric',
+                    position: 'bottom',
+                    fields: ['Female', 'Male'],
+                    title: 'Number of patients',
+                    grid: true,
+                    minimum: 0
+                }],
+                series: [{
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        height: 28,
+                        renderer: function (storeItem, item) {
+                            this.setTitle(String(item.value[1]) + ' Patients');
+                        }
+                    },
+                    xField: 'outpostName',
+                    yField: ['Female', 'Male'],
+                    stacked: true
+                }],
+                legend: {
+                    position: 'right'
+                }
+            });
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 0 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'hbox'
+            },
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    height: 200,
+                    items: [
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Information at health facility level'
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, window.feature.country,
+                        window.feature.region,
+                        window.feature.district
+                    ]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
+                        xtype: 'datefield',
+                        fieldLabel: 'Start Date',
+                        format: 'd-M-Y',
+                        labelAlign: 'top',
+                        margin: '5 0 0 0',
+                        itemId: window.feature.StartDateId,
+                        listeners: {
+                            select: function (t, n, o) {
+                                var date = t.getValue();
+                                window.feature.reportStore.proxy.extraParams.startDate = date;
+                                window.feature.reportStore.loadPage(1);
+                                window.feature.execute.delay(500);
+                            },
+                            specialkey: function (field, e) {
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue(null);
+                                    window.feature.reportStore.proxy.extraParams.startDate = "";
+                                    window.feature.reportStore.loadPage(1);
+                                    window.feature.execute.delay(500);
+                                }
+                            }
+                        }
+                    }, {
+                        xtype: 'datefield',
+                        fieldLabel: 'End Date',
+                        labelAlign: 'top',
+                        margin: '5 0 0 0',
+                        format: 'd-M-Y',
+                        itemId: window.feature.EndDateId,
+                        listeners: {
+                            select: function (t, n, o) {
+                                var date = t.getValue();
+                                window.feature.reportStore.proxy.extraParams.endDate = date;
+                                window.feature.reportStore.loadPage(1);
+                                window.feature.execute.delay(500);
+                            },
+                            specialkey: function (field, e) {
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue(null);
+                                    window.feature.reportStore.proxy.extraParams.endDate = "";
+                                    window.feature.reportStore.loadPage(1);
+                                    window.feature.execute.delay(500);
+                                }
+                            }
+                        }
+                    }, window.feature.outpostType]
+                }]
+                }, {
+                    xtype: 'gridpanel',
+                    cls: 'white-border',
+                    itemId: window.feature.gridHealthFacilityLevelId,
+                    store: window.feature.reportStore,
+                    loadMask: true,
+                    disableSelection: true,
+                    flex: 3,
+                    autoScroll: true,
+                    columns: [{
+                        header: "Health Facility Name",
+                        dataIndex: 'OutpostName',
+                        flex: 2,
+                        menuDisabled: true,
+                        sortable: true
+                    }, {
+                        header: "Females",
+                        dataIndex: 'Female',
+                        flex: 1,
+                        menuDisabled: true,
+                        sortable: true
+                    }, {
+                        header: "Males",
+                        dataIndex: 'Male',
+                        flex: 1,
+                        menuDisabled: true,
+                        sortable: true
+                    }, {
+                        header: "Number Of Patients",
+                        dataIndex: 'NumberOfPatients',
+                        flex: 1,
+                        menuDisabled: true,
+                        sortable: true
+                    }],
+                    bbar: Ext.create('Ext.PagingToolbar', {
+                        store: window.feature.reportStore,
+                        displayInfo: true,
+                        displayMsg: 'Displaying topics {0} - {1} of {2}',
+                        emptyMsg: "No topics to display",
+                        ui: 'snapshot-pagination-toolbar'
+                    })
+                }]
+            }, {
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                padding: '0 0 0 20',
+                items: [{
+                    xtype: 'container',
+                    id: 'DivChartContainer',
+                    flex: 2,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    autoScroll: true,
+                    items: []
+                }]
+            }]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.outpostTypeStore.load(function () {
+            var combo = window.feature.container.down('#' + window.feature.outpostTypeComboboxId);
+            combo.setValue(window.feature.outpostTypeStore.getAt(0).get('Type'));
+            window.feature.reportStore.proxy.extraParams.outpostType = combo.getValue();
+            window.feature.reportStore.loadPage(1);
+            window.feature.execute.delay(500);
+        });
+
+    });
+</script>

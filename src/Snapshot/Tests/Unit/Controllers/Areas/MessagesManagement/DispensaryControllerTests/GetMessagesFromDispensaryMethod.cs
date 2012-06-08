@@ -8,6 +8,7 @@ using Rhino.Mocks;
 
 namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTests
 {
+    [TestFixture]
     public class GetMessagesFromDispensaryMethod
     {
         public ObjectMother objectMother = new ObjectMother();

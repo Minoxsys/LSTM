@@ -9,5 +9,6 @@ namespace Web.Areas.OutpostManagement.Models.Outpost
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public int Type { get; set; }
     }
 }
