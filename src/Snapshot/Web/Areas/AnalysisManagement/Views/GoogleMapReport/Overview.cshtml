@@ -99,11 +99,6 @@ Analysis: Product level information at district level
             }]
         });
 
-        window.feature.execute = new Ext.util.DelayedTask(function () {
-            var map = googleMapPanel.getMap();
-            map.setZoom(4);
-        });
-
         window.feature.country = Ext.create('Ext.form.ComboBox', {
             xtype: 'combobox',
             itemId: window.feature.countryComboboxId,
@@ -118,21 +113,21 @@ Analysis: Product level information at district level
             typeAhead: false,
             listeners: {
                 'select': function (combo, record) {
+                    var map = googleMapPanel.getMap();
 
                     window.feature.outpostStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.outpostStore.load();
                     window.feature.districtStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.districtStore.load();
                     window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.regionStore.load();
+                    window.feature.regionStore.load(function () {
+                        map.setZoom(4);
+                    });
 
                     deleteMarkers(regionMarkersArray);
                     deleteMarkers(districtMarkersArray);
                     deleteMarkers(regionMarkersArray);
 
-                    window.feature.execute.delay(500);
-
-                    var map = googleMapPanel.getMap();
                     centerOnPlace(combo.getRawValue(), map);
                 }
             }

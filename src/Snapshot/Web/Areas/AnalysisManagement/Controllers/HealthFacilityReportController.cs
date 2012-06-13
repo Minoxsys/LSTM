@@ -60,7 +60,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var outpostModelListProjection = (from outpost in outpostDataQuery.ToList()
                                              select new HealthFacilityModel
                                              {
-                                                 OutpostName = outpost.Name,
+                                                 OutpostName = outpost.Name + " (" + outpost.District.Name + ")",
                                                  NumberOfPatients = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "").ToString(),
                                                  Female = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "F").ToString(),
                                                  Male = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "M").ToString(),
