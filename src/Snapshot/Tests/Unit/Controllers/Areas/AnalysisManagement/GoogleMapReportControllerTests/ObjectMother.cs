@@ -31,8 +31,10 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
         public Guid drugshopId;
         public Outpost dispensary;
         public Guid dispensaryId;
-        public District district;
-        public Guid districtId;
+        public District district1;
+        public Guid district1Id;
+        public District district2;
+        public Guid district2Id;
         public Region region;
         public Guid regionId;
         public Guid countryId;
@@ -110,12 +112,19 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
             region.Country = country;
             region.Client = client;
 
-            districtId = Guid.NewGuid();
-            district = MockRepository.GeneratePartialMock<District>();
-            district.Stub(c => c.Id).Return(districtId);
-            district.Name = "District";
-            district.Region = region;
-            district.Client = client;
+            district1Id = Guid.NewGuid();
+            district1 = MockRepository.GeneratePartialMock<District>();
+            district1.Stub(c => c.Id).Return(district1Id);
+            district1.Name = "District";
+            district1.Region = region;
+            district1.Client = client;
+
+            district2Id = Guid.NewGuid();
+            district2 = MockRepository.GeneratePartialMock<District>();
+            district2.Stub(c => c.Id).Return(district2Id);
+            district2.Name = "District";
+            district2.Region = region;
+            district2.Client = client;
 
             drugshopId = Guid.NewGuid();
             drugshop = MockRepository.GeneratePartialMock<Outpost>();
@@ -123,7 +132,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
             drugshop.Name = "Drugshop";
             drugshop.Region = region;
             drugshop.Country = country;
-            drugshop.District = district;
+            drugshop.District = district2;
             drugshop.Client = client;
             drugshop.OutpostType = new OutpostType { Name = "DrugShop", Type = 0 };
             drugshop.Latitude = "(34.234323454,27.876567546)";
@@ -134,7 +143,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
             dispensary.Name = "Dispensary";
             dispensary.Region = region;
             dispensary.Country = country;
-            dispensary.District = district;
+            dispensary.District = district1;
             dispensary.Client = client;
             dispensary.OutpostType = new OutpostType { Name = "Dispensary", Type = 1 };
             dispensary.Latitude = "(12.123212321,4.345434567)";

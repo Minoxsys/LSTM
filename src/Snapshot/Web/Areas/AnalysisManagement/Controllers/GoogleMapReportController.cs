@@ -77,7 +77,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                                                   Name = district.Name,
                                                   Number = GetNumberOfPatientsFor(district, null).ToString(),
                                                   Type = 1,
-                                                  Coordonates = GetCenterCoordonates(district, null)
+                                                  Coordonates = GetCenterCoordonates(district)
                                               }).ToArray();
 
             return Json(new MarkerIndexOutputModel
@@ -87,7 +87,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        private string GetCenterCoordonates(District district, Region region)
+        private string GetCenterCoordonates(District district)
         {
             double lat = 0;
             double lng = 0;
@@ -95,8 +95,6 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var outpostDataQuery = QueryOutposts.Query().Where(it => it.Client == _client);
             if (district != null)
                 outpostDataQuery = outpostDataQuery.Where(it => it.District.Id == district.Id);
-            if (region != null)
-                outpostDataQuery = outpostDataQuery.Where(it => it.Region.Id == region.Id);
 
             foreach (var outpost in outpostDataQuery)
             {
@@ -137,7 +135,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                                                    Name = region.Name,
                                                    Number = GetNumberOfPatientsFor(null, region).ToString(),
                                                    Type = 0,
-                                                   Coordonates = GetCenterCoordonates(null, region)
+                                                   Coordonates = GetCenterCoordonates(region)
                                                }).ToArray();
 
             return Json(new MarkerIndexOutputModel
@@ -145,6 +143,23 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 Markers = districtModelListProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string GetCenterCoordonates(Region region)
+        {
+            double lat = 0;
+            double lng = 0;
+
+            var districtDataQuery = QueryDistricts.Query().Where(it => it.Region.Id == region.Id);
+            
+            foreach (var district in districtDataQuery)
+            {
+                var coordonates = GetCenterCoordonates(district);
+                lat += double.Parse(coordonates.Substring(1, coordonates.IndexOf(",") - 1));
+                lng += double.Parse(coordonates.Substring(coordonates.IndexOf(",") + 1, coordonates.Length - coordonates.IndexOf(",") - 2).Trim());
+            }
+
+            return "(" + lat / districtDataQuery.Count() + "," + lng / districtDataQuery.Count() + ")";
         }
 
 

@@ -25,6 +25,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
         {
             //Arrange
             objectMother.queryRegion.Expect(call => call.Query()).Return(new Region[] { objectMother.region }.AsQueryable());
+            objectMother.queryDistrict.Expect(call => call.Query()).Return(new District[] {objectMother.district2}.AsQueryable());
             objectMother.queryOutpost.Expect(call => call.Query()).Return(new Outpost[] { objectMother.drugshop }.AsQueryable());
             objectMother.queryMessageFromDrugShop.Expect(call => call.Query()).Return(objectMother.ListOfMessageFromDrugShop());
 
@@ -33,6 +34,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
 
             //Assert
             objectMother.queryRegion.VerifyAllExpectations();
+            objectMother.queryDistrict.VerifyAllExpectations();
             objectMother.queryOutpost.VerifyAllExpectations();
             objectMother.queryMessageFromDrugShop.VerifyAllExpectations();
 

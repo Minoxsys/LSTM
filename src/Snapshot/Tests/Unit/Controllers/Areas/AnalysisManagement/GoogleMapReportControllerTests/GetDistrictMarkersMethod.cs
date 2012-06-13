@@ -24,10 +24,9 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
         public void Returns_JSON_WithAListOf_Markers()
         {
             //Arrange
-            objectMother.queryDistrict.Expect(call => call.Query()).Return(new District[] { objectMother.district }.AsQueryable());
+            objectMother.queryDistrict.Expect(call => call.Query()).Return(new District[] { objectMother.district1 }.AsQueryable());
             objectMother.queryOutpost.Expect(call => call.Query()).Return(new Outpost[] { objectMother.drugshop, objectMother.dispensary }.AsQueryable());
             objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(objectMother.ListOfMessageFromDispensary());
-            objectMother.queryMessageFromDrugShop.Expect(call => call.Query()).Return(objectMother.ListOfMessageFromDrugShop());
 
             //Act
             var jsonResult = objectMother.controller.GetDistrictMarkers(objectMother.countryId);
@@ -36,7 +35,6 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
             objectMother.queryDistrict.VerifyAllExpectations();
             objectMother.queryOutpost.VerifyAllExpectations();
             objectMother.queryMessageFromDispensary.VerifyAllExpectations();
-            objectMother.queryMessageFromDrugShop.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             Assert.IsInstanceOf<MarkerIndexOutputModel>(jsonResult.Data);
@@ -44,8 +42,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(1, jsonData.TotalItems);
-            Assert.AreEqual("20", jsonData.Markers[0].Number);
-            Assert.AreEqual("(23.1787678875,16.1110010565)", jsonData.Markers[0].Coordonates);
+            Assert.AreEqual("10", jsonData.Markers[0].Number);
+            Assert.AreEqual(objectMother.dispensary.Latitude, jsonData.Markers[0].Coordonates);
         }
     }
 }
