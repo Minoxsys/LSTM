@@ -13,6 +13,20 @@ Analysis: Product level information at district level
     Html.RenderPartial("SelectPositionGoogleMapWindow");
 }
 
+<style type="text/css">
+.labels {
+   color: red;
+   background-color: white;
+   font-family: "Lucida Grande", "Arial", sans-serif;
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   width: 30px;     
+   border: 2px solid black;
+   white-space: nowrap;
+}
+</style>
+
 <script type="text/javascript">
 
     Ext.onReady(function () {
@@ -23,28 +37,120 @@ Analysis: Product level information at district level
     });
 
 </script>
+
 <script type="text/javascript">
-    var allowUserToClearValue = {
-        'load': function () {
-            //this.insert(0, {Id:'@Guid.Empty', Name:'All'});
-        }
-    };
     Ext.onReady(function () {
         window.feature = {};
-        
-        var googleMapPanelConfig = {
-            flex: 1,
-            margin: '0 0 10 0',
+        window.feature.countryComboboxId = "Country-Combo-Box-Google-Map-Report";
 
-        };
-        googleMapPanelConfig.centerPosition = new google.maps.LatLng(-6.063063980580725, 35.083722392578125);
-        googleMapPanelConfig.zoom = 6;
+        var outpostMarkersArray = [];
+        var districtMarkersArray = [];
+        var regionMarkersArray = [];
+
+        var googleMapPanelConfig = { flex: 1, margin: '0 0 10 0' };
+        googleMapPanelConfig.centerPosition = new google.maps.LatLng(34.321061139205526, 66.34764831250004);
+        googleMapPanelConfig.zoom = 2;
         var googleMapPanel = Ext.create('Ext.feature.GoogleMapPanel', googleMapPanelConfig);
-        var latLng = new google.maps.LatLng(-7.367547420958276, 34.13573425000004);
 
-        googleMapPanel.addMarker({
-            position: latLng,
-            title: "Outpost"
+        window.feature.outpostStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Number', 'Type', 'Coordonates'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "GoogleMapReport", action = "GetOutpostMarkers" })',
+                reader: {
+                    type: 'json',
+                    root: 'Markers',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' }
+            }
+        });
+
+        window.feature.districtStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Number', 'Type', 'Coordonates'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "GoogleMapReport", action = "GetDistrictMarkers" })',
+                reader: {
+                    type: 'json',
+                    root: 'Markers',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' }
+            }
+        });
+
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
+            fields: ['Name', 'Number', 'Type', 'Coordonates'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "GoogleMapReport", action = "GetRegionMarkers" })',
+                reader: {
+                    type: 'json',
+                    root: 'Markers',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' }
+            }
+        });
+
+        window.feature.countryStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
+                reader: {
+                    type: 'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.execute = new Ext.util.DelayedTask(function () {
+            var map = googleMapPanel.getMap();
+            map.setZoom(4);
+        });
+
+        window.feature.country = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.countryComboboxId,
+            store: window.feature.countryStore,
+            margin: '0 0 20 20',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Country',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'Country List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+
+                    window.feature.outpostStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.outpostStore.load();
+                    window.feature.districtStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.districtStore.load();
+                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.regionStore.load();
+
+                    deleteMarkers(regionMarkersArray);
+                    deleteMarkers(districtMarkersArray);
+                    deleteMarkers(regionMarkersArray);
+
+                    window.feature.execute.delay(500);
+
+                    var map = googleMapPanel.getMap();
+                    centerOnPlace(combo.getRawValue(), map);
+                }
+            }
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
@@ -69,7 +175,7 @@ Analysis: Product level information at district level
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    height: 50,
+                    height: 70,
                     items: [{
                         xtype: 'container',
                         flex: 1,
@@ -85,7 +191,8 @@ Analysis: Product level information at district level
                             xtype: 'label',
                             cls: 'x-title-label',
                             text: 'Google Map Report'
-                        }]
+                        }, window.feature.country
+                        ]
                     }]
                 }, {
                     xtype: 'container',
@@ -101,10 +208,94 @@ Analysis: Product level information at district level
             }]
         });
 
+        function centerOnPlace(country, map) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ 'address': country }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                }
+            });
+        };
+
+        function getGooglePositionFromText(coordinates) {
+            var a = parseFloat(coordinates.substring(1, coordinates.indexOf(',')));
+            var b = parseFloat(coordinates.substring(coordinates.indexOf(',') + 1, coordinates.length - 1));
+            return new google.maps.LatLng(a, b);
+        };
+
+        function deleteMarkers(markerArray) {
+            var number = markerArray.length;
+
+            if (markerArray) {
+                for (var j = 0; j < markerArray.length; j++) {
+                    markerArray[j].setMap(null);
+                }
+            }
+            markerArray.splice(0, number);
+            markerArray = [];
+
+        };
+
+        function createMarker(store, markerArray, map) {
+            var a = markerArray.length;
+
+            if (markerArray.length == 0) {
+                var i = 0;
+
+                store.each(function (item) {
+                    var marker = new MarkerWithLabel({
+                        position: getGooglePositionFromText(item.get('Coordonates')),
+                        draggable: false,
+                        raiseOnDrag: true,
+                        map: map,
+                        labelContent: item.get('Number'),
+                        labelAnchor: new google.maps.Point(15, 0),
+                        labelClass: 'labels',
+                        labelStyle: { opacity: 0.75 },
+                        title: item.get('Name'),
+                        animation: google.maps.Animation.DROP
+                    });
+
+                    markerArray[i] = marker;
+                    i = i + 1;
+                }, this);
+            }
+        }
+
+        function SetUpZoomEvent() {
+            var map = googleMapPanel.getMap();
+
+            google.maps.event.addListener(map, 'zoom_changed', function () {
+                var zoomLevel = map.getZoom();
+
+                if (map.getZoom() >= 7) {
+                    deleteMarkers(regionMarkersArray);
+                    deleteMarkers(districtMarkersArray);
+                    createMarker(window.feature.outpostStore, outpostMarkersArray, map);
+                }
+
+                if (map.getZoom() < 7 && map.getZoom() >= 5) {
+                    deleteMarkers(outpostMarkersArray);
+                    deleteMarkers(regionMarkersArray);
+                    createMarker(window.feature.districtStore, districtMarkersArray, map);
+                }
+
+                if (map.getZoom() < 5) {
+                    deleteMarkers(districtMarkersArray);
+                    deleteMarkers(outpostMarkersArray);
+                    createMarker(window.feature.regionStore, regionMarkersArray, map);
+                }
+
+            });
+        }
+
+
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-
+        window.feature.countryStore.load(function () {
+            SetUpZoomEvent();
+        });
     });
 </script>

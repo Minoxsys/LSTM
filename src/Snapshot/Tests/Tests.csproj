@@ -95,6 +95,10 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\Controllers\AccountControllerTest.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\GoogleMapReportControllerTests\GetDistrictMarkersMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\GoogleMapReportControllerTests\GetOutpostMarkersMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\GoogleMapReportControllerTests\GetRegionMarkersMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\GoogleMapReportControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\HealthFacilityReportControllerTests\GetHealthFacilityReportMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\HealthFacilityReportControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\DispensaryControllerTests\GetMessagesFromDispensaryMethod.cs" />
