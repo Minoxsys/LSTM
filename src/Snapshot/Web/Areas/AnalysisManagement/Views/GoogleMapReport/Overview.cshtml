@@ -13,20 +13,6 @@ Analysis: Product level information at district level
     Html.RenderPartial("SelectPositionGoogleMapWindow");
 }
 
-<style type="text/css">
-.labels {
-   color: red;
-   background-color: white;
-   font-family: "Lucida Grande", "Arial", sans-serif;
-   font-size: 10px;
-   font-weight: bold;
-   text-align: center;
-   width: 30px;     
-   border: 2px solid black;
-   white-space: nowrap;
-}
-</style>
-
 <script type="text/javascript">
 
     Ext.onReady(function () {
@@ -122,9 +108,8 @@ Analysis: Product level information at district level
             xtype: 'combobox',
             itemId: window.feature.countryComboboxId,
             store: window.feature.countryStore,
-            margin: '0 0 20 20',
-            labelAlign: 'top',
-            fieldLabel: 'Selected Country',
+            margin: '0 0 20 50',
+            fieldLabel: 'Select Country',
             displayField: 'Name',
             valueField: 'Id',
             labelClsExtra: 'combo-label',
@@ -175,7 +160,7 @@ Analysis: Product level information at district level
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    height: 70,
+                    height: 35,
                     items: [{
                         xtype: 'container',
                         flex: 1,
@@ -250,7 +235,7 @@ Analysis: Product level information at district level
                         map: map,
                         labelContent: item.get('Number'),
                         labelAnchor: new google.maps.Point(15, 0),
-                        labelClass: 'labels',
+                        labelClass: item.get('Type'),
                         labelStyle: { opacity: 0.75 },
                         title: item.get('Name'),
                         animation: google.maps.Animation.DROP
@@ -299,3 +284,39 @@ Analysis: Product level information at district level
         });
     });
 </script>
+
+<style type="text/css">
+.drugshop {
+   color: black;
+   background-color: #FFCCCC;
+   font-family: "Lucida Grande", "Arial", sans-serif;
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   width: 30px;     
+   border: 1px solid black;
+   white-space: nowrap;
+}
+.dispensary {
+   color: black;
+   background-color: #FFFF66;
+   font-family: "Lucida Grande", "Arial", sans-serif;
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   width: 30px;     
+   border: 1px solid black;
+   white-space: nowrap;
+}
+.healthcenter {
+   color: black;
+   background-color: #99FFFF;
+   font-family: "Lucida Grande", "Arial", sans-serif;
+   font-size: 10px;
+   font-weight: bold;
+   text-align: center;
+   width: 30px;     
+   border: 1px solid black;
+   white-space: nowrap;
+}
+</style>

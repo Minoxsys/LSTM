@@ -42,7 +42,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                                               {
                                                   Name = outpost.Name,
                                                   Number = GetNumberOfPatientsFor(outpost).ToString(),
-                                                  Type = 2,
+                                                  Type = SetType(outpost.OutpostType.Type),
                                                   Coordonates = outpost.Latitude
                                               }).ToArray();
 
@@ -51,6 +51,16 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 Markers = outpostModelListProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private string SetType(int type)
+        {
+            if (type == 0)
+                return "drugshop";
+            if (type == 1)
+                return "dispensary";
+
+            return "healthcenter";
         }
 
         private int GetNumberOfPatientsFor(Outpost outpost)
@@ -76,7 +86,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                                               {
                                                   Name = district.Name,
                                                   Number = GetNumberOfPatientsFor(district, null).ToString(),
-                                                  Type = 1,
+                                                  Type = "drugshop",
                                                   Coordonates = GetCenterCoordonates(district)
                                               }).ToArray();
 
@@ -134,7 +144,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                                                {
                                                    Name = region.Name,
                                                    Number = GetNumberOfPatientsFor(null, region).ToString(),
-                                                   Type = 0,
+                                                   Type = "drugshop",
                                                    Coordonates = GetCenterCoordonates(region)
                                                }).ToArray();
 

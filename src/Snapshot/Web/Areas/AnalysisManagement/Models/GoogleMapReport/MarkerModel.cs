@@ -9,7 +9,7 @@ namespace Web.Areas.AnalysisManagement.Models.GoogleMapReport
     {
         public string Name { get; set; }
         public string Number { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public string Coordonates { get; set; }
     }
 }
