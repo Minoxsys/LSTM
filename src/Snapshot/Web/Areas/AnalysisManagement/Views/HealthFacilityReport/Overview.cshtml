@@ -67,7 +67,7 @@ Analysis: Product level information at district level
             }],
             listeners: {
                 'load': function (store, records, options) {
-                   DrawChart();
+                    DrawChart();
                 }
             }
         });
@@ -524,7 +524,15 @@ Analysis: Product level information at district level
                         displayInfo: true,
                         displayMsg: 'Displaying topics {0} - {1} of {2}',
                         emptyMsg: "No topics to display",
-                        ui: 'snapshot-pagination-toolbar'
+                        ui: 'snapshot-pagination-toolbar',
+                        buttons: [{
+                            xtype: 'button',
+                            text: 'Export to Excel',
+                            handler: function () {
+                                var postToUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "ExportToExcel" })';
+                                var action = $.post(postToUrl);
+                            }
+                        }]
                     })
                 }]
             }, {

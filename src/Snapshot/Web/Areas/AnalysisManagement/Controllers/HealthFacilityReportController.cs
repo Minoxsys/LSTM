@@ -8,6 +8,8 @@ using Core.Persistence;
 using Web.Areas.AnalysisManagement.Models.HealthFacilityReport;
 using System.Globalization;
 using Core.Domain;
+using Microsoft.Office.Interop;
+using Microsoft.Office.Interop.Excel;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -108,6 +110,26 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 return dispensaryQuery.Where(it => it.OutpostId == id && it.OutpostType == type).Count();
             }
             return 0;
+        }
+
+        [HttpPost]
+        public ActionResult ExportToExcel()
+        {
+            Microsoft.Office.Interop.Excel._Application xla = new Microsoft.Office.Interop.Excel.Application();
+            Workbook wb = xla.Workbooks.Add(XlSheetType.xlWorksheet);
+            Worksheet ws = (Worksheet)xla.ActiveSheet;
+
+            xla.Visible = true;
+
+            ws.Cells[1, 1] = "First name";
+            ws.Cells[1, 2] = "Last name";
+            ws.Cells[1, 3] = "Age";
+
+            ws.Cells[2, 1] = "Clau";
+            ws.Cells[2, 2] = "Dya";
+            ws.Cells[2, 3] = "25";
+
+            return null;
         }
 
         private void LoadUserAndClient()
