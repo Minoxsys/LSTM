@@ -529,8 +529,10 @@ Analysis: Product level information at district level
                             xtype: 'button',
                             text: 'Export to Excel',
                             handler: function () {
-                                var postToUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "ExportToExcel" })';
-                                var action = $.post(postToUrl);
+///                               var postToUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "ExportToExcel" })';
+//                                var action = $.post(postToUrl);
+                                DownloadFile('estimari.xlsx');
+
                             }
                         }]
                     })
@@ -556,6 +558,41 @@ Analysis: Product level information at district level
                 }]
             }]
         });
+
+        function DownloadFile(filename) {
+               var body = Ext.getBody();
+ 
+               // create a hiddle frame
+               var frame = body.createChild({
+                   tag: 'iframe',
+                   cls: 'x-hidden',
+                   id: 'iframe',
+                   name: 'iframe'
+               });
+ 
+               //create hidden form with download as action
+ 
+               var form = body.createChild({
+                   tag: 'form',
+                   cls: 'x-hidden',
+                   id: 'form',
+                   method: 'POST',
+                   action: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "ExportToExcel" })',
+                   target: 'iframe'
+               });
+ 
+               // to set the parameter through a hidden field
+               var inputpara = form.createChild({
+                   tag: 'input',
+                   type: 'hidden',
+                   name: 'filename', // parameter name
+                   value: filename  // parameter value
+               });
+ 
+               // submit the form to initiate the downloading
+               form.dom.submit();
+ 
+           }
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);

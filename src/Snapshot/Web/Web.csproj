@@ -2093,6 +2093,7 @@
     <Content Include="Areas\AnalysisManagement\Views\HealthFacilityReport\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\HealthCenter\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\GoogleMapReport\Overview.cshtml" />
+    <None Include="Assets\resources\clientsreports\estimari.xlsx" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\layout\_layout.scss" />
