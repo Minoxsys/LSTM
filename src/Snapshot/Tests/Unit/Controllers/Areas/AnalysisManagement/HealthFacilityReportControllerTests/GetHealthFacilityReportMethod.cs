@@ -21,17 +21,10 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         }
 
         [Test]
-        public void Returns_The_Data_Paginated()
+        public void Returns_All_Data()
         {
             //Arange
-            var indexModel = new HealthFacilityIndexModel
-            {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "OutpostName"
-            };
+            var indexModel = new HealthFacilityIndexModel();
             var outpostList = objectMother.GetOutpostList(indexModel);
             objectMother.queryOutpost.Expect(call => call.Query()).Return(outpostList);
 
@@ -49,18 +42,12 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         }
 
         [Test]
-        public void Returns_The_Data_Paginated_ForSelectedCountry()
+        public void Returns_The_Data_ForSelectedCountry()
         {
             //Arange
             var indexModel = new HealthFacilityIndexModel
             {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "OutpostName",
                 countryId = objectMother.countryId.ToString()
-
             };
             var outpostList = objectMother.GetOutpostList(indexModel);
             objectMother.queryOutpost.Expect(call => call.Query()).Return(outpostList);
@@ -79,16 +66,11 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         }
 
         [Test]
-        public void Returns_The_Data_Paginated_ForSelectedCountry_andRegion()
+        public void Returns_The_Data_ForSelectedCountry_andRegion()
         {
             //Arange
             var indexModel = new HealthFacilityIndexModel
             {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "OutpostName",
                 countryId = objectMother.countryId.ToString(),
                 regionId = objectMother.regionId.ToString()
 
@@ -110,16 +92,11 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         }
 
         [Test]
-        public void Returns_The_Data_Paginated_ForSelectedCountry_andRegion_andDistrict()
+        public void Returns_The_Data_ForSelectedCountry_andRegion_andDistrict()
         {
             //Arange
             var indexModel = new HealthFacilityIndexModel
             {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "OutpostName",
                 countryId = objectMother.countryId.ToString(),
                 regionId = objectMother.regionId.ToString(),
                 districtId = objectMother.districtId.ToString()
@@ -142,16 +119,11 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         }
 
         [Test]
-        public void Returns_The_Data_Paginated_ForSelectedOutpostType()
+        public void Returns_The_Data_ForSelectedOutpostType()
         {
             //Arange
             var indexModel = new HealthFacilityIndexModel
             {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "OutpostName",
                 outpostType = "0"
 
             };
@@ -174,18 +146,12 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         }
 
         [Test]
-        public void Returns_The_Data_Paginated_ForSelectedOutpostType_ReturnsNumberOfPatients()
+        public void Returns_The_Data_ForSelectedOutpostType_ReturnsNumberOfPatients()
         {
             //Arange
             var indexModel = new HealthFacilityIndexModel
             {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "OutpostName",
                 outpostType = "0"
-
             };
             var outpostList = objectMother.GetOutpostList(indexModel);
             var messageList = objectMother.GetMessageFromDrugShopList(indexModel);
@@ -210,16 +176,11 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         }
 
         [Test]
-        public void Returns_The_Data_Paginated_ForSelectedOutpostType_andStartDate()
+        public void Returns_The_Data_ForSelectedOutpostType_andStartDate()
         {
             //Arange
             var indexModel = new HealthFacilityIndexModel
             {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "OutpostName",
                 outpostType = "0",
                 startDate = DateTime.UtcNow.AddMonths(-10).ToShortDateString()
 
@@ -247,16 +208,11 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         }
 
         [Test]
-        public void Returns_The_Data_Paginated_ForSelectedOutpostType_andStartDate_andEndDate()
+        public void Returns_The_Data_ForSelectedOutpostType_andStartDate_andEndDate()
         {
             //Arange
             var indexModel = new HealthFacilityIndexModel
             {
-                dir = "ASC",
-                limit = 50,
-                page = 1,
-                start = 0,
-                sort = "OutpostName",
                 outpostType = "0",
                 startDate = DateTime.UtcNow.AddMonths(-10).ToShortDateString(),
                 endDate = DateTime.UtcNow.AddMonths(-8).ToShortDateString()

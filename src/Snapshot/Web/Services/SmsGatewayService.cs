@@ -23,37 +23,21 @@ namespace Web.Services
             this.smsGatewaySettingsService = smsGatewaySettingsService;
         }
 
-        public string SendSmsRequest(SmsRequest smsRequest)
+        public string SendSmsRequest(string smsRequest)
         {
             string postData = GetPostDataFromSettingsAndSmsRequest(smsRequest);
             string postResponse = httpService.Post(smsGatewaySettingsService.SmsGatewayUrl, postData);
             return postResponse;
         }
 
-        private string GetPostDataFromSettingsAndSmsRequest(SmsRequest smsRequest)
-        {
-            return GetPostDataForSmsRequestFromSettings() + "&" + GetPostDataFromSmsRequest(smsRequest);
-        }
-
-        private string GetPostDataForSmsRequestFromSettings()
+        private string GetPostDataFromSettingsAndSmsRequest(string smsRequest)
         {
             StringBuilder postDataBuilder = new StringBuilder();
-            postDataBuilder.Append("uname=" + smsGatewaySettingsService.SmsGatewayUserName);
-            postDataBuilder.Append("&pword=" + smsGatewaySettingsService.SmsGatewayPassword);
-            postDataBuilder.Append("&from=" + smsGatewaySettingsService.SmsGatewayFrom);
-            postDataBuilder.Append("&test=" + smsGatewaySettingsService.SmsGatewayTestMode);
-            postDataBuilder.Append("&info=" + smsGatewaySettingsService.SmsGatewayDebugMode);
-
-            return postDataBuilder.ToString();
-        }
-
-        private string GetPostDataFromSmsRequest(SmsRequest smsRequest)
-        {
-            StringBuilder postDataBuilder = new StringBuilder();
-            postDataBuilder.Append("selectednums=" + smsRequest.Number);
-            postDataBuilder.Append("&custom=" + smsRequest.Id);
-            postDataBuilder.Append("&message=" + HttpUtility.HtmlEncode(smsRequest.Message));
-
+            postDataBuilder.Append("login=" + smsGatewaySettingsService.SmsGatewayUserName);
+            postDataBuilder.Append("&password=" + smsGatewaySettingsService.SmsGatewayPassword);
+            postDataBuilder.Append("&shortcode=" + smsGatewaySettingsService.SmsGatewayShortcode);
+            postDataBuilder.Append("&keyword=" + smsGatewaySettingsService.SmsGatewayKeyword);
+            postDataBuilder.Append("&message=" + HttpUtility.HtmlEncode(smsRequest));
             return postDataBuilder.ToString();
         }
     }

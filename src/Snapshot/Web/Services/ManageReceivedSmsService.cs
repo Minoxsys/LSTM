@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using Core.Persistence;
 using Persistence.Queries.Outposts;
+using System.Xml;
 
 namespace Web.Services
 {
@@ -15,6 +16,7 @@ namespace Web.Services
         private const string CONTENT_FROMDRUGSHOP_REGEX = @"^([A-Za-z]{2,4}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;/]+)$";
         private const string CONTENT_FROMDISPENSARY_REGEX = @"^([0-9A-Za-z]{8}[ \t][A-Za-z0-9 +-;]+)$";
         private const string DateFormat = "ddMMyy";
+        private const string XMLDateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
 
         private IQueryService<ServiceNeeded> queryServiceNeeded;
@@ -210,6 +212,36 @@ namespace Web.Services
             }
             return code;
 
+        }
+
+
+        public RawSmsReceived GetRawSmsReceivedFromXMLString(string request)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(request);
+            XmlNodeList list = doc.GetElementsByTagName("message");
+
+            RawSmsReceived rawSmsReceived = new RawSmsReceived();
+
+            if (list.Count > 0)
+            {
+                rawSmsReceived.SmsId = list[0].Attributes["id"].Value;
+                rawSmsReceived.Sender = list[0].Attributes["msisdn"].Value;
+                rawSmsReceived.ServiceNumber = list[0].Attributes["service-number"].Value;
+                rawSmsReceived.Operator = list[0].Attributes["operator"].Value;
+                rawSmsReceived.OperatorId = list[0].Attributes["operator_id"].Value;
+                rawSmsReceived.Keyword = list[0].Attributes["keyword"].Value;
+                rawSmsReceived.Content = list[0].InnerText;
+
+                var date = HttpUtility.UrlDecode(list[0].Attributes["submit-date"].Value);
+                DateTime dateRetult;
+                if (DateTime.TryParseExact(date, XMLDateFormat, FormatProvider, DateTimeStyles.None, out dateRetult))
+                    rawSmsReceived.ReceivedDate = dateRetult;
+                else
+                    rawSmsReceived.ReceivedDate = DateTime.UtcNow;
+            }
+
+            return rawSmsReceived;
         }
     }
 }

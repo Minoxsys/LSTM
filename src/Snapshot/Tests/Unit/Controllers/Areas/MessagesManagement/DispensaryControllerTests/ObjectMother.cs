@@ -53,7 +53,6 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 rawSMSList.Add(new RawSmsReceived
                 {
                     Content = CONTENT + "-" + i,
-                    Credits = CREDITS,
                     OutpostType = 1,
                     OutpostId = Guid.NewGuid(),
                     ParseErrorMessage = "Parse error no." + i,
@@ -76,7 +75,6 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 rawSMSList.Add(new RawSmsReceived
                 {
                     Content = CONTENT + "-" + i,
-                    Credits = CREDITS,
                     OutpostType = i % 2,
                     OutpostId = Guid.NewGuid(),
                     ParseErrorMessage = "Parse error no." + i,

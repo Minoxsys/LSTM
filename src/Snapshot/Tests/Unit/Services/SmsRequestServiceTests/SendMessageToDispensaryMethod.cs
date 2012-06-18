@@ -26,7 +26,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
             objectMother.queryOutposts.Expect(call => call.GetWarehouse(objectMother.outpostId)).Return(null);
 
             //Act
-            var result = objectMother.service.SendMessageToDispensary(objectMother.messageFromDrugShop);
+            var result = objectMother.service.SendMessageToDispensary(objectMother.messageFromDrugShop, objectMother.rawSms);
 
             //Assert
             objectMother.queryOutposts.VerifyAllExpectations();
@@ -40,11 +40,11 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
         {
             //Arange
             objectMother.queryOutposts.Expect(call => call.GetWarehouse(objectMother.outpostId)).Return(objectMother.warehouse);
-            objectMother.smsGatewayService.Expect(call => call.SendSmsRequest(Arg<SmsRequest>.Matches(c => c.Number == ObjectMother.CORRECTNUMBER))).Return("");
-            objectMother.queryContact.Expect(call => call.Query()).Return(new Contact[] { objectMother.contact}.AsQueryable());
+            objectMother.smsGatewayService.Expect(call => call.SendSmsRequest(Arg<string>.Is.Anything)).Return("");
+            objectMother.queryContact.Expect(call => call.Query()).Return(new Contact[] { objectMother.contact }.AsQueryable());
 
             //Act
-            var result = objectMother.service.SendMessageToDispensary(objectMother.messageFromDrugShop);
+            var result = objectMother.service.SendMessageToDispensary(objectMother.messageFromDrugShop, objectMother.rawSms);
 
             //Assert
             objectMother.queryOutposts.VerifyAllExpectations();

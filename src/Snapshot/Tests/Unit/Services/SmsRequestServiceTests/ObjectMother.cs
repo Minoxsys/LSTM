@@ -31,6 +31,8 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
         public Contact contact;
         public Guid messageFromDrugShopId;
         public MessageFromDrugShop messageFromDrugShop;
+        public Guid rawSmsId;
+        public RawSmsReceived rawSms;
 
         public void Init()
         {
@@ -73,6 +75,13 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
             outpost.Stub(c => c.Id).Return(outpostId);
             outpost.Warehouse = warehouse;
             outpost.Name = "DrugShop1";
+
+            rawSmsId = Guid.NewGuid();
+            rawSms = MockRepository.GeneratePartialMock<RawSmsReceived>();
+            rawSms.Stub(c => c.Id).Return(rawSmsId);
+            rawSms.Sender = CORRECTNUMBER;
+            rawSms.SmsId = "25485";
+            rawSms.ServiceNumber = "12458";
 
             messageFromDrugShopId = Guid.NewGuid();
             messageFromDrugShop = MockRepository.GeneratePartialMock<MessageFromDrugShop>();

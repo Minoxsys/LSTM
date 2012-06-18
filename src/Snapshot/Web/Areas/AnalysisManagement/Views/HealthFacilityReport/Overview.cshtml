@@ -38,9 +38,14 @@ Analysis: Product level information at district level
         window.feature.EndDateId = 'End-Date-Health-Facility-Level';
         window.feature.gridHealthFacilityLevelId = "Grid-Health-Facility-Level-Id";
         DivChartContainer = "Chart-Health-Facility-Level-Id";
+        countryExportValue = "";
+        regionExportValue = "";
+        districtExportValue = "";
+        startDateExportValue = "";
+        endDateExportValue = "";
+        outpostTypeExportValue = "";
 
         window.feature.reportStore = Ext.create('Ext.data.Store', {
-            pageSize: 50,
             fields: ['OutpostName', 'NumberOfPatients', 'Male', 'Female'],
             proxy: {
                 type: 'ajax',
@@ -60,7 +65,6 @@ Analysis: Product level information at district level
                 },
                 simpleSortMode: true
             },
-            remoteSort: true,
             sorters: [{
                 property: 'OutpostName',
                 direction: 'ASC'
@@ -154,9 +158,11 @@ Analysis: Product level information at district level
 
             window.feature.reportStore.proxy.extraParams.regionId = "";
             window.feature.reportStore.proxy.extraParams.districtId = "";
-            window.feature.reportStore.loadPage(1);
-            window.feature.execute.delay(500);
+            window.feature.reportStore.load();
 
+            countryExportValue = "";
+            regionExportValue = "";
+            districtExportValue = "";
         };
 
         function ResetRegionDependencies() {
@@ -164,8 +170,10 @@ Analysis: Product level information at district level
             districtCombobox.setValue(null);
 
             window.feature.reportStore.proxy.extraParams.districtId = "";
-            window.feature.reportStore.loadPage(1);
-            window.feature.execute.delay(500);
+            window.feature.reportStore.load();
+
+            regionExportValue = "";
+            districtExportValue = "";
         };
 
         window.feature.country = Ext.create('Ext.form.ComboBox', {
@@ -188,8 +196,8 @@ Analysis: Product level information at district level
                     window.feature.regionStore.load();
 
                     window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.reportStore.loadPage(1);
-                    window.feature.execute.delay(500);
+                    window.feature.reportStore.load();
+                    countryExportValue = combo.getValue();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -219,8 +227,9 @@ Analysis: Product level information at district level
                     window.feature.districtStore.load();
 
                     window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
-                    window.feature.reportStore.loadPage(1);
-                    window.feature.execute.delay(500);
+                    window.feature.reportStore.load();
+
+                    regionExportValue = combo.getValue();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -246,12 +255,13 @@ Analysis: Product level information at district level
             listeners: {
                 'select': function (combo, record) {
                     window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
-                    window.feature.reportStore.loadPage(1);
-                    window.feature.execute.delay(500);
+                    window.feature.reportStore.load();
+                    districtExportValue = combo.getValue();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
+                        districtExportValue = "";
                     }
                 }
             }
@@ -275,13 +285,13 @@ Analysis: Product level information at district level
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
+                        outpostTypeExportValue = "";
                     }
                 },
                 'select': function (combo, record) {
                     window.feature.reportStore.proxy.extraParams.outpostType = combo.getValue();
-                    window.feature.reportStore.loadPage(1);
-
-                    window.feature.execute.delay(500);
+                    window.feature.reportStore.load();
+                    outpostTypeExportValue = combo.getValue();
                 }
             }
         });
@@ -452,13 +462,15 @@ Analysis: Product level information at district level
                             select: function (t, n, o) {
                                 var date = t.getValue();
                                 window.feature.reportStore.proxy.extraParams.startDate = date;
-                                window.feature.reportStore.loadPage(1);
+                                window.feature.reportStore.load();
+                                startDateExportValue = date;
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.startDate = "";
-                                    window.feature.reportStore.loadPage(1);
+                                    window.feature.reportStore.load();
+                                    startDateExportValue = "";
                                 }
                             }
                         }
@@ -473,13 +485,15 @@ Analysis: Product level information at district level
                             select: function (t, n, o) {
                                 var date = t.getValue();
                                 window.feature.reportStore.proxy.extraParams.endDate = date;
-                                window.feature.reportStore.loadPage(1);
+                                window.feature.reportStore.load();
+                                endDateExportValue = date;
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.endDate = "";
-                                    window.feature.reportStore.loadPage(1);
+                                    window.feature.reportStore.load();
+                                    endDateExportValue = "";
                                 }
                             }
                         }
@@ -520,19 +534,11 @@ Analysis: Product level information at district level
                         sortable: true
                     }],
                     bbar: Ext.create('Ext.PagingToolbar', {
-                        store: window.feature.reportStore,
-                        displayInfo: true,
-                        displayMsg: 'Displaying topics {0} - {1} of {2}',
-                        emptyMsg: "No topics to display",
-                        ui: 'snapshot-pagination-toolbar',
                         buttons: [{
                             xtype: 'button',
                             text: 'Export to Excel',
                             handler: function () {
-///                               var postToUrl = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "ExportToExcel" })';
-//                                var action = $.post(postToUrl);
-                                DownloadFile('estimari.xlsx');
-
+                                DownloadFile();
                             }
                         }]
                     })
@@ -559,40 +565,69 @@ Analysis: Product level information at district level
             }]
         });
 
-        function DownloadFile(filename) {
-               var body = Ext.getBody();
- 
-               // create a hiddle frame
-               var frame = body.createChild({
-                   tag: 'iframe',
-                   cls: 'x-hidden',
-                   id: 'iframe',
-                   name: 'iframe'
-               });
- 
-               //create hidden form with download as action
- 
-               var form = body.createChild({
-                   tag: 'form',
-                   cls: 'x-hidden',
-                   id: 'form',
-                   method: 'POST',
-                   action: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "ExportToExcel" })',
-                   target: 'iframe'
-               });
- 
-               // to set the parameter through a hidden field
-               var inputpara = form.createChild({
-                   tag: 'input',
-                   type: 'hidden',
-                   name: 'filename', // parameter name
-                   value: filename  // parameter value
-               });
- 
-               // submit the form to initiate the downloading
-               form.dom.submit();
- 
-           }
+        function DownloadFile() {
+            var body = Ext.getBody();
+
+            var frame = body.createChild({
+                tag: 'iframe',
+                cls: 'x-hidden',
+                id: 'iframe',
+                name: 'iframe'
+            });
+
+            var form = body.createChild({
+                tag: 'form',
+                cls: 'x-hidden',
+                id: 'form',
+                method: 'POST',
+                action: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "ExportToExcel" })',
+                target: 'iframe'
+            });
+
+            var countryInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'countryId',
+                value: countryExportValue
+            });
+
+            var regionInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'regionId',
+                value: regionExportValue
+            });
+
+            var districtInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'districtId',
+                value: districtExportValue
+            });
+
+            var startDateInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'startDate',
+                value: startDateExportValue
+            });
+
+            var endDateInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'endDate',
+                value: endDateExportValue
+            });
+
+            var outpostTypeInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'outpostType',
+                value: outpostTypeExportValue
+            });
+
+            form.dom.submit();
+        }
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
@@ -601,8 +636,9 @@ Analysis: Product level information at district level
         window.feature.outpostTypeStore.load(function () {
             var combo = window.feature.container.down('#' + window.feature.outpostTypeComboboxId);
             combo.setValue(window.feature.outpostTypeStore.getAt(0).get('Type'));
+            outpostTypeExportValue = window.feature.outpostTypeStore.getAt(0).get('Type');
             window.feature.reportStore.proxy.extraParams.outpostType = combo.getValue();
-            window.feature.reportStore.loadPage(1);
+            window.feature.reportStore.load();
         });
 
     });

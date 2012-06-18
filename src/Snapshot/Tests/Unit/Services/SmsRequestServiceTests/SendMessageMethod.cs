@@ -23,10 +23,10 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
         public void WhenWeWantToSendMessage_AndMessageIsSuccesfullySent_ItShouldReturn_True()
         {
             //Arrange
-            objectMother.smsGatewayService.Expect(call => call.SendSmsRequest(Arg<SmsRequest>.Matches(c => c.Number == ObjectMother.CORRECTNUMBER && c.Message == ObjectMother.MESSAGE))).Return("");
+            objectMother.smsGatewayService.Expect(call => call.SendSmsRequest(Arg<string>.Is.Anything)).Return("");
 
             //Act
-            var result = objectMother.service.SendMessage(ObjectMother.MESSAGE, ObjectMother.CORRECTNUMBER);
+            var result = objectMother.service.SendMessage(ObjectMother.MESSAGE, objectMother.rawSms);
 
             //Assert
             objectMother.smsGatewayService.VerifyAllExpectations();

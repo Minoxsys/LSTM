@@ -129,7 +129,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
             outpost.OutpostType = new OutpostType() { Name = "Shop", Type = 0 };
             outpostList.Add(outpost);
 
-            for (int i = indexModel.start.Value+1; i < indexModel.limit.Value; i++)
+            for (int i = 1; i < 50; i++)
             {
                 outpostList.Add(new Outpost
                 {
@@ -148,7 +148,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.HealthFacilityReportCo
         {
             List<MessageFromDrugShop> messageList = new List<MessageFromDrugShop>();
 
-            for (int i = indexModel.start.Value + 1; i < indexModel.limit.Value + 1; i++)
+            for (int i = 1; i < 51; i++)
             {
                 messageList.Add(new MessageFromDrugShop
                 {

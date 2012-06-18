@@ -10,8 +10,8 @@ namespace Web.Services
         string SmsGatewayUrl { get; }
         string SmsGatewayUserName { get; }
         string SmsGatewayPassword { get; }
-        string SmsGatewayFrom { get; }
-        string SmsGatewayTestMode { get; }
-        string SmsGatewayDebugMode { get; }
+        string SmsGatewayShortcode { get; }
+        string SmsGatewayKeyword { get; }
+
     }
 }

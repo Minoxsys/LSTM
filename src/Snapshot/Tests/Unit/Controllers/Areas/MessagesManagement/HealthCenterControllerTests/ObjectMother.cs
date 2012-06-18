@@ -41,7 +41,6 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
             rawSms = MockRepository.GeneratePartialMock<RawSmsReceived>();
             rawSms.Stub(c => c.Id).Return(rawSmsId);
             rawSms.Content = CONTENT;
-            rawSms.Credits = CREDITS;
             rawSms.OutpostType = 0;
             rawSms.OutpostId = OUTPOSTID;
             rawSms.ParseErrorMessage = ERRORMESSAGE;
@@ -72,7 +71,6 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 rawSMSList.Add(new RawSmsReceived
                 {
                     Content = CONTENT + "-" + i,
-                    Credits = CREDITS,
                     OutpostType = 2,
                     OutpostId = Guid.NewGuid(),
                     ParseErrorMessage = "Parse error no." + i,
@@ -95,7 +93,6 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 rawSMSList.Add(new RawSmsReceived
                 {
                     Content = CONTENT + "-" + i,
-                    Credits = CREDITS,
                     OutpostType = i % 3,
                     OutpostId = Guid.NewGuid(),
                     ParseErrorMessage = "Parse error no." + i,

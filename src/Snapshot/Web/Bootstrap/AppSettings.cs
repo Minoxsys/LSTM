@@ -32,21 +32,9 @@ namespace Web.Bootstrap
         /// </summary>
         public static string SmsGatewayPassword = ConfigurationManager.AppSettings["SmsGateway.Password"];
 
-        /// <summary>
-        /// The SMS from text. Use "xreplyx" to be able to receive replys.
-        /// </summary>
-        public static string SmsGatewayFrom = ConfigurationManager.AppSettings["SmsGateway.From"];
+        public static string SmsGatewayShortcode = ConfigurationManager.AppSettings["SmsGateway.Shortcode"];
 
-        /// <summary>
-        /// Use to set-up the SmsGatewayService in test mode, if you don't want to send the SMS messages.
-        /// Values to be used are 0 for real mode and 1 for test mode.
-        /// </summary>
-        public static string SmsGatewayTestMode = ConfigurationManager.AppSettings["SmsGateway.TestMode"];
-
-        /// <summary>
-        /// Used to configure the SMS API to send detailed information about the sent SMS and account.
-        /// </summary>
-        public static string SmsGatewayDebugMode = ConfigurationManager.AppSettings["SmsGateway.DebugMode"];
+        public static string SmsGatewayKeyword = ConfigurationManager.AppSettings["SmsGateway.Keyword"];
 
 	}
 }

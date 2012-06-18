@@ -1,70 +1,161 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Rhino.Mocks;
-using NUnit.Framework;
-using System.Web.Mvc;
-using Domain;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using Rhino.Mocks;
+//using NUnit.Framework;
+//using System.Web.Mvc;
+//using Domain;
 
-namespace Tests.Unit.Controllers.SmsRequestControllerTests
-{
-    [TestFixture]
-    public class ReceiveSmsMethod
-    {
-        public ObjectMother objectMother = new ObjectMother();
+//namespace Tests.Unit.Controllers.SmsRequestControllerTests
+//{
+//    [TestFixture]
+//    public class ReceiveSmsMethod
+//    {
+//        public ObjectMother objectMother = new ObjectMother();
 
-        [SetUp]
-        public void BeforeAll()
-        {
-            objectMother.Init();
-        }
+//        [SetUp]
+//        public void BeforeAll()
+//        {
+//            objectMother.Init();
+//        }
 
-        //[Test]
-        //public void IfNoOutpostHasAssociatedThePhoneNumber_ItShouldSaveTheRawSmsMessage_AndSendAnErrorMessage()
-        //{
-        //    //Arrange
-        //    objectMother.manageReceivedSmsService.Stub(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(objectMother.rawSmsNotParsedCorrect)).Return(Guid.Empty);
-        //    objectMother.smsRequestService.Stub(call => call.SendMessage(Arg<string>.Is.Anything, Arg<string>.Is.Anything)).Return(true);
-        //    objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
-        //        p => p.OutpostId == Guid.Empty && 
-        //             p.Sender == ObjectMother.WRONGPHONENUMBER && 
-        //             p.Content == ObjectMother.TEXT &&
-        //             p.ParseSucceeded == false &&
-        //             p.ParseErrorMessage == "Phone number is not valid."
-        //             )));
+//        [Test]
+//        public void WhenPhoneNumberIsIncorect_Itshould_SaveTheRawSms_AndSendSmsBack_WithErrorMessage()
+//        {
+//            //Arrange
+//            objectMother.manageReceivedSmsService.Expect(call => call.GetRawSmsReceivedFromXMLString(objectMother.XMLStringInvalidPhoneNumber)).Return(objectMother.rawSmsInvalidPhoneNumber);
+//            objectMother.manageReceivedSmsService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(objectMother.rawSmsInvalidPhoneNumber)).Return(objectMother.rawSmsInvalidPhoneNumber);
+//            objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
+//            objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
+//                p => p.OutpostId == Guid.Empty &&
+//                     p.Sender == ObjectMother.WRONGPHONENUMBER &&
+//                     p.ParseSucceeded == false &&
+//                     p.ParseErrorMessage == "Phone number is not valid."
+//                     )));
 
-        //    //Act
-        //    var result = objectMother.controller.ReceiveSms(ObjectMother.WRONGPHONENUMBER, ObjectMother.SERVICENUMBER, ObjectMother.OPERATOR, ObjectMother.DATE, ObjectMother.TEXT);
-            
-        //    //Assert
-        //    objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
-        //    Assert.IsNull(result);
-        //}
+//            //Act
+//            var result = objectMother.controller.ReceiveSms(objectMother.XMLStringInvalidPhoneNumber);
 
-        //[Test]
-        //public void IfPhoneNumberIdCorrect_AndOutpostIdDrugShop_ItShouldParseTheTextMessage_IfTextMessageIsNotCorrect_ItShouldSendErrorMessageAndReturnNull()
-        //{
-        //    //Arange
-        //    objectMother.manageReceivedSmsService.Stub(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Is.Anything)).Return(objectMother.outpostId);
-        //    objectMother.smsRequestService.Stub(call => call.SendMessage(Arg<string>.Is.Anything, Arg<string>.Is.Anything)).Return(true);
-        //    objectMother.manageReceivedSmsService.Stub(call => call.ParseRawSmsReceivedFromDrugShop(Arg<RawSmsReceived>.Is.Anything)).Return(objectMother.rawSmsNotParsedCorrect);
+//            //Assert
+//            objectMother.manageReceivedSmsService.VerifyAllExpectations();
+//            objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
+//            objectMother.smsRequestService.VerifyAllExpectations();
+//            Assert.IsNull(result);
+//        }
 
-        //    objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
-        //        p => p.OutpostId == Guid.Empty &&
-        //             p.Sender == ObjectMother.CORRECTPHONENUMBER &&
-        //             p.Content == ObjectMother.TEXT &&
-        //             p.ParseSucceeded == false &&
-        //             p.ParseErrorMessage == "Phone number is not valid."
-        //             )));
+//        [Test]
+//        public void WhenMessageIsFromDrugShop_ButContentIsNotCorrect_Itshould_SaveTheRawSms_AndSendSmsBack_WithErrorMessage()
+//        {
+//            //Arrange
+//            objectMother.manageReceivedSmsService.Expect(call => call.GetRawSmsReceivedFromXMLString(objectMother.XMLStringFromDrugShop)).Return(objectMother.rawSmsIncorectFormatDrugShop);
+//            objectMother.manageReceivedSmsService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(objectMother.rawSmsIncorectFormatDrugShop)).Return(objectMother.rawSmsIncorectFormatDrugShop);
+//            objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDrugShop(objectMother.rawSmsIncorectFormatDrugShop)).Return(objectMother.rawSmsIncorectFormatDrugShop);
+//            objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
+//            objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
+//                p => p.OutpostId == objectMother.outpostId &&
+//                     p.Sender == ObjectMother.CORRECTPHONENUMBER &&
+//                     p.ParseSucceeded == false
+//                     )));
 
-        //    //Act
-        //    var result = objectMother.controller.ReceiveSms(ObjectMother.CORRECTPHONENUMBER, ObjectMother.SERVICENUMBER, ObjectMother.OPERATOR, ObjectMother.DATE, ObjectMother.TEXT);
+//            //Act
+//            var result = objectMother.controller.ReceiveSms(objectMother.XMLStringInvalidPhoneNumber);
 
-        //    //Assert
-        //    objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
-        //    Assert.IsNull(result);
-        //}
+//            //Assert
+//            objectMother.manageReceivedSmsService.VerifyAllExpectations();
+//            objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
+//            objectMother.smsRequestService.VerifyAllExpectations();
+//            Assert.IsNull(result);
+//        }
+
+//        [Test]
+//        public void WhenMessageIsFromDispensary_ButContentIsNotCorrect_Itshould_SaveTheRawSms_AndSendSmsBack_WithErrorMessage()
+//        {
+//            //Arrange
+//            objectMother.manageReceivedSmsService.Expect(call => call.GetRawSmsReceivedFromXMLString(objectMother.XMLStringDispensary)).Return(objectMother.rawSmsIncorectFormatDispensary);
+//            objectMother.manageReceivedSmsService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(objectMother.rawSmsIncorectFormatDispensary)).Return(objectMother.rawSmsIncorectFormatDispensary);
+//            objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDispensary(objectMother.rawSmsIncorectFormatDispensary)).Return(objectMother.rawSmsIncorectFormatDispensary);
+//            objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
+//            objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
+//                p => p.OutpostId == objectMother.outpostId &&
+//                     p.Sender == ObjectMother.CORRECTPHONENUMBER &&
+//                     p.ParseSucceeded == false
+//                     )));
+
+//            //Act
+//            var result = objectMother.controller.ReceiveSms(objectMother.XMLStringInvalidPhoneNumber);
+
+//            //Assert
+//            objectMother.manageReceivedSmsService.VerifyAllExpectations();
+//            objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
+//            objectMother.smsRequestService.VerifyAllExpectations();
+//            Assert.IsNull(result);
+//        }
+
+//        [Test]
+//        public void WhenMessageIsFromDrugShop_ContentIsCorrect_Itshould_SaveTheRawSms_AndSendSmsToDispensary()
+//        {
+//            //Arrange
+//            objectMother.manageReceivedSmsService.Expect(call => call.GetRawSmsReceivedFromXMLString(objectMother.XMLStringFromDrugShop)).Return(objectMother.rawSmsCorerctFormatDrugShop);
+//            objectMother.manageReceivedSmsService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(objectMother.rawSmsCorerctFormatDrugShop)).Return(objectMother.rawSmsCorerctFormatDrugShop);
+//            objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop)).Return(objectMother.rawSmsCorerctFormatDrugShop);
+//            objectMother.manageReceivedSmsService.Expect(call => call.CreateMessageFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop)).Return(objectMother.messageFromDrugShop);
+//            objectMother.smsRequestService.Expect(call => call.SendMessageToDispensary(Arg<MessageFromDrugShop>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
+
+//            objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
+//                p => p.OutpostId == objectMother.outpostId &&
+//                     p.Sender == ObjectMother.CORRECTPHONENUMBER &&
+//                     p.ParseSucceeded == true
+//                     )));
+
+//            objectMother.saveCommandMessageFromDrugShop.Expect(call => call.Execute(Arg<MessageFromDrugShop>.Matches(
+//                p => p.OutpostId == objectMother.outpostId &&
+//                     p.Gender == "M" &&
+//                     p.IDCode == "12345678"
+//                     )));
+
+//            //Act
+//            var result = objectMother.controller.ReceiveSms(objectMother.XMLStringInvalidPhoneNumber);
+
+//            //Assert
+//            objectMother.manageReceivedSmsService.VerifyAllExpectations();
+//            objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
+//            objectMother.saveCommandMessageFromDrugShop.VerifyAllExpectations();
+//            objectMother.smsRequestService.VerifyAllExpectations();
+//            Assert.IsNull(result);
+//        }
+
+//        [Test]
+//        public void WhenMessageIsFromDispensary_AndContentIsCorrent_Itshould_SaveTheRawSms()
+//        {
+//            //Arrange
+//            objectMother.manageReceivedSmsService.Expect(call => call.GetRawSmsReceivedFromXMLString(objectMother.XMLStringDispensary)).Return(objectMother.rawSmsCorerctFormatDispensary);
+//            objectMother.manageReceivedSmsService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(objectMother.rawSmsCorerctFormatDispensary)).Return(objectMother.rawSmsCorerctFormatDispensary);
+//            objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDispensary(objectMother.rawSmsCorerctFormatDispensary)).Return(objectMother.rawSmsCorerctFormatDispensary);
+//            objectMother.manageReceivedSmsService.Expect(call => call.CreateMessageFromDispensary(objectMother.rawSmsCorerctFormatDispensary)).Return(objectMother.messageFromDispensary);
+
+//            objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
+//                p => p.OutpostId == objectMother.outpostId &&
+//                     p.Sender == ObjectMother.CORRECTPHONENUMBER &&
+//                     p.ParseSucceeded == true
+//                     )));
+
+//            objectMother.saveCommandMessageFromDispensary.Expect(call => call.Execute(Arg<MessageFromDispensary>.Matches(
+//                p => p.OutpostId == objectMother.outpostId &&
+//                     p.MessageFromDrugShop.Id == objectMother.messageFromDrugShop.Id &&
+//                     p.OutpostType == 1
+//                     )));
+
+//            //Act
+//            var result = objectMother.controller.ReceiveSms(objectMother.XMLStringInvalidPhoneNumber);
+
+//            //Assert
+//            objectMother.manageReceivedSmsService.VerifyAllExpectations();
+//            objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
+//            objectMother.saveCommandMessageFromDispensary.VerifyAllExpectations();
+//            Assert.IsNull(result);
+//        }
+
         
-    }
-}
+//    }
+//}

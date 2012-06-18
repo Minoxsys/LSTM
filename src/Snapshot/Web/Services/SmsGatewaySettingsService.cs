@@ -32,27 +32,19 @@ namespace Web.Services
             }
         }
 
-        public virtual string SmsGatewayFrom
+        public virtual string SmsGatewayShortcode
         {
             get
             {
-                return AppSettings.SmsGatewayFrom;
+                return AppSettings.SmsGatewayShortcode;
             }
         }
 
-        public virtual string SmsGatewayTestMode
+        public virtual string SmsGatewayKeyword
         {
             get
             {
-                return AppSettings.SmsGatewayTestMode;
-            }
-        }
-
-        public virtual string SmsGatewayDebugMode
-        {
-            get
-            {
-                return AppSettings.SmsGatewayDebugMode;
+                return AppSettings.SmsGatewayKeyword;
             }
         }
     }

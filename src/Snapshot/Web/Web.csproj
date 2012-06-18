@@ -309,6 +309,7 @@
     <Compile Include="Models\Shared\RazorExtensions.cs" />
     <Compile Include="Models\SmsRequest\ParsedSmsReceived.cs" />
     <Compile Include="Models\SmsRequest\ReferenceModel.cs" />
+    <Compile Include="Models\SmsRequest\ResponseModel.cs" />
     <Compile Include="Models\SmsRequest\SmsRequestCreateModel.cs" />
     <Compile Include="Models\UnauthorizedAccess\Index.cs" />
     <Compile Include="Models\UserManager\ClientsIndexOutputModel.cs" />

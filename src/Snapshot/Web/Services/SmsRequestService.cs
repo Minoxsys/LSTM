@@ -5,6 +5,7 @@ using System.Web;
 using Domain;
 using Persistence.Queries.Outposts;
 using Core.Persistence;
+using Web.Models.SmsRequest;
 
 namespace Web.Services
 {
@@ -23,11 +24,20 @@ namespace Web.Services
             this.queryContact = queryContact;
         }
 
-        public bool SendMessage(string message, string number)
+        public bool SendMessage(string message,  RawSmsReceived response)
         {
-            SmsRequest request = new SmsRequest();
-            request.Number = number;
-            request.Message = message;
+            ResponseModel model = new ResponseModel();
+            model.Id = "1";
+            model.Content = message;
+            model.DeferDate = "";
+            model.Operator = "";
+            model.PhoneNumber = response.Sender;
+            model.Priority = "1";
+            model.RefId = response.SmsId;
+            model.ServiceNo = response.ServiceNumber;
+            model.Valability = "3";
+
+            string request = CreatePostData(model);
 
             try
             {
@@ -40,12 +50,23 @@ namespace Web.Services
             }
         }
 
-        public bool SendMessageToDispensary(MessageFromDrugShop message)
+
+        public bool SendMessageToDispensary(MessageFromDrugShop message, RawSmsReceived rawSms)
         {
-            SmsRequest request = new SmsRequest();
-            request.Number = GetWarehousePhoneNumber(message.OutpostId);
-            request.Message = CreateMessageToBeSentToDispensary(message);
-            if (request.Number != null)
+            ResponseModel model = new ResponseModel();
+            model.Id = "1";
+            model.Content = CreateMessageToBeSentToDispensary(message);
+            model.DeferDate = "";
+            model.Operator = "";
+            model.PhoneNumber = GetWarehousePhoneNumber(message.OutpostId);
+            model.Priority = "1";
+            model.RefId = rawSms.SmsId;
+            model.ServiceNo = rawSms.ServiceNumber;
+            model.Valability = "3";
+
+            string request = CreatePostData(model);
+
+            if (model.PhoneNumber != null)
             {
                 try
                 {
@@ -85,6 +106,16 @@ namespace Web.Services
             }
 
             return message;
+        }
+
+        private string CreatePostData(ResponseModel model)
+        {
+            string response = "<?xml version='1.0' encoding='UTF-8'?><sms-response delivery-notification-requested='true' version='1.0'> ";
+            response += "<message id='" + model.Id + "' ref-id='" + model.RefId + "' msisdn='" + model.PhoneNumber + "' service-number='" + model.ServiceNo + "' operator='" + model.Operator + "' ";
+            response += "defer-date='" + model.DeferDate + "' validity-period='" + model.Valability + "' priority='" + model.Priority + "'>";
+            response += "<content type='text/plain'>" + model.Content + "</content></message></sms-response>";
+
+            return response;
         }
     }
 }

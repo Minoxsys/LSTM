@@ -31,7 +31,12 @@ namespace Migrations
         {
             Create.Table("RawSmsReceiveds")
                 .WithCommonColumns()
+                .WithColumn("SmsId").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("Sender").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("ServiceNumber").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("Operator").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("OperatorId").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Content").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("Credits").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("ReceivedDate").AsDateTime().Nullable()
