@@ -25,20 +25,8 @@ namespace Web.Services
 
         public string SendSmsRequest(string smsRequest)
         {
-            string postData = GetPostDataFromSettingsAndSmsRequest(smsRequest);
-            string postResponse = httpService.Post(smsGatewaySettingsService.SmsGatewayUrl, postData);
+            string postResponse = httpService.Post(smsGatewaySettingsService.SmsGatewayUrl, smsRequest);
             return postResponse;
-        }
-
-        private string GetPostDataFromSettingsAndSmsRequest(string smsRequest)
-        {
-            StringBuilder postDataBuilder = new StringBuilder();
-            postDataBuilder.Append("login=" + smsGatewaySettingsService.SmsGatewayUserName);
-            postDataBuilder.Append("&password=" + smsGatewaySettingsService.SmsGatewayPassword);
-            postDataBuilder.Append("&shortcode=" + smsGatewaySettingsService.SmsGatewayShortcode);
-            postDataBuilder.Append("&keyword=" + smsGatewaySettingsService.SmsGatewayKeyword);
-            postDataBuilder.Append("&message=" + HttpUtility.HtmlEncode(smsRequest));
-            return postDataBuilder.ToString();
         }
     }
 }

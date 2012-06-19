@@ -22,8 +22,11 @@ namespace Web.Services
             webRequest = (HttpWebRequest)WebRequest.Create(url);
 
             webRequest.Method = "POST";
-            webRequest.ContentLength = Encoding.UTF8.GetByteCount(data);
-            webRequest.ContentType = "application/x-www-form-urlencoded";
+            //webRequest.ContentType = "application/x-www-form-urlencoded";
+            webRequest.ContentType = "text/xml";
+            //webRequest.ContentLength = Encoding.UTF8.GetByteCount(data);
+            webRequest.ContentLength = data.Length;
+            
         }
 
         private void SendRequest(string data)

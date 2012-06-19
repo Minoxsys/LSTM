@@ -6,6 +6,7 @@ using Domain;
 using Persistence.Queries.Outposts;
 using Core.Persistence;
 using Web.Models.SmsRequest;
+using Web.Bootstrap;
 
 namespace Web.Services
 {
@@ -110,9 +111,9 @@ namespace Web.Services
 
         private string CreatePostData(ResponseModel model)
         {
-            string response = "<?xml version='1.0' encoding='UTF-8'?><sms-response delivery-notification-requested='true' version='1.0'> ";
+            string response = "<?xml version='1.0' encoding='UTF-8'?><sms-response login='" + AppSettings.SmsGatewayUserName + "' password='" + AppSettings.SmsGatewayPassword + "' delivery-notification-requested='true' version='1.0'> ";
             response += "<message id='" + model.Id + "' ref-id='" + model.RefId + "' msisdn='" + model.PhoneNumber + "' service-number='" + model.ServiceNo + "' operator='" + model.Operator + "' ";
-            response += "defer-date='" + model.DeferDate + "' validity-period='" + model.Valability + "' priority='" + model.Priority + "'>";
+            response += "validity-period='" + model.Valability + "' priority='" + model.Priority + "'>";
             response += "<content type='text/plain'>" + model.Content + "</content></message></sms-response>";
 
             return response;
