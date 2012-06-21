@@ -43,7 +43,7 @@ namespace Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
+
         public ActionResult ReceiveSms()
         {
             //if (Request.ContentType == "application/xml" || Request.ContentType == "text/xml")
@@ -51,17 +51,17 @@ namespace Web.Controllers
                 StreamReader reader = new StreamReader(Request.InputStream);
                 String request = reader.ReadToEnd();
 
-                var stream = Request.InputStream;
-                byte[] buffer = new byte[stream.Length];
-                stream.Read(buffer, 0, buffer.Length);
-                string xml = Encoding.UTF8.GetString(buffer);
-                string xml2 = Encoding.GetEncoding(1251).GetString(buffer);
+                //var stream = Request.InputStream;
+                //byte[] buffer = new byte[stream.Length];
+                //stream.Read(buffer, 0, buffer.Length);
+                //string xml = Encoding.UTF8.GetString(buffer);
+                //string xml2 = Encoding.GetEncoding(1251).GetString(buffer);
                 
                 RawSmsReceived test = new RawSmsReceived();
                 test.Content = request;
                 test.Operator = Request.ContentType;
-                test.Keyword = xml;
-                test.OperatorId = xml2;
+                //test.Keyword = xml;
+                //test.OperatorId = xml2;
                 SaveCommandRawSmsReceived.Execute(test);
 
 
@@ -88,7 +88,7 @@ namespace Web.Controllers
                         MessageFromDrugShop message = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
                         SaveCommandMessageFromDrugShop.Execute(message);
 
-                        SmsRequestService.SendResponseMessage();
+                        SmsRequestService.SendResponseMessage(rawSmsReceived);
                         SmsRequestService.SendMessageToDispensary(message, rawSmsReceived);
 
                     }
