@@ -19,12 +19,12 @@ namespace Migrations
             Delete.Table("DiagnosisMessageFromDispensarys");
             Delete.Table("MessageFromDispensaryTreatments");
 
-            //Delete.RemoveForeignKey("MessageFromDispensarys");
-            ////Delete.RemoveForeignKey("MessageFromDispensarys", "MessageFromDrugShop_FK", "MessageFromDispensarys");
-            //Delete.Table("MessageFromDispensarys");
+            Delete.RemoveForeignKey("MessageFromDispensarys", "MessageFromDrugShop_FK", "MessageFromDispensarys");
+            Delete.RemoveForeignKey("MessageFromDispensarys");
+            Delete.Table("MessageFromDispensarys");
 
-            //Delete.RemoveForeignKey("MessageFromDrugShops");
-            //Delete.Table("MessageFromDrugShops");
+            Delete.RemoveForeignKey("MessageFromDrugShops");
+            Delete.Table("MessageFromDrugShops");
         }
 
         public override void Up()

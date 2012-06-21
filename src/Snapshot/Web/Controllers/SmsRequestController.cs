@@ -43,7 +43,7 @@ namespace Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
+
         public ActionResult ReceiveSms()
         {
             //if (Request.ContentType == "application/xml" || Request.ContentType == "text/xml")
@@ -80,7 +80,7 @@ namespace Web.Controllers
                 rawSmsReceived.ParseSucceeded = false;
                 SaveCommandRawSmsReceived.Execute(rawSmsReceived);
 
-                //SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
+                SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
                 return new EmptyResult();
             }
             SaveCommandRawSmsReceived.Execute(rawSmsReceived);

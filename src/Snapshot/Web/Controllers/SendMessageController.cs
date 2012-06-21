@@ -56,9 +56,9 @@ namespace Web.Controllers
             //response += "<content type='text/plain'>" + model + "</content></message></sms-response>";
 
             string bulkRequest = "<?xml version='1.0' encoding='UTF-8'?>";
-            bulkRequest += "<bulk-request login='"+AppSettings.SmsGatewayUserName+"' password='"+AppSettings.SmsGatewayPassword+"' request-id='1001' delivery-notification-requested='true' version='1.0'>";
+            bulkRequest += "<bulk-request login='"+AppSettings.SmsGatewayUserName+"' password='"+AppSettings.SmsGatewayPassword+"' request-id='1003' delivery-notification-requested='true' version='1.0'>";
             bulkRequest += "<message id='1' msisdn='255787959070' service-number='" + AppSettings.SmsGatewayShortcode + "' validity-period='3' priority='1'> ";
-            bulkRequest += "<content type='text/plain'>Test can you please send a message to 15046. message: Test SR120365F S1 Thanks</content>";
+            bulkRequest += "<content type='text/plain'>Test from Claudia</content>";
             bulkRequest += "</message></bulk-request>";
 
             return bulkRequest;
