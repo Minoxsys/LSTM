@@ -45,10 +45,16 @@ namespace Web.Controllers
         [HttpPost]
         public ActionResult ReceiveSms()
         {
-            if (Request.ContentType == "application/xml" || Request.ContentType == "text/xml")
-            {
+            //if (Request.ContentType == "application/xml" || Request.ContentType == "text/xml")
+            //{
                 StreamReader reader = new StreamReader(Request.InputStream);
                 String request = reader.ReadToEnd();
+
+                RawSmsReceived test = new RawSmsReceived();
+                test.Content = request;
+                test.Operator = Request.ContentType;
+                SaveCommandRawSmsReceived.Execute(test);
+
                 RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(request);
                 rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
@@ -94,7 +100,7 @@ namespace Web.Controllers
                         SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                     }
                 }
-            }
+            
 
             return null;
         }

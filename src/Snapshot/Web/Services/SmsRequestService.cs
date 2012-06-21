@@ -55,7 +55,7 @@ namespace Web.Services
         public bool SendMessageToDispensary(MessageFromDrugShop message, RawSmsReceived rawSms)
         {
             ResponseModel model = new ResponseModel();
-            model.Id = "1";
+            model.Id = rawSms.SmsId;
             model.Content = CreateMessageToBeSentToDispensary(message);
             model.DeferDate = "";
             model.Operator = "";
