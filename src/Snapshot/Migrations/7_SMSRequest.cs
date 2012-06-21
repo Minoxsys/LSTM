@@ -19,12 +19,12 @@ namespace Migrations
             Delete.Table("DiagnosisMessageFromDispensarys");
             Delete.Table("MessageFromDispensaryTreatments");
 
-            Delete.RemoveForeignKey("MessageFromDrugShops");
-            Delete.Table("MessageFromDrugShops");
+            //Delete.RemoveForeignKey("MessageFromDispensarys");
+            ////Delete.RemoveForeignKey("MessageFromDispensarys", "MessageFromDrugShop_FK", "MessageFromDispensarys");
+            //Delete.Table("MessageFromDispensarys");
 
-            Delete.RemoveForeignKey("MessageFromDispensarys");
-            Delete.RemoveForeignKey("MessageFromDispensarys", "MessageFromDrugShop_FK", "MessageFromDispensarys");
-            Delete.Table("MessageFromDispensarys");
+            //Delete.RemoveForeignKey("MessageFromDrugShops");
+            //Delete.Table("MessageFromDrugShops");
         }
 
         public override void Up()
@@ -38,7 +38,6 @@ namespace Migrations
                 .WithColumn("OperatorId").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Content").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Credits").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("ReceivedDate").AsDateTime().Nullable()
                 .WithColumn("OutpostId").AsGuid().Nullable()
                 .WithColumn("OutpostType").AsInt32().Nullable()

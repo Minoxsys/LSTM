@@ -218,10 +218,13 @@ namespace Web.Services
         public RawSmsReceived GetRawSmsReceivedFromXMLString(string request)
         {
             XmlDocument doc = new XmlDocument();
+            RawSmsReceived rawSmsReceived = new RawSmsReceived();
+
+            if (string.IsNullOrEmpty(request))
+                return null;
+
             doc.LoadXml(request);
             XmlNodeList list = doc.GetElementsByTagName("message");
-
-            RawSmsReceived rawSmsReceived = new RawSmsReceived();
 
             if (list.Count > 0)
             {
