@@ -22,16 +22,16 @@ namespace Web.Controllers
         public JsonResult Send(string message)
         {
             string request = CreatePostData(message);
-
+            string responseMessage = "";
             try
             {
-                smsGatewayService.SendSmsRequest(request);
+                responseMessage = smsGatewayService.SendSmsRequest(request);
 
                 return Json(
                    new JsonActionResponse
                    {
                        Status = "Success",
-                       Message = String.Format("Message sent")
+                       Message = String.Format("Message sent: " + responseMessage)
                     });
             }
             catch (Exception)
@@ -40,7 +40,7 @@ namespace Web.Controllers
                    new JsonActionResponse
                    {
                        Status = "Error",
-                       Message = String.Format("Message NOT sent")
+                       Message = String.Format("Message NOT sent: " + responseMessage)
                     });
             }
                         

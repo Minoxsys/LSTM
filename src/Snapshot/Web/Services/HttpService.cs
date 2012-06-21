@@ -104,11 +104,12 @@ namespace Web.Services
             //requestStream.Write(postDataBytes, 0, postDataBytes.Length);
             //requestStream.Close();
 
-            //String result = "";
-            //var resp = (HttpWebResponse)webRequest.GetResponse();
-            //StreamReader responseReader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
-            //result = responseReader.ReadToEnd();
-            //resp.Close();
+            String result = "";
+            HttpWebResponse resp = (HttpWebResponse)webRequest.GetResponse();
+            StreamReader responseReader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
+            result = responseReader.ReadToEnd();
+            responseReader.Close();
+            resp.Close();
 
             return GetResponse();
         }
