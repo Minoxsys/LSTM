@@ -55,11 +55,13 @@ namespace Web.Controllers
                 byte[] buffer = new byte[stream.Length];
                 stream.Read(buffer, 0, buffer.Length);
                 string xml = Encoding.UTF8.GetString(buffer);
-
+                string xml2 = Encoding.GetEncoding(1251).GetString(buffer);
+                
                 RawSmsReceived test = new RawSmsReceived();
                 test.Content = request;
                 test.Operator = Request.ContentType;
                 test.Keyword = xml;
+                test.OperatorId = xml2;
                 SaveCommandRawSmsReceived.Execute(test);
 
 

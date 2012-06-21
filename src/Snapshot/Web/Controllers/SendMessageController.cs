@@ -22,11 +22,13 @@ namespace Web.Controllers
         public JsonResult Send(string message)
         {
             string request = CreatePostData(message);
+
             string responseMessage = "";
             try
             {
+                
                 responseMessage = smsGatewayService.SendSmsRequest(request);
-
+                
                 return Json(
                    new JsonActionResponse
                    {
@@ -54,9 +56,9 @@ namespace Web.Controllers
             //response += "<content type='text/plain'>" + model + "</content></message></sms-response>";
 
             string bulkRequest = "<?xml version='1.0' encoding='UTF-8'?>";
-            bulkRequest += "<bulk-request login='"+AppSettings.SmsGatewayUserName+"' password='"+AppSettings.SmsGatewayPassword+"' request-id='1000' delivery-notification-requested='true' version='1.0'>";
-            bulkRequest += "<message id='1' msisdn='255717105204' service-number='" + AppSettings.SmsGatewayShortcode + "' validity-period='3' priority='1'> ";
-            bulkRequest += "<content type='text/plain'>Test message from Claudia</content>";
+            bulkRequest += "<bulk-request login='"+AppSettings.SmsGatewayUserName+"' password='"+AppSettings.SmsGatewayPassword+"' request-id='1001' delivery-notification-requested='true' version='1.0'>";
+            bulkRequest += "<message id='1' msisdn='255787959070' service-number='" + AppSettings.SmsGatewayShortcode + "' validity-period='3' priority='1'> ";
+            bulkRequest += "<content type='text/plain'>Test can you please send a message to 15046. message: Test SR120365F S1 Thanks</content>";
             bulkRequest += "</message></bulk-request>";
 
             return bulkRequest;
