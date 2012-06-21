@@ -83,18 +83,34 @@ namespace Web.Services
             webRequest.ContentType = "application/x-www-form-urlencoded";
             webRequest.ContentLength = postDataBytes.Length;
 
+            StreamWriter myWriter = null;
+            try
+            {
+                myWriter = new StreamWriter(webRequest.GetRequestStream());
+                myWriter.Write(data);
+                myWriter.Flush();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                myWriter.Close();
+            }
 
-            Stream requestStream = webRequest.GetRequestStream();
-            requestStream.Write(postDataBytes, 0, postDataBytes.Length);
-            requestStream.Close();
 
-            String result = "";
-            var resp = (HttpWebResponse)webRequest.GetResponse();
-            StreamReader responseReader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
-            result = responseReader.ReadToEnd();
-            resp.Close();
+            //Stream requestStream = webRequest.GetRequestStream();
+            //requestStream.Write(postDataBytes, 0, postDataBytes.Length);
+            //requestStream.Close();
 
-            return result;
+            //String result = "";
+            //var resp = (HttpWebResponse)webRequest.GetResponse();
+            //StreamReader responseReader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
+            //result = responseReader.ReadToEnd();
+            //resp.Close();
+
+            return GetResponse();
         }
     }
 }
