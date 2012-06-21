@@ -21,11 +21,17 @@ namespace Web.Services
         {
             webRequest = (HttpWebRequest)WebRequest.Create(url);
 
+            byte[] postDataBytes = Encoding.UTF8.GetBytes(data);
+
             webRequest.Method = "POST";
+            webRequest.ContentType = "application/x-www-form-urlencoded";
+            webRequest.ContentLength = postDataBytes.Length;
+
+
             //webRequest.ContentType = "application/x-www-form-urlencoded";
-            webRequest.ContentType = "text/xml";
+            //webRequest.ContentType = "text/xml";
             //webRequest.ContentLength = Encoding.UTF8.GetByteCount(data);
-            webRequest.ContentLength = data.Length;
+            //webRequest.ContentLength = data.Length;
             
         }
 
@@ -65,11 +71,30 @@ namespace Web.Services
 
         public string Post(string url, string data)
         {
-            PrepareWebRequestForPost(url, data);
+            //PrepareWebRequestForPost(url, data);
             
-            SendRequest(data);
+            //SendRequest(data);
 
-            return GetResponse();
+            webRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            byte[] postDataBytes = Encoding.UTF8.GetBytes(data);
+
+            webRequest.Method = "POST";
+            webRequest.ContentType = "application/x-www-form-urlencoded";
+            webRequest.ContentLength = postDataBytes.Length;
+
+
+            Stream requestStream = webRequest.GetRequestStream();
+            requestStream.Write(postDataBytes, 0, postDataBytes.Length);
+            requestStream.Close();
+
+            String result = "";
+            var resp = (HttpWebResponse)webRequest.GetResponse();
+            StreamReader responseReader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8);
+            result = responseReader.ReadToEnd();
+            resp.Close();
+
+            return result;
         }
     }
 }
