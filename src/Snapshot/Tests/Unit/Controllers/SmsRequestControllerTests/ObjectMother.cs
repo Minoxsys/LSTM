@@ -8,6 +8,11 @@ using Domain;
 using Persistence.Queries.Outposts;
 using Rhino.Mocks;
 using Web.Services;
+using System.Web;
+using System.Net;
+using System.Web.Mvc;
+using System.Web.Routing;
+using System.IO;
 
 namespace Tests.Unit.Controllers.SmsRequestControllerTests
 {
@@ -50,9 +55,14 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         
         public string XMLStringInvalidPhoneNumber = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='00000000012' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>This is a test message</content> </message> </sms-request>";
         public string XMLStringFromDrugShop = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='00000000012' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>This is a test message</content> </message> </sms-request>";
+        public string XMLCorrectStringFromDrugShop = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='0123456789' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>XRT120572F S1</content> </message> </sms-request>";
         public string XMLStringDispensary = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='00000000012' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>This is a test message</content> </message> </sms-request>";
-
-
+        public string XMLCorrectStringDispensary = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='0123456789' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>124585488 D1 T1 A2</content> </message> </sms-request>";
+        
+        
+        public HttpContextBase mockedhttpContext;
+        public HttpRequestBase mockedHttpRequest;
+        
         public void Init()
         {
             MockServices();
@@ -145,11 +155,27 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         private void Setup_Controller()
         {
             controller = new SmsRequestController();
+
             controller.SaveCommandMessageFromDispensary = saveCommandMessageFromDispensary;
             controller.SaveCommandMessageFromDrugShop = saveCommandMessageFromDrugShop;
             controller.SaveCommandRawSmsReceived = saveCommandRawSmsReceived;
             controller.ManageReceivedSmsService = manageReceivedSmsService;
             controller.SmsRequestService = smsRequestService;
+        }
+
+        public void MockRequest(string message)
+        {
+            MockRepository mocks = new MockRepository();
+
+            mockedhttpContext = mocks.DynamicMock<HttpContextBase>();
+            mockedHttpRequest = mocks.DynamicMock<HttpRequestBase>();
+
+            MemoryStream m = new MemoryStream(System.Text.Encoding.Default.GetBytes(message));
+            SetupResult.For(mockedHttpRequest.InputStream).Return(m);
+
+            SetupResult.For(mockedhttpContext.Request).Return(mockedHttpRequest);
+            mocks.ReplayAll();
+            controller.ControllerContext = new ControllerContext(mockedhttpContext, new RouteData(), controller);
         }
 
         
