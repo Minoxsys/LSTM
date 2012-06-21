@@ -13,6 +13,7 @@ using Persistence.Queries.Outposts;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.IO;
+using System.Text;
 
 namespace Web.Controllers
 {
@@ -50,10 +51,17 @@ namespace Web.Controllers
                 StreamReader reader = new StreamReader(Request.InputStream);
                 String request = reader.ReadToEnd();
 
+                var stream = Request.InputStream;
+                byte[] buffer = new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+                string xml = Encoding.UTF8.GetString(buffer);
+
                 RawSmsReceived test = new RawSmsReceived();
                 test.Content = request;
                 test.Operator = Request.ContentType;
+                test.Keyword = xml;
                 SaveCommandRawSmsReceived.Execute(test);
+
 
                 RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(request);
                 rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);

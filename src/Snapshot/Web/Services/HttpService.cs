@@ -87,7 +87,7 @@ namespace Web.Services
             try
             {
                 myWriter = new StreamWriter(webRequest.GetRequestStream());
-                myWriter.Write(data);
+                myWriter.Write(postDataBytes);
                 myWriter.Flush();
             }
             catch (Exception e)
