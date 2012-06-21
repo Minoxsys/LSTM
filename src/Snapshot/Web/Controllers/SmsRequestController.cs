@@ -88,6 +88,7 @@ namespace Web.Controllers
                         MessageFromDrugShop message = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
                         SaveCommandMessageFromDrugShop.Execute(message);
 
+                        SmsRequestService.SendResponseMessage();
                         SmsRequestService.SendMessageToDispensary(message, rawSmsReceived);
 
                     }

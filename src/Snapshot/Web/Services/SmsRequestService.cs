@@ -28,7 +28,7 @@ namespace Web.Services
         public bool SendMessage(string message,  RawSmsReceived response)
         {
             ResponseModel model = new ResponseModel();
-            model.Id = "1";
+            model.Id = response.SmsId;
             model.Content = message;
             model.DeferDate = "";
             model.Operator = "";
@@ -65,7 +65,7 @@ namespace Web.Services
             model.ServiceNo = rawSms.ServiceNumber;
             model.Valability = "3";
 
-            string request = CreatePostData(model);
+            string request = CreateEmptyPostData(model);
 
             if (model.PhoneNumber != null)
             {
@@ -117,6 +117,38 @@ namespace Web.Services
             response += "<content type='text/plain'>" + model.Content + "</content></message></sms-response>";
 
             return response;
+        }
+
+        public bool SendResponseMessage(RawSmsReceived rawSmsReceived)
+        {
+            string request = CreateEmptyPostData(rawSmsReceived);
+
+            try
+            {
+                smsGatewayService.SendSmsRequest(request);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private string CreateEmptyPostData(RawSmsReceived rawSmsReceived)
+        {
+            string response = "<?xml version='1.0' encoding='UTF-8'?><sms-response login='" + AppSettings.SmsGatewayUserName + "' password='" + AppSettings.SmsGatewayPassword + "' version='1.0'> ";
+            return response;
+        }
+
+        private string CreateEmptyPostData(ResponseModel model)
+        {
+            string bulkRequest = "<?xml version='1.0' encoding='UTF-8'?>";
+            bulkRequest += "<bulk-request login='" + AppSettings.SmsGatewayUserName + "' password='" + AppSettings.SmsGatewayPassword + "' request-id='"+model.Id+"' delivery-notification-requested='true' version='1.0'>";
+            bulkRequest += "<message id='1' msisdn='"+model.PhoneNumber+"' service-number='" + AppSettings.SmsGatewayShortcode + "' validity-period='"+model.Valability+"' priority='"+model.Priority+"'> ";
+            bulkRequest += "<content type='text/plain'>"+model.Content+"</content>";
+            bulkRequest += "</message></bulk-request>";
+
+            return bulkRequest;
         }
     }
 }
