@@ -69,8 +69,8 @@ namespace Web.Controllers
         [HttpPost]
         public JsonResult SendXml(string message)
         {
-            string xml = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2012-06-06 13:30:10' msisdn='0040747651059' service-number='15046' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>XF140387F S1</content> </message> </sms-request>";
-            string url = "http://lstm-staging.apphb.com/SmsRequest/ReceiveSms";
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-request version=\"1.0\">                      <message id=\"6644856\" keyword=\"test\" message-count=\"1\" msisdn=\"255717105204\" operator=\"tigo-smpp\" operator-id=\"10003\" service-number=\"15046\" submit-date=\"2012-06-25 14:01:49\">                         <content type=\"text/plain\">test DR120387F S1</content>                      </message>                   </sms-request>";
+            string url = "http://localhost:52618/SmsRequest/ReceiveSms";
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
 
             byte[] requestBytes = System.Text.Encoding.ASCII.GetBytes(xml);

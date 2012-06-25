@@ -232,7 +232,7 @@ namespace Web.Services
                 rawSmsReceived.Sender = list[0].Attributes["msisdn"].Value;
                 rawSmsReceived.ServiceNumber = list[0].Attributes["service-number"].Value;
                 rawSmsReceived.Operator = list[0].Attributes["operator"].Value;
-                rawSmsReceived.OperatorId = list[0].Attributes["operator_id"].Value;
+                rawSmsReceived.OperatorId = list[0].Attributes["operator-id"].Value;
                 rawSmsReceived.Keyword = list[0].Attributes["keyword"].Value;
                 rawSmsReceived.Content = list[0].InnerText;
 
