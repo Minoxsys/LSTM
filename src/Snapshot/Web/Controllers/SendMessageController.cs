@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Web.Models.Shared;
 using Web.Services;
 using Web.Bootstrap;
+using System.Net;
+using System.IO;
 
 namespace Web.Controllers
 {
@@ -62,6 +64,39 @@ namespace Web.Controllers
             bulkRequest += "</message></bulk-request>";
 
             return bulkRequest;
+        }
+
+        [HttpPost]
+        public JsonResult SendXml(string message)
+        {
+            string xml = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2012-06-06 13:30:10' msisdn='0040747651059' service-number='15046' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>XF140387F S1</content> </message> </sms-request>";
+            string url = "http://lstm-staging.apphb.com/SmsRequest/ReceiveSms";
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+
+            byte[] requestBytes = System.Text.Encoding.ASCII.GetBytes(xml);
+            req.Method = "POST";
+            req.ContentType = "text/xml;charset=utf-8";
+            req.ContentLength = requestBytes.Length;
+            Stream requestStream = req.GetRequestStream();
+            requestStream.Write(requestBytes, 0, requestBytes.Length);
+            requestStream.Close();
+
+
+            HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+            StreamReader sr = new StreamReader(res.GetResponseStream(), System.Text.Encoding.Default);
+            string backstr = sr.ReadToEnd();
+
+            return Json(
+                   new JsonActionResponse
+                   {
+                       Status = backstr,
+                       Message = String.Format(backstr)
+                   });
+
+            sr.Close();
+            res.Close();
+
+
         }
     }
 }

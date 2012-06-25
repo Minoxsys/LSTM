@@ -56,7 +56,9 @@ namespace Web.Controllers
             test1.Keyword = "Before";
             test1.OperatorId = "Before";
             test1.ReceivedDate = DateTime.UtcNow;
+            test1.Content = "body";
             SaveCommandRawSmsReceived.Execute(test1);
+            
             
             StreamReader reader = new StreamReader(Request.InputStream);
             String request = reader.ReadToEnd();
@@ -71,7 +73,7 @@ namespace Web.Controllers
             test2.SmsId = "1";
             test2.Sender = "After";
             test2.ServiceNumber = "152";
-            test2.Content = request;
+            test2.Content = "body";
             test2.Operator = Request.ContentType;
             test2.Keyword = "After";
             test2.OperatorId = "After";
