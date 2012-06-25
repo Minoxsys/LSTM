@@ -43,7 +43,7 @@ namespace Web.Controllers
             return View(model);
         }
 
-
+        [HttpPost]
         public ActionResult ReceiveSms()
         {
             //if (Request.ContentType == "application/xml" || Request.ContentType == "text/xml")
