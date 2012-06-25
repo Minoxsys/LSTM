@@ -152,9 +152,14 @@
   <ItemGroup>
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\DiagnosisReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\HealthFacilityReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\GoogleMapReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\PatientsReportController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\DiagnosisIndexModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\DiagnosisReportIndexOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\DiagnosisReportModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\PatientsModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\GoogleMapReport\MarkerIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\GoogleMapReport\MarkerModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\HealthFacilityReport\HealthFacilityIndexOutputModel.cs" />
@@ -2104,6 +2109,7 @@
     <Content Include="Areas\AnalysisManagement\Views\GoogleMapReport\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\PatientsReport\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\Shared\_AnalysisSideBar.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\DiagnosisReport\Overview.cshtml" />
     <None Include="Assets\resources\clientsreports\estimari.xlsx" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
