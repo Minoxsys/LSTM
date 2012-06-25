@@ -46,29 +46,12 @@ namespace Web.Controllers
         [HttpPost]
         public ActionResult ReceiveSms()
         {
-            //if (Request.ContentType == "application/xml" || Request.ContentType == "text/xml")
-            //{
-            RawSmsReceived test1 = new RawSmsReceived();
-            test1.SmsId = "1";
-            test1.Sender = "Before request";
-            test1.ServiceNumber = "152";
-            test1.Operator = Request.ContentType;
-            test1.Keyword = "Before";
-            test1.OperatorId = "Before";
-            test1.ReceivedDate = DateTime.UtcNow;
-            test1.Content = "body";
-            SaveCommandRawSmsReceived.Execute(test1);
-            
-            
-            //StreamReader reader = new StreamReader(Request.InputStream);
-            //String request = reader.ReadToEnd();
-
+           
             var stream = Request.InputStream;
             byte[] buffer = new byte[stream.Length];
             stream.Read(buffer, 0, buffer.Length);
             string xml = Encoding.UTF8.GetString(buffer);
 
-            //string xml2 = Encoding.GetEncoding(1251).GetString(buffer);
 
             RawSmsReceived test2 = new RawSmsReceived();
             test2.SmsId = "1";
@@ -85,16 +68,7 @@ namespace Web.Controllers
             RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(xml);
             if (rawSmsReceived == null)
             {
-                RawSmsReceived test3 = new RawSmsReceived();
-                test3.SmsId = "1";
-                test3.Sender = "From xml";
-                test3.ServiceNumber = "152";
-                test3.Content = "body";
-                test3.Operator = Request.ContentType;
-                test3.Keyword = "From xml";
-                test3.OperatorId = xml;
-                test3.ReceivedDate = DateTime.UtcNow;
-                SaveCommandRawSmsReceived.Execute(test3);
+                SmsRequestService.SendResponseMessage(rawSmsReceived);
                 return new EmptyResult();
             }
             rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
@@ -121,7 +95,6 @@ namespace Web.Controllers
 
                     SmsRequestService.SendResponseMessage(rawSmsReceived);
                     SmsRequestService.SendMessageToDispensary(message, rawSmsReceived);
-
                 }
                 else
                 {

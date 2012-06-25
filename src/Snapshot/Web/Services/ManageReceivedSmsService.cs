@@ -13,8 +13,8 @@ namespace Web.Services
 {
     public class ManageReceivedSmsService : IManageReceivedSmsService
     {
-        private const string CONTENT_FROMDRUGSHOP_REGEX = @"^([A-Za-z]{2,4}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;/]+)$";
-        private const string CONTENT_FROMDISPENSARY_REGEX = @"^([0-9A-Za-z]{8}[ \t][A-Za-z0-9 +-;]+)$";
+        private const string CONTENT_FROMDRUGSHOP_REGEX = @"^(([A-Za-z]{4}[ \t]+)*[A-Za-z]{2,4}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;/]+)$";
+        private const string CONTENT_FROMDISPENSARY_REGEX = @"^(([A-Za-z]{4}[ \t]+)*[0-9A-Za-z]{8}[ \t][A-Za-z0-9 +-;]+)$";
         private const string DateFormat = "ddMMyy";
         private const string XMLDateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
@@ -70,7 +70,10 @@ namespace Web.Services
             if (regexFromDrugshop.IsMatch(rawSmsReceived.Content))
             {
                 string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
-                string stringDate = parsedLine[0].Substring(parsedLine[0].Length - 7, 6);
+                var index = 0;
+                if (parsedLine[0].ToUpper().Contains("TEST"))
+                    index = 1;
+                string stringDate = parsedLine[index].Substring(parsedLine[index].Length - 7, 6);
                 DateTime dateRetult;
 
                 if (!DateTime.TryParseExact(stringDate, DateFormat, FormatProvider, DateTimeStyles.None, out dateRetult))
@@ -80,7 +83,7 @@ namespace Web.Services
                     return rawSmsReceived;
                 }
 
-                for (var i = 1; i < parsedLine.Count(); i++)
+                for (var i = index+1; i < parsedLine.Count(); i++)
                 {
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
@@ -112,7 +115,10 @@ namespace Web.Services
             if (regexFromDispensary.IsMatch(rawSmsReceived.Content))
             {
                 string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
-                string IdCode = parsedLine[0].Substring(0, 8);
+                var index = 0;
+                if (parsedLine[0].ToUpper().Contains("TEST"))
+                    index = 1;
+                string IdCode = parsedLine[index].Substring(0, 8);
                 if (!queryMessageFromDrugShop.Query().Where(it => it.IDCode == IdCode).Any())
                 {
                     rawSmsReceived.ParseSucceeded = false;
@@ -120,7 +126,7 @@ namespace Web.Services
                     return rawSmsReceived;
                 }
 
-                for (var i = 1; i < parsedLine.Count(); i++)
+                for (var i = index+1; i < parsedLine.Count(); i++)
                 {
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
@@ -151,15 +157,20 @@ namespace Web.Services
             MessageFromDrugShop message = new MessageFromDrugShop();
 
             string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
-            message.Gender = parsedLine[0].Substring(parsedLine[0].Length - 1, 1);
-            string stringDate = parsedLine[0].Substring(parsedLine[0].Length - 7, 6);
+
+            var index = 0;
+            if (parsedLine[0].ToUpper().Contains("TEST"))
+                index = 1;
+
+            message.Gender = parsedLine[index].Substring(parsedLine[index].Length - 1, 1).ToUpper();
+            string stringDate = parsedLine[index].Substring(parsedLine[index].Length - 7, 6);
             message.BirthDate = DateTime.ParseExact(stringDate, DateFormat, FormatProvider, DateTimeStyles.None);
-            message.Initials = parsedLine[0].Substring(0, parsedLine[0].Length - 7);
+            message.Initials = parsedLine[index].Substring(0, parsedLine[index].Length - 7).ToUpper();
             message.IDCode = GenerateIDCode();
             message.OutpostId = rawSmsReceived.OutpostId;
             message.SentDate = rawSmsReceived.ReceivedDate;
 
-            for (var i = 1; i < parsedLine.Count(); i++)
+            for (var i = index+1; i < parsedLine.Count(); i++)
             {
                 if (!string.IsNullOrEmpty(parsedLine[i]))
                 {

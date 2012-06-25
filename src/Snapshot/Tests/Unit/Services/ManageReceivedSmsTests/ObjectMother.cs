@@ -30,7 +30,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public const string WRONGCONTENTDRUGSHOP = "XRTDRDR485478654651354 RETFF";
         public const string WRONGDATEMESSAGEFROMDRUGSHOP = "XY231398F RX1 RX2";
         public const string WRONGSERVICEMESSAGEFROMDRUGSHOP = "XY230498F RX1 RX2";
-        public const string CORRECTMESSAGEFROMDRUGSHOP = "XYXX230498F    S1 S5  S6   ";
+        public const string CORRECTMESSAGEFROMDRUGSHOP = "test XYXX230498F    S1 S5  S6   ";
         public const string WRONGIDCODEMESSAGEDISPENSARY = "12343214 TR1 TR2";
         public const string WRONGSERVICECODEFORDISPENSARYMESSAGE = "10000008 DIAG1 TREAT1 ADV1";
         public const string CORRECTMESSAGEFROMDISPENSARY = "10000008  D1  D2     T4  T3 A1        ";
