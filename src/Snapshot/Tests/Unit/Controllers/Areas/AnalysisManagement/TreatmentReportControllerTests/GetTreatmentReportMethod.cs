@@ -5,13 +5,13 @@ using System.Text;
 using Domain;
 using Rhino.Mocks;
 using NUnit.Framework;
-using Web.Areas.AnalysisManagement.Models.DiagnosisReport;
+using Web.Areas.AnalysisManagement.Models.TreatmentReport;
 
 
-namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControllerTests
+namespace Tests.Unit.Controllers.Areas.AnalysisManagement.TreatmentReportControllerTests
 {
     [TestFixture]
-    public class GetDiagnosisReportMethod
+    public class GetTreatmentReportMethod
     {
         public ObjectMother objectMother = new ObjectMother();
 
@@ -25,21 +25,21 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         public void Returns_All_Data()
         {
             //Arrange
-            DiagnosisIndexModel model = new DiagnosisIndexModel();
-            objectMother.queryDiagnosis.Expect(call => call.Query()).Return(objectMother.diagnosisList.AsQueryable());
+            TreatmentIndexModel model = new TreatmentIndexModel();
+            objectMother.queryTreatment.Expect(call => call.Query()).Return(objectMother.treatmentList.AsQueryable());
             objectMother.queryOutpost.Expect(call => call.Query()).Return(objectMother.outpostList.AsQueryable());
             objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(objectMother.messageList.AsQueryable());
 
             //Act
-            var result = objectMother.controller.GetDiagnosisReport(model);
+            var result = objectMother.controller.GetTreatmentReport(model);
 
             //Assert
-            objectMother.queryDiagnosis.VerifyAllExpectations();
+            objectMother.queryTreatment.VerifyAllExpectations();
             objectMother.queryOutpost.VerifyAllExpectations();
             objectMother.queryMessageFromDispensary.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<DiagnosisReportIndexOutputModel>(result.Data);
-            var jsonData = result.Data as DiagnosisReportIndexOutputModel;
+            Assert.IsInstanceOf<TreatmentReportIndexOutputModel>(result.Data);
+            var jsonData = result.Data as TreatmentReportIndexOutputModel;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(12, jsonData.TotalItems);
@@ -49,24 +49,24 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         public void Returns_JSONData_ForCountry()
         {
             //Arrange
-            DiagnosisIndexModel model = new DiagnosisIndexModel
+            TreatmentIndexModel model = new TreatmentIndexModel
             {
                 countryId = objectMother.countryId.ToString()
             };
-            objectMother.queryDiagnosis.Expect(call => call.Query()).Return(objectMother.diagnosisList.AsQueryable());
+            objectMother.queryTreatment.Expect(call => call.Query()).Return(objectMother.treatmentList.AsQueryable());
             objectMother.queryOutpost.Expect(call => call.Query()).Return(objectMother.outpostList.AsQueryable());
             objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(objectMother.messageList.AsQueryable());
 
             //Act
-            var result = objectMother.controller.GetDiagnosisReport(model);
+            var result = objectMother.controller.GetTreatmentReport(model);
 
             //Assert
-            objectMother.queryDiagnosis.VerifyAllExpectations();
+            objectMother.queryTreatment.VerifyAllExpectations();
             objectMother.queryOutpost.VerifyAllExpectations();
             objectMother.queryMessageFromDispensary.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<DiagnosisReportIndexOutputModel>(result.Data);
-            var jsonData = result.Data as DiagnosisReportIndexOutputModel;
+            Assert.IsInstanceOf<TreatmentReportIndexOutputModel>(result.Data);
+            var jsonData = result.Data as TreatmentReportIndexOutputModel;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(12, jsonData.TotalItems);
@@ -76,25 +76,25 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         public void Returns_JSONData_ForCountry_Region()
         {
             //Arrange
-            DiagnosisIndexModel model = new DiagnosisIndexModel
+            TreatmentIndexModel model = new TreatmentIndexModel
             {
                 countryId = objectMother.countryId.ToString(),
                 regionId = objectMother.regionId.ToString()
             };
-            objectMother.queryDiagnosis.Expect(call => call.Query()).Return(objectMother.diagnosisList.AsQueryable());
+            objectMother.queryTreatment.Expect(call => call.Query()).Return(objectMother.treatmentList.AsQueryable());
             objectMother.queryOutpost.Expect(call => call.Query()).Return(objectMother.outpostList.AsQueryable());
             objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(objectMother.messageList.AsQueryable());
 
             //Act
-            var result = objectMother.controller.GetDiagnosisReport(model);
+            var result = objectMother.controller.GetTreatmentReport(model);
 
             //Assert
-            objectMother.queryDiagnosis.VerifyAllExpectations();
+            objectMother.queryTreatment.VerifyAllExpectations();
             objectMother.queryOutpost.VerifyAllExpectations();
             objectMother.queryMessageFromDispensary.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<DiagnosisReportIndexOutputModel>(result.Data);
-            var jsonData = result.Data as DiagnosisReportIndexOutputModel;
+            Assert.IsInstanceOf<TreatmentReportIndexOutputModel>(result.Data);
+            var jsonData = result.Data as TreatmentReportIndexOutputModel;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(8, jsonData.TotalItems);
@@ -104,26 +104,26 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         public void Returns_JSONData_ForCountry_Region_District()
         {
             //Arrange
-            DiagnosisIndexModel model = new DiagnosisIndexModel
+            TreatmentIndexModel model = new TreatmentIndexModel
             {
                 countryId = objectMother.countryId.ToString(),
                 regionId = objectMother.regionId.ToString(),
                 districtId = objectMother.districtId.ToString()
             };
-            objectMother.queryDiagnosis.Expect(call => call.Query()).Return(objectMother.diagnosisList.AsQueryable());
+            objectMother.queryTreatment.Expect(call => call.Query()).Return(objectMother.treatmentList.AsQueryable());
             objectMother.queryOutpost.Expect(call => call.Query()).Return(objectMother.outpostList.AsQueryable());
             objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(objectMother.messageList.AsQueryable());
 
             //Act
-            var result = objectMother.controller.GetDiagnosisReport(model);
+            var result = objectMother.controller.GetTreatmentReport(model);
 
             //Assert
-            objectMother.queryDiagnosis.VerifyAllExpectations();
+            objectMother.queryTreatment.VerifyAllExpectations();
             objectMother.queryOutpost.VerifyAllExpectations();
             objectMother.queryMessageFromDispensary.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<DiagnosisReportIndexOutputModel>(result.Data);
-            var jsonData = result.Data as DiagnosisReportIndexOutputModel;
+            Assert.IsInstanceOf<TreatmentReportIndexOutputModel>(result.Data);
+            var jsonData = result.Data as TreatmentReportIndexOutputModel;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(4, jsonData.TotalItems);
@@ -133,60 +133,60 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         public void Returns_JSONData_FilteredBy_StartDate()
         {
             //Arrange
-            DiagnosisIndexModel model = new DiagnosisIndexModel
+            TreatmentIndexModel model = new TreatmentIndexModel
             {
                 startDate = DateTime.UtcNow.AddMonths(-3).ToString()
             };
-            objectMother.queryDiagnosis.Expect(call => call.Query()).Return(objectMother.diagnosisList.AsQueryable());
+            objectMother.queryTreatment.Expect(call => call.Query()).Return(objectMother.treatmentList.AsQueryable());
             objectMother.queryOutpost.Expect(call => call.Query()).Return(objectMother.outpostList.AsQueryable());
             objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(objectMother.messageList.AsQueryable());
 
             //Act
-            var result = objectMother.controller.GetDiagnosisReport(model);
+            var result = objectMother.controller.GetTreatmentReport(model);
 
             //Assert
-            objectMother.queryDiagnosis.VerifyAllExpectations();
+            objectMother.queryTreatment.VerifyAllExpectations();
             objectMother.queryOutpost.VerifyAllExpectations();
             objectMother.queryMessageFromDispensary.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<DiagnosisReportIndexOutputModel>(result.Data);
-            var jsonData = result.Data as DiagnosisReportIndexOutputModel;
+            Assert.IsInstanceOf<TreatmentReportIndexOutputModel>(result.Data);
+            var jsonData = result.Data as TreatmentReportIndexOutputModel;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(12, jsonData.TotalItems);
-            Assert.AreEqual(0, jsonData.Diagnosis[0].Female);
-            Assert.AreEqual(1, jsonData.Diagnosis[0].Male);
-            Assert.AreEqual(1, jsonData.Diagnosis[0].NumberOfPatients);
+            Assert.AreEqual(1, jsonData.Treatment[0].Female);
+            Assert.AreEqual(1, jsonData.Treatment[0].Male);
+            Assert.AreEqual(2, jsonData.Treatment[0].NumberOfPatients);
         }
 
         [Test]
         public void Returns_JSONData_FilteredBy_EndDate()
         {
             //Arrange
-            DiagnosisIndexModel model = new DiagnosisIndexModel
+            TreatmentIndexModel model = new TreatmentIndexModel
             {
                 endDate = DateTime.UtcNow.AddMonths(-3).ToString()
             };
-            objectMother.queryDiagnosis.Expect(call => call.Query()).Return(objectMother.diagnosisList.AsQueryable());
+            objectMother.queryTreatment.Expect(call => call.Query()).Return(objectMother.treatmentList.AsQueryable());
             objectMother.queryOutpost.Expect(call => call.Query()).Return(objectMother.outpostList.AsQueryable());
             objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(objectMother.messageList.AsQueryable());
 
             //Act
-            var result = objectMother.controller.GetDiagnosisReport(model);
+            var result = objectMother.controller.GetTreatmentReport(model);
 
             //Assert
-            objectMother.queryDiagnosis.VerifyAllExpectations();
+            objectMother.queryTreatment.VerifyAllExpectations();
             objectMother.queryOutpost.VerifyAllExpectations();
             objectMother.queryMessageFromDispensary.VerifyAllExpectations();
 
-            Assert.IsInstanceOf<DiagnosisReportIndexOutputModel>(result.Data);
-            var jsonData = result.Data as DiagnosisReportIndexOutputModel;
+            Assert.IsInstanceOf<TreatmentReportIndexOutputModel>(result.Data);
+            var jsonData = result.Data as TreatmentReportIndexOutputModel;
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(12, jsonData.TotalItems);
-            Assert.AreEqual(0, jsonData.Diagnosis[1].Female);
-            Assert.AreEqual(1, jsonData.Diagnosis[1].Male);
-            Assert.AreEqual(1, jsonData.Diagnosis[1].NumberOfPatients);
+            Assert.AreEqual(2, jsonData.Treatment[0].Female);
+            Assert.AreEqual(0, jsonData.Treatment[0].Male);
+            Assert.AreEqual(2, jsonData.Treatment[0].NumberOfPatients);
         }
 
 

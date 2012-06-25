@@ -9,15 +9,15 @@ using Core.Domain;
 using Web.Areas.AnalysisManagement.Controllers;
 using MvcContrib.TestHelper.Fakes;
 
-namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControllerTests
+namespace Tests.Unit.Controllers.Areas.AnalysisManagement.TreatmentReportControllerTests
 {
     public class ObjectMother
     {
-        public DiagnosisReportController controller;
+        public TreatmentReportController controller;
 
         public IQueryService<MessageFromDispensary> queryMessageFromDispensary;
         public IQueryService<Outpost> queryOutpost;
-        public IQueryService<Diagnosis> queryDiagnosis;
+        public IQueryService<Treatment> queryTreatment;
         public IQueryService<Client> queryClient;
         public IQueryService<User> queryUsers;
 
@@ -33,7 +33,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         public District district;
         public Guid districtId;
         public List<Outpost> outpostList;
-        public List<Diagnosis> diagnosisList;
+        public List<Treatment> treatmentList;
         public List<MessageFromDispensary> messageList;
 
         private const string CLIENT_NAME = "Ion";
@@ -50,19 +50,19 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         private void MockServices()
         {
             queryMessageFromDispensary = MockRepository.GenerateMock<IQueryService<MessageFromDispensary>>();
-            queryDiagnosis = MockRepository.GenerateMock<IQueryService<Diagnosis>>();
+            queryTreatment = MockRepository.GenerateMock<IQueryService<Treatment>>();
             queryOutpost = MockRepository.GenerateMock<IQueryService<Outpost>>();
         }
 
         private void Setup_Controller()
         {
-            controller = new DiagnosisReportController();
+            controller = new TreatmentReportController();
 
             FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(USER_NAME), new string[] { });
             FakeControllerContext.Initialize(controller);
 
             controller.QueryMessageFromDispensary = queryMessageFromDispensary;
-            controller.QueryDiagnosis = queryDiagnosis;
+            controller.QueryTreatment = queryTreatment;
             controller.QueryOutpost = queryOutpost;
         }
 
@@ -147,17 +147,17 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
             outpostList.Add(outpost2);
             outpostList.Add(outpost3);
 
-            diagnosisList = new List<Diagnosis>();
+            treatmentList = new List<Treatment>();
             for (int i = 0; i < 4; i++)
             {
-                Guid diagnosisId = Guid.NewGuid();
-                Diagnosis diagnosis = MockRepository.GeneratePartialMock<Diagnosis>();
-                diagnosis.Stub(c => c.Id).Return(diagnosisId);
-                diagnosis.Code = "D" + i;
-                diagnosis.Keyword = "d" + i;
-                diagnosis.Client = client;
+                Guid treatmentId = Guid.NewGuid();
+                Treatment treatment = MockRepository.GeneratePartialMock<Treatment>();
+                treatment.Stub(c => c.Id).Return(treatmentId);
+                treatment.Code = "T" + i;
+                treatment.Keyword = "t" + i;
+                treatment.Client = client;
 
-                diagnosisList.Add(diagnosis);
+                treatmentList.Add(treatment);
             }
 
             messageList = new List<MessageFromDispensary>();
@@ -170,8 +170,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
                 message.OutpostId = outpostList[i % 3].Id;
                 message.OutpostType = 1;
                 message.SentDate = DateTime.UtcNow.AddMonths(-i);
-                message.Diagnosises = new List<Diagnosis>{ diagnosisList[i % 4] };
-                message.MessageFromDrugShop = (i % 4 == 0) ? new MessageFromDrugShop { Gender = "M"} : new MessageFromDrugShop { Gender = "F"};
+                message.Treatments = new List<Treatment> { treatmentList[i % 3] };
+                message.MessageFromDrugShop = (i % 4 == 0) ? new MessageFromDrugShop { Gender = "M" } : new MessageFromDrugShop { Gender = "F" };
 
                 messageList.Add(message);
             }
