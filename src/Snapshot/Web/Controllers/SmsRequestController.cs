@@ -60,13 +60,14 @@ namespace Web.Controllers
             SaveCommandRawSmsReceived.Execute(test1);
             
             
-            StreamReader reader = new StreamReader(Request.InputStream);
-            String request = reader.ReadToEnd();
+            //StreamReader reader = new StreamReader(Request.InputStream);
+            //String request = reader.ReadToEnd();
 
-            //var stream = Request.InputStream;
-            //byte[] buffer = new byte[stream.Length];
-            //stream.Read(buffer, 0, buffer.Length);
-            //string xml = Encoding.UTF8.GetString(buffer);
+            var stream = Request.InputStream;
+            byte[] buffer = new byte[stream.Length];
+            stream.Read(buffer, 0, buffer.Length);
+            string xml = Encoding.UTF8.GetString(buffer);
+
             //string xml2 = Encoding.GetEncoding(1251).GetString(buffer);
 
             RawSmsReceived test2 = new RawSmsReceived();
@@ -76,12 +77,12 @@ namespace Web.Controllers
             test2.Content = "body";
             test2.Operator = Request.ContentType;
             test2.Keyword = "After";
-            test2.OperatorId = "After";
+            test2.OperatorId = xml;
             test2.ReceivedDate = DateTime.UtcNow;
             SaveCommandRawSmsReceived.Execute(test2);
 
 
-            RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(request);
+            RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(xml);
             if (rawSmsReceived == null)
                 return new EmptyResult();
             rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
