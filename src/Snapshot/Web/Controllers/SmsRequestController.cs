@@ -48,6 +48,16 @@ namespace Web.Controllers
         {
             //if (Request.ContentType == "application/xml" || Request.ContentType == "text/xml")
             //{
+            RawSmsReceived test1 = new RawSmsReceived();
+            test1.SmsId = "1";
+            test1.Sender = "Before request";
+            test1.ServiceNumber = "152";
+            test1.Operator = Request.ContentType;
+            test1.Keyword = "Before";
+            test1.OperatorId = "Before";
+            test1.ReceivedDate = DateTime.UtcNow;
+            SaveCommandRawSmsReceived.Execute(test1);
+            
             StreamReader reader = new StreamReader(Request.InputStream);
             String request = reader.ReadToEnd();
 
@@ -57,16 +67,16 @@ namespace Web.Controllers
             //string xml = Encoding.UTF8.GetString(buffer);
             //string xml2 = Encoding.GetEncoding(1251).GetString(buffer);
 
-            RawSmsReceived test = new RawSmsReceived();
-            test.SmsId = "1";
-            test.Sender = "POST";
-            test.ServiceNumber = "152";
-            test.Content = request;
-            test.Operator = Request.ContentType;
-            test.Keyword = "a";
-            test.OperatorId = "a";
-            test.ReceivedDate = DateTime.UtcNow;
-            SaveCommandRawSmsReceived.Execute(test);
+            RawSmsReceived test2 = new RawSmsReceived();
+            test2.SmsId = "1";
+            test2.Sender = "After";
+            test2.ServiceNumber = "152";
+            test2.Content = request;
+            test2.Operator = Request.ContentType;
+            test2.Keyword = "After";
+            test2.OperatorId = "After";
+            test2.ReceivedDate = DateTime.UtcNow;
+            SaveCommandRawSmsReceived.Execute(test2);
 
 
             RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(request);
