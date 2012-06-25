@@ -26,8 +26,8 @@ namespace Web.Controllers
         public ISaveOrUpdateCommand<MessageFromDrugShop> SaveCommandMessageFromDrugShop { get; set; }
         public ISaveOrUpdateCommand<MessageFromDispensary> SaveCommandMessageFromDispensary { get; set; }
 
-        private const string INVALIDNUMBERERRORMESSAGE = "Your phone is not registered. Please contact your administrator or resend from a registered phone. Thanks.";
-        private const string INVALIDFORMATERRORMESSAGE = "The format of your message is incorrect. Please check and retry. Thank you.";
+        private const string INVALIDNUMBERERRORMESSAGE = "Namba ya simu uliotumia haijasajiliwa na waongozi wa mtandao huu. Tafadhali wasiliana na utawala au tuma tena kwa kutumia namba ya simu iliyosajiliwa.Ahsante.";
+        private const string INVALIDFORMATERRORMESSAGE = "Muundo wa ujumbe wako si sahihi.Tafadhali angalia na utume tena.Ahsante.";
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
 
@@ -98,7 +98,7 @@ namespace Web.Controllers
                 }
                 else
                 {
-                    SmsRequestService.SendMessage(rawSmsReceived.ParseErrorMessage, rawSmsReceived);
+                    SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                 }
             }
             else
