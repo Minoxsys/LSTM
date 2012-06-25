@@ -7,6 +7,7 @@ using Persistence.Queries.Outposts;
 using Core.Persistence;
 using Web.Models.SmsRequest;
 using Web.Bootstrap;
+using System.Security.Cryptography;
 
 namespace Web.Services
 {
@@ -55,7 +56,7 @@ namespace Web.Services
         public bool SendMessageToDispensary(MessageFromDrugShop message, RawSmsReceived rawSms)
         {
             ResponseModel model = new ResponseModel();
-            model.Id = rawSms.SmsId;
+            model.Id = Get7Digits();
             model.Content = CreateMessageToBeSentToDispensary(message);
             model.DeferDate = "";
             model.Operator = "";
@@ -65,7 +66,7 @@ namespace Web.Services
             model.ServiceNo = rawSms.ServiceNumber;
             model.Valability = "3";
 
-            string request = CreateEmptyPostData(model);
+            string request = CreateDispensaryData(model);
 
             if (model.PhoneNumber != null)
             {
@@ -140,7 +141,7 @@ namespace Web.Services
             return response;
         }
 
-        private string CreateEmptyPostData(ResponseModel model)
+        private string CreateDispensaryData(ResponseModel model)
         {
             string bulkRequest = "<?xml version='1.0' encoding='UTF-8'?>";
             bulkRequest += "<bulk-request login='" + AppSettings.SmsGatewayUserName + "' password='" + AppSettings.SmsGatewayPassword + "' request-id='"+model.Id+"' delivery-notification-requested='true' version='1.0'>";
@@ -150,5 +151,15 @@ namespace Web.Services
 
             return bulkRequest;
         }
+
+        private string Get7Digits()
+        {
+            var bytes = new byte[4];
+            var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(bytes);
+            int random = BitConverter.ToInt32(bytes, 0) % 10000000;
+            return String.Format("{0:D7}", random);
+        }
+
     }
 }
