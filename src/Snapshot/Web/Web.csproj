@@ -151,12 +151,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\AdviceReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\DiagnosisReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\HealthFacilityReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\GoogleMapReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\PatientsReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\TreatmentReportController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\AdviceReport\AdviceIndexModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\AdviceReport\AdviceReportIndexOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\AdviceReport\AdviceReportModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\AdviceReport\PatientsModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\DiagnosisIndexModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\DiagnosisReportIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\DiagnosisReportModel.cs" />
@@ -2116,6 +2121,7 @@
     <Content Include="Areas\AnalysisManagement\Views\Shared\_AnalysisSideBar.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\DiagnosisReport\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\TreatmentReport\Overview.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\AdviceReport\Overview.cshtml" />
     <None Include="Assets\resources\clientsreports\estimari.xlsx" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />

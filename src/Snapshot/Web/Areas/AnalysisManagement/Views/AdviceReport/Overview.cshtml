@@ -1,0 +1,452 @@
+﻿@using Domain
+@using Microsoft.Web.Mvc;
+@using Web.Areas.AnalysisManagement;
+
+@section page_title{
+Analysis: Advice Report
+}
+
+@{
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_AnalysisSideBar");
+}
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+
+        var analysisBtnId = window.res.header.navigation.analysisAndReports;
+        var analysisBtn = Ext.getCmp(analysisBtnId);
+        analysisBtn.toggle(true);
+
+        var reportBtnId = window.res.content.maincontent.sidebar.advicereport;
+        var reportBtn = Ext.getCmp(reportBtnId);
+        reportBtn.toggle(true);
+    });
+
+</script>
+<script type="text/javascript">
+    var allowUserToClearValue = {
+        'load': function () {
+            //this.insert(0, {Id:'@Guid.Empty', Name:'All'});
+        }
+    };
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.countryComboboxId = 'Overview-Combobox-Country-Advice-Report';
+        window.feature.regionComboboxId = 'Overview-Combobox-Region-Advice-Report';
+        window.feature.districtComboboxId = 'Overview-Combobox-District-Advice-Report';
+        window.feature.StartDateId = 'Start-Date-Advice-Report';
+        window.feature.EndDateId = 'End-Date-Advice-Report';
+        window.feature.DivChartContainer = 'Chart-Advice-Report-Container-Id';
+
+        window.feature.reportStore = Ext.create('Ext.data.Store', {
+            fields: ['Advice', 'Outpost', 'Female', 'Male', 'NumberOfPatients'],
+            groupField: 'Advice',
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "AdviceReport", action = "GetAdviceReport" })',
+                reader: {
+                    type: 'json',
+                    root: 'Advice',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    startDate: '',
+                    endDate: ''
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Advice',
+                direction: 'ASC'
+            }],
+            listeners: {
+                'load': function (store, records, options) {
+                    // DrawChart();
+                }
+            }
+        });
+
+        window.feature.countryStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
+                reader: {
+                    type: 'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
+                reader: {
+                    type: 'json',
+                    root: 'regions',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.districtStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Districts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { regionId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        function ResetCountryDependencies() {
+            var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
+            regionCombobox.setValue(null);
+
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue(null);
+
+            window.feature.reportStore.proxy.extraParams.regionId = "";
+            window.feature.reportStore.proxy.extraParams.districtId = "";
+            window.feature.reportStore.load();
+        };
+
+        function ResetRegionDependencies() {
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue(null);
+
+            window.feature.reportStore.proxy.extraParams.districtId = "";
+            window.feature.reportStore.load();
+        };
+
+        window.feature.countryComnobox = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.countryComboboxId,
+            store: window.feature.countryStore,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Country',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'Country List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    ResetCountryDependencies();
+
+                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.regionStore.load();
+
+                    window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.reportStore.load();
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        ResetCountryDependencies();
+                    }
+                }
+            }
+        });
+        window.feature.regionCombobox = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.regionComboboxId,
+            store: window.feature.regionStore,
+            labelAlign: 'top',
+            fieldLabel: 'Selected Region',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'Region List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    ResetRegionDependencies();
+
+                    window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.districtStore.load();
+
+                    window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.reportStore.load();
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        ResetRegionDependencies();
+                    }
+                }
+            }
+        });
+
+        window.feature.districtCombobox = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.districtComboboxId,
+            store: window.feature.districtStore,
+            labelAlign: 'top',
+            fieldLabel: 'Selected District',
+            displayField: 'Name',
+            labelClsExtra: 'combo-label',
+            valueField: 'Id',
+            emptyText: 'District List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
+                    window.feature.reportStore.load();
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        window.feature.reportStore.proxy.extraParams.districtId = "";
+                        window.feature.reportStore.load();
+                    }
+                }
+            }
+        });
+
+        var showSummary = true;
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 0 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'hbox'
+            },
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    height: 200,
+                    items: [
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Advice Report'
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, window.feature.countryComnobox,
+                        window.feature.regionCombobox,
+                        window.feature.districtCombobox
+                    ]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
+                        xtype: 'datefield',
+                        fieldLabel: 'Start Date',
+                        format: 'd-M-Y',
+                        labelAlign: 'top',
+                        margin: '5 0 5 0',
+                        itemId: window.feature.StartDateId,
+                        listeners: {
+                            select: function (t, n, o) {
+                                var date = t.getValue();
+                                window.feature.reportStore.proxy.extraParams.startDate = date;
+                                window.feature.reportStore.load();
+
+                            },
+                            specialkey: function (field, e) {
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue(null);
+                                    window.feature.reportStore.proxy.extraParams.startDate = "";
+                                    window.feature.reportStore.load();
+
+                                }
+                            }
+                        }
+                    }, {
+                        xtype: 'datefield',
+                        fieldLabel: 'End Date',
+                        labelAlign: 'top',
+                        margin: '5 0 5 0',
+                        format: 'd-M-Y',
+                        itemId: window.feature.EndDateId,
+                        listeners: {
+                            select: function (t, n, o) {
+                                var date = t.getValue();
+                                window.feature.reportStore.proxy.extraParams.endDate = date;
+                                window.feature.reportStore.load();
+
+                            },
+                            specialkey: function (field, e) {
+                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                    field.setValue(null);
+                                    window.feature.reportStore.proxy.extraParams.endDate = "";
+                                    window.feature.reportStore.load();
+
+                                }
+                            }
+                        }
+                    }]
+                }]
+                }, {
+                    xtype: 'gridpanel',
+                    cls: 'white-border',
+                    store: window.feature.reportStore,
+                    loadMask: true,
+                    disableSelection: true,
+                    flex: 3,
+                    autoScroll: true,
+                    features: [{
+                        id: 'group',
+                        ftype: 'groupingsummary',
+                        enableGroupingMenu: false
+                    }],
+                    columns: [{
+                        header: "Advice / Health Facility",
+                        dataIndex: 'Outpost',
+                        flex: 3,
+                        menuDisabled: true,
+                        sortable: true
+                    }, {
+                        header: "Females",
+                        dataIndex: 'Female',
+                        flex: 1,
+                        menuDisabled: true,
+                        sortable: true,
+                        summaryType: 'sum',
+                        summaryRenderer: function (value, summaryData, dataIndex) {
+                            return value + ' females';
+                        },
+                        field: {
+                            xtype: 'numberfield'
+                        }
+                    }, {
+                        header: "Males",
+                        dataIndex: 'Male',
+                        flex: 1,
+                        menuDisabled: true,
+                        sortable: true,
+                        summaryType: 'sum',
+                        summaryRenderer: function (value, summaryData, dataIndex) {
+                            return value + ' males';
+                        },
+                        field: {
+                            xtype: 'numberfield'
+                        }
+                    }, {
+                        header: "Number Of Patients",
+                        dataIndex: 'NumberOfPatients',
+                        flex: 1,
+                        menuDisabled: true,
+                        sortable: true,
+                        summaryType: 'sum',
+                        summaryRenderer: function (value, summaryData, dataIndex) {
+                            return value + ' patients';
+                        },
+                        field: {
+                            xtype: 'numberfield'
+                        }
+                    }],
+                    bbar: Ext.create('Ext.PagingToolbar', {
+                        buttons: [{
+                            xtype: 'button',
+                            text: 'Export to Excel',
+                            handler: function () {
+
+                            }
+                        }]
+                    })
+                }]
+            }, {
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                padding: '0 0 0 20',
+                items: [{
+                    xtype: 'container',
+                    id: 'window.feature.DivChartContainer',
+                    flex: 2,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    autoScroll: true,
+                    items: []
+                }]
+            }]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.reportStore.load();
+    });
+</script>
