@@ -1,0 +1,143 @@
+﻿@using Web.Areas.AnalysisManagement.Controllers;
+@using Web.Areas.AnalysisManagement;
+
+<script type="text/javascript">
+    window.res.content.maincontent = {
+        id: 'MainContent',
+        sidebar: {
+            id: 'SideBar',
+            group: 'SideBarGroup',
+            petientsreport: 'Sidebar-AnalysisAdministration-Petients-Report-Button',
+            healthfacility: 'Sidebar-AnalysisAdministration-Health-Facility-Button',
+            googlemaps: 'Sidebar-AnalysisAdministration-Google-Maps-Button',
+            diagnoisreport: 'Sidebar-AnalysisAdministration-Diagnosis-Report-Button',
+            treatmentreport: 'Sidebar-AnalysisAdministration-Treatment-Report-Button',
+            advicereport: 'Sidebar-AnalysisAdministration-Advice-Report-Button'
+        }
+    };
+
+    window.res.link.petientsreport = '@(Url.RouteUrl<PatientsReportController>( x=>x.Overview() ,  AnalysisManagementAreaRegistration.DEFAULT_ROUTE ))';
+    window.res.link.healthfacility = '@(Url.RouteUrl<HealthFacilityReportController>( x=>x.Overview() ,  AnalysisManagementAreaRegistration.DEFAULT_ROUTE ))';
+    window.res.link.googlemaps = '@(Url.RouteUrl<GoogleMapReportController>( x=>x.Overview() ,  AnalysisManagementAreaRegistration.DEFAULT_ROUTE ))';
+
+
+    Ext.onReady(function () {
+
+        var contentRes = window.res.content;
+
+        var content = Ext.getCmp(contentRes.id);
+
+        content.add(
+            {
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                items: [
+                     {
+                         xtype: 'container',
+                         id: contentRes.maincontent.id,
+                         layout: {
+                             align: 'stretch',
+                             type: 'fit'
+                         },
+                         flex: 1
+                     },
+                    {
+                        xtype: 'container',
+                        id: 'SideBar',
+                        width: 260,
+                        layout: {
+                            align: 'stretch',
+                            type: 'vbox'
+                        },
+                        items: [
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.petientsreport,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                text: 'Patients Report',
+                                height: 30,
+                                margin: '45 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.petientsreport);
+                                }
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.healthfacility,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Health Facility Level',
+                                height: 30,
+                                margin: '0 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.healthfacility);
+                                },
+                                enableToggle: true
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.diagnoisreport,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Diagnosis Report',
+                                height: 30,
+                                margin: '0 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.diagnoisreport);
+                                },
+                                enableToggle: true
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.treatmentreport,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Treatment Report',
+                                height: 30,
+                                margin: '0 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.treatmentreport);
+                                },
+                                enableToggle: true
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.advicereport,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Advice Report',
+                                height: 30,
+                                margin: '0 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.advicereport);
+                                },
+                                enableToggle: true
+                            },
+                            {
+                                xtype: 'button',
+                                id: window.res.content.maincontent.sidebar.googlemaps,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                enableToggle: true,
+                                height: 30,
+                                margin: '0 50 0 0',
+                                text: 'Google Map Report',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.googlemaps);
+                                }
+                            }
+                        ]
+                    }
+
+                ]
+
+            }
+        );
+
+    });
+</script>

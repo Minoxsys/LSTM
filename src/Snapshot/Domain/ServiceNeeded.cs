@@ -24,5 +24,11 @@ namespace Domain
         {
             Messages.Add(message);
         }
+
+        public override string ToString()
+        {
+            return Code;
+        }
+
     }
 }
