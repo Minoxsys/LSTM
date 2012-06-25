@@ -84,7 +84,19 @@ namespace Web.Controllers
 
             RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(xml);
             if (rawSmsReceived == null)
+            {
+                RawSmsReceived test3 = new RawSmsReceived();
+                test3.SmsId = "1";
+                test3.Sender = "From xml";
+                test3.ServiceNumber = "152";
+                test3.Content = "body";
+                test3.Operator = Request.ContentType;
+                test3.Keyword = "From xml";
+                test3.OperatorId = xml;
+                test3.ReceivedDate = DateTime.UtcNow;
+                SaveCommandRawSmsReceived.Execute(test3);
                 return new EmptyResult();
+            }
             rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
             if (rawSmsReceived.OutpostId == Guid.Empty)
