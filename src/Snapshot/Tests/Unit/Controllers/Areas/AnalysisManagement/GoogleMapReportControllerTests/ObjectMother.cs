@@ -160,7 +160,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
                 {
                     OutpostId = dispensaryId,
                     OutpostType = 1,
-                    SentDate = DateTime.UtcNow
+                    SentDate = DateTime.UtcNow,
+                    MessageFromDrugShop = new MessageFromDrugShop { Gender = (i % 2 == 0) ? "F" : "M", BirthDate = DateTime.UtcNow.AddYears(-i * 5) }
                 });
             }
             return list.AsQueryable();
@@ -175,7 +176,9 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
                 list.Add(new MessageFromDrugShop
                 {
                     OutpostId = drugshopId,
-                    SentDate = DateTime.UtcNow
+                    SentDate = DateTime.UtcNow,
+                    Gender = (i%2 == 0)? "F" : "M",
+                    BirthDate = DateTime.UtcNow.AddYears(-i*5)
                 });
             }
             return list.AsQueryable();

@@ -9,7 +9,7 @@ Analysis: Product level information at district level
 
 @{
     Html.RenderPartial("_EmptySubNavigation");
-    Html.RenderPartial("_EmptySideBar");
+    Html.RenderPartial("_AnalysisSideBar");
     Html.RenderPartial("SelectPositionGoogleMapWindow");
 }
 
@@ -39,7 +39,7 @@ Analysis: Product level information at district level
         var googleMapPanel = Ext.create('Ext.feature.GoogleMapPanel', googleMapPanelConfig);
 
         window.feature.outpostStore = Ext.create('Ext.data.Store', {
-            fields: ['Name', 'Number', 'Type', 'Coordonates'],
+            fields: ['Name', 'Number', 'Type', 'Coordonates', 'FemaleYounger', 'FemaleOlder', 'MaleYounger', 'MaleOlder'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "GoogleMapReport", action = "GetOutpostMarkers" })',
@@ -53,7 +53,7 @@ Analysis: Product level information at district level
         });
 
         window.feature.districtStore = Ext.create('Ext.data.Store', {
-            fields: ['Name', 'Number', 'Type', 'Coordonates'],
+            fields: ['Name', 'Number', 'Type', 'Coordonates', 'FemaleYounger', 'FemaleOlder', 'MaleYounger', 'MaleOlder'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "GoogleMapReport", action = "GetDistrictMarkers" })',
@@ -67,7 +67,7 @@ Analysis: Product level information at district level
         });
 
         window.feature.regionStore = Ext.create('Ext.data.Store', {
-            fields: ['Name', 'Number', 'Type', 'Coordonates'],
+            fields: ['Name', 'Number', 'Type', 'Coordonates', 'FemaleYounger', 'FemaleOlder', 'MaleYounger', 'MaleOlder'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Areas.AnalysisManagement.AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "GoogleMapReport", action = "GetRegionMarkers" })',
@@ -236,7 +236,7 @@ Analysis: Product level information at district level
                     });
 
                     var infowindow = new google.maps.InfoWindow({
-                        content: "<h1>" + marker.title + "</h1><br/><p><h3>Female</h3></p><p>Younger than 20 years: 0</p><p>Older than 20 years: 1</p><br/><p><h3>Male</h3></p><p>Younger than 20 years: 0</p><p>Older than 20 years: 2</p>"
+                        content: "<h1>" + marker.title + "</h1><br/><p><h3>Female</h3></p><p>Younger than 20 years: " + item.get('FemaleYounger') + "</p><p>Older than 20 years: " + item.get('FemaleOlder') + "</p><br/><p><h3>Male</h3></p><p>Younger than 20 years: " + item.get('MaleYounger') + "</p><p>Older than 20 years: " + item.get('MaleOlder') + "</p>"
                     });
 
                     google.maps.event.addListener(marker, 'click', function () {

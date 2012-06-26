@@ -46,7 +46,12 @@ namespace Web.Areas.AnalysisManagement.Controllers
                                                   Name = outpost.Name,
                                                   Number = GetNumberOfPatientsFor(outpost).ToString(),
                                                   Type = SetType(outpost.OutpostType.Type),
-                                                  Coordonates = outpost.Latitude
+                                                  Coordonates = outpost.Latitude,
+                                                  FemaleYounger = GetNumberOfPatientsFor(outpost, "F", 0, 20).ToString(),
+                                                  FemaleOlder = GetNumberOfPatientsFor(outpost, "F", 1, 20).ToString(),
+                                                  MaleYounger = GetNumberOfPatientsFor(outpost, "M", 0, 20).ToString(),
+                                                  MaleOlder = GetNumberOfPatientsFor(outpost, "M", 1, 20).ToString(),
+
                                               }).ToArray();
 
             return Json(new MarkerIndexOutputModel
@@ -54,6 +59,35 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 Markers = outpostModelListProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private int GetNumberOfPatientsFor(Outpost outpost, string gender, int younger, int age)
+        {
+            if (outpost.OutpostType.Type == 0)
+            {
+                var query = QueryMessageFromDrugShops.Query().Where(it => it.OutpostId == outpost.Id);
+                if (!string.IsNullOrEmpty(gender))
+                    query = query.Where(it => it.Gender.ToUpper() == gender);
+                if (younger == 0)
+                    query = query.Where(it => it.BirthDate >= DateTime.UtcNow.AddYears(-age));
+                else
+                    query = query.Where(it => it.BirthDate < DateTime.UtcNow.AddYears(-age));
+                return query.Count();
+            }
+
+            if (outpost.OutpostType.Type == 1 || outpost.OutpostType.Type == 2)
+            {
+                var query = QueryMessageFromDispensarys.Query().Where(it => it.OutpostId == outpost.Id);
+                if (!string.IsNullOrEmpty(gender))
+                    query = query.Where(it => it.MessageFromDrugShop.Gender.ToUpper() == gender);
+                if (younger == 0)
+                    query = query.Where(it => it.MessageFromDrugShop.BirthDate >= DateTime.UtcNow.AddYears(-age));
+                else
+                    query = query.Where(it => it.MessageFromDrugShop.BirthDate < DateTime.UtcNow.AddYears(-age));
+                return query.Count();
+            }
+
+            return 0;
         }
 
         private string SetType(int type)
@@ -90,7 +124,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
                                                   Name = district.Name,
                                                   Number = GetNumberOfPatientsFor(district, null).ToString(),
                                                   Type = "drugshop",
-                                                  Coordonates = GetCenterCoordonates(district)
+                                                  Coordonates = GetCenterCoordonates(district),
+                                                  FemaleYounger = GetNumberOfPatientsFor(district, null, "F", 0, 20).ToString(),
+                                                  FemaleOlder = GetNumberOfPatientsFor(district, null, "F", 1, 20).ToString(),
+                                                  MaleYounger = GetNumberOfPatientsFor(district, null, "M", 0, 20).ToString(),
+                                                  MaleOlder = GetNumberOfPatientsFor(district, null, "M", 1, 20).ToString()
                                               }).ToArray();
 
             return Json(new MarkerIndexOutputModel
@@ -98,6 +136,22 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 Markers = districtModelListProjection,
                 TotalItems = districtModelListProjection.Count()
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        private object GetNumberOfPatientsFor(District district, Region region, string gender, int younger, int age)
+        {
+            int sum = 0;
+            var outpostDataQuery = QueryOutposts.Query().Where(it => it.Client == _client);
+
+            if (district != null)
+                outpostDataQuery = outpostDataQuery.Where(it => it.District.Id == district.Id);
+            if (region != null)
+                outpostDataQuery = outpostDataQuery.Where(it => it.Region.Id == region.Id);
+
+            foreach (var outpost in outpostDataQuery)
+                sum += GetNumberOfPatientsFor(outpost, gender, younger, age);
+
+            return sum;
         }
 
         private string GetCenterCoordonates(District district)
@@ -148,7 +202,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
                                                    Name = region.Name,
                                                    Number = GetNumberOfPatientsFor(null, region).ToString(),
                                                    Type = "drugshop",
-                                                   Coordonates = GetCenterCoordonates(region)
+                                                   Coordonates = GetCenterCoordonates(region),
+                                                   FemaleYounger = GetNumberOfPatientsFor(null, region, "F", 0, 20).ToString(),
+                                                   FemaleOlder = GetNumberOfPatientsFor(null, region, "F", 1, 20).ToString(),
+                                                   MaleYounger = GetNumberOfPatientsFor(null, region, "M", 0, 20).ToString(),
+                                                   MaleOlder = GetNumberOfPatientsFor(null, region, "M", 1, 20).ToString()
                                                }).ToArray();
 
             return Json(new MarkerIndexOutputModel
