@@ -46,29 +46,16 @@ namespace Web.Controllers
         [HttpPost]
         public ActionResult ReceiveSms()
         {
-           
+            SmsRequestService.SendResponseMessage();
+
             var stream = Request.InputStream;
             byte[] buffer = new byte[stream.Length];
             stream.Read(buffer, 0, buffer.Length);
             string xml = Encoding.UTF8.GetString(buffer);
 
-
-            RawSmsReceived test2 = new RawSmsReceived();
-            test2.SmsId = "1";
-            test2.Sender = "After";
-            test2.ServiceNumber = "152";
-            test2.Content = "body";
-            test2.Operator = Request.ContentType;
-            test2.Keyword = "After";
-            test2.OperatorId = xml;
-            test2.ReceivedDate = DateTime.UtcNow;
-            SaveCommandRawSmsReceived.Execute(test2);
-
-
             RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(xml);
             if (rawSmsReceived == null)
             {
-                SmsRequestService.SendResponseMessage(rawSmsReceived);
                 return new EmptyResult();
             }
             rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
@@ -93,7 +80,6 @@ namespace Web.Controllers
                     MessageFromDrugShop message = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
                     SaveCommandMessageFromDrugShop.Execute(message);
 
-                    SmsRequestService.SendResponseMessage(rawSmsReceived);
                     SmsRequestService.SendMessageToDispensary(message, rawSmsReceived);
                 }
                 else

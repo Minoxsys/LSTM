@@ -9,6 +9,6 @@ namespace Web.Services
         bool SendMessage(string message, RawSmsReceived rawSms);
         bool SendMessageToDispensary(MessageFromDrugShop message, RawSmsReceived rawSms);
         string CreateMessageToBeSentToDispensary(MessageFromDrugShop messageFromDrugShop);
-        bool SendResponseMessage(RawSmsReceived rawSmsReceived);
+        bool SendResponseMessage();
     }
 }

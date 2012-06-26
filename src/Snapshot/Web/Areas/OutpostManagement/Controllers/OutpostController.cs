@@ -104,7 +104,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 			return Json(new JsonActionResponse
 			{
 				Status = "Success",
-				Message = string.Format("Successfully removed outpost {0}", outpost.Name)
+				Message = string.Format("Successfully removed health facility {0}", outpost.Name)
 			});
 		}
 
@@ -268,7 +268,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already an outpost with this name: {0} for this district! Please insert a different name!", model.Name)
+                        Message = string.Format("There is already an health facility with this name: {0} for this district! Please insert a different name!", model.Name)
                     });
 
             }
@@ -280,7 +280,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already an outpost with this coordinates: {0}. Please choose different coordinates!", model.Coordinates)
+                        Message = string.Format("There is already an health facility with this coordinates: {0}. Please choose different coordinates!", model.Coordinates)
                     });
  
             }
@@ -292,7 +292,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 			return Json(new OutpostCreateResponse
 			{
-				Message = string.Format("Created successfully outpost {0}", outpost.Name),
+                Message = string.Format("Created successfully health facility {0}", outpost.Name),
 				OutpostId= outpost.Id,
 				Status = "Success"
 			});
@@ -311,7 +311,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already an outpost with this name: {0} for this district! Please insert a different name!", model.Name)
+                        Message = string.Format("There is already an health facility with this name: {0} for this district! Please insert a different name!", model.Name)
                     });
 
             }
@@ -323,7 +323,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already an outpost with this coordinates: {0}. Please choose different coordinates!", model.Coordinates)
+                        Message = string.Format("There is already an health facility with this coordinates: {0}. Please choose different coordinates!", model.Coordinates)
                     });
 
             }
@@ -334,7 +334,7 @@ namespace Web.Areas.OutpostManagement.Controllers
 
 			return Json(new JsonActionResponse
 			{
-				Message = string.Format("Saved successfully outpost {0}", outpost.Name),
+                Message = string.Format("Saved successfully health facility {0}", outpost.Name),
 				Status = "Success"
 			});
 		}

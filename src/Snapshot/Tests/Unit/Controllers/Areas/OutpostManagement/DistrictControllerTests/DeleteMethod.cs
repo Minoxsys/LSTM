@@ -75,7 +75,7 @@ namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
             var response = result.Data as JsonActionResponse;
 
             Assert.AreEqual(response.Status, "Error");
-            Assert.AreEqual(response.Message, "The district Cluj has outposts associated, so it can not be deleted!"); 
+            Assert.AreEqual(response.Message, "The district Cluj has health facilities associated, so it can not be deleted!"); 
  
         }
     }

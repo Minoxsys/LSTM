@@ -68,11 +68,11 @@ Analysis
                                     type: 'vbox'
                                 },
                                 items: [{ xtype: 'box',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Reports at Health Facility Level' },
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patients Report' },
                                     margin: '70 30 10 80'
                                    }, { xtype: 'label',
                                     margin: '0 0 10 80',
-                                    text: 'This report will show you the number of patients received at different health facitities'
+                                    text: 'In this report the user can see all information on patients.'
                                 }]
                             }]
                         }, { xtype: 'container',
@@ -90,10 +90,10 @@ Analysis
                                 },
                                 items: [{ xtype: 'box',
                                     margin: '70 30 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patients Report' }
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Health Facility Level' }
                                 }, { xtype: 'label',
                                     margin: '0 0 10 80',
-                                    text: 'This report will show you the latest data of products level at the district level'
+                                    text: 'This report will show the number of patients received at Health Facilities with gender stratification.'
                                 }]
                             }]
                         }]
@@ -117,10 +117,10 @@ Analysis
                                 },
                                 items: [{ xtype: 'box',
                                     margin: '70 0 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Reports at health center level' }
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<DiagnosisReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Diagnosis Report' }
                                  }, { xtype: 'label',
                                     margin: '0 0 10 80',
-                                    text: 'Report description'
+                                    text: 'This report will show the number of patients who received a specific diagnosis at different health facilities.'
                                 }]
                             }]
                         }, { xtype: 'container',
@@ -137,10 +137,10 @@ Analysis
                                 },
                                 items: [{ xtype: 'box',
                                     margin: '70 0 10 90',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Reports at district level' }
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Treatments Report' }
                                     }, { xtype: 'label',
                                     margin: '0 0 10 90',
-                                    text: 'Report description'
+                                    text: 'This report will show the number of patients who received a specific treatment at different health facilities.'
                                 }]
                             }]
                         }]
@@ -164,10 +164,10 @@ Analysis
                                 },
                                 items: [{ xtype: 'box',
                                     margin: '70 0 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '', html: 'Reports at region level' }
+                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Advice Report' }
                                  }, { xtype: 'label',
                                     margin: '0 0 10 80',
-                                    text: 'Report description'
+                                    text: 'This report will show the number of patients who received a specific advice at different health facilities.'
                                 }]
                             }]
                         }, { xtype: 'container',
@@ -187,7 +187,7 @@ Analysis
                                     autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(), AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Google Map Report' }
                                     }, { xtype: 'label',
                                     margin: '0 0 10 90',
-                                    text: 'Report description'
+                                    text: 'This report will show the number of patients referred and treated at different health facilities.'
                                 }]
                             }]
                         }]

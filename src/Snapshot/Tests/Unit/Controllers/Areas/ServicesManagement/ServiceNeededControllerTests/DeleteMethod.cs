@@ -32,7 +32,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.ServiceNeededControlle
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Error"));
-            Assert.That(response.Message, Is.EqualTo("You must supply a serviceNeededId in order to remove the service needed."));
+            Assert.That(response.Message, Is.EqualTo("You must supply a conditionId in order to remove the condition."));
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.ServiceNeededControlle
             Assert.IsNotNull(jsonResult);
             var response = jsonResult.Data as JsonActionResponse;
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Service needed with code "+objectMother.serviceNeeded.Code+" was removed."));
+            Assert.That(response.Message, Is.EqualTo("Condition with code "+objectMother.serviceNeeded.Code+" was removed."));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Web.Services
             WebRequest request = WebRequest.Create(url);
             request.Method = "POST";
             request.ContentLength = byteArray.Length;
-            request.ContentType = "text/xml";
+            request.ContentType = "text/xml; charset=UTF-8";
 
             Stream dataStream = request.GetRequestStream();
             dataStream.Write(byteArray, 0, byteArray.Length);

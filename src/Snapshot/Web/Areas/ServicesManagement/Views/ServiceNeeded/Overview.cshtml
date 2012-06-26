@@ -135,17 +135,17 @@
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'ServiceNeeded'
+                        text: 'Condition'
                     }, {
                         xtype: 'button',
                         margin: '0 0 0 20',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
                         //disabled: @(ViewBag.HasNoRightsToAdd),
-                        text: 'Add New Service Needed',
+                        text: 'Add New Condition',
                         handler: function () {
                             var winAdd = new window.feature.modal({
-                                title: 'Add New Service Needed',
+                                title: 'Add New Condition',
                                 buttons: [{
                                     text: 'Cancel',
                                     margin: '10 10 20 0',
@@ -331,7 +331,7 @@
                             msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
                             msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
                             msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
-                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete service needed {0} ?', rec.get('Code')), function (btn) {
+                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete condition {0} ?', rec.get('Code')), function (btn) {
                                 if (btn == 'yes') {
                                     var values = { id: rec.get('Id') };
                                     var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ServiceNeeded", action = "Delete" })';

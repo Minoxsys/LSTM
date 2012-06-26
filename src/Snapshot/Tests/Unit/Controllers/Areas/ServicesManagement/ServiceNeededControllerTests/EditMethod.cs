@@ -33,7 +33,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.ServiceNeededControlle
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Error"));
-            Assert.That(response.Message, Is.EqualTo("You must supply a serviceNeededId in order to edit the service needed."));
+            Assert.That(response.Message, Is.EqualTo("You must supply a conditionId in order to edit the condition."));
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace Tests.Unit.Controllers.Areas.ServicesManagement.ServiceNeededControlle
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Service needed " + serviceNeededModel .Code+ " has been saved."));
+            Assert.That(response.Message, Is.EqualTo("Condition " + serviceNeededModel .Code+ " has been saved."));
         }
     }
 }

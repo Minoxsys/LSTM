@@ -45,7 +45,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                    new JsonActionResponse
                    {
                        Status = "Error",
-                       Message = "The service needed has not been saved!"
+                       Message = "The condition has not been saved!"
                    });
             }
 
@@ -57,7 +57,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already a service needed with code {0} and keyword {1}", serviceNeededInputModel.Code, serviceNeededInputModel.Keyword)
+                        Message = string.Format("There is already a condition with code {0} and keyword {1}", serviceNeededInputModel.Code, serviceNeededInputModel.Keyword)
                     });
 
             }
@@ -75,7 +75,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                {
                    Status = "Success",
                    CloseModal = true,
-                   Message = String.Format("Service needed {0} has been saved.", serviceNeeded.Code)
+                   Message = String.Format("Condition {0} has been saved.", serviceNeeded.Code)
                });
         }
 
@@ -91,7 +91,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                    {
                        Status = "Error",
                        CloseModal = true,
-                       Message = "You must supply a serviceNeededId in order to edit the service needed."
+                       Message = "You must supply a conditionId in order to edit the condition."
                    });
             }
 
@@ -102,7 +102,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                    {
                        Status = "Error",
                        CloseModal = true,
-                       Message = "The service needed has not been saved!"
+                       Message = "The condition has not been saved!"
                    });
             }
 
@@ -118,7 +118,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already a service needed with code {0} and keyword {1}", serviceNeededInputModel.Code, serviceNeededInputModel.Keyword)
+                        Message = string.Format("There is already a condition with code {0} and keyword {1}", serviceNeededInputModel.Code, serviceNeededInputModel.Keyword)
                     });
 
             }
@@ -136,7 +136,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                {
                    Status = "Success",
                    CloseModal = true,
-                   Message = String.Format("Service needed {0} has been saved.", serviceNeeded.Code)
+                   Message = String.Format("Condition {0} has been saved.", serviceNeeded.Code)
                });
         }
 
@@ -150,7 +150,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                 return Json(new JsonActionResponse
                 {
                     Status = "Error",
-                    Message = "You must supply a serviceNeededId in order to remove the service needed."
+                    Message = "You must supply a conditionId in order to remove the condition."
                 });
             }
 
@@ -164,7 +164,7 @@ namespace Web.Areas.ServicesManagement.Controllers
                 new JsonActionResponse
                 {
                     Status = "Success",
-                    Message = String.Format("Service needed with code {0} was removed.", serviceNeeded.Code)
+                    Message = String.Format("Condition with code {0} was removed.", serviceNeeded.Code)
                 });
         }
 

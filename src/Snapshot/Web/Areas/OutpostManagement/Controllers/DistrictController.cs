@@ -370,7 +370,7 @@ namespace Web.Areas.OutpostManagement.Controllers
                 {
                     return Json(new JsonActionResponse 
                     {   Status = "Error",
-                        Message = string.Format("The district {0} has outposts associated, so it can not be deleted!", district.Name) 
+                        Message = string.Format("The district {0} has health facilities associated, so it can not be deleted!", district.Name) 
                     }, JsonRequestBehavior.AllowGet);
                 }
 

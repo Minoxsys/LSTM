@@ -36,7 +36,7 @@ namespace Web.Services
             model.PhoneNumber = response.Sender;
             model.Priority = "1";
             model.RefId = response.SmsId;
-            model.ServiceNo = response.ServiceNumber;
+            model.ServiceNo = AppSettings.SmsGatewayShortcode;
             model.Valability = "3";
 
             string request = CreatePostData(model);
@@ -62,8 +62,7 @@ namespace Web.Services
             model.Operator = "";
             model.PhoneNumber = GetWarehousePhoneNumber(message.OutpostId);
             model.Priority = "1";
-            model.RefId = rawSms.SmsId;
-            model.ServiceNo = rawSms.ServiceNumber;
+            model.ServiceNo = AppSettings.SmsGatewayShortcode;
             model.Valability = "3";
 
             string request = CreateDispensaryData(model);
@@ -112,17 +111,17 @@ namespace Web.Services
 
         private string CreatePostData(ResponseModel model)
         {
-            string response = "<?xml version='1.0' encoding='UTF-8'?><sms-response login='" + AppSettings.SmsGatewayUserName + "' password='" + AppSettings.SmsGatewayPassword + "' delivery-notification-requested='true' version='1.0'> ";
-            response += "<message id='" + model.Id + "' ref-id='" + model.RefId + "' msisdn='" + model.PhoneNumber + "' service-number='" + model.ServiceNo + "' operator='" + model.Operator + "' ";
-            response += "validity-period='" + model.Valability + "' priority='" + model.Priority + "'>";
-            response += "<content type='text/plain'>" + model.Content + "</content></message></sms-response>";
+            string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response login=\"" + AppSettings.SmsGatewayUserName + "\" password=\"" + AppSettings.SmsGatewayPassword + "\" delivery-notification-requested=\"true\" version=\"1.0\"> ";
+            response += "<message id=\"" + model.Id + "\" ref-id=\"" + model.RefId + "\" msisdn=\"" + model.PhoneNumber + "\" service-number=\"" + model.ServiceNo + "\" operator=\"" + model.Operator + "\" ";
+            response += "validity-period=\"" + model.Valability + "\" priority=\"" + model.Priority + "\">";
+            response += "<content type=\"text/plain\">" + model.Content + "</content></message></sms-response>";
 
             return response;
         }
 
-        public bool SendResponseMessage(RawSmsReceived rawSmsReceived)
+        public bool SendResponseMessage()
         {
-            string request = CreateEmptyPostData(rawSmsReceived);
+            string request = CreateEmptyPostData();
 
             try
             {
@@ -135,18 +134,18 @@ namespace Web.Services
             }
         }
 
-        private string CreateEmptyPostData(RawSmsReceived rawSmsReceived)
+        private string CreateEmptyPostData()
         {
-            string response = "<?xml version='1.0' encoding='UTF-8'?><sms-response login='" + AppSettings.SmsGatewayUserName + "' password='" + AppSettings.SmsGatewayPassword + "' version='1.0'> ";
+            string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response version=\"1.0\">";
             return response;
         }
 
         private string CreateDispensaryData(ResponseModel model)
         {
-            string bulkRequest = "<?xml version='1.0' encoding='UTF-8'?>";
-            bulkRequest += "<bulk-request login='" + AppSettings.SmsGatewayUserName + "' password='" + AppSettings.SmsGatewayPassword + "' request-id='"+model.Id+"' delivery-notification-requested='true' version='1.0'>";
-            bulkRequest += "<message id='1' msisdn='"+model.PhoneNumber+"' service-number='" + AppSettings.SmsGatewayShortcode + "' validity-period='"+model.Valability+"' priority='"+model.Priority+"'> ";
-            bulkRequest += "<content type='text/plain'>"+model.Content+"</content>";
+            string bulkRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+            bulkRequest += "<bulk-request login=\"" + AppSettings.SmsGatewayUserName + "\" password=\"" + AppSettings.SmsGatewayPassword + "\" request-id=\""+model.Id+"\" delivery-notification-requested=\"true\" version=\"1.0\">";
+            bulkRequest += "<message id=\"1\" msisdn=\""+model.PhoneNumber+"\" service-number=\"" + AppSettings.SmsGatewayShortcode + "\" validity-period=\""+model.Valability+"\" priority=\""+model.Priority+"\"> ";
+            bulkRequest += "<content type=\"text/plain\">"+model.Content+"</content>";
             bulkRequest += "</message></bulk-request>";
 
             return bulkRequest;
