@@ -87,7 +87,7 @@ namespace Web.Services
                 {
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
-                        var existServiceNeeded = queryServiceNeeded.Query().Where(it => it.Code == parsedLine[i].Trim()).Any();
+                        var existServiceNeeded = queryServiceNeeded.Query().Where(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper()).Any();
                         if (!existServiceNeeded)
                         {
                             rawSmsReceived.ParseSucceeded = false;
@@ -119,7 +119,7 @@ namespace Web.Services
                 if (parsedLine[0].ToUpper().Contains("TEST"))
                     index = 1;
                 string IdCode = parsedLine[index].Substring(0, 8);
-                if (!queryMessageFromDrugShop.Query().Where(it => it.IDCode == IdCode).Any())
+                if (!queryMessageFromDrugShop.Query().Where(it => it.IDCode.ToUpper() == IdCode.ToUpper()).Any())
                 {
                     rawSmsReceived.ParseSucceeded = false;
                     rawSmsReceived.ParseErrorMessage = "ID code " + IdCode + " is incorect. Please check and retry. Thank you.";
@@ -130,9 +130,9 @@ namespace Web.Services
                 {
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
-                        var existDiagnosis = queryDiagnosis.Query().Where(it => it.Code == parsedLine[i]).Any();
-                        var existTreatment = queryTreatment.Query().Where(it => it.Code == parsedLine[i]).Any();
-                        var existAdvice = queryAdvice.Query().Where(it => it.Code == parsedLine[i]).Any();
+                        var existDiagnosis = queryDiagnosis.Query().Where(it => it.Code.ToUpper() == parsedLine[i].ToUpper()).Any();
+                        var existTreatment = queryTreatment.Query().Where(it => it.Code.ToUpper() == parsedLine[i].ToUpper()).Any();
+                        var existAdvice = queryAdvice.Query().Where(it => it.Code.ToUpper() == parsedLine[i].ToUpper()).Any();
 
                         if (!existDiagnosis && !existTreatment && !existAdvice)
                         {
