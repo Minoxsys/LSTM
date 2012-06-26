@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Core.Persistence;
 using Domain;
 using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Security;
 
 namespace Web.Areas.MessagesManagement.Controllers
 {
@@ -15,12 +16,9 @@ namespace Web.Areas.MessagesManagement.Controllers
         public IQueryService<Outpost> QueryOutpost { get; set; }
 
         [HttpGet]
-        //[Requires(Permissions = "Diagnosis.View")]
+        [Requires(Permissions = "Messages.View")]
         public ActionResult Overview()
         {
-            //ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(REGION_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
-            //ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(REGION_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
-
             return View("Overview");
         }
 

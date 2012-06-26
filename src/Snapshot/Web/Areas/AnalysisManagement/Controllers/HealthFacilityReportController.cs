@@ -14,6 +14,7 @@ using System.IO;
 using System.Web.UI;
 using System.Net;
 using System.Web.UI.WebControls;
+using Web.Security;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -28,6 +29,8 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private Client _client;
         private User _user;
 
+        [HttpGet]
+        [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
         {
             return View();

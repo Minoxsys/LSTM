@@ -75,27 +75,23 @@
         window.feature.outpostEditId = "Outpost.Edit";
         window.feature.outpostDeleteId = "Outpost.Delete";
 
-        window.feature.productGroupViewId = "ProductGroup.View";
-        window.feature.productGroupEditId = "ProductGroup.Edit";
-        window.feature.productGroupDeleteId = "ProductGroup.Delete";
+        window.feature.productGroupViewId = "ServiceNeeded.View";
+        window.feature.productGroupEditId = "ServiceNeeded.Edit";
+        window.feature.productGroupDeleteId = "ServiceNeeded.Delete";
 
-        window.feature.productViewId = "Product.View";
-        window.feature.productEditId = "Product.Edit";
-        window.feature.productDeleteId = "Product.Delete";
+        window.feature.productViewId = "Diagnosis.View";
+        window.feature.productEditId = "Diagnosis.Edit";
+        window.feature.productDeleteId = "Diagnosis.Delete";
 
-        window.feature.campaignViewId = "Campaign.View";
-        window.feature.campaignEditId = "Campaign.Edit";
-        window.feature.campaignDuplicateId = "Campaign.Duplicate";
+        window.feature.campaignViewId = "Treatment.View";
+        window.feature.campaignEditId = "Treatment.Edit";
+        window.feature.campaignDuplicateId = "Treatment.Delete";
 
-        window.feature.automaticScheduleViewId = "AutomaticSchedule.View";
-        window.feature.automaticScheduleEditId = "AutomaticSchedule.Edit";
-        window.feature.automaticScheduleDeleteId = "AutomaticSchedule.Delete";
+        window.feature.automaticScheduleViewId = "Advice.View";
+        window.feature.automaticScheduleEditId = "Advice.Edit";
+        window.feature.automaticScheduleDeleteId = "Advice.Delete";
 
-        window.feature.productLevelRequestViewId = "ProductLevelRequest.View";
-        window.feature.productLevelRequestEditId = "ProductLevelRequest.Edit";
-        window.feature.productLevelRequestStopId = "ProductLevelRequest.Stop";
-
-        window.feature.existingRequestViewId = "ExistingRequest.View";
+        window.feature.productLevelRequestViewId = "Messages.View";
 
         window.feature.clientViewId = "Client.View";
         window.feature.clientEditId = "Client.Edit";
@@ -109,13 +105,6 @@
         window.feature.roleEditId = "Role.Edit";
         window.feature.roleDeleteId = "Role.Delete";
 
-        window.feature.currentOutpostStockLevelViewId = "CurrentOutpostStockLevel.View";
-        window.feature.currentOutpostStockLevelEditId = "CurrentOutpostStockLevel.Edit";
-
-        window.feature.historicalOutpostStockLevelViewId = "HistoricalOutpostStockLevel.View";
-        window.feature.historicalOutpostStockLevelEditId = "HistoricalOutpostStockLevel.Edit";
-
-        window.feature.alertViewId = "Alert.View";
         window.feature.reportViewId = "Report.View";
 
         window.feature.checkBoxControls = [];
@@ -128,14 +117,10 @@
             window.feature.productViewId, window.feature.productEditId, window.feature.productDeleteId,
             window.feature.campaignViewId, window.feature.campaignEditId, window.feature.campaignDuplicateId,
             window.feature.automaticScheduleViewId, window.feature.automaticScheduleEditId, window.feature.automaticScheduleDeleteId,
-            window.feature.productLevelRequestViewId, window.feature.productLevelRequestEditId, window.feature.productLevelRequestStopId,
             window.feature.clientViewId, window.feature.clientEditId, window.feature.clientDeleteId,
             window.feature.userViewId, window.feature.userEditId, window.feature.userDeleteId,
             window.feature.roleViewId, window.feature.roleEditId, window.feature.roleDeleteId,
-            window.feature.currentOutpostStockLevelViewId, window.feature.currentOutpostStockLevelEditId,
-            window.feature.historicalOutpostStockLevelViewId, window.feature.historicalOutpostStockLevelEditId,
-            window.feature.existingRequestViewId,
-            window.feature.alertViewId,
+            window.feature.productLevelRequestViewId,
             window.feature.reportViewId
         ];
 
@@ -227,26 +212,22 @@
                         { xtype: 'checkbox', id: window.feature.outpostViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.outpostEditId, padding: window.feature.editPadding },
                         { xtype: 'checkbox', id: window.feature.outpostDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Product Group' },
+                        { xtype: 'label', text: 'Condition' },
                         { xtype: 'checkbox', id: window.feature.productGroupViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.productGroupEditId, padding: window.feature.editPadding },
                         { xtype: 'checkbox', id: window.feature.productGroupDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Product' },
+                        { xtype: 'label', text: 'Diagnosis' },
                         { xtype: 'checkbox', id: window.feature.productViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.productEditId, padding: window.feature.editPadding },
                         { xtype: 'checkbox', id: window.feature.productDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Campaign' },
+                        { xtype: 'label', text: 'Treatment' },
                         { xtype: 'checkbox', id: window.feature.campaignViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.campaignEditId, padding: window.feature.editPadding },
                         { xtype: 'checkbox', id: window.feature.campaignDuplicateId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Automatic Schedules' },
+                        { xtype: 'label', text: 'Advice' },
                         { xtype: 'checkbox', id: window.feature.automaticScheduleViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.automaticScheduleEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.automaticScheduleDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Product Level Request' },
-                        { xtype: 'checkbox', id: window.feature.productLevelRequestViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.productLevelRequestEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.productLevelRequestStopId, padding: window.feature.deletePadding },                           
+                        { xtype: 'checkbox', id: window.feature.automaticScheduleDeleteId, padding: window.feature.deletePadding },                   
                         { xtype: 'label', text: 'Clients' },
                         { xtype: 'checkbox', id: window.feature.clientViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.clientEditId, padding: window.feature.editPadding },
@@ -259,23 +240,11 @@
                         { xtype: 'checkbox', id: window.feature.roleViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.roleEditId, padding: window.feature.editPadding },
                         { xtype: 'checkbox', id: window.feature.roleDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Current Outpost Stock Level' },
-                        { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.currentOutpostStockLevelEditId, padding: window.feature.editPadding },
-                        { xtype: 'container'},
-                        { xtype: 'label', text: 'Historical Outpost Stock Level' },
-                        { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.historicalOutpostStockLevelEditId, padding: window.feature.editPadding },
-                        { xtype: 'container' },
-                        { xtype: 'label', text: 'Existing Request' },
-                        { xtype: 'checkbox', id: window.feature.existingRequestViewId, padding: window.feature.viewPadding },
+                        { xtype: 'label', text: 'Messages' },
+                        { xtype: 'checkbox', id: window.feature.productLevelRequestViewId, padding: window.feature.viewPadding },
                         { xtype: 'container' },
                         { xtype: 'container' },
-                        { xtype: 'label', text: 'Alert' },
-                        { xtype: 'checkbox', id: window.feature.alertViewId, padding: window.feature.viewPadding },
-                        { xtype: 'container' },
-                        { xtype: 'container' },
-                        { xtype: 'label', text: 'Report' },
+                        { xtype: 'label', text: 'Reports' },
                         { xtype: 'checkbox', id: window.feature.reportViewId, padding: window.feature.viewPadding },
                         { xtype: 'container' },
                         { xtype: 'container' }

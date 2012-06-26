@@ -7,6 +7,7 @@ using Core.Persistence;
 using Domain;
 using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.TreatmentReport;
+using Web.Security;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -21,7 +22,8 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private Client _client;
         private User _user;
 
-
+        [HttpGet]
+        [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
         {
             return View();

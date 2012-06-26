@@ -3,7 +3,7 @@
 @using Microsoft.Web.Mvc;
 
 @section page_title{
-    Service Needed Item: Overview
+    Condition Item: Overview
 }
 @{
     Html.RenderPartial("_SubNavigation");
@@ -141,7 +141,7 @@
                         margin: '0 0 0 20',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
-                        //disabled: @(ViewBag.HasNoRightsToAdd),
+                        disabled: @(ViewBag.HasNoRightsToAdd),
                         text: 'Add New Condition',
                         handler: function () {
                             var winAdd = new window.feature.modal({
@@ -258,6 +258,14 @@
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                         action: 'Edit',
                         handler: function (grid, rowIndex, colIndex) {
+                            if(@(ViewBag.HasNoRightsToAdd) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+
                             var rec = grid.getStore().getAt(rowIndex);
 
                             var winEdit = new window.feature.modal({
@@ -317,39 +325,48 @@
                             winEdit.down('#' + window.feature.formServiceNeededDescriptionId).setValue(rec.get('Description'));
 
                             winEdit.show();
+                            }
                         }
                     }, {
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                         action: 'Delete',
                         handler: function (grid, rowIndex, colIndex) {
-                            var rec = grid.getStore().getAt(rowIndex);
-
-                            var msgConfirm = Ext.Msg;
-                            msgConfirm.ui = 'snapshot-popup-window';
-                            msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
-                            msgConfirm.msgButtons['no'].margin = '10 10 20 0';
-                            msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
-                            msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
-                            msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
-                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete condition {0} ?', rec.get('Code')), function (btn) {
-                                if (btn == 'yes') {
-                                    var values = { id: rec.get('Id') };
-                                    var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ServiceNeeded", action = "Delete" })';
-                                    var action = $.post(postToUrl, values);
-
-                                    action.success(function (serverResponse) {
-                                        if (serverResponse.Status == "Error") {
-                                            var msgAlert = Ext.Msg;
+                            if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
                                             msgAlert.ui = 'snapshot-popup-window';
                                             msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0',
-                                            msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                                        }
-                                        window.feature.serviceNeededStore.loadPage(1);
-                                    });
-                                }
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+                                var rec = grid.getStore().getAt(rowIndex);
 
-                            });
+                                var msgConfirm = Ext.Msg;
+                                msgConfirm.ui = 'snapshot-popup-window';
+                                msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete condition {0} ?', rec.get('Code')), function (btn) {
+                                    if (btn == 'yes') {
+                                        var values = { id: rec.get('Id') };
+                                        var postToUrl = '@Url.RouteUrl(ServicesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ServiceNeeded", action = "Delete" })';
+                                        var action = $.post(postToUrl, values);
+
+                                        action.success(function (serverResponse) {
+                                            if (serverResponse.Status == "Error") {
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                            }
+                                            window.feature.serviceNeededStore.loadPage(1);
+                                        });
+                                    }
+
+                                });
+                            }
                         }
                     }]
                 }],

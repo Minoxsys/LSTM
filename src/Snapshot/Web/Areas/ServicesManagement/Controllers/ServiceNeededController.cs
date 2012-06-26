@@ -9,6 +9,8 @@ using Core.Domain;
 using Web.Areas.ServicesManagement.Models.ServiceNeeded;
 using AutoMapper;
 using Web.Models.Shared;
+using Core.Security;
+using Web.Security;
 
 namespace Web.Areas.ServicesManagement.Controllers
 {
@@ -24,12 +26,16 @@ namespace Web.Areas.ServicesManagement.Controllers
         private Client _client;
         private User _user;
 
+        public IPermissionsService PermissionService { get; set; }
+        private string ADD_PERMISSION = "ServiceNeeded.Edit";
+        private string DELETE_PERMISSION = "ServiceNeeded.Delete";
+
         [HttpGet]
-        //[Requires(Permissions = "Diagnosis.View")]
+        [Requires(Permissions = "ServiceNeeded.View")]
         public ActionResult Overview()
         {
-            //ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(REGION_ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
-            //ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(REGION_DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+            ViewBag.HasNoRightsToDelete = (PermissionService.HasPermissionAssigned(DELETE_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
 
             return View("Overview");
         }
