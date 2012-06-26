@@ -70,7 +70,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private PatientsModel GetNumberOfPatients(Outpost outpost, string startDate, string endDate, Advice advice)
         {
-            var dispensaryQuery = QueryMessageFromDispensary.Query().Where(it => it.OutpostId == outpost.Id && it.Advices.Contains(advice));
+            var dispensaryQuery = QueryMessageFromDispensary.Query().Where(it => it.Advices.Contains(advice));
+            if (outpost != null)
+                dispensaryQuery = dispensaryQuery.Where(it => it.OutpostId == outpost.Id);
 
             DateTime outputStartDate;
             if (!string.IsNullOrEmpty(startDate))
@@ -87,6 +89,40 @@ namespace Web.Areas.AnalysisManagement.Controllers
             int numberOfPatients = dispensaryQuery.Count();
 
             return new PatientsModel { Female = numberOfFemales, Male = numberOfMales, TotalNumber = numberOfPatients };
+        }
+
+        public JsonResult GetChartData(AdviceIndexModel inputModel)
+        {
+            LoadUserAndClient();
+
+            var queryAdvice = QueryAdvice.Query().Where(it => it.Client == _client);
+            var queryOutposts = QueryOutpost.Query().Where(it => it.Client == _client && it.OutpostType.Type > 0);
+            if (!string.IsNullOrEmpty(inputModel.countryId))
+                queryOutposts = queryOutposts.Where(it => it.Country.Id == new Guid(inputModel.countryId));
+            if (!string.IsNullOrEmpty(inputModel.regionId))
+                queryOutposts = queryOutposts.Where(it => it.Region.Id == new Guid(inputModel.regionId));
+            if (!string.IsNullOrEmpty(inputModel.districtId))
+                queryOutposts = queryOutposts.Where(it => it.District.Id == new Guid(inputModel.districtId));
+
+            List<AdviceReportModel> adviceList = new List<AdviceReportModel>();
+
+            foreach (var advice in queryAdvice.ToList())
+            {
+                AdviceReportModel model = new AdviceReportModel();
+                model.Advice = advice.Code;
+
+                PatientsModel patients = GetNumberOfPatients(null, inputModel.startDate, inputModel.endDate, advice);
+                model.Female = patients.Female;
+                model.Male = patients.Male;
+
+                adviceList.Add(model);
+            }
+
+            return Json(new AdviceReportIndexOutputModel
+            {
+                Advice = adviceList.ToArray(),
+                TotalItems = adviceList.Count()
+            }, JsonRequestBehavior.AllowGet);
         }
 
         private void LoadUserAndClient()

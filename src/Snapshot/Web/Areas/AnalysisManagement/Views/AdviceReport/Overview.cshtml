@@ -65,10 +65,111 @@ Analysis: Advice Report
             }],
             listeners: {
                 'load': function (store, records, options) {
-                    // DrawChart();
+                    window.feature.chartStore.proxy.extraParams.countryId = window.feature.reportStore.proxy.extraParams.countryId;
+                    window.feature.chartStore.proxy.extraParams.regionId = window.feature.reportStore.proxy.extraParams.regionId;
+                    window.feature.chartStore.proxy.extraParams.districtId = window.feature.reportStore.proxy.extraParams.districtId;
+                    window.feature.chartStore.proxy.extraParams.startDate = window.feature.reportStore.proxy.extraParams.startDate;
+                    window.feature.chartStore.proxy.extraParams.endDate = window.feature.reportStore.proxy.extraParams.endDate;
+
+                    window.feature.chartStore.load();
                 }
             }
         });
+
+        window.feature.chartStore = Ext.create('Ext.data.Store', {
+            fields: [
+                { name: 'Advice' },
+                { name: 'Female', type: 'int' },
+                { name: 'Male', type: 'int' }
+            ],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "AdviceReport", action = "GetChartData" })',
+                reader: {
+                    type: 'json',
+                    root: 'Advice',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    startDate: '',
+                    endDate: ''
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Advice',
+                direction: 'ASC'
+            }],
+            listeners: {
+                'load': function (store, records, options) {
+                    DrawChart();
+                }
+            }
+        });
+
+        Ext.define('Ext.chart.theme.MyTheme', {
+            extend: 'Ext.chart.theme.Base',
+            colors: ['rgb(255, 	130, 	171)', 'rgb(126, 	192, 	238)'],
+            constructor: function (config) {
+                this.callParent([Ext.apply({
+                    colors: this.colors
+                }, config)]);
+            }
+        });
+
+        function DrawChart() {
+            var cont = Ext.getCmp(window.feature.DivChartContainer);
+            var chart = Ext.getCmp('chartIdRemove');
+            cont.remove(chart);
+
+            cont.add({
+                id: 'chartIdRemove',
+                xtype: 'chart',
+                animate: true,
+                shadow: true,
+                style: 'background:#fff',
+                minHeight: 300,
+                maxHeight: 400,
+                flex: 1,
+                store: window.feature.chartStore,
+                theme: 'MyTheme',
+                axes: [{
+                    type: 'Category',
+                    position: 'left',
+                    fields: ['Advice'],
+                    title: 'Advice'
+                }, {
+                    type: 'Numeric',
+                    position: 'bottom',
+                    fields: ['Female', 'Male'],
+                    title: 'Number of patients',
+                    grid: true,
+                    minimum: 0
+                }],
+                series: [{
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        height: 28,
+                        renderer: function (storeItem, item) {
+                            this.setTitle(String(item.value[1]) + ' Patients');
+                        }
+                    },
+                    xField: 'Advice',
+                    yField: ['Female', 'Male'],
+                    stacked: true
+                }],
+                legend: {
+                    position: 'right'
+                }
+            });
+        };
 
         window.feature.countryStore = Ext.create('Ext.data.Store', {
             remoteSort: true,
@@ -368,7 +469,7 @@ Analysis: Advice Report
                     columns: [{
                         header: "Advice / Health Facility",
                         dataIndex: 'Outpost',
-                        flex: 3,
+                        flex: 2,
                         menuDisabled: true,
                         sortable: true
                     }, {
@@ -411,15 +512,13 @@ Analysis: Advice Report
                             xtype: 'numberfield'
                         }
                     }],
-                    bbar: Ext.create('Ext.PagingToolbar', {
-                        buttons: [{
-                            xtype: 'button',
-                            text: 'Export to Excel',
-                            handler: function () {
+                    bbar: [{
+                        xtype: 'button',
+                        text: 'Export to Excel',
+                        handler: function () {
 
-                            }
-                        }]
-                    })
+                        }
+                    }]
                 }]
             }, {
                 xtype: 'container',
@@ -431,7 +530,7 @@ Analysis: Advice Report
                 padding: '0 0 0 20',
                 items: [{
                     xtype: 'container',
-                    id: 'window.feature.DivChartContainer',
+                    id: window.feature.DivChartContainer,
                     flex: 2,
                     layout: {
                         align: 'stretch',

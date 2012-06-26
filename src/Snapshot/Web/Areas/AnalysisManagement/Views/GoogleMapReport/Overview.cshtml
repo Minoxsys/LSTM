@@ -235,6 +235,14 @@ Analysis: Product level information at district level
                         animation: google.maps.Animation.DROP
                     });
 
+                    var infowindow = new google.maps.InfoWindow({
+                        content: "<h1>" + marker.title + "</h1><br/><p><h3>Female</h3></p><p>Younger than 20 years: 0</p><p>Older than 20 years: 1</p><br/><p><h3>Male</h3></p><p>Younger than 20 years: 0</p><p>Older than 20 years: 2</p>"
+                    });
+
+                    google.maps.event.addListener(marker, 'click', function () {
+                        infowindow.open(map, marker);
+                    });
+
                     markerArray[i] = marker;
                     i = i + 1;
                 }, this);

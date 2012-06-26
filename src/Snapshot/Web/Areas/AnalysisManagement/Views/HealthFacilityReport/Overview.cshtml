@@ -423,7 +423,7 @@ Analysis: Product level information at district level
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Information at health facility level'
+                        text: 'Health Facility Level'
                     }]
                 }, {
                     xtype: 'container',
@@ -533,15 +533,13 @@ Analysis: Product level information at district level
                         menuDisabled: true,
                         sortable: true
                     }],
-                    bbar: Ext.create('Ext.PagingToolbar', {
-                        buttons: [{
-                            xtype: 'button',
-                            text: 'Export to Excel',
-                            handler: function () {
-                                DownloadFile();
-                            }
-                        }]
-                    })
+                    bbar: [{
+                        xtype: 'button',
+                        text: 'Export to Excel',
+                        handler: function () {
+                            DownloadFile();
+                        }
+                    }]
                 }]
             }, {
                 xtype: 'container',
