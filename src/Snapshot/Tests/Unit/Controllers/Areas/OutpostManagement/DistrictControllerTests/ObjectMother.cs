@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Web.Areas.OutpostManagement.Controllers;
+using Web.Areas.LocationManagement.Controllers;
 using Rhino.Mocks;
 using Persistence.Queries.Districts;
 using Core.Persistence;
 using Domain;
-using Web.Areas.OutpostManagement.Models.District;
+using Web.Areas.LocationManagement.Models.District;
 using Core.Domain;
 using MvcContrib.TestHelper.Fakes;
 using Core.Security;
 using Persistence.Security;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.DistrictControllerTests
 {
     public class ObjectMother
     {

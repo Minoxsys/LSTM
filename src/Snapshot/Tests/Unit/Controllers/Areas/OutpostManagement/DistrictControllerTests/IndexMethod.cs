@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Web.Areas.OutpostManagement.Models.District;
+using Web.Areas.LocationManagement.Models.District;
 using Rhino.Mocks;
 using System.Web.Mvc;
 using Domain;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.DistrictControllerTests
 {
     [TestFixture]
     public class IndexMethod

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Web.Areas.OutpostManagement.Controllers;
+using Web.Areas.LocationManagement.Controllers;
 using Moq;
 using AutofacContrib.Moq;
 using Core.Domain;
 using Domain;
 using MvcContrib.TestHelper.Fakes;
 using Autofac;
-using Web.Areas.OutpostManagement.Models.Contact;
+using Web.Areas.LocationManagement.Models.Contact;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.ContactControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.ContactControllerTests
 {
     public class ObjectMother
     {

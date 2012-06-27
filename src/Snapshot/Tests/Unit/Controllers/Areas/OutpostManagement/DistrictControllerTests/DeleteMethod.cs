@@ -7,7 +7,7 @@ using Web.Models.Shared;
 using Rhino.Mocks;
 using Domain;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.DistrictControllerTests
 {
     [TestFixture]
     public class DeleteMethod

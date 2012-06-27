@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.ContactControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.ContactControllerTests
 {
     [TestFixture]
     public class IndexMethod

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using Rhino.Mocks;
 using NUnit.Framework;
-using Web.Areas.OutpostManagement.Models.Region;
+using Web.Areas.LocationManagement.Models.Region;
 using Web.Models.Shared;
 using Domain;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.RegionControllerTests
 {
     [TestFixture]
     public class EditMethod

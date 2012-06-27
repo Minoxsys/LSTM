@@ -6,9 +6,9 @@ using NUnit.Framework;
 using System.Web.Mvc;
 using Rhino.Mocks;
 using Domain;
-using Web.Areas.OutpostManagement.Models.Region;
+using Web.Areas.LocationManagement.Models.Region;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.RegionControllerTests
 {
     [TestFixture]
     public class OverviewMethod

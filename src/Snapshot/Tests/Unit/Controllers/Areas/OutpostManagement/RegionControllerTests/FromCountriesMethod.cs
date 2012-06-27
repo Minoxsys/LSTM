@@ -5,7 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using System.Web.Mvc;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.RegionControllerTests
 {
     [TestFixture]
     public class FromCountriesMethod

@@ -115,7 +115,7 @@ Analysis: Treatment Report
             fields: ['Id', 'Name'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
+                url: '@Url.RouteUrl(Web.Areas.LocationManagement.LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
                 reader: {
                     type: 'json',
                     root: 'Countries',
@@ -134,7 +134,7 @@ Analysis: Treatment Report
             fields: ['Id', 'Name'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
+                url: '@Url.RouteUrl(Web.Areas.LocationManagement.LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
                 reader: {
                     type: 'json',
                     root: 'regions',
@@ -154,7 +154,7 @@ Analysis: Treatment Report
             fields: ['Id', 'Name'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(Web.Areas.OutpostManagement.OutpostManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
+                url: '@Url.RouteUrl(Web.Areas.LocationManagement.LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
                 reader: {
                     type: 'json',
                     root: 'Districts',

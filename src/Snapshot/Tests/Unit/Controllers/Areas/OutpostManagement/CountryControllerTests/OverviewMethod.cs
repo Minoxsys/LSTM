@@ -3,13 +3,13 @@ using System.Linq;
 using System.Web.Mvc;
 using Domain;
 using NUnit.Framework;
-using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.LocationManagement.Models.Country;
 using Rhino.Mocks;
 using Persistence.Queries.Functions;
 using Core.Domain;
 using Persistence.Queries.Employees;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.CountryControllerTests
 {
     [TestFixture]
     public class OverviewMethod

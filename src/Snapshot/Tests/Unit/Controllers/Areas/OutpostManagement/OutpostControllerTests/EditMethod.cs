@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Areas.LocationManagement.Models.Outpost;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.OutpostControllerTests
 {
 	[TestFixture]
 	public class EditMethod

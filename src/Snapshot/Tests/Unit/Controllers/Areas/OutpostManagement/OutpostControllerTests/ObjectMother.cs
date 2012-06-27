@@ -7,10 +7,10 @@ using Core.Domain;
 using Domain;
 using Moq;
 using MvcContrib.TestHelper.Fakes;
-using Web.Areas.OutpostManagement.Controllers;
-using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Areas.LocationManagement.Controllers;
+using Web.Areas.LocationManagement.Models.Outpost;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.OutpostControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.OutpostControllerTests
 {
 	public class ObjectMother
 	{

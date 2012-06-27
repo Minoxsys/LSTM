@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Web.Areas.OutpostManagement.Models.Outpost;
+using Web.Areas.LocationManagement.Models.Outpost;
 using Domain;
 
 namespace Web.Areas.AnalysisManagement.Models.PatientsReport

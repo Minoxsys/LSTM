@@ -7,7 +7,7 @@ using BeforeEach = NUnit.Framework.SetUpAttribute;
 using Web.Models.Shared;
 using Domain;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.CountryControllerTests
 {
     [TestFixture]
     public class DeleteMethod

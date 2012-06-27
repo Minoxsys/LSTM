@@ -6,9 +6,9 @@ using Fact = NUnit.Framework.TestAttribute;
 using BeforeEach = NUnit.Framework.SetUpAttribute;
 using Web.Models.Shared;
 using Domain;
-using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.LocationManagement.Models.Country;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.CountryControllerTests
 {
     [TestFixture]
     public class CreateMethod

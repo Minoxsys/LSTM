@@ -193,51 +193,51 @@
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessagesIndexModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Controllers\ContactController.cs" />
-    <Compile Include="Areas\OutpostManagement\Controllers\CountryController.cs" />
-    <Compile Include="Areas\OutpostManagement\Controllers\DistrictController.cs" />
-    <Compile Include="Areas\OutpostManagement\Controllers\OutpostController.cs" />
-    <Compile Include="Areas\OutpostManagement\Controllers\RegionController.cs" />
-    <Compile Include="Areas\OutpostManagement\HtmlHelpers\PagingHelpers.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Client\ClientModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Contact\ContactModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Contact\ContactsOverviewModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountriesList.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountryIndexModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountryIndexOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountryOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountryInputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountryModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\ClientModelCountry.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\District\DistrictIndexOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\District\FromRegionModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\CreateOutpostInputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\EditOutpostInputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetDistrictsOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsInputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetOutpostsOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\GetWarehousesOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostInputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\District\DistrictInputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\District\DistrictOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\District\DistrictOverviewModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostOverviewModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostTypeModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostTypesIndexOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\PagingInfo.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\FromCountryModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\RegionIndexOuputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\RegionInputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\RegionOutputModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\RegionOverviewModel.cs" />
-    <Compile Include="Areas\OutpostManagement\OutpostManagementAreaRegistration.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Country\CountryOverviewModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\District\DistrictModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Outpost\OutpostModel.cs" />
-    <Compile Include="Areas\OutpostManagement\Models\Region\RegionModel.cs" />
+    <Compile Include="Areas\LocationManagement\Controllers\ContactController.cs" />
+    <Compile Include="Areas\LocationManagement\Controllers\CountryController.cs" />
+    <Compile Include="Areas\LocationManagement\Controllers\DistrictController.cs" />
+    <Compile Include="Areas\LocationManagement\Controllers\OutpostController.cs" />
+    <Compile Include="Areas\LocationManagement\Controllers\RegionController.cs" />
+    <Compile Include="Areas\LocationManagement\HtmlHelpers\PagingHelpers.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Client\ClientModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Contact\ContactModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Contact\ContactsOverviewModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Country\CountriesList.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Country\CountryIndexModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Country\CountryIndexOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Country\CountryOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Country\CountryInputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Country\CountryModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Country\ClientModelCountry.cs" />
+    <Compile Include="Areas\LocationManagement\Models\District\DistrictIndexModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\District\DistrictIndexOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\District\FromRegionModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\CreateOutpostInputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\EditOutpostInputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\GetDistrictsOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\GetOutpostsInputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\GetOutpostsOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\GetWarehousesOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\OutpostInputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\OutpostOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\District\DistrictInputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\District\DistrictOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\District\DistrictOverviewModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\OutpostOverviewModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\OutpostTypeModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\OutpostTypesIndexOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\PagingInfo.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Region\FromCountryModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Region\RegionIndexModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Region\RegionIndexOuputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Region\RegionInputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Region\RegionOutputModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Region\RegionOverviewModel.cs" />
+    <Compile Include="Areas\LocationManagement\LocationManagementAreaRegistration.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Country\CountryOverviewModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\District\DistrictModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Outpost\OutpostModel.cs" />
+    <Compile Include="Areas\LocationManagement\Models\Region\RegionModel.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\AdviceController.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\DiagnosisController.cs" />
     <Compile Include="Areas\ServicesManagement\Controllers\ServiceNeededController.cs" />
@@ -2044,7 +2044,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\OutpostManagement\Services\" />
+    <Folder Include="Areas\LocationManagement\Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -2073,12 +2073,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\OutpostManagement\Views\Web.config" />
-    <Content Include="Areas\OutpostManagement\Views\Country\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Region\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\Outpost\Overview.cshtml" />
-    <Content Include="Areas\OutpostManagement\Views\District\Overview.cshtml" />
+    <Content Include="Areas\LocationManagement\Views\Web.config" />
+    <Content Include="Areas\LocationManagement\Views\Country\Overview.cshtml" />
+    <Content Include="Areas\LocationManagement\Views\Region\Overview.cshtml" />
+    <Content Include="Areas\LocationManagement\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\LocationManagement\Views\Outpost\Overview.cshtml" />
+    <Content Include="Areas\LocationManagement\Views\District\Overview.cshtml" />
     <Content Include="Views\Shared\Calendar.cshtml" />
     <Content Include="Views\Shared\FormButtons.cshtml" />
     <Content Include="Views\Shared\InfoMessage.cshtml" />
@@ -2090,10 +2090,10 @@
     <Content Include="Views\Shared\_SubNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\OutpostManagement\Views\Shared\_OutpostAdministrationSideBar.cshtml" />
+    <Content Include="Areas\LocationManagement\Views\Shared\_OutpostAdministrationSideBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\OutpostManagement\Views\Outpost\_OutpostContacts.cshtml" />
+    <Content Include="Areas\LocationManagement\Views\Outpost\_OutpostContacts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_UserAdministrationSideBar.cshtml" />

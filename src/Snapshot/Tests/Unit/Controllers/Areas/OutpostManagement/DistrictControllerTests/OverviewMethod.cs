@@ -5,12 +5,12 @@ using System.Text;
 using NUnit.Framework;
 using System.Web.Mvc;
 using Rhino.Mocks;
-using Web.Areas.OutpostManagement.Models.District;
+using Web.Areas.LocationManagement.Models.District;
 using Persistence.Queries.Functions;
 using Core.Domain;
 using Persistence.Queries.Employees;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.DistrictControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.DistrictControllerTests
 {
     [TestFixture]
     public class OverviewMethod

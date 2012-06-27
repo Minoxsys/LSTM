@@ -7,9 +7,9 @@ using Rhino.Mocks;
 using Domain;
 using Web.Models.Shared;
 using System.Web.Mvc;
-using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.LocationManagement.Models.Country;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.RegionControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.RegionControllerTests
 {
     [TestFixture]
     public class GetCountriesMethod

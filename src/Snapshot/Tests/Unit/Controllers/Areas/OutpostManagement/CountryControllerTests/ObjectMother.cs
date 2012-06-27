@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using Domain;
 using Rhino.Mocks;
-using Web.Areas.OutpostManagement.Controllers;
+using Web.Areas.LocationManagement.Controllers;
 using Core.Persistence;
 using Core.Domain;
 using MvcContrib.TestHelper.Fakes;
-using Web.Areas.OutpostManagement.Models.Country;
+using Web.Areas.LocationManagement.Models.Country;
 using Core.Security;
 using Persistence.Security;
 
-namespace Tests.Unit.Controllers.Areas.OutpostManagement.CountryControllerTests
+namespace Tests.Unit.Controllers.Areas.LocationManagement.CountryControllerTests
 {
     class ObjectMother
     {
