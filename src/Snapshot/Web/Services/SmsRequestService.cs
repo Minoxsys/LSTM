@@ -8,6 +8,7 @@ using Core.Persistence;
 using Web.Models.SmsRequest;
 using Web.Bootstrap;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Web.Services
 {
@@ -136,8 +137,10 @@ namespace Web.Services
 
         private string CreateEmptyPostData()
         {
-            string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response delivery-notification-requested=\"true\" version=\"1.0\"/>";            
-            return response;
+            StringBuilder xml = new StringBuilder();
+            xml.Append("<?xml version=" + "\"" + "1.0" + "\"" + "?>\r\n");
+            xml.Append("<sms-response delivery-notification-requested=\"true\" version=\"1.0\"/>\r");
+            return xml.ToString(); ;
         }
 
         private string CreateDispensaryData(ResponseModel model)
