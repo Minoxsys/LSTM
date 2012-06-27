@@ -136,7 +136,7 @@ namespace Web.Services
 
         private string CreateEmptyPostData()
         {
-            string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response version=\"1.0\" />";            
+            string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response login=\"" + AppSettings.SmsGatewayUserName + "\" password=\"" + AppSettings.SmsGatewayPassword + "\" version=\"1.0\"/>";            
             return response;
         }
 
