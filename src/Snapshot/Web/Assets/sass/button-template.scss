@@ -21,11 +21,11 @@
     $background-color-pressed:  #ffff00,
     $background-color-disabled:  #ffff00,
 
-    $background-gradient: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-over: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-focus: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%), //like $background-gradient
-    $background-gradient-pressed: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-disabled: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%),
+    $background-gradient-over: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%),
+    $background-gradient-focus: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%), //like $background-gradient
+    $background-gradient-pressed: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%),
+    $background-gradient-disabled: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%),
 
     $color: $default-button-color,
     $color-over: $default-button-color,
@@ -73,11 +73,11 @@
     $background-color-pressed:  #ffff00,
     $background-color-disabled:  #ffff00,
 
-    $background-gradient: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-over: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-focus: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%), //like $background-gradient
-    $background-gradient-pressed: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
-    $background-gradient-disabled: color_stops(#207cca 0%,#4e92c9 0%,#95caf9 1%,#64b0f4 3%,#4e92c9 100%),
+    $background-gradient: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%),
+    $background-gradient-over: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%),
+    $background-gradient-focus: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%), //like $background-gradient
+    $background-gradient-pressed: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%),
+    $background-gradient-disabled: color_stops(#77bb55 0%,#4c7f2c 0%,#426a28 1%,#395a23 3%,#4c7f2c 100%),
 
     $color: $default-button-color,
     $color-over: $default-button-color,
@@ -126,9 +126,9 @@
     $background-color-disabled:  transparent,
 
     $background-gradient: transparent,
-    $background-gradient-over: color_stops(#415b71 0%,#3d5468 100%),
-    $background-gradient-focus: color_stops(#415b71 0%,#3d5468 100%), //like $background-gradient
-    $background-gradient-pressed: color_stops(#415b71 0%,#3d5468 100%),
+    $background-gradient-over: color_stops(#477230 0%,#446a2f 100%),
+    $background-gradient-focus: color_stops(#477230 0%,#446a2f 100%), //like $background-gradient
+    $background-gradient-pressed: color_stops(#477230 0%,#446a2f 100%),
     $background-gradient-disabled: transparent,
 
     $color: $default-button-color,
