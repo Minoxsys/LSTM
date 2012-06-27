@@ -159,7 +159,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         {
             Response.Clear();
             Response.ContentType = "application/vnd.xls";
-            Response.AddHeader("Content-disposition", "attachment; filename=" + "PatientsReport" + DateTime.UtcNow.ToShortDateString() + ".xls");
+            Response.AddHeader("Content-disposition", "attachment; filename=" + "DiagnosisReport" + DateTime.UtcNow.ToShortDateString() + ".xls");
 
             var reportData = GetDataForReport(model);
             var chartData = GetDataForChart(model);

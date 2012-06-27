@@ -8,6 +8,7 @@ using Core.Persistence;
 using Domain;
 using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.SummaryReport;
+using System.IO;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -18,6 +19,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public IQueryService<Outpost> QueryOutpost { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
+        public IQueryService<Country> QueryCountry { get; set; }
+        public IQueryService<Region> QueryRegion { get; set; }
+        public IQueryService<District> QueryDistrict { get; set; }
 
         private Client _client;
         private User _user;
@@ -31,6 +35,18 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         public JsonResult GetSummaryReport(SummaryIndexModel inputModel)
+        {
+            List<SummaryReportModel> dataList = GetDataForReport(inputModel);
+
+            return Json(new SummaryReportIndexOutputModel
+            {
+                Patients = dataList.ToArray(),
+                TotalItems = dataList.Count()
+            }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        private List<SummaryReportModel> GetDataForReport(SummaryIndexModel inputModel)
         {
             LoadUserAndClient();
 
@@ -57,13 +73,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 summaryList.Add(model);
             }
 
-
-            return Json(new SummaryReportIndexOutputModel
-            {
-                Patients = summaryList.ToArray(),
-                TotalItems = summaryList.Count()
-            }, JsonRequestBehavior.AllowGet);
-
+            return summaryList;
         }
 
         private int GetNumberOfPatientsWhoFailedToReportToDispensary(Outpost dispensary)
@@ -102,6 +112,61 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 
             }
             return sum;
+        }
+
+        [HttpPost]
+        public void ExportToExcel(SummaryIndexModel model)
+        {
+            Response.Clear();
+            Response.ContentType = "application/vnd.xls";
+            Response.AddHeader("Content-disposition", "attachment; filename=" + "SummaryReport" + DateTime.UtcNow.ToShortDateString() + ".xls");
+
+            var reportData = GetDataForReport(model);
+            SummaryIndexModel outputDataModel = GetFiltersForExcel(model);
+
+            StreamWriter writer = new StreamWriter(Response.OutputStream);
+
+            writer.WriteLine("Country:\t" + outputDataModel.countryId + "\t \t");
+            writer.WriteLine("Region:\t" + outputDataModel.regionId + "\t \t");
+            writer.WriteLine("District:\t" + outputDataModel.districtId + "\t \t");
+            writer.WriteLine("Start date:\t" + outputDataModel.startDate + "\t \t");
+            writer.WriteLine("End date:\t" + outputDataModel.endDate + "\t \t");
+            writer.WriteLine(" ");
+            writer.WriteLine(" ");
+
+            writer.WriteLine("Health facility\t" + "Treated\t" + "Not treated\t" + "Failed to report\t" + "Distinct patients\t \t");
+
+            foreach (var item in reportData)
+                    writer.WriteLine(item.Outpost + "\t" + item.Treated + "\t" + item.NotTreated + "\t" + item.FailedToReport + "\t" + item.DistinctPatients + "\t \t");
+
+            writer.Close();
+            Response.End();
+
+        }
+
+        private SummaryIndexModel GetFiltersForExcel(SummaryIndexModel model)
+        {
+            SummaryIndexModel outputModel = new SummaryIndexModel();
+
+            if (!string.IsNullOrEmpty(model.countryId))
+                outputModel.countryId = QueryCountry.Load(new Guid(model.countryId)).Name;
+            else
+                outputModel.countryId = " ";
+
+            if (!string.IsNullOrEmpty(model.regionId))
+                outputModel.regionId = QueryRegion.Load(new Guid(model.regionId)).Name;
+            else
+                outputModel.regionId = " ";
+
+            if (!string.IsNullOrEmpty(model.districtId))
+                outputModel.districtId = QueryDistrict.Load(new Guid(model.districtId)).Name;
+            else
+                outputModel.districtId = " ";
+
+            outputModel.startDate = model.startDate;
+            outputModel.endDate = model.endDate;
+
+            return outputModel;
         }
 
         private void LoadUserAndClient()

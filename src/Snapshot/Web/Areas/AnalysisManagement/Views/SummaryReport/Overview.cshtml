@@ -42,6 +42,8 @@ Analysis: Product level information at district level
         window.feature.EndDateId = 'End-Date-Summary-Report';
         window.feature.gridHealthFacilityLevelId = "Grid-Summary-Report-Id";
         DivChartContainer = "Chart-Summary-Report-Id";
+        window.feature.exportStartDate = "";
+        window.feature.exportEndDate = "";
 
         window.feature.reportStore = Ext.create('Ext.data.Store', {
             fields: ['Outpost', 'Treated', 'NotTreated', 'FailedToReport', 'DistinctPatients'],
@@ -141,7 +143,7 @@ Analysis: Product level information at district level
 
             window.feature.reportStore.proxy.extraParams.regionId = "";
             window.feature.reportStore.proxy.extraParams.districtId = "";
-            window.feature.reportStore.load();
+
         };
 
         function ResetRegionDependencies() {
@@ -149,7 +151,6 @@ Analysis: Product level information at district level
             districtCombobox.setValue(null);
 
             window.feature.reportStore.proxy.extraParams.districtId = "";
-            window.feature.reportStore.load();
         };
 
         window.feature.country = Ext.create('Ext.form.ComboBox', {
@@ -178,6 +179,7 @@ Analysis: Product level information at district level
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetCountryDependencies();
+                        window.feature.reportStore.load();
                     }
                 }
             }
@@ -208,6 +210,7 @@ Analysis: Product level information at district level
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetRegionDependencies();
+                        window.feature.reportStore.load();
                     }
                 }
             }
@@ -229,7 +232,6 @@ Analysis: Product level information at district level
                 'select': function (combo, record) {
                     window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
                     window.feature.reportStore.load();
-                    districtExportValue = combo.getValue();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -380,12 +382,14 @@ Analysis: Product level information at district level
                             select: function (t, n, o) {
                                 var date = t.getValue();
                                 window.feature.reportStore.proxy.extraParams.startDate = date;
+                                window.feature.exportStartDate = date;
                                 window.feature.reportStore.load();
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.startDate = "";
+                                    window.feature.exportStartDate = "";
                                     window.feature.reportStore.load();
                                 }
                             }
@@ -401,19 +405,21 @@ Analysis: Product level information at district level
                             select: function (t, n, o) {
                                 var date = t.getValue();
                                 window.feature.reportStore.proxy.extraParams.endDate = date;
+                                window.feature.exportEndDate = date;
                                 window.feature.reportStore.load();
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.endDate = "";
+                                    window.feature.exportEndDate = "";
                                     window.feature.reportStore.load();
                                 }
                             }
                         }
                     }]
                 }]
-            }, { 
+                }, {
                     xtype: 'gridpanel',
                     cls: 'white-border',
                     store: window.feature.reportStore,
@@ -460,7 +466,7 @@ Analysis: Product level information at district level
                         xtype: 'button',
                         text: 'Export to Excel',
                         handler: function () {
-
+                            DownloadFile();
                         }
                     }]
                 }]
@@ -485,6 +491,71 @@ Analysis: Product level information at district level
                 }]
             }]
         });
+
+        function DownloadFile() {
+            var body = Ext.getBody();
+
+            var frame = body.createChild({
+                tag: 'iframe',
+                cls: 'x-hidden',
+                id: 'iframe',
+                name: 'iframe'
+            });
+
+            var form = body.createChild({
+                tag: 'form',
+                cls: 'x-hidden',
+                id: 'form',
+                method: 'POST',
+                action: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "SummaryReport", action = "ExportToExcel" })',
+                target: 'iframe'
+            });
+
+            var countryInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'countryId',
+                value: window.feature.reportStore.proxy.extraParams.countryId
+            });
+
+            var regionInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'regionId',
+                value: window.feature.reportStore.proxy.extraParams.regionId
+            });
+
+            var districtInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'districtId',
+                value: window.feature.reportStore.proxy.extraParams.districtId
+            });
+
+            var startDateValue = "";
+            if (window.feature.exportStartDate != "")
+                startDateValue = Ext.Date.format(window.feature.exportStartDate, 'd-M-Y')
+
+            var startDateInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'startDate',
+                value: startDateValue
+            });
+
+            var endDateValue = "";
+            if (window.feature.exportEndDate != "")
+                endDateValue = Ext.Date.format(window.feature.exportEndDate, 'd-M-Y')
+
+            var endDateInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'endDate',
+                value: endDateValue
+            });
+
+            form.dom.submit();
+        }
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
