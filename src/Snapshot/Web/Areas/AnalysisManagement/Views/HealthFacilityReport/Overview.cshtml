@@ -42,6 +42,8 @@ Analysis: Product level information at district level
         window.feature.EndDateId = 'End-Date-Health-Facility-Level';
         window.feature.gridHealthFacilityLevelId = "Grid-Health-Facility-Level-Id";
         DivChartContainer = "Chart-Health-Facility-Level-Id";
+        window.feature.exportStartDate = "";
+        window.feature.exportEndDate = "";
 
         window.feature.reportStore = Ext.create('Ext.data.Store', {
             fields: ['OutpostName', 'NumberOfPatients', 'Male', 'Female'],
@@ -447,6 +449,7 @@ Analysis: Product level information at district level
                         listeners: {
                             select: function (t, n, o) {
                                 var date = t.getValue();
+                                window.feature.exportStartDate = date;
                                 window.feature.reportStore.proxy.extraParams.startDate = date;
                                 window.feature.reportStore.load();
                             },
@@ -454,6 +457,7 @@ Analysis: Product level information at district level
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.startDate = "";
+                                    window.feature.exportStartDate = "";
                                     window.feature.reportStore.load();
                                 }
                             }
@@ -468,6 +472,7 @@ Analysis: Product level information at district level
                         listeners: {
                             select: function (t, n, o) {
                                 var date = t.getValue();
+                                window.feature.exportEndDate = date;
                                 window.feature.reportStore.proxy.extraParams.endDate = date;
                                 window.feature.reportStore.load();
                             },
@@ -475,6 +480,7 @@ Analysis: Product level information at district level
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.endDate = "";
+                                    window.feature.exportEndDate = "";
                                     window.feature.reportStore.load();
                                 }
                             }
@@ -587,19 +593,26 @@ Analysis: Product level information at district level
                 name: 'districtId',
                 value: window.feature.reportStore.proxy.extraParams.districtId
             });
+            var startDateValue = "";
+            if (window.feature.exportStartDate != "")
+                startDateValue = Ext.Date.format(window.feature.exportStartDate, 'd-M-Y')
 
             var startDateInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'startDate',
-                value: Ext.Date.format(window.feature.container.down('#' + window.feature.StartDateId).getValue(), 'd-M-Y')
+                value: startDateValue
             });
+
+            var endDateValue = "";
+            if (window.feature.exportEndDate != "")
+                endDateValue = Ext.Date.format(window.feature.exportEndDate, 'd-M-Y')
 
             var endDateInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'endDate',
-                value: Ext.Date.format(window.feature.container.down('#' + window.feature.EndDateId).getValue(), 'd-M-Y')
+                value: endDateValue
             });
 
             var outpostTypeInput = form.createChild({

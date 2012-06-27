@@ -38,6 +38,8 @@ Analysis: Diagnosis Report
         window.feature.StartDateId = 'Start-Date-Diagnosis-Report';
         window.feature.EndDateId = 'End-Date-Diagnosis-Report';
         window.feature.DivChartContainer = 'Chart-Diagnosis-Report-Container-Id';
+        window.feature.exportStartDate = "";
+        window.feature.exportEndDate = "";
 
         window.feature.reportStore = Ext.create('Ext.data.Store', {
             fields: ['Diagnosis', 'Outpost', 'Female', 'Male', 'NumberOfPatients'],
@@ -178,7 +180,6 @@ Analysis: Diagnosis Report
 
             window.feature.reportStore.proxy.extraParams.regionId = "";
             window.feature.reportStore.proxy.extraParams.districtId = "";
-            window.feature.reportStore.load();
         };
 
         function ResetRegionDependencies() {
@@ -186,7 +187,6 @@ Analysis: Diagnosis Report
             districtCombobox.setValue(null);
 
             window.feature.reportStore.proxy.extraParams.districtId = "";
-            window.feature.reportStore.load();
         };
 
         window.feature.countryComnobox = Ext.create('Ext.form.ComboBox', {
@@ -215,6 +215,7 @@ Analysis: Diagnosis Report
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetCountryDependencies();
+                        window.feature.reportStore.load();
                     }
                 }
             }
@@ -245,6 +246,7 @@ Analysis: Diagnosis Report
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetRegionDependencies();
+                        window.feature.reportStore.load();
                     }
                 }
             }
@@ -416,6 +418,7 @@ Analysis: Diagnosis Report
                             select: function (t, n, o) {
                                 var date = t.getValue();
                                 window.feature.reportStore.proxy.extraParams.startDate = date;
+                                window.feature.exportStartDate = date;
                                 window.feature.reportStore.load();
 
                             },
@@ -423,6 +426,7 @@ Analysis: Diagnosis Report
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.startDate = "";
+                                    window.feature.exportStartDate = "";
                                     window.feature.reportStore.load();
 
                                 }
@@ -439,6 +443,7 @@ Analysis: Diagnosis Report
                             select: function (t, n, o) {
                                 var date = t.getValue();
                                 window.feature.reportStore.proxy.extraParams.endDate = date;
+                                window.feature.exportEndDate = date;
                                 window.feature.reportStore.load();
 
                             },
@@ -446,6 +451,7 @@ Analysis: Diagnosis Report
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.endDate = "";
+                                    window.feature.exportEndDate = "";
                                     window.feature.reportStore.load();
 
                                 }
@@ -585,25 +591,26 @@ Analysis: Diagnosis Report
                 value: window.feature.reportStore.proxy.extraParams.districtId
             });
 
+            var startDateValue = "";
+            if (window.feature.exportStartDate != "")
+                startDateValue = Ext.Date.format(window.feature.exportStartDate, 'd-M-Y')
+
             var startDateInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'startDate',
-                value: Ext.Date.format(window.feature.container.down('#' + window.feature.StartDateId).getValue(), 'd-M-Y')
+                value: startDateValue
             });
+
+            var endDateValue = "";
+            if (window.feature.exportEndDate != "")
+                endDateValue = Ext.Date.format(window.feature.exportEndDate, 'd-M-Y')
 
             var endDateInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'endDate',
-                value: Ext.Date.format(window.feature.container.down('#' + window.feature.EndDateId).getValue(), 'd-M-Y')
-            });
-
-            var outpostTypeInput = form.createChild({
-                tag: 'input',
-                type: 'hidden',
-                name: 'outpostType',
-                value: window.feature.reportStore.proxy.extraParams.outpostType
+                value: endDateValue
             });
 
             form.dom.submit();
