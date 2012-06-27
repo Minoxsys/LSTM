@@ -52,9 +52,11 @@ namespace Web.Controllers
             string xml = Encoding.UTF8.GetString(buffer);
 
             Response.Clear();
-            Response.ContentType = "text/xml; charset=UTF-8";
-            byte[] byteArray = Encoding.UTF8.GetBytes("<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response version=\"1.0\" />");
-            Response.Write(byteArray);
+            Response.ContentType = "text/xml;";
+            StringBuilder responseXml = new StringBuilder();
+            responseXml.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
+            responseXml.Append("<sms-response version=\"1.0\"/>");
+            Response.Write(responseXml.ToString());
             Response.End();
 
             RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(xml);
