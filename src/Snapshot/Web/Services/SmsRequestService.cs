@@ -125,7 +125,7 @@ namespace Web.Services
 
             try
             {
-                smsGatewayService.SendSmsRequest(request);
+                smsGatewayService.SendEmptySmsRequest(request);
                 return true;
             }
             catch (Exception)

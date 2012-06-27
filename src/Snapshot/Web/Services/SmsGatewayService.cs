@@ -28,5 +28,12 @@ namespace Web.Services
             string postResponse = httpService.Post(smsGatewaySettingsService.SmsGatewayUrl, smsRequest);
             return postResponse;
         }
+
+
+        public string SendEmptySmsRequest(string smsRequest)
+        {
+            string postResponse = httpService.EmptyPost(smsGatewaySettingsService.SmsGatewayUrl, smsRequest);
+            return postResponse;
+        }
     }
 }
