@@ -46,12 +46,12 @@ namespace Web.Controllers
         [HttpPost]
         public void ReceiveSms()
         {
+            SmsRequestService.SendResponseMessage();
+
             var stream = Request.InputStream;
             byte[] buffer = new byte[stream.Length];
             stream.Read(buffer, 0, buffer.Length);
             string xml = Encoding.UTF8.GetString(buffer);
-
-            SmsRequestService.SendResponseMessage();
 
             RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(xml);
             if (rawSmsReceived != null)

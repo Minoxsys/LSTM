@@ -8,6 +8,7 @@ using Domain;
 using Core.Domain;
 using Web.Areas.AnalysisManagement.Models.AdviceReport;
 using Web.Security;
+using System.IO;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -18,6 +19,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public IQueryService<Advice> QueryAdvice { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
+        public IQueryService<Country> QueryCountry { get; set; }
+        public IQueryService<Region> QueryRegion { get; set; }
+        public IQueryService<District> QueryDistrict { get; set; }
 
         private Client _client;
         private User _user;
@@ -31,22 +35,27 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         public JsonResult GetAdviceReport(AdviceIndexModel inputModel)
         {
+
+            List<AdviceReportModel> listOfDataForReport = GetDataForReport(inputModel);
+
+            return Json(new AdviceReportIndexOutputModel
+            {
+                Advice = listOfDataForReport.ToArray(),
+                TotalItems = listOfDataForReport.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<AdviceReportModel> GetDataForReport(AdviceIndexModel inputModel)
+        {
             LoadUserAndClient();
 
             var queryAdvice = QueryAdvice.Query().Where(it => it.Client == _client);
-            var queryOutposts = QueryOutpost.Query().Where(it => it.Client == _client && it.OutpostType.Type > 0);
-            if (!string.IsNullOrEmpty(inputModel.countryId))
-                queryOutposts = queryOutposts.Where(it => it.Country.Id == new Guid(inputModel.countryId));
-            if (!string.IsNullOrEmpty(inputModel.regionId))
-                queryOutposts = queryOutposts.Where(it => it.Region.Id == new Guid(inputModel.regionId));
-            if (!string.IsNullOrEmpty(inputModel.districtId))
-                queryOutposts = queryOutposts.Where(it => it.District.Id == new Guid(inputModel.districtId));
-
+            List<Outpost> outpostList = GetListOfOutpostsAfterFiltering(inputModel);
             List<AdviceReportModel> adviceList = new List<AdviceReportModel>();
 
             foreach (var advice in queryAdvice.ToList())
             {
-                foreach (var dispensary in queryOutposts.ToList())
+                foreach (var dispensary in outpostList)
                 {
                     AdviceReportModel model = new AdviceReportModel();
                     model.Advice = advice.Code;
@@ -61,11 +70,20 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
             }
 
-            return Json(new AdviceReportIndexOutputModel
-            {
-                Advice = adviceList.ToArray(),
-                TotalItems = adviceList.Count()
-            }, JsonRequestBehavior.AllowGet);
+            return adviceList;
+        }
+
+        private List<Outpost> GetListOfOutpostsAfterFiltering(AdviceIndexModel inputModel)
+        {
+            var queryOutposts = QueryOutpost.Query().Where(it => it.Client == _client && it.OutpostType.Type > 0);
+            if (!string.IsNullOrEmpty(inputModel.countryId))
+                queryOutposts = queryOutposts.Where(it => it.Country.Id == new Guid(inputModel.countryId));
+            if (!string.IsNullOrEmpty(inputModel.regionId))
+                queryOutposts = queryOutposts.Where(it => it.Region.Id == new Guid(inputModel.regionId));
+            if (!string.IsNullOrEmpty(inputModel.districtId))
+                queryOutposts = queryOutposts.Where(it => it.District.Id == new Guid(inputModel.districtId));
+
+            return queryOutposts.ToList();
         }
 
         private PatientsModel GetNumberOfPatients(Outpost outpost, string startDate, string endDate, Advice advice)
@@ -93,36 +111,111 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         public JsonResult GetChartData(AdviceIndexModel inputModel)
         {
+            var listDataForChart = GetDataForChart(inputModel);
+
+            return Json(new AdviceReportIndexOutputModel
+            {
+                Advice = listDataForChart.ToArray(),
+                TotalItems = listDataForChart.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<AdviceReportModel> GetDataForChart(AdviceIndexModel inputModel)
+        {
             LoadUserAndClient();
 
             var queryAdvice = QueryAdvice.Query().Where(it => it.Client == _client);
-            var queryOutposts = QueryOutpost.Query().Where(it => it.Client == _client && it.OutpostType.Type > 0);
-            if (!string.IsNullOrEmpty(inputModel.countryId))
-                queryOutposts = queryOutposts.Where(it => it.Country.Id == new Guid(inputModel.countryId));
-            if (!string.IsNullOrEmpty(inputModel.regionId))
-                queryOutposts = queryOutposts.Where(it => it.Region.Id == new Guid(inputModel.regionId));
-            if (!string.IsNullOrEmpty(inputModel.districtId))
-                queryOutposts = queryOutposts.Where(it => it.District.Id == new Guid(inputModel.districtId));
-
+            List<Outpost> outpostList = GetListOfOutpostsAfterFiltering(inputModel);
             List<AdviceReportModel> adviceList = new List<AdviceReportModel>();
 
             foreach (var advice in queryAdvice.ToList())
             {
+                int female = 0;
+                int male = 0;
+                int total = 0;
+
+                foreach (var dispensary in outpostList)
+                {
+                    PatientsModel patients = GetNumberOfPatients(dispensary, inputModel.startDate, inputModel.endDate, advice);
+                    female += patients.Female;
+                    male += patients.Male;
+                    total += patients.TotalNumber;
+                }
+
                 AdviceReportModel model = new AdviceReportModel();
                 model.Advice = advice.Code;
-
-                PatientsModel patients = GetNumberOfPatients(null, inputModel.startDate, inputModel.endDate, advice);
-                model.Female = patients.Female;
-                model.Male = patients.Male;
+                model.Female = female;
+                model.Male = male;
+                model.NumberOfPatients = total;
 
                 adviceList.Add(model);
             }
 
-            return Json(new AdviceReportIndexOutputModel
+            return adviceList;
+        }
+
+        [HttpPost]
+        public void ExportToExcel(AdviceIndexModel model)
+        {
+            Response.Clear();
+            Response.ContentType = "application/vnd.xls";
+            Response.AddHeader("Content-disposition", "attachment; filename=" + "PatientsReport" + DateTime.UtcNow.ToShortDateString() + ".xls");
+
+            var reportData = GetDataForReport(model);
+            var chartData = GetDataForChart(model);
+            AdviceIndexModel outputDataModel = GetFiltersForExcel(model);
+
+            StreamWriter writer = new StreamWriter(Response.OutputStream);
+
+            writer.WriteLine("Country:\t" + outputDataModel.countryId + "\t \t");
+            writer.WriteLine("Region:\t" + outputDataModel.regionId + "\t \t");
+            writer.WriteLine("District:\t" + outputDataModel.districtId + "\t \t");
+            writer.WriteLine("Start date:\t" + outputDataModel.startDate + "\t \t");
+            writer.WriteLine("End date:\t" + outputDataModel.endDate + "\t \t");
+            writer.WriteLine(" ");
+            writer.WriteLine(" ");
+
+            writer.WriteLine("Advice\t" + "Health facility\t" + "Females\t" + "Males\t" + "Number of patients\t \t");
+
+            foreach (var advice in chartData)
             {
-                Advice = adviceList.ToArray(),
-                TotalItems = adviceList.Count()
-            }, JsonRequestBehavior.AllowGet);
+                writer.WriteLine(advice.Advice + "\t \t" + advice.Female + "\t" + advice.Male + "\t" + advice.NumberOfPatients + "\t \t");
+
+                foreach (var item in reportData)
+                {
+                    if (item.Advice.ToUpper() == advice.Advice.ToUpper())
+                        writer.WriteLine(" \t" + item.Outpost + "\t" + item.Female + "\t" + item.Male + "\t" + item.NumberOfPatients + "\t \t");
+                }
+            }
+            writer.Close();
+
+            Response.End();
+
+        }
+
+        private AdviceIndexModel GetFiltersForExcel(AdviceIndexModel model)
+        {
+            AdviceIndexModel outputModel = new AdviceIndexModel();
+
+            if (!string.IsNullOrEmpty(model.countryId))
+                outputModel.countryId = QueryCountry.Load(new Guid(model.countryId)).Name;
+            else
+                outputModel.countryId = " ";
+
+            if (!string.IsNullOrEmpty(model.regionId))
+                outputModel.regionId = QueryRegion.Load(new Guid(model.regionId)).Name;
+            else
+                outputModel.regionId = " ";
+
+            if (!string.IsNullOrEmpty(model.districtId))
+                outputModel.districtId = QueryDistrict.Load(new Guid(model.districtId)).Name;
+            else
+                outputModel.districtId = " ";
+
+            outputModel.startDate = model.startDate;
+            outputModel.endDate = model.endDate;
+
+            return outputModel;
         }
 
         private void LoadUserAndClient()
