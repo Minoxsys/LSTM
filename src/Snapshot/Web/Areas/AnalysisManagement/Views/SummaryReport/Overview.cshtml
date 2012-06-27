@@ -4,7 +4,7 @@
 @using Web.Areas.OutpostManagement;
 
 @section page_title{
-Analysis: Patients Report
+Analysis: Product level information at district level
 }
 
 @{
@@ -20,7 +20,7 @@ Analysis: Patients Report
         var analysisBtn = Ext.getCmp(analysisBtnId);
         analysisBtn.toggle(true);
 
-        var reportBtnId = window.res.content.maincontent.sidebar.petientsreport;
+        var reportBtnId = window.res.content.maincontent.sidebar.summaryreport;
         var reportBtn = Ext.getCmp(reportBtnId);
         reportBtn.toggle(true);
     });
@@ -34,22 +34,20 @@ Analysis: Patients Report
     };
     Ext.onReady(function () {
         window.feature = {};
-        window.feature.countryComboboxId = 'Overview-Combobox-Country-Patients-Report';
-        window.feature.regionComboboxId = 'Overview-Combobox-Region-Patients-Report';
-        window.feature.districtComboboxId = 'Overview-Combobox-District-Patients-Report';
-        window.feature.serviceNeededComboboxId = 'Overview-Combobox-Service-Needed-Patients-Report';
-        window.feature.diagnosisComboboxId = 'Overview-Combobox-Diagnosis-Patients-Report';
-        window.feature.treatmentComboboxId = 'Overview-Combobox-Treatment-Patients-Report';
-        window.feature.adviceComboboxId = 'Overview-Combobox-Advice-Patients-Report';
-        window.feature.StartDateId = 'Start-Date-Patients-Report';
-        window.feature.EndDateId = 'End-Date-Patients-Report';
-        window.feature.gridHealthFacilityLevelId = "Grid-Patients-Report-Id";
+        window.feature.countryComboboxId = 'Overview-Combobox-Country-Summary-Report';
+        window.feature.regionComboboxId = 'Overview-Combobox-Region-Summary-Report';
+        window.feature.districtComboboxId = 'Overview-Combobox-District-Summary-Report';
+        window.feature.outpostTypeComboboxId = 'Overview-Combobox-Outpost-Type-Summary-Report';
+        window.feature.StartDateId = 'Start-Date-Summary-Report';
+        window.feature.EndDateId = 'End-Date-Summary-Report';
+        window.feature.gridHealthFacilityLevelId = "Grid-Summary-Report-Id";
+        DivChartContainer = "Chart-Summary-Report-Id";
 
         window.feature.reportStore = Ext.create('Ext.data.Store', {
-            fields: ['Initials', 'PatientID', 'Gender', 'Age', 'Drugshop', 'DrugshopDate', 'Condition', 'Dispensary', 'DispensaryDate', 'Diagnosis', 'Treatment', 'Advice'],
+            fields: ['Outpost', 'Treated', 'NotTreated', 'FailedToReport', 'DistinctPatients'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetPatientsReport" })',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "SummaryReport", action = "GetSummaryReport" })',
                 reader: {
                     type: 'json',
                     root: 'Patients',
@@ -60,20 +58,19 @@ Analysis: Patients Report
                     regionId: '',
                     districtId: '',
                     startDate: '',
-                    endDate: '',
-                    serviceNeededId: '',
-                    diagnosisId: '',
-                    treatmentId: '',
-                    adviceId: '',
-                    gender: '',
-                    ageInterval: ''
+                    endDate: ''
                 },
                 simpleSortMode: true
             },
             sorters: [{
-                property: 'Initials',
+                property: 'Outpost',
                 direction: 'ASC'
-            }]
+            }],
+            listeners: {
+                'load': function (store, records, options) {
+                    DrawChart();
+                }
+            }
         });
 
         window.feature.countryStore = Ext.create('Ext.data.Store', {
@@ -135,63 +132,6 @@ Analysis: Patients Report
             }]
         });
 
-        window.feature.serviceNeededStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Code'],
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetServiceNeeded" })',
-                reader: {
-                    type: 'json',
-                    root: 'Service'
-                },
-                simpleSortMode: true
-            },
-            listeners: allowUserToClearValue
-        });
-
-        window.feature.diagnosisStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Code'],
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetDiagnosis" })',
-                reader: {
-                    type: 'json',
-                    root: 'Service'
-                },
-                simpleSortMode: true
-            },
-            listeners: allowUserToClearValue
-        });
-
-        window.feature.treatmentStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Code'],
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetTreatment" })',
-                reader: {
-                    type: 'json',
-                    root: 'Service'
-                },
-                simpleSortMode: true
-            },
-            listeners: allowUserToClearValue
-        });
-
-        window.feature.adviceStore = Ext.create('Ext.data.Store', {
-            fields: ['Id', 'Code'],
-            proxy: {
-                type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetAdvice" })',
-                reader: {
-                    type: 'json',
-                    root: 'Service'
-                },
-                simpleSortMode: true
-            },
-            listeners: allowUserToClearValue
-        });
-
-
         function ResetCountryDependencies() {
             var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
             regionCombobox.setValue(null);
@@ -217,7 +157,6 @@ Analysis: Patients Report
             itemId: window.feature.countryComboboxId,
             store: window.feature.countryStore,
             labelAlign: 'top',
-            margin: '1 0 0 0',
             fieldLabel: 'Selected Country',
             displayField: 'Name',
             valueField: 'Id',
@@ -248,7 +187,6 @@ Analysis: Patients Report
             itemId: window.feature.regionComboboxId,
             store: window.feature.regionStore,
             labelAlign: 'top',
-            margin: '1 0 0 0',
             fieldLabel: 'Selected Region',
             displayField: 'Name',
             valueField: 'Id',
@@ -265,7 +203,6 @@ Analysis: Patients Report
 
                     window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.reportStore.load();
-
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -281,7 +218,6 @@ Analysis: Patients Report
             itemId: window.feature.districtComboboxId,
             store: window.feature.districtStore,
             labelAlign: 'top',
-            margin: '1 0 0 0',
             fieldLabel: 'Selected District',
             displayField: 'Name',
             labelClsExtra: 'combo-label',
@@ -293,6 +229,7 @@ Analysis: Patients Report
                 'select': function (combo, record) {
                     window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
                     window.feature.reportStore.load();
+                    districtExportValue = combo.getValue();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -304,121 +241,67 @@ Analysis: Patients Report
             }
         });
 
-        window.feature.serviceNeededCombobox = Ext.create('Ext.form.ComboBox', {
-            xtype: 'combobox',
-            itemId: window.feature.serviceNeededComboboxId,
-            store: window.feature.serviceNeededStore,
-            margin: '1 0 0 0',
-            queryMode: 'local',
-            displayField: 'Code',
-            labelAlign: 'top',
-            fieldLabel: 'Selected Condition',
-            labelClsExtra: 'combo-label',
-            initialValue: 0,
-            valueField: 'Id',
-            emptyText: 'Condition List',
-            typeAhead: true,
-            listeners: {
-                specialkey: function (field, e) {
-                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                        field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.serviceNeededId = "";
-                        window.feature.reportStore.load();
-                    }
-                },
-                'select': function (combo, record) {
-                    window.feature.reportStore.proxy.extraParams.serviceNeededId = combo.getValue();
-                    window.feature.reportStore.load();
-                }
+        Ext.define('Ext.chart.theme.MyTheme', {
+            extend: 'Ext.chart.theme.Base',
+            colors: ['rgb(51, 204, 51)', 'rgb(0, 102, 255)', 'rgb(200,0,0)', 'rgb(255, 	153, 	0)'],
+            constructor: function (config) {
+                this.callParent([Ext.apply({
+                    colors: this.colors
+                }, config)]);
             }
         });
 
-        window.feature.diagnosisCombobox = Ext.create('Ext.form.ComboBox', {
-            xtype: 'combobox',
-            itemId: window.feature.diagnosisComboboxId,
-            store: window.feature.diagnosisStore,
-            margin: '1 0 0 0',
-            queryMode: 'local',
-            displayField: 'Code',
-            labelAlign: 'top',
-            fieldLabel: 'Selected Diagnosis',
-            labelClsExtra: 'combo-label',
-            initialValue: 0,
-            valueField: 'Id',
-            emptyText: 'Diagnosis List',
-            typeAhead: true,
-            listeners: {
-                specialkey: function (field, e) {
-                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                        field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.diagnosisId = "";
-                        window.feature.reportStore.load();
-                    }
-                },
-                'select': function (combo, record) {
-                    window.feature.reportStore.proxy.extraParams.diagnosisId = combo.getValue();
-                    window.feature.reportStore.load();
-                }
-            }
-        });
 
-        window.feature.treatmentCombobox = Ext.create('Ext.form.ComboBox', {
-            xtype: 'combobox',
-            itemId: window.feature.treatmentComboboxId,
-            store: window.feature.treatmentStore,
-            margin: '1 0 0 0',
-            queryMode: 'local',
-            displayField: 'Code',
-            labelAlign: 'top',
-            fieldLabel: 'Selected Treatment',
-            labelClsExtra: 'combo-label',
-            initialValue: 0,
-            valueField: 'Id',
-            emptyText: 'Treatment List',
-            typeAhead: true,
-            listeners: {
-                specialkey: function (field, e) {
-                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                        field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.treatmentId = "";
-                        window.feature.reportStore.load();
-                    }
-                },
-                'select': function (combo, record) {
-                    window.feature.reportStore.proxy.extraParams.treatmentId = combo.getValue();
-                    window.feature.reportStore.load();
-                }
-            }
-        });
+        function DrawChart() {
+            var cont = Ext.getCmp('DivChartContainer');
+            var chart = Ext.getCmp('chartIdRemove');
+            cont.remove(chart);
 
-        window.feature.adviceCombobox = Ext.create('Ext.form.ComboBox', {
-            xtype: 'combobox',
-            itemId: window.feature.adviceComboboxId,
-            store: window.feature.adviceStore,
-            margin: '1 0 0 0',
-            queryMode: 'local',
-            displayField: 'Code',
-            labelAlign: 'top',
-            fieldLabel: 'Selected Advice',
-            labelClsExtra: 'combo-label',
-            initialValue: 0,
-            valueField: 'Id',
-            emptyText: 'Advice List',
-            typeAhead: true,
-            listeners: {
-                specialkey: function (field, e) {
-                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                        field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.adviceId = "";
-                        window.feature.reportStore.load();
-                    }
-                },
-                'select': function (combo, record) {
-                    window.feature.reportStore.proxy.extraParams.adviceId = combo.getValue();
-                    window.feature.reportStore.load();
+            cont.add({
+                id: 'chartIdRemove',
+                xtype: 'chart',
+                animate: true,
+                shadow: true,
+                style: 'background:#fff',
+                minHeight: 300,
+                maxHeight: 400,
+                flex: 1,
+                store: window.feature.reportStore,
+                theme: 'MyTheme',
+                axes: [{
+                    type: 'Category',
+                    position: 'left',
+                    fields: ['Outpost'],
+                    title: 'Health Facility'
+                }, {
+                    type: 'Numeric',
+                    position: 'bottom',
+                    fields: ['Treated', 'NotTreated', 'FailedToReport', 'DistinctPatients'],
+                    title: 'Number of patients',
+                    grid: true,
+                    minimum: 0
+                }],
+                series: [{
+                    type: 'bar',
+                    axis: 'bottom',
+                    highlight: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        height: 28,
+                        renderer: function (storeItem, item) {
+                            this.setTitle(String(item.value[1]) + ' Patients');
+                        }
+                    },
+                    xField: 'Outpost',
+                    yField: ['Treated', 'NotTreated', 'FailedToReport', 'DistinctPatients'],
+                    stacked: true
+                }],
+                legend: {
+                    position: 'right'
                 }
-            }
-        });
+            });
+        };
 
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '45 50 20 20',
@@ -458,7 +341,7 @@ Analysis: Patients Report
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Patients Report'
+                        text: 'Summary Report'
                     }]
                 }, {
                     xtype: 'container',
@@ -473,8 +356,20 @@ Analysis: Patients Report
                         html: '&nbsp;'
                     }, window.feature.country,
                         window.feature.region,
-                        window.feature.district,
-                    {
+                        window.feature.district
+                    ]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
                         xtype: 'datefield',
                         fieldLabel: 'Start Date',
                         format: 'd-M-Y',
@@ -517,132 +412,45 @@ Analysis: Patients Report
                             }
                         }
                     }]
-                }, {
-                    xtype: 'container',
-                    flex: 1,
-                    layout: {
-                        type: 'column'
-                    },
-                    items: [{
-                        xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html: '&nbsp;'
-                    }, window.feature.serviceNeededCombobox,
-                       window.feature.diagnosisCombobox,
-                       window.feature.treatmentCombobox,
-                       window.feature.adviceCombobox,
-                    {
-                        xtype: 'combo',
-                        typeAhead: true,
-                        queryMode: 'local',
-                        triggerAction: 'all',
-                        fieldLabel: 'Patient Gender',
-                        margin: '5 0 5 0',
-                        labelAlign: 'top',
-                        store: [['M', 'Male'], ['F', 'Female']],
-                        listeners: {
-                            specialkey: function (field, e) {
-                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                    field.setValue(null);
-                                    window.feature.reportStore.proxy.extraParams.gender = "";
-                                    window.feature.reportStore.load();
-                                }
-                            },
-                            'select': function (combo, record) {
-                                window.feature.reportStore.proxy.extraParams.gender = combo.getValue();
-                                window.feature.reportStore.load();
-                            }
-                        }
-                    }]
                 }]
-                }, {
+            }, { 
                     xtype: 'gridpanel',
                     cls: 'white-border',
                     store: window.feature.reportStore,
                     loadMask: true,
                     disableSelection: true,
-                    flex: 3,
+                    flex: 2,
                     autoScroll: true,
                     columns: [{
-                        header: "Patient initials",
-                        dataIndex: 'Initials',
-                        flex: 1,
+                        header: "Health Facility",
+                        dataIndex: 'Outpost',
+                        flex: 2,
                         menuDisabled: true,
                         sortable: true
                     }, {
-                        header: "Patient ID",
-                        dataIndex: 'PatientID',
-                        flex: 1,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Patient Gender",
-                        dataIndex: 'Gender',
+                        header: "Treated",
+                        dataIndex: 'Treated',
                         flex: 1,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
                     }, {
-                        header: "Patient age",
-                        dataIndex: 'Age',
+                        header: "Not Treated",
+                        dataIndex: 'NotTreated',
                         flex: 1,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
                     }, {
-                        header: "Drug shop",
-                        dataIndex: 'Drugshop',
+                        header: "Failed To Report",
+                        dataIndex: 'FailedToReport',
                         flex: 1,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
                     }, {
-                        header: "Date of arrival",
-                        dataIndex: 'DrugshopDate',
-                        flex: 1,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Condition",
-                        dataIndex: 'Condition',
-                        flex: 1,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Dispensary",
-                        dataIndex: 'Dispensary',
-                        flex: 1,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Date of arrival",
-                        dataIndex: 'DispensaryDate',
-                        flex: 1,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Diagnosis",
-                        dataIndex: 'Diagnosis',
-                        flex: 1,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Treatment",
-                        dataIndex: 'Treatment',
-                        flex: 1,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Advice",
-                        dataIndex: 'Advice',
+                        header: "Distinct Patients",
+                        dataIndex: 'DistinctPatients',
                         flex: 1,
                         align: 'center',
                         menuDisabled: true,
@@ -656,18 +464,32 @@ Analysis: Patients Report
                         }
                     }]
                 }]
+            }, {
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                padding: '0 0 0 20',
+                items: [{
+                    xtype: 'container',
+                    id: 'DivChartContainer',
+                    flex: 2,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    autoScroll: true,
+                    items: []
+                }]
             }]
         });
-
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.serviceNeededStore.load();
-        window.feature.diagnosisStore.load();
-        window.feature.treatmentStore.load();
-        window.feature.adviceStore.load();
         window.feature.reportStore.load();
 
     });

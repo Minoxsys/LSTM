@@ -157,6 +157,7 @@
     <Compile Include="Areas\AnalysisManagement\Controllers\HealthFacilityReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\GoogleMapReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\PatientsReportController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\SummaryReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\TreatmentReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\AdviceReport\AdviceIndexModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\AdviceReport\AdviceReportIndexOutputModel.cs" />
@@ -178,6 +179,9 @@
     <Compile Include="Areas\AnalysisManagement\Models\PatientsReport\PatientReportoutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\PatientsReport\ServiceIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\PatientsReport\ServiceModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\SummaryReport\SummaryIndexModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\SummaryReport\SummaryReportIndexOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\SummaryReport\SummaryReportModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\PatientsModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentIndexModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentReportIndexOutputModel.cs" />
@@ -2122,6 +2126,7 @@
     <Content Include="Areas\AnalysisManagement\Views\DiagnosisReport\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\TreatmentReport\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\AdviceReport\Overview.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\SummaryReport\Overview.cshtml" />
     <None Include="Assets\resources\clientsreports\estimari.xlsx" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />

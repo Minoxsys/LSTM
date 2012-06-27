@@ -12,7 +12,8 @@
             googlemaps: 'Sidebar-AnalysisAdministration-Google-Maps-Button',
             diagnoisreport: 'Sidebar-AnalysisAdministration-Diagnosis-Report-Button',
             treatmentreport: 'Sidebar-AnalysisAdministration-Treatment-Report-Button',
-            advicereport: 'Sidebar-AnalysisAdministration-Advice-Report-Button'
+            advicereport: 'Sidebar-AnalysisAdministration-Advice-Report-Button',
+            summaryreport: 'Sidebar-AnalysisAdministration-Summary-Report-Button',
         }
     };
 
@@ -21,7 +22,8 @@
     window.res.link.googlemaps = '@(Url.RouteUrl<GoogleMapReportController>( x=>x.Overview() ,  AnalysisManagementAreaRegistration.DEFAULT_ROUTE ))';
     window.res.link.diagnoisreport = '@(Url.RouteUrl<DiagnosisReportController>( x=>x.Overview() ,  AnalysisManagementAreaRegistration.DEFAULT_ROUTE ))';
     window.res.link.treatmentreport = '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
-    window.res.link.advicereport = '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'
+    window.res.link.advicereport = '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
+    window.res.link.summaryreport = '@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))';
 
     Ext.onReady(function () {
 
@@ -117,6 +119,19 @@
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {
                                     navigateTo(window.res.link.advicereport);
+                                },
+                                enableToggle: true
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.summaryreport,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Summary Report',
+                                height: 30,
+                                margin: '0 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.summaryreport);
                                 },
                                 enableToggle: true
                             },
