@@ -125,7 +125,7 @@ namespace Web.Services
 
             try
             {
-                smsGatewayService.SendEmptySmsRequest(request);
+                smsGatewayService.SendSmsRequest(request);
                 return true;
             }
             catch (Exception)
@@ -136,7 +136,7 @@ namespace Web.Services
 
         private string CreateEmptyPostData()
         {
-            string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response version=\"1.0\"/>";            
+            string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response delivery-notification-requested=\"true\" version=\"1.0\"/>";            
             return response;
         }
 

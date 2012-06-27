@@ -9,6 +9,5 @@ namespace Web.Services
     public interface ISmsGatewayService
     {
         String SendSmsRequest(string sms);
-        String SendEmptySmsRequest(string sms);
     }
 }
