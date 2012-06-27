@@ -8,6 +8,7 @@ using Core.Persistence;
 using Domain;
 using Core.Domain;
 using Web.Security;
+using System.IO;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -20,6 +21,9 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public IQueryService<Diagnosis> QueryDiagnosis { get; set; }
         public IQueryService<Treatment> QueryTreatment { get; set; }
         public IQueryService<Advice> QueryAdvice { get; set; }
+        public IQueryService<Country> QueryCountry { get; set; }
+        public IQueryService<Region> QueryRegion { get; set; }
+        public IQueryService<District> QueryDistrict { get; set; }
 
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
@@ -35,6 +39,17 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         public JsonResult GetPatientsReport(PatientReportIndexModel model)
+        {
+            var listDataReport = GetDataForReport(model);
+            
+            return Json(new PatientReportIndexOutputModel
+            {
+                Patients = listDataReport.ToArray(),
+                TotalItems = listDataReport.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<PatientReportoutputModel> GetDataForReport(PatientReportIndexModel model)
         {
             var queryMessage = QueryMessageFromDrugShop.Query();
 
@@ -60,13 +75,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                     reportList.Add(patientmodel.ReportModel);
             }
 
-            var a = reportList.ToArray();
-
-            return Json(new PatientReportIndexOutputModel
-            {
-                Patients = reportList.ToArray(),
-                TotalItems = reportList.Count()
-            }, JsonRequestBehavior.AllowGet);
+            return reportList;
         }
 
         private bool ContainsFilterProperties(PatientReportModel patientmodel, PatientReportIndexModel model)
@@ -235,6 +244,89 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 Service = listProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void ExportToExcel(PatientReportIndexModel model)
+        {
+            Response.Clear();
+            Response.ContentType = "application/vnd.xls";
+            Response.AddHeader("Content-disposition", "attachment; filename=" + "PatientsReport" + DateTime.UtcNow.ToShortDateString() + ".xls");
+
+            var reportData = GetDataForReport(model);
+            PatientReportIndexModel outputDataModel = GetFiltersForExcel(model);
+            
+            StreamWriter writer = new StreamWriter(Response.OutputStream);
+
+            writer.WriteLine("Country:\t" + outputDataModel.countryId + "\t \t");
+            writer.WriteLine("Region:\t" + outputDataModel.regionId + "\t \t");
+            writer.WriteLine("District:\t" + outputDataModel.districtId + "\t \t");
+            writer.WriteLine("Start date:\t" + outputDataModel.startDate + "\t \t");
+            writer.WriteLine("End date:\t" + outputDataModel.endDate + "\t \t");
+            writer.WriteLine("Condition:\t" + outputDataModel.serviceNeededId + "\t \t");
+            writer.WriteLine("Diagnosis:\t" + outputDataModel.diagnosisId + "\t \t");
+            writer.WriteLine("Treatment:\t" + outputDataModel.treatmentId + "\t \t");
+            writer.WriteLine("Advice:\t" + outputDataModel.adviceId + "\t \t");
+            writer.WriteLine("Gender:\t" + outputDataModel.gender + "\t \t");
+            writer.WriteLine(" ");
+            writer.WriteLine(" ");
+
+            writer.WriteLine("Patient initials\t" + "Patient ID\t" + "Gender\t" + "Age\t" + "Drugshop\t" + "Drugshop Date\t" + "Condition\t" + "Dispensary\t" + "Dispensary Date\t" + "Diagnosis\t" + "Treatment\t" + "Advice\t \t");
+
+            foreach (var item in reportData)
+            {
+                writer.WriteLine(item.Initials + "\t" + item.PatientID + "\t" + item.Gender + "\t" + item.Age + "\t" + item.Drugshop + "\t" + item.DrugshopDate + "\t" + item.Condition + "\t" + item.Dispensary + "\t" + item.DispensaryDate + "\t" + item.Diagnosis + "\t" + item.Treatment + "\t" + item.Advice + "\t \t");
+            }
+            writer.Close();
+
+            Response.End();
+
+        }
+
+        private PatientReportIndexModel GetFiltersForExcel(PatientReportIndexModel model)
+        {
+            PatientReportIndexModel outputModel = new PatientReportIndexModel();
+
+            if (!string.IsNullOrEmpty(model.countryId))
+                outputModel.countryId = QueryCountry.Load(new Guid(model.countryId)).Name;
+            else
+                outputModel.countryId = " ";
+
+            if (!string.IsNullOrEmpty(model.regionId))
+                outputModel.regionId = QueryRegion.Load(new Guid(model.regionId)).Name;
+            else
+                outputModel.regionId = " ";
+
+            if (!string.IsNullOrEmpty(model.districtId))
+                outputModel.districtId = QueryDistrict.Load(new Guid(model.districtId)).Name;
+            else
+                outputModel.districtId = " ";
+
+            if (!string.IsNullOrEmpty(model.serviceNeededId))
+                outputModel.serviceNeededId = QueryServiceNeeded.Load(new Guid(model.serviceNeededId)).Code;
+            else
+                outputModel.serviceNeededId = " ";
+
+            if (!string.IsNullOrEmpty(model.diagnosisId))
+                outputModel.diagnosisId = QueryDiagnosis.Load(new Guid(model.diagnosisId)).Code;
+            else
+                outputModel.diagnosisId = " ";
+
+            if (!string.IsNullOrEmpty(model.treatmentId))
+                outputModel.treatmentId = QueryTreatment.Load(new Guid(model.treatmentId)).Code;
+            else
+                outputModel.treatmentId = " ";
+
+            if (!string.IsNullOrEmpty(model.adviceId))
+                outputModel.adviceId = QueryAdvice.Load(new Guid(model.adviceId)).Code;
+            else
+                outputModel.adviceId = " ";
+
+            outputModel.startDate = model.startDate;
+            outputModel.endDate = model.endDate;
+            outputModel.gender = model.gender;
+
+            return outputModel;
         }
 
         private void LoadUserAndClient()

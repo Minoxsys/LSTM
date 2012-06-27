@@ -29,6 +29,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private Client _client;
         private User _user;
 
+        private string _countryName;
+        private string _regionName;
+        private string _districtName;
+        private string _outpostType;
+
         [HttpGet]
         [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
@@ -38,34 +43,56 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         public JsonResult GetHealthFacilityReport(HealthFacilityIndexModel inputModel)
         {
+            var reportData = GetDataForReport(inputModel);
+            
+            return Json(new HealthFacilityIndexOutputModel
+            {
+                Outposts = reportData.ToArray(),
+                TotalItems = reportData.Count()
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        private List<HealthFacilityModel> GetDataForReport(HealthFacilityIndexModel inputModel)
+        {
             LoadUserAndClient();
 
             var outpostDataQuery = QueryOutpost.Query().Where(it => it.Client == _client);
 
             if (!string.IsNullOrEmpty(inputModel.countryId))
+            {
                 outpostDataQuery = outpostDataQuery.Where(it => it.Country.Id == new Guid(inputModel.countryId));
+                var outpost = outpostDataQuery.FirstOrDefault<Outpost>();
+                _countryName = outpost.Country.Name;
+            }
             if (!string.IsNullOrEmpty(inputModel.regionId))
+            {
                 outpostDataQuery = outpostDataQuery.Where(it => it.Region.Id == new Guid(inputModel.regionId));
+                var outpost = outpostDataQuery.FirstOrDefault<Outpost>();
+                _regionName = outpost.Region.Name;
+            }
             if (!string.IsNullOrEmpty(inputModel.districtId))
+            {
                 outpostDataQuery = outpostDataQuery.Where(it => it.District.Id == new Guid(inputModel.districtId));
+                var outpost = outpostDataQuery.FirstOrDefault<Outpost>();
+                _districtName = outpost.District.Name;
+            }
             if (!string.IsNullOrEmpty(inputModel.outpostType))
+            {
                 outpostDataQuery = outpostDataQuery.Where(it => it.OutpostType.Type == Int32.Parse(inputModel.outpostType));
-
-            var totalItems = outpostDataQuery.Count();
+                var outpost = outpostDataQuery.FirstOrDefault<Outpost>();
+                _outpostType = outpost.OutpostType.Name;
+            }
 
             var outpostModelListProjection = (from outpost in outpostDataQuery.ToList()
-                                             select new HealthFacilityModel
-                                             {
-                                                 OutpostName = outpost.Name + " (" + outpost.District.Name + ")",
-                                                 NumberOfPatients = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "").ToString(),
-                                                 Female = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "F").ToString(),
-                                                 Male = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "M").ToString(),
-                                             }).ToArray();
-            return Json(new HealthFacilityIndexOutputModel
-            {
-                Outposts = outpostModelListProjection,
-                TotalItems = totalItems
-            }, JsonRequestBehavior.AllowGet);
+                                              select new HealthFacilityModel
+                                              {
+                                                  OutpostName = outpost.Name + " (" + outpost.District.Name + ")",
+                                                  NumberOfPatients = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "").ToString(),
+                                                  Female = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "F").ToString(),
+                                                  Male = inputModel.outpostType == null ? "" : GetNumberOfPatientsForOutpostType(inputModel, outpost.Id, "M").ToString(),
+                                              }).ToList();
+
+            return outpostModelListProjection;
         }
 
         private int GetNumberOfPatientsForOutpostType(HealthFacilityIndexModel inputModel, Guid id, string gender)
@@ -109,15 +136,29 @@ namespace Web.Areas.AnalysisManagement.Controllers
         [HttpPost]
         public void ExportToExcel(HealthFacilityIndexModel model)
         {
-
             Response.Clear();
             Response.ContentType = "application/vnd.xls";
-            Response.AddHeader("Content-disposition", "attachment; filename=" + "report.xls");
+            Response.AddHeader("Content-disposition", "attachment; filename=" + "HealthFacilityLevel"+DateTime.UtcNow.ToShortDateString()+".xls");
+
+            var reportData = GetDataForReport(model);
 
             StreamWriter writer = new StreamWriter(Response.OutputStream);
-            writer.WriteLine(model.countryId);
-            writer.WriteLine(model.regionId);
-            writer.WriteLine(model.districtId);
+
+            writer.WriteLine("Country:\t" + _countryName + "\t \t");
+            writer.WriteLine("Region:\t" + _regionName + "\t \t");
+            writer.WriteLine("District:\t" + _districtName + "\t \t");
+            writer.WriteLine("Start date:\t" + model.startDate + "\t \t");
+            writer.WriteLine("End date:\t" + model.endDate + "\t \t");
+            writer.WriteLine("Health facility:\t" + _outpostType + "\t \t");
+            writer.WriteLine(" ");
+            writer.WriteLine(" ");
+
+            writer.WriteLine("Health facility\t" + "Females\t" + "Males\t" + "Number of patients\t \t");
+
+            foreach (var item in reportData)
+            {
+                writer.WriteLine(item.OutpostName + "\t" + item.Female + "\t" + item.Male + "\t" + item.NumberOfPatients + "\t \t");
+            }
             writer.Close();
 
             Response.End();

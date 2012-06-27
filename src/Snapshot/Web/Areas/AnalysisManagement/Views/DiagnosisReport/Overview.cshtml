@@ -519,7 +519,7 @@ Analysis: Diagnosis Report
                         xtype: 'button',
                         text: 'Export to Excel',
                         handler: function () {
-
+                            DownloadFile();
                         }
                     }]
                 }]
@@ -544,6 +544,70 @@ Analysis: Diagnosis Report
                 }]
             }]
         });
+
+        function DownloadFile() {
+            var body = Ext.getBody();
+
+            var frame = body.createChild({
+                tag: 'iframe',
+                cls: 'x-hidden',
+                id: 'iframe',
+                name: 'iframe'
+            });
+
+            var form = body.createChild({
+                tag: 'form',
+                cls: 'x-hidden',
+                id: 'form',
+                method: 'POST',
+                action: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "DiagnosisReport", action = "ExportToExcel" })',
+                target: 'iframe'
+            });
+
+            var countryInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'countryId',
+                value: window.feature.reportStore.proxy.extraParams.countryId
+            });
+
+            var regionInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'regionId',
+                value: window.feature.reportStore.proxy.extraParams.regionId
+            });
+
+            var districtInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'districtId',
+                value: window.feature.reportStore.proxy.extraParams.districtId
+            });
+
+            var startDateInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'startDate',
+                value: Ext.Date.format(window.feature.container.down('#' + window.feature.StartDateId).getValue(), 'd-M-Y')
+            });
+
+            var endDateInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'endDate',
+                value: Ext.Date.format(window.feature.container.down('#' + window.feature.EndDateId).getValue(), 'd-M-Y')
+            });
+
+            var outpostTypeInput = form.createChild({
+                tag: 'input',
+                type: 'hidden',
+                name: 'outpostType',
+                value: window.feature.reportStore.proxy.extraParams.outpostType
+            });
+
+            form.dom.submit();
+        }
 
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);

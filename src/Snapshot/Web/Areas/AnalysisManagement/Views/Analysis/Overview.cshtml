@@ -8,8 +8,8 @@ Analysis
 
 
 @{
-    Html.RenderPartial("AnalysisMainContent");
-    Html.RenderPartial("AnalysisUserInfoContainer");
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_EmptySideBar");
 }
 <script type="text/javascript">
 
@@ -27,176 +27,215 @@ Analysis
 
         window.feature = {};
 
-        var contentRes = window.res.content;
-
-        var mainContent = Ext.getCmp(contentRes.maincontent.id);
-        mainContent.add({
-            xtype: 'container',
-            margin: '45 50 20 10',
-            padding: '20 0 0 10',
-            autoScroll: true,
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 20 20 20',
             id: 'TopContainer',
             layout: {
                 align: 'stretch',
-                type: 'vbox'
+                type: 'hbox'
             },
+            autoScroll: true,
             items: [{
-                xtype: 'fieldset',
+                xtype: 'container',
                 width: 1200,
-                defaults: { anchor: '100%' },
-                layout: 'vbox',
-                items: [{ xtype: 'container',
-                    align: 'center',
+                height: 500,
+                autoScroll: true,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
                     layout: {
-                        type: 'vbox'
+                        align: 'stretch',
+                        type: 'hbox'
                     },
-                    items: [{ xtype: 'container',
-                        //align: 'center',
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
                         layout: {
-                            type: 'hbox'
+                            type: 'table',
+                            columns: 2
                         },
-                        items: [{ xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelRegion.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 40'
-                            }, { xtype: 'container',
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patients Report' },
-                                    margin: '70 30 10 80'
-                                   }, { xtype: 'label',
-                                    margin: '0 0 10 80',
-                                    text: 'In this report the user can see all information on patients.'
-                                }]
-                            }]
-                        }, { xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{ xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelDistrict.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 40'
-                            }, { xtype: 'container',
-                                width: 600,
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    margin: '70 30 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Health Facility Level' }
-                                }, { xtype: 'label',
-                                    margin: '0 0 10 80',
-                                    text: 'This report will show the number of patients received at Health Facilities with gender stratification.'
-                                }]
-                            }]
+                        items: [{
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '20 20 0 20',
+                            rowspan: 2
+                        }, {
+                            xtype: 'box',
+                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patients Report' },
+                            margin: '70 30 10 0'
+                        }, {
+                            xtype: 'label',
+                            margin: '0 0 10 0',
+                            text: 'In this report the user can see all information on patients.'
                         }]
-                    },{ xtype: 'container',
-                        //align: 'center',
+                    }, {
+                        xtype: 'container',
+                        flex: 1,
                         layout: {
-                            type: 'hbox'
+                            type: 'table',
+                            columns: 2
                         },
-                        items: [{ xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{ xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 40'
-                            }, { xtype: 'container',
-                                width:400,
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    margin: '70 0 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<DiagnosisReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Diagnosis Report' }
-                                 }, { xtype: 'label',
-                                    margin: '0 0 10 80',
-                                    text: 'This report will show the number of patients who received a specific diagnosis at different health facilities.'
-                                }]
-                            }]
-                        }, { xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{ xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 140'
-                            }, { xtype: 'container',
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    margin: '70 0 10 90',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Treatments Report' }
-                                    }, { xtype: 'label',
-                                    margin: '0 0 10 90',
-                                    text: 'This report will show the number of patients who received a specific treatment at different health facilities.'
-                                }]
-                            }]
+                        items: [{
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '20 20 0 20',
+                            rowspan: 2
+                        }, {
+                            xtype: 'box',
+                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Health Facility Level' },
+                            margin: '70 30 10 0'
+                        }, {
+                            xtype: 'label',
+                            margin: '0 0 10 0',
+                            text: 'This report will show the number of patients received at Health Facilities with gender stratification.'
                         }]
-                    }, { xtype: 'container',
-                        //align: 'center',
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        type: 'hbox'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
                         layout: {
-                            type: 'hbox'
+                            type: 'table',
+                            columns: 2
                         },
-                        items: [{ xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{ xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 40'
-                            }, { xtype: 'container',
-                                width:400,
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    margin: '70 0 10 80',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Advice Report' }
-                                 }, { xtype: 'label',
-                                    margin: '0 0 10 80',
-                                    text: 'This report will show the number of patients who received a specific advice at different health facilities.'
-                                }]
-                            }]
-                        }, { xtype: 'container',
-                            //align: 'center',
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{ xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '60 0 0 140'
-                            }, { xtype: 'container',
-                                layout: {
-                                    type: 'vbox'
-                                },
-                                items: [{ xtype: 'box',
-                                    margin: '70 0 10 90',
-                                    autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(), AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Google Map Report' }
-                                    }, { xtype: 'label',
-                                    margin: '0 0 10 90',
-                                    text: 'This report will show the number of patients referred and treated at different health facilities.'
-                                }]
-                            }]
+                        items: [{
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '20 20 0 20',
+                            rowspan: 2
+                        }, {
+                            xtype: 'box',
+                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<DiagnosisReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Diagnosis Report' },
+                            margin: '70 30 10 0'
+                        }, {
+                            xtype: 'label',
+                            margin: '0 0 10 0',
+                            text: 'This report will show the number of patients who received a specific diagnosis at different health facilities.'
                         }]
+                    }, {
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            type: 'table',
+                            columns: 2
+                        },
+                        items: [{
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '20 20 0 20',
+                            rowspan: 2
+                        }, {
+                            xtype: 'box',
+                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Treatments Report' },
+                            margin: '70 30 10 0'
+                        }, {
+                            xtype: 'label',
+                            margin: '0 0 10 0',
+                            text: 'This report will show the number of patients who received a specific treatment at different health facilities.'
+                        }]
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        type: 'hbox'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            type: 'table',
+                            columns: 2
+                        },
+                        items: [{
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '20 20 0 20',
+                            rowspan: 2
+                        }, {
+                            xtype: 'box',
+                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Advice Report' },
+                            margin: '70 30 10 0'
+                        }, {
+                            xtype: 'label',
+                            margin: '0 0 10 0',
+                            text: 'This report will show the number of patients who received a specific advice at different health facilities.'
+                        }]
+                    }, {
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            type: 'table',
+                            columns: 2
+                        },
+                        items: [{
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '20 20 0 20',
+                            rowspan: 2
+                        }, {
+                            xtype: 'box',
+                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patients summary' },
+                            margin: '70 30 10 0'
+                        }, {
+                            xtype: 'label',
+                            margin: '0 0 10 0',
+                            text: 'This report will show the number of patients who failed to report at a certain dispensary, number of patients who obtained/ did not get treatment and the number of patients reported into the system at different dispensaries or health centers.'
+                        }]
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        type: 'hbox'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
+                        layout: {
+                            type: 'table',
+                            columns: 2
+                        },
+                        items: [{
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelRegion.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '20 20 0 20',
+                            rowspan: 2
+                        }, {
+                            xtype: 'box',
+                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Google Map Report' },
+                            margin: '70 30 10 0'
+                        }, {
+                            xtype: 'label',
+                            margin: '0 0 10 0',
+                            text: 'This report will show the number of patients referred and treated at different health facilities.'
+                        }]
+                    }, {
+                        xtype: 'container',
+                        flex: 1
+
                     }]
 
                 }]
             }]
         });
 
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
+        mainContent.add(window.feature.container);
     });
 </script>

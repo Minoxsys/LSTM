@@ -42,12 +42,6 @@ Analysis: Product level information at district level
         window.feature.EndDateId = 'End-Date-Health-Facility-Level';
         window.feature.gridHealthFacilityLevelId = "Grid-Health-Facility-Level-Id";
         DivChartContainer = "Chart-Health-Facility-Level-Id";
-        countryExportValue = "";
-        regionExportValue = "";
-        districtExportValue = "";
-        startDateExportValue = "";
-        endDateExportValue = "";
-        outpostTypeExportValue = "";
 
         window.feature.reportStore = Ext.create('Ext.data.Store', {
             fields: ['OutpostName', 'NumberOfPatients', 'Male', 'Female'],
@@ -162,11 +156,6 @@ Analysis: Product level information at district level
 
             window.feature.reportStore.proxy.extraParams.regionId = "";
             window.feature.reportStore.proxy.extraParams.districtId = "";
-            window.feature.reportStore.load();
-
-            countryExportValue = "";
-            regionExportValue = "";
-            districtExportValue = "";
         };
 
         function ResetRegionDependencies() {
@@ -174,10 +163,6 @@ Analysis: Product level information at district level
             districtCombobox.setValue(null);
 
             window.feature.reportStore.proxy.extraParams.districtId = "";
-            window.feature.reportStore.load();
-
-            regionExportValue = "";
-            districtExportValue = "";
         };
 
         window.feature.country = Ext.create('Ext.form.ComboBox', {
@@ -201,12 +186,12 @@ Analysis: Product level information at district level
 
                     window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.reportStore.load();
-                    countryExportValue = combo.getValue();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetCountryDependencies();
+                        window.feature.reportStore.load();
                     }
                 }
             }
@@ -232,13 +217,12 @@ Analysis: Product level information at district level
 
                     window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.reportStore.load();
-
-                    regionExportValue = combo.getValue();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetRegionDependencies();
+                        window.feature.reportStore.load();
                     }
                 }
             }
@@ -260,12 +244,12 @@ Analysis: Product level information at district level
                 'select': function (combo, record) {
                     window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
                     window.feature.reportStore.load();
-                    districtExportValue = combo.getValue();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        districtExportValue = "";
+                        window.feature.reportStore.proxy.extraParams.districtId = "";
+                        window.feature.reportStore.load();
                     }
                 }
             }
@@ -289,13 +273,11 @@ Analysis: Product level information at district level
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        outpostTypeExportValue = "";
                     }
                 },
                 'select': function (combo, record) {
                     window.feature.reportStore.proxy.extraParams.outpostType = combo.getValue();
                     window.feature.reportStore.load();
-                    outpostTypeExportValue = combo.getValue();
                 }
             }
         });
@@ -467,14 +449,12 @@ Analysis: Product level information at district level
                                 var date = t.getValue();
                                 window.feature.reportStore.proxy.extraParams.startDate = date;
                                 window.feature.reportStore.load();
-                                startDateExportValue = date;
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.startDate = "";
                                     window.feature.reportStore.load();
-                                    startDateExportValue = "";
                                 }
                             }
                         }
@@ -490,14 +470,12 @@ Analysis: Product level information at district level
                                 var date = t.getValue();
                                 window.feature.reportStore.proxy.extraParams.endDate = date;
                                 window.feature.reportStore.load();
-                                endDateExportValue = date;
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.reportStore.proxy.extraParams.endDate = "";
                                     window.feature.reportStore.load();
-                                    endDateExportValue = "";
                                 }
                             }
                         }
@@ -593,42 +571,42 @@ Analysis: Product level information at district level
                 tag: 'input',
                 type: 'hidden',
                 name: 'countryId',
-                value: countryExportValue
+                value: window.feature.reportStore.proxy.extraParams.countryId
             });
 
             var regionInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'regionId',
-                value: regionExportValue
+                value: window.feature.reportStore.proxy.extraParams.regionId
             });
 
             var districtInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'districtId',
-                value: districtExportValue
+                value: window.feature.reportStore.proxy.extraParams.districtId
             });
 
             var startDateInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'startDate',
-                value: startDateExportValue
+                value: Ext.Date.format(window.feature.container.down('#' + window.feature.StartDateId).getValue(), 'd-M-Y')
             });
 
             var endDateInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'endDate',
-                value: endDateExportValue
+                value: Ext.Date.format(window.feature.container.down('#' + window.feature.EndDateId).getValue(), 'd-M-Y')
             });
 
             var outpostTypeInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
                 name: 'outpostType',
-                value: outpostTypeExportValue
+                value: window.feature.reportStore.proxy.extraParams.outpostType
             });
 
             form.dom.submit();
@@ -641,7 +619,6 @@ Analysis: Product level information at district level
         window.feature.outpostTypeStore.load(function () {
             var combo = window.feature.container.down('#' + window.feature.outpostTypeComboboxId);
             combo.setValue(window.feature.outpostTypeStore.getAt(0).get('Type'));
-            outpostTypeExportValue = window.feature.outpostTypeStore.getAt(0).get('Type');
             window.feature.reportStore.proxy.extraParams.outpostType = combo.getValue();
             window.feature.reportStore.load();
         });
