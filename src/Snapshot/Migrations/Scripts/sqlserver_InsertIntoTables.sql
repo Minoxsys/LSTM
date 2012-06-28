@@ -1,6 +1,6 @@
 -- OutpostTypes
 GO
-if not exists(select [Name] from OutpostTypes where [Name]=N'Drug shop')
+if not exists(select [Name] from OutpostTypes where [Name]=N'Shop/ADDO')
 begin
 INSERT  INTO OutpostTypes
            (Id
@@ -8,7 +8,7 @@ INSERT  INTO OutpostTypes
 		   ,Type)
      VALUES
            ('461e581b-e60b-4dfd-a5a8-88229f143790'
-           ,N'Drug shop'
+           ,N'Shop/ADDO'
 		   ,'0')
 end	
 
