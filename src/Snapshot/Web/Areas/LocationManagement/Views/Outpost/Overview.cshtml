@@ -808,7 +808,7 @@
                                                 winAdd.down('#' + window.feature.modalIds.outpostTypeId).setValue(outpostTypeId.getValue());  
                                                 winAdd.down('#' + window.feature.modalIds.warehouseId).setDisabled(false);
 
-                                                if (outpostTypeId.getRawValue() !== 'Drug shop'){
+                                                if (outpostTypeId.getRawValue() !== 'Shop/ADDO'){
                                                     winAdd.down('#' + window.feature.modalIds.warehouseId).setValue(null);
                                                     winAdd.down('#' + window.feature.modalIds.warehouseId).setDisabled(true);
                                                 }   
@@ -974,7 +974,7 @@
 
                                                         win.down('#' + modalIds.warehouseId).setDisabled(false);
 
-                                                        if (outpostTypeName !== 'Drug shop'){
+                                                        if (outpostTypeName !== 'Shop/ADDO'){
                                                             win.down('#' + modalIds.warehouseId).setValue(null);
                                                             win.down('#' + modalIds.warehouseId).setDisabled(true);
                                                         }

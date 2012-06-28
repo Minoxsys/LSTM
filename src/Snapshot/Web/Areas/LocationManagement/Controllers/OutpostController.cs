@@ -223,7 +223,7 @@ namespace Web.Areas.LocationManagement.Controllers
             LoadUserAndClient();
 
             var warehouseQueryData = QueryService.Query()
-                                                 .Where(c => c.Client == this._client && c.OutpostType.Name != "Drug shop")
+                                                 .Where(c => c.Client == this._client && c.OutpostType.Name != "Shop/ADDO")
                                                  .OrderBy(w => w.Name);
             model.Warehouses = (from w in warehouseQueryData.ToList()
                                 select new GetWarehousesOutputModel.WarehouseModel

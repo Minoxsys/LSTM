@@ -14,7 +14,7 @@ namespace Web.Services
     public class ManageReceivedSmsService : IManageReceivedSmsService
     {
         private const string CONTENT_FROMDRUGSHOP_REGEX = @"^(([A-Za-z]{4}[ \t]+)*[A-Za-z]{2,4}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;/]+)$";
-        private const string CONTENT_FROMDISPENSARY_REGEX = @"^(([A-Za-z]{4}[ \t]+)*[0-9A-Za-z]{8}[ \t][A-Za-z0-9 +-;]+)$";
+        private const string CONTENT_FROMDISPENSARY_REGEX = @"^(([A-Za-z]{4}[ \t]+)*[0-9A-Za-z]{8}[ \t][A-Za-z0-9 +-;/]+)$";
         private const string DateFormat = "ddMMyy";
         private const string XMLDateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
