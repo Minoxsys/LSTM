@@ -85,6 +85,7 @@ namespace Web.Controllers
             HttpWebResponse res = (HttpWebResponse)req.GetResponse();
             StreamReader sr = new StreamReader(res.GetResponseStream(), System.Text.Encoding.Default);
             string backstr = sr.ReadToEnd();
+            string description = res.StatusDescription;
 
             sr.Close();
             res.Close();
