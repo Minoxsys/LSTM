@@ -47,13 +47,16 @@ namespace Web.Controllers
         public void ReceiveSms()
         {
             string emptyxml = "<?xml version=" + "\"" + "1.0" + "\"" + " encoding=" + "\"" + "UTF-8" + "\"" + "?><sms-response version=" + "\"" + "1.0" + "\"" + "/>";
+            byte[] byteArray = System.Text.Encoding.ASCII.GetBytes(emptyxml);
+            
             Response.Clear();
             Response.StatusCode = 200;
             Response.StatusDescription = "OK";
             Response.ContentType = "text/xml";
 
             StreamWriter writer = new StreamWriter(Response.OutputStream);
-            writer.WriteLine(emptyxml);
+            writer.WriteLine(byteArray);
+            writer.Flush();
 
             writer.Close();
             Response.End();
