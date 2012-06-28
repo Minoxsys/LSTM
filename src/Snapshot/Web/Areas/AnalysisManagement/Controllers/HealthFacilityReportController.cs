@@ -25,14 +25,12 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public IQueryService<Outpost> QueryOutpost { get; set; }
         public IQueryService<Client> QueryClients { get; set; }
         public IQueryService<User> QueryUsers { get; set; }
+        public IQueryService<Country> QueryCountry { get; set; }
+        public IQueryService<Region> QueryRegion { get; set; }
+        public IQueryService<District> QueryDistrict { get; set; }
 
         private Client _client;
         private User _user;
-
-        private string _countryName;
-        private string _regionName;
-        private string _districtName;
-        private string _outpostType;
 
         [HttpGet]
         [Requires(Permissions = "Report.View")]
@@ -59,29 +57,13 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var outpostDataQuery = QueryOutpost.Query().Where(it => it.Client == _client);
 
             if (!string.IsNullOrEmpty(inputModel.countryId))
-            {
                 outpostDataQuery = outpostDataQuery.Where(it => it.Country.Id == new Guid(inputModel.countryId));
-                var outpost = outpostDataQuery.FirstOrDefault<Outpost>();
-                _countryName = outpost.Country.Name;
-            }
             if (!string.IsNullOrEmpty(inputModel.regionId))
-            {
                 outpostDataQuery = outpostDataQuery.Where(it => it.Region.Id == new Guid(inputModel.regionId));
-                var outpost = outpostDataQuery.FirstOrDefault<Outpost>();
-                _regionName = outpost.Region.Name;
-            }
             if (!string.IsNullOrEmpty(inputModel.districtId))
-            {
                 outpostDataQuery = outpostDataQuery.Where(it => it.District.Id == new Guid(inputModel.districtId));
-                var outpost = outpostDataQuery.FirstOrDefault<Outpost>();
-                _districtName = outpost.District.Name;
-            }
             if (!string.IsNullOrEmpty(inputModel.outpostType))
-            {
                 outpostDataQuery = outpostDataQuery.Where(it => it.OutpostType.Type == Int32.Parse(inputModel.outpostType));
-                var outpost = outpostDataQuery.FirstOrDefault<Outpost>();
-                _outpostType = outpost.OutpostType.Name;
-            }
 
             var outpostModelListProjection = (from outpost in outpostDataQuery.ToList()
                                               select new HealthFacilityModel
@@ -110,7 +92,6 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 if (!string.IsNullOrEmpty(inputModel.endDate))
                     if (DateTime.TryParse(inputModel.endDate, out endDate))
                         drugShopQuery = drugShopQuery.Where(it => it.SentDate <= endDate);
-
                 if (!string.IsNullOrEmpty(gender))
                     drugShopQuery = drugShopQuery.Where(it => it.Gender.ToUpper() == gender.ToUpper());
 
@@ -141,15 +122,16 @@ namespace Web.Areas.AnalysisManagement.Controllers
             Response.AddHeader("Content-disposition", "attachment; filename=" + "HealthFacilityLevel"+DateTime.UtcNow.ToShortDateString()+".xls");
 
             var reportData = GetDataForReport(model);
+            HealthFacilityIndexModel outputDataModel = GetFiltersForExcel(model);
 
             StreamWriter writer = new StreamWriter(Response.OutputStream);
 
-            writer.WriteLine("Country:\t" + _countryName + "\t \t");
-            writer.WriteLine("Region:\t" + _regionName + "\t \t");
-            writer.WriteLine("District:\t" + _districtName + "\t \t");
-            writer.WriteLine("Start date:\t" + model.startDate + "\t \t");
-            writer.WriteLine("End date:\t" + model.endDate + "\t \t");
-            writer.WriteLine("Health facility:\t" + _outpostType + "\t \t");
+            writer.WriteLine("Country:\t" + outputDataModel.countryId + "\t \t");
+            writer.WriteLine("Region:\t" + outputDataModel.regionId + "\t \t");
+            writer.WriteLine("District:\t" + outputDataModel.districtId + "\t \t");
+            writer.WriteLine("Start date:\t" + outputDataModel.startDate + "\t \t");
+            writer.WriteLine("End date:\t" + outputDataModel.endDate + "\t \t");
+            writer.WriteLine("Health facility:\t" + outputDataModel.outpostType + "\t \t");
             writer.WriteLine(" ");
             writer.WriteLine(" ");
 
@@ -163,6 +145,32 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             Response.End();
 
+        }
+
+        private HealthFacilityIndexModel GetFiltersForExcel(HealthFacilityIndexModel model)
+        {
+            HealthFacilityIndexModel outputModel = new HealthFacilityIndexModel();
+
+            if (!string.IsNullOrEmpty(model.countryId))
+                outputModel.countryId = QueryCountry.Load(new Guid(model.countryId)).Name;
+            else
+                outputModel.countryId = " ";
+
+            if (!string.IsNullOrEmpty(model.regionId))
+                outputModel.regionId = QueryRegion.Load(new Guid(model.regionId)).Name;
+            else
+                outputModel.regionId = " ";
+
+            if (!string.IsNullOrEmpty(model.districtId))
+                outputModel.districtId = QueryDistrict.Load(new Guid(model.districtId)).Name;
+            else
+                outputModel.districtId = " ";
+
+            outputModel.outpostType = model.outpostType;
+            outputModel.startDate = model.startDate;
+            outputModel.endDate = model.endDate;
+
+            return outputModel;
         }
 
         private void LoadUserAndClient()

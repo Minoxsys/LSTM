@@ -137,10 +137,8 @@ namespace Web.Services
 
         private string CreateEmptyPostData()
         {
-            StringBuilder xml = new StringBuilder();
-            xml.Append("<?xml version=" + "\"" + "1.0" + "\"" + "?>\r\n");
-            xml.Append("<sms-response delivery-notification-requested=\"true\" version=\"1.0\"/>\r");
-            return xml.ToString(); ;
+            string xml = "<?xml version=" + "\"" + "1.0" + "\"" + " encoding=" + "\"" + "UTF-8" + "\"" + "?><sms-response version=" + "\"" + "1.0" + "\"" + "/>\r\n";
+            return xml;
         }
 
         private string CreateDispensaryData(ResponseModel model)

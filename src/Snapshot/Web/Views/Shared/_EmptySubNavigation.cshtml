@@ -91,14 +91,15 @@
                         }]
                     }]
                 }, {
-                    xtype: 'container',
-                    margin: '14, 0, 0, 0',
+                   xtype: 'container',
                     itemId: 'userPhoto',
-                    width: 161,
-                    items: [{
-                        xtype: 'image',
-                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
-                    }]
+                    margin: '14, 0, 0, 0',
+                    width: 80,
+                    height: 62
+//                    items: [{
+//                        xtype: 'image',
+//                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+//                    }]
                 }]
             }]
         }]);

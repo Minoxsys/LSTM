@@ -86,6 +86,9 @@ namespace Web.Controllers
             StreamReader sr = new StreamReader(res.GetResponseStream(), System.Text.Encoding.Default);
             string backstr = sr.ReadToEnd();
 
+            sr.Close();
+            res.Close();
+
             return Json(
                    new JsonActionResponse
                    {
@@ -93,8 +96,7 @@ namespace Web.Controllers
                        Message = String.Format(backstr)
                    });
 
-            sr.Close();
-            res.Close();
+            
 
 
         }

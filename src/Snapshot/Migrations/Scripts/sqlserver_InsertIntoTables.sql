@@ -82,7 +82,7 @@ end
 	GO	   
 -- Clients
 GO
-if not exists(select [Name] from Clients where [Name]=N'Minoxsys')
+if not exists(select [Name] from Clients where [Name]=N'IntHec')
 begin
 INSERT INTO [Clients]
            ([Id]
@@ -92,7 +92,7 @@ INSERT INTO [Clients]
            ,[ByUser_FK])
      VALUES
            ( 'BEEC53CE-A73C-4F03-A354-C617F68BC813'
-           ,'Minoxsys'
+           ,'IntHec'
            ,'2011-12-14 14:03:43.000'
            ,'2011-12-14 14:03:43.000'
            ,null)

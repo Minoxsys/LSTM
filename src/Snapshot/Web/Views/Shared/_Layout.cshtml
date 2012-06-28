@@ -1,8 +1,8 @@
 ﻿@using Web.Areas.LocationManagement;
-@using Web.Areas.ServicesManagement;
+@using Web.Areas.ConditionManagement;
 @using Web.Areas.MessagesManagement;
 @using Web.Areas.MessagesManagement.Controllers;
-@using Web.Areas.ServicesManagement.Controllers;
+@using Web.Areas.ConditionManagement.Controllers;
 @using Web.Areas.LocationManagement.Controllers;
 @using Web.Areas.AnalysisManagement.Controllers;
 @using Web.Areas.AnalysisManagement;
@@ -49,10 +49,10 @@
             clientsOverview: '@(Url.RouteUrl<ClientManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             rolesOverview: '@(Url.RouteUrl<RoleManagerController>( x=>x.Overview() ,  Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE ))',
             analysisAndReports: '@(Url.RouteUrl<AnalysisController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))',
-            serviceneeded: '@(Url.RouteUrl<ServiceNeededController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))',
-            diagnosis: '@(Url.RouteUrl<DiagnosisController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))',
-            treatment: '@(Url.RouteUrl<TreatmentController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))',
-            advice: '@(Url.RouteUrl<AdviceController>(x=>x.Overview(), ServicesManagementAreaRegistration.DEFAULT_ROUTE))',
+            serviceneeded: '@(Url.RouteUrl<ConditionController>(x=>x.Overview(), ConditionManagementAreaRegistration.DEFAULT_ROUTE))',
+            diagnosis: '@(Url.RouteUrl<DiagnosisController>(x=>x.Overview(), ConditionManagementAreaRegistration.DEFAULT_ROUTE))',
+            treatment: '@(Url.RouteUrl<TreatmentController>(x=>x.Overview(), ConditionManagementAreaRegistration.DEFAULT_ROUTE))',
+            advice: '@(Url.RouteUrl<AdviceController>(x=>x.Overview(), ConditionManagementAreaRegistration.DEFAULT_ROUTE))',
             drugstore: '@(Url.RouteUrl<DrugstoreController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))',
             dispensary: '@(Url.RouteUrl<DispensaryController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))',
             healthcenter: '@(Url.RouteUrl<HealthCenterController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))'
@@ -110,12 +110,12 @@
                             {
                                 xtype: 'container',
                                 height: 70,
-                                margin: '15 60 0 20',
+                                margin: '15 20 0 20',
                                 id: res.header.navigation.logo,
                                 padding: 0,
-                                width: 150,
+                                width: 195,
                                 items:[{ xtype: 'image',
-                                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Logo.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+                                    src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/logo_inthec.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
                                 }]
                             },
                             {
@@ -180,7 +180,7 @@
                                 enableToggle:true,
                                 text: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Analysis and Reports',
                                 handler:function(){
-                                    navigateTo( res.link.analysisAndReports ); 
+                                    navigateTo( res.link.analysisAndReports );
                                 }
                             }] 
                         },

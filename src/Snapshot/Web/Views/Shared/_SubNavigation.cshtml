@@ -67,7 +67,7 @@
                                 padding: '0 0 0 10',
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductNotSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 iconAlign: 'left',
-                                text: 'Service Administration',
+                                text: 'Condition Administration',
                                 ui: 'snapshot-submenu-btn',
                                 handler:function(){
                                     SetUnselectedImagesToButtons();
@@ -160,12 +160,13 @@
                                 itemId: 'userPhoto',
                                 margin: '14, 0, 0, 0',
                                 width: 80,
-                                items: [
-                                    { 
-                                        xtype: 'image',
-                                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
-                                    }
-                                ]
+                                height: 62
+//                                items: [
+//                                    { 
+//                                        xtype: 'image',
+//                                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+//                                    }
+//                                ]
                             }
                         ]
                     }

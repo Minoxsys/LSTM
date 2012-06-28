@@ -62,8 +62,7 @@
                 afterrender: function(grid){
                     grid.ownerCt.doLayout(); 
                 },
-                'edit': function(editor, e) {
-                    
+                'edit': function (editor, e) {
                     // set IsMainContact to false on all other records
                     if (e.record.get('IsMainContact')){
                         e.store.each(function(record){
@@ -77,11 +76,16 @@
                     if (e.store.getCount() == 1){
                         e.record.set('IsMainContact', true);
                     }
+
+                    Ext.getCmp('SaveButtonOutpost').enable();
+                    Ext.getCmp('CancelButtonOutpost').enable();
                 },
                 'canceledit': function(editor,e){
                     if(e.record.data.ContactDetail === ""){
-                        e.grid.store.remove(e.record);           
-                    }         
+                        e.grid.store.remove(e.record);
+                    }
+                    Ext.getCmp('SaveButtonOutpost').enable();
+                    Ext.getCmp('CancelButtonOutpost').enable();       
                 }
 
             },
@@ -117,7 +121,11 @@
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
 
-                            handler: function (grid, rowIndex, colIndex) {
+                        handler: function (grid, rowIndex, colIndex) {
+
+                                Ext.getCmp('SaveButtonOutpost').disable();
+                                Ext.getCmp('CancelButtonOutpost').disable();
+
                                 var rec = grid.getStore().getAt(rowIndex);
                                 window.feature.rowEditor.startEdit(rec, 0);
                             }

@@ -1,4 +1,6 @@
 ﻿@model Web.Models.Home.IndexModel
+@using Web.Areas.AnalysisManagement.Controllers
+@using Web.Areas.AnalysisManagement
 @section page_title{
 Snapshot Application
 }
@@ -17,11 +19,42 @@ Snapshot Application
         var content = Ext.getCmp(window.res.content.id);
 
         content.add({
-            xtype: 'image',
-            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/dashboard_image.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-            cls: "dashboard-img",
+            xtype: 'container',
             width: 1140,
-            height: 390
+            height: 500,
+            cls: "dashboard-img",
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                cls: "dashboard-img",
+                layout: {
+                    type: 'hbox'
+                },
+                items: [{
+                    xtype: 'image',
+                    autoEl: { html: "<a href='@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='570' src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/map.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'</a>"}
+                }, {
+                    xtype: 'image',
+                    autoEl: { html: "<a href='@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='570' src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/summary.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'</a>"}
+                }]
+            }, {
+                xtype: 'container',
+                flex: 1,
+                cls: "dashboard-img",
+                layout: {
+                    type: 'hbox'
+                },
+                items: [{
+                    xtype: 'image',
+                    autoEl: { html: "<a href='@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='1140' src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patients.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'</a>"}
+               
+                }]
+
+            }]
         });
 
     });
@@ -116,13 +149,14 @@ Snapshot Application
                         }]
                     },{
                         xtype: 'container',
-                        margin: '14, 0, 0, 0',
                         itemId: 'userPhoto',
-                        width: 161,
-                        items: [{ 
-                            xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
-                        }]
+                        margin: '14, 0, 0, 0',
+                        width: 80,
+                        height: 62
+//                        items: [{ 
+//                            xtype: 'image',
+//                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/Users/user.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'
+//                        }]
                     }]
                 }]
             }]);

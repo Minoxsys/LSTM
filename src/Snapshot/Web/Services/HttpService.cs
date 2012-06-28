@@ -12,7 +12,7 @@ namespace Web.Services
     {
         public string Post(string url, string data)
         {
-            byte[] byteArray = Encoding.UTF8.GetBytes(data);
+            byte[] byteArray = System.Text.Encoding.ASCII.GetBytes(data);
 
             WebRequest request = WebRequest.Create(url);
             request.Method = "POST";
@@ -21,7 +21,7 @@ namespace Web.Services
 
             Stream dataStream = request.GetRequestStream();
             dataStream.Write(byteArray, 0, byteArray.Length);
-
+            
             WebResponse response = request.GetResponse();
             string value = ((HttpWebResponse)response).StatusDescription;
             dataStream = response.GetResponseStream();
