@@ -21,7 +21,7 @@ Snapshot Application
         content.add({
             xtype: 'container',
             width: 1140,
-            height: 500,
+            height: 540,
             cls: "dashboard-img",
             layout: {
                 align: 'stretch',
@@ -42,18 +42,14 @@ Snapshot Application
                     autoEl: { html: "<a href='@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='570' src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/summary.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'</a>"}
                 }]
             }, {
-                xtype: 'container',
-                flex: 1,
-                cls: "dashboard-img",
-                layout: {
-                    type: 'hbox'
-                },
-                items: [{
-                    xtype: 'image',
-                    autoEl: { html: "<a href='@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='1140' src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patients.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'</a>"}
-               
-                }]
-
+                xtype: 'image',
+                height: 250,
+                autoEl: { html: "<a href='@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='1140' src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patients.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'</a>"}
+            },{
+                xtype: 'image',
+                width: 1140,
+                height: 40,
+                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copyright.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
             }]
         });
 
