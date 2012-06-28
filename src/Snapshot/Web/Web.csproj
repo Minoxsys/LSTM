@@ -399,8 +399,11 @@
     <Content Include="Assets\resources\img\copyright.png" />
     <Content Include="Assets\resources\img\logo_inthec.png" />
     <Content Include="Assets\resources\img\map.png" />
+    <Content Include="Assets\resources\img\maphover.png" />
     <Content Include="Assets\resources\img\Patients.png" />
+    <Content Include="Assets\resources\img\Patientshover.png" />
     <Content Include="Assets\resources\img\summary.png" />
+    <Content Include="Assets\resources\img\summaryhover.png" />
     <Content Include="Assets\resources\markerwithlabel.js" />
     <Content Include="Assets\js\markerwithlabel_packed.js" />
     <Content Include="Assets\js\underscore-min.js" />
