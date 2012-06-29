@@ -459,12 +459,13 @@ Analysis: Treatment Report
                         }
                     }]
                 }]
-                }, {
+            }, {
                     xtype: 'gridpanel',
                     cls: 'white-border',
                     store: window.feature.reportStore,
                     loadMask: true,
                     disableSelection: true,
+                    layout: 'fit',
                     flex: 3,
                     autoScroll: true,
                     features: [{
@@ -475,12 +476,14 @@ Analysis: Treatment Report
                     columns: [{
                         header: "Treatment / Health Facility",
                         dataIndex: 'Outpost',
-                        flex: 2,
+                        minWidth: 200,
+                        flex: 3,
                         menuDisabled: true,
                         sortable: true
                     }, {
                         header: "Females",
                         dataIndex: 'Female',
+                        minWidth: 100,
                         flex: 1,
                         menuDisabled: true,
                         sortable: true,
@@ -495,6 +498,7 @@ Analysis: Treatment Report
                     }, {
                         header: "Males",
                         dataIndex: 'Male',
+                        minWidth: 100,
                         flex: 1,
                         menuDisabled: true,
                         sortable: true,
@@ -509,7 +513,8 @@ Analysis: Treatment Report
                     }, {
                         header: "Number Of Patients",
                         dataIndex: 'NumberOfPatients',
-                        flex: 1,
+                        minWidth: 150,
+                        flex: 2,
                         menuDisabled: true,
                         sortable: true,
                         align: 'center',

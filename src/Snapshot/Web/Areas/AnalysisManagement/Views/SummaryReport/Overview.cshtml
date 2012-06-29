@@ -425,18 +425,21 @@ Analysis: Product level information at district level
                     store: window.feature.reportStore,
                     loadMask: true,
                     disableSelection: true,
-                    flex: 2,
+                    flex: 3,
+                    layout: 'fit',
                     autoScroll: true,
                     columns: [{
                         header: "Health Facility",
                         dataIndex: 'Outpost',
                         flex: 2,
+                        minWidth: 160,
                         menuDisabled: true,
                         sortable: true
                     }, {
                         header: "Treated",
                         dataIndex: 'Treated',
                         flex: 1,
+                        minWidth: 100,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
@@ -444,6 +447,7 @@ Analysis: Product level information at district level
                         header: "Not Treated",
                         dataIndex: 'NotTreated',
                         flex: 1,
+                        minWidth: 100,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
@@ -451,6 +455,7 @@ Analysis: Product level information at district level
                         header: "Failed To Report",
                         dataIndex: 'FailedToReport',
                         flex: 1,
+                        minWidth: 120,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
@@ -458,6 +463,7 @@ Analysis: Product level information at district level
                         header: "Distinct Patients",
                         dataIndex: 'DistinctPatients',
                         flex: 1,
+                        minWidth: 120,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true

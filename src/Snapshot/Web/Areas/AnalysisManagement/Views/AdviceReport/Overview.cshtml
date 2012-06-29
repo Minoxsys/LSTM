@@ -466,6 +466,7 @@ Analysis: Advice Report
                     loadMask: true,
                     disableSelection: true,
                     flex: 3,
+                    layout: 'fit',
                     autoScroll: true,
                     features: [{
                         id: 'group',
@@ -476,12 +477,14 @@ Analysis: Advice Report
                         header: "Advice / Health Facility",
                         dataIndex: 'Outpost',
                         flex: 2,
+                        minWidth: 200,
                         menuDisabled: true,
                         sortable: true
                     }, {
                         header: "Females",
                         dataIndex: 'Female',
                         flex: 1,
+                        minWidth: 100,
                         menuDisabled: true,
                         sortable: true,
                         align: 'center',
@@ -496,6 +499,7 @@ Analysis: Advice Report
                         header: "Males",
                         dataIndex: 'Male',
                         flex: 1,
+                        minWidth: 100,
                         menuDisabled: true,
                         sortable: true,
                         align: 'center',
@@ -510,6 +514,7 @@ Analysis: Advice Report
                         header: "Number Of Patients",
                         dataIndex: 'NumberOfPatients',
                         flex: 1,
+                        minWidth: 150,
                         menuDisabled: true,
                         sortable: true,
                         align: 'center',

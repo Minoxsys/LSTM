@@ -495,17 +495,20 @@ Analysis: Product level information at district level
                     loadMask: true,
                     disableSelection: true,
                     flex: 3,
+                    layout: 'fit',
                     autoScroll: true,
                     columns: [{
                         header: "Health Facility Name",
                         dataIndex: 'OutpostName',
                         flex: 2,
+                        minWidth: 200,
                         menuDisabled: true,
                         sortable: true
                     }, {
                         header: "Females",
                         dataIndex: 'Female',
                         flex: 1,
+                        minWidth: 100,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
@@ -513,6 +516,7 @@ Analysis: Product level information at district level
                         header: "Males",
                         dataIndex: 'Male',
                         flex: 1,
+                        minWidth: 100,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
@@ -520,6 +524,7 @@ Analysis: Product level information at district level
                         header: "Number Of Patients",
                         dataIndex: 'NumberOfPatients',
                         flex: 1,
+                        minWidth: 150,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
