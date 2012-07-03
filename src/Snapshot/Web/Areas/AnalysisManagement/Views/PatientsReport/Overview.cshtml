@@ -314,11 +314,11 @@ Analysis: Patients Report
             queryMode: 'local',
             displayField: 'Code',
             labelAlign: 'top',
-            fieldLabel: 'Selected Condition',
+            fieldLabel: 'Selected Symptom',
             labelClsExtra: 'combo-label',
             initialValue: 0,
             valueField: 'Id',
-            emptyText: 'Condition List',
+            emptyText: 'Symptom List',
             typeAhead: true,
             listeners: {
                 specialkey: function (field, e) {
@@ -619,7 +619,7 @@ Analysis: Patients Report
                         menuDisabled: true,
                         sortable: true
                     }, {
-                        header: "Condition",
+                        header: "Symptom",
                         dataIndex: 'Condition',
                         flex: 1,
                         minWidth: 130,

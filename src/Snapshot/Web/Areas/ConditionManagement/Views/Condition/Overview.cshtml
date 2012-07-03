@@ -135,17 +135,17 @@
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Condition'
+                        text: 'Symptom'
                     }, {
                         xtype: 'button',
                         margin: '0 0 0 20',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
                         disabled: @(ViewBag.HasNoRightsToAdd),
-                        text: 'Add New Condition',
+                        text: 'Add New Symptom',
                         handler: function () {
                             var winAdd = new window.feature.modal({
-                                title: 'Add New Condition',
+                                title: 'Add New Symptom',
                                 buttons: [{
                                     text: 'Cancel',
                                     margin: '10 10 20 0',
@@ -269,7 +269,7 @@
                             var rec = grid.getStore().getAt(rowIndex);
 
                             var winEdit = new window.feature.modal({
-                                title: 'Edit Service Needed',
+                                title: 'Edit Symptom',
                                 buttons: [{
                                     text: 'Cancel',
                                     margin: '10 10 20 0',
@@ -347,7 +347,7 @@
                                 msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
                                 msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
                                 msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
-                                msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete condition {0} ?', rec.get('Code')), function (btn) {
+                                msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete symptom {0} ?', rec.get('Code')), function (btn) {
                                     if (btn == 'yes') {
                                         var values = { id: rec.get('Id') };
                                         var postToUrl = '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Condition", action = "Delete" })';

@@ -51,7 +51,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                    new JsonActionResponse
                    {
                        Status = "Error",
-                       Message = "The condition has not been saved!"
+                       Message = "The symptom has not been saved!"
                    });
             }
 
@@ -63,7 +63,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already a condition with code {0} and keyword {1}", serviceNeededInputModel.Code, serviceNeededInputModel.Keyword)
+                        Message = string.Format("There is already a symptom with code {0} and keyword {1}", serviceNeededInputModel.Code, serviceNeededInputModel.Keyword)
                     });
 
             }
@@ -81,7 +81,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                {
                    Status = "Success",
                    CloseModal = true,
-                   Message = String.Format("Condition {0} has been saved.", serviceNeeded.Code)
+                   Message = String.Format("Symptom {0} has been saved.", serviceNeeded.Code)
                });
         }
 
@@ -97,7 +97,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                    {
                        Status = "Error",
                        CloseModal = true,
-                       Message = "You must supply a conditionId in order to edit the condition."
+                       Message = "You must supply a symptomId in order to edit the condition."
                    });
             }
 
@@ -108,7 +108,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                    {
                        Status = "Error",
                        CloseModal = true,
-                       Message = "The condition has not been saved!"
+                       Message = "The symptom has not been saved!"
                    });
             }
 
@@ -124,7 +124,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                     {
                         Status = "Error",
                         CloseModal = false,
-                        Message = string.Format("There is already a condition with code {0} and keyword {1}", serviceNeededInputModel.Code, serviceNeededInputModel.Keyword)
+                        Message = string.Format("There is already a symptom with code {0} and keyword {1}", serviceNeededInputModel.Code, serviceNeededInputModel.Keyword)
                     });
 
             }
@@ -142,7 +142,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                {
                    Status = "Success",
                    CloseModal = true,
-                   Message = String.Format("Condition {0} has been saved.", serviceNeeded.Code)
+                   Message = String.Format("Symptom {0} has been saved.", serviceNeeded.Code)
                });
         }
 
@@ -156,7 +156,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                 return Json(new JsonActionResponse
                 {
                     Status = "Error",
-                    Message = "You must supply a conditionId in order to remove the condition."
+                    Message = "You must supply a symptomId in order to remove the condition."
                 });
             }
 
@@ -170,7 +170,7 @@ namespace Web.Areas.ConditionManagement.Controllers
                 new JsonActionResponse
                 {
                     Status = "Success",
-                    Message = String.Format("Condition with code {0} was removed.", serviceNeeded.Code)
+                    Message = String.Format("Symptom with code {0} was removed.", serviceNeeded.Code)
                 });
         }
 
