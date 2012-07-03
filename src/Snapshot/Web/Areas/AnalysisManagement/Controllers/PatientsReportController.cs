@@ -17,7 +17,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public IQueryService<MessageFromDrugShop> QueryMessageFromDrugShop { get; set; }
         public IQueryService<MessageFromDispensary> QueryMessageFromDispensary { get; set; }
         public IQueryService<Outpost> QueryOutpost { get; set; }
-        public IQueryService<ServiceNeeded> QueryServiceNeeded { get; set; }
+        public IQueryService<Condition> QueryCondition { get; set; }
         public IQueryService<Diagnosis> QueryDiagnosis { get; set; }
         public IQueryService<Treatment> QueryTreatment { get; set; }
         public IQueryService<Advice> QueryAdvice { get; set; }
@@ -55,8 +55,8 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             if (!string.IsNullOrEmpty(model.gender))
                 queryMessage = queryMessage.Where(it => it.Gender.ToUpper() == model.gender.ToUpper());
-            if (!string.IsNullOrEmpty(model.serviceNeededId))
-                queryMessage = queryMessage.Where(it => it.ServicesNeeded.FirstOrDefault(c => c.Id == new Guid(model.serviceNeededId)) != null);
+            if (!string.IsNullOrEmpty(model.conditionId))
+                queryMessage = queryMessage.Where(it => it.ServicesNeeded.FirstOrDefault(c => c.Id == new Guid(model.conditionId)) != null);
             DateTime startDate;
             if (!string.IsNullOrEmpty(model.startDate))
                 if (DateTime.TryParse(model.startDate, out startDate))
@@ -159,13 +159,13 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetServiceNeeded()
+        public JsonResult GetCondition()
         {
             LoadUserAndClient();
-            var serviceNeeded = QueryServiceNeeded.Query().Where(it => it.Client.Id == this._client.Id);
-            int totalItems = serviceNeeded.Count();
+            var condition = QueryCondition.Query().Where(it => it.Client.Id == this._client.Id);
+            int totalItems = condition.Count();
 
-            var listProjection = (from service in serviceNeeded.ToList()
+            var listProjection = (from service in condition.ToList()
                                   select new ServiceModel
                                   {
                                       Id = service.Id,
@@ -263,7 +263,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             writer.WriteLine("District:\t" + outputDataModel.districtId + "\t \t");
             writer.WriteLine("Start date:\t" + outputDataModel.startDate + "\t \t");
             writer.WriteLine("End date:\t" + outputDataModel.endDate + "\t \t");
-            writer.WriteLine("Condition:\t" + outputDataModel.serviceNeededId + "\t \t");
+            writer.WriteLine("Condition:\t" + outputDataModel.conditionId + "\t \t");
             writer.WriteLine("Diagnosis:\t" + outputDataModel.diagnosisId + "\t \t");
             writer.WriteLine("Treatment:\t" + outputDataModel.treatmentId + "\t \t");
             writer.WriteLine("Advice:\t" + outputDataModel.adviceId + "\t \t");
@@ -302,10 +302,10 @@ namespace Web.Areas.AnalysisManagement.Controllers
             else
                 outputModel.districtId = " ";
 
-            if (!string.IsNullOrEmpty(model.serviceNeededId))
-                outputModel.serviceNeededId = QueryServiceNeeded.Load(new Guid(model.serviceNeededId)).Code;
+            if (!string.IsNullOrEmpty(model.conditionId))
+                outputModel.conditionId = QueryCondition.Load(new Guid(model.conditionId)).Code;
             else
-                outputModel.serviceNeededId = " ";
+                outputModel.conditionId = " ";
 
             if (!string.IsNullOrEmpty(model.diagnosisId))
                 outputModel.diagnosisId = QueryDiagnosis.Load(new Guid(model.diagnosisId)).Code;

@@ -144,7 +144,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
         }
 
         [Test]
-        public void Returns_JSON_With_Messages_Filtered_By_ServiceNeeded()
+        public void Returns_JSON_With_Messages_Filtered_By_Condition()
         {
             //Arrange
             objectMother.queryMessageFromDrugShop.Expect(call => call.Query()).Return(objectMother.listOfMessagesFromDrugShop.AsQueryable());
@@ -156,7 +156,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
 
             PatientReportIndexModel model = new PatientReportIndexModel
             {
-                serviceNeededId = objectMother.serviceNeededId.ToString()
+                conditionId = objectMother.conditionId.ToString()
             };
 
             //Act

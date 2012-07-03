@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Web.Areas.ConditionManagement.Models.Condition
 {
-    public class ServiceNeededModel
+    public class ConditionModel
     {
         public string Code { get; set; }
         public string Keyword { get; set; }

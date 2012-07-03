@@ -19,9 +19,9 @@ namespace Migrations
             Delete.RemoveClientForeignKey("Treatments");
             Delete.Table("Treatments");
 
-            Delete.RemoveForeignKey("ServiceNeededs");
-            Delete.RemoveClientForeignKey("ServiceNeededs");
-            Delete.Table("ServiceNeededs");
+            Delete.RemoveForeignKey("Conditions");
+            Delete.RemoveClientForeignKey("Conditions");
+            Delete.Table("Conditions");
 
             Delete.RemoveForeignKey("Advices");
             Delete.RemoveClientForeignKey("Advices");
@@ -50,15 +50,15 @@ namespace Migrations
             Create.AddForeignKey("Treatments");
             Create.AddClientForeignKey("Treatments");
 
-            Create.Table("ServiceNeededs")
+            Create.Table("Conditions")
                 .WithCommonColumns()
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
                 .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
 
-            Create.AddForeignKey("ServiceNeededs");
-            Create.AddClientForeignKey("ServiceNeededs");
+            Create.AddForeignKey("Conditions");
+            Create.AddClientForeignKey("Conditions");
 
             Create.Table("Advices")
                 .WithCommonColumns()

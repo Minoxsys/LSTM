@@ -37,7 +37,7 @@ Analysis: Patients Report
         window.feature.countryComboboxId = 'Overview-Combobox-Country-Patients-Report';
         window.feature.regionComboboxId = 'Overview-Combobox-Region-Patients-Report';
         window.feature.districtComboboxId = 'Overview-Combobox-District-Patients-Report';
-        window.feature.serviceNeededComboboxId = 'Overview-Combobox-Service-Needed-Patients-Report';
+        window.feature.conditionComboboxId = 'Overview-Combobox-Service-Needed-Patients-Report';
         window.feature.diagnosisComboboxId = 'Overview-Combobox-Diagnosis-Patients-Report';
         window.feature.treatmentComboboxId = 'Overview-Combobox-Treatment-Patients-Report';
         window.feature.adviceComboboxId = 'Overview-Combobox-Advice-Patients-Report';
@@ -63,7 +63,7 @@ Analysis: Patients Report
                     districtId: '',
                     startDate: '',
                     endDate: '',
-                    serviceNeededId: '',
+                    conditionId: '',
                     diagnosisId: '',
                     treatmentId: '',
                     adviceId: '',
@@ -137,11 +137,11 @@ Analysis: Patients Report
             }]
         });
 
-        window.feature.serviceNeededStore = Ext.create('Ext.data.Store', {
+        window.feature.conditionStore = Ext.create('Ext.data.Store', {
             fields: ['Id', 'Code'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetServiceNeeded" })',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetCondition" })',
                 reader: {
                     type: 'json',
                     root: 'Service'
@@ -306,10 +306,10 @@ Analysis: Patients Report
             }
         });
 
-        window.feature.serviceNeededCombobox = Ext.create('Ext.form.ComboBox', {
+        window.feature.conditionCombobox = Ext.create('Ext.form.ComboBox', {
             xtype: 'combobox',
-            itemId: window.feature.serviceNeededComboboxId,
-            store: window.feature.serviceNeededStore,
+            itemId: window.feature.conditionComboboxId,
+            store: window.feature.conditionStore,
             margin: '1 0 0 0',
             queryMode: 'local',
             displayField: 'Code',
@@ -324,12 +324,12 @@ Analysis: Patients Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.serviceNeededId = "";
+                        window.feature.reportStore.proxy.extraParams.conditionId = "";
                         window.feature.reportStore.load();
                     }
                 },
                 'select': function (combo, record) {
-                    window.feature.reportStore.proxy.extraParams.serviceNeededId = combo.getValue();
+                    window.feature.reportStore.proxy.extraParams.conditionId = combo.getValue();
                     window.feature.reportStore.load();
                 }
             }
@@ -534,7 +534,7 @@ Analysis: Patients Report
                         height: 30,
                         width: 30,
                         html: '&nbsp;'
-                    }, window.feature.serviceNeededCombobox,
+                    }, window.feature.conditionCombobox,
                        window.feature.diagnosisCombobox,
                        window.feature.treatmentCombobox,
                        window.feature.adviceCombobox,
@@ -743,8 +743,8 @@ Analysis: Patients Report
             var outpostTypeInput = form.createChild({
                 tag: 'input',
                 type: 'hidden',
-                name: 'serviceNeededId',
-                value: window.feature.reportStore.proxy.extraParams.serviceNeededId
+                name: 'conditionId',
+                value: window.feature.reportStore.proxy.extraParams.conditionId
             });
 
             var outpostTypeInput = form.createChild({
@@ -783,7 +783,7 @@ Analysis: Patients Report
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.serviceNeededStore.load();
+        window.feature.conditionStore.load();
         window.feature.diagnosisStore.load();
         window.feature.treatmentStore.load();
         window.feature.adviceStore.load();

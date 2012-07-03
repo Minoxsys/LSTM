@@ -14,7 +14,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
     {
         public IManageReceivedSmsService service;
 
-        public IQueryService<ServiceNeeded> queryServiceNeeded;
+        public IQueryService<Condition> queryCondition;
         public IQueryService<Diagnosis> queryDiagnosis;
         public IQueryService<Treatment> queryTreatment;
         public IQueryService<Advice> queryAdvice;
@@ -101,7 +101,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
 
         private void MockServices()
         {
-            queryServiceNeeded = MockRepository.GenerateMock<IQueryService<ServiceNeeded>>();
+            queryCondition = MockRepository.GenerateMock<IQueryService<Condition>>();
             queryDiagnosis = MockRepository.GenerateMock<IQueryService<Diagnosis>>();
             queryTreatment = MockRepository.GenerateMock<IQueryService<Treatment>>();
             queryAdvice = MockRepository.GenerateMock<IQueryService<Advice>>();
@@ -112,23 +112,23 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
 
         private void Setup_Service()
         {
-            service = new ManageReceivedSmsService(queryServiceNeeded, queryDiagnosis, queryTreatment, queryAdvice, queryMessageFromDrugShop, queryServiceContact, queryOutposts);
+            service = new ManageReceivedSmsService(queryCondition, queryDiagnosis, queryTreatment, queryAdvice, queryMessageFromDrugShop, queryServiceContact, queryOutposts);
         }
 
-        public IQueryable<ServiceNeeded> ListOfServiceNeeded()
+        public IQueryable<Condition> ListOfCondition()
         {
-            List<ServiceNeeded> serviceNeededList = new List<ServiceNeeded>();
+            List<Condition> conditionList = new List<Condition>();
 
             for (int i = 0; i < 10; i++)
             {
-                serviceNeededList.Add(new ServiceNeeded
+                conditionList.Add(new Condition
                 {
                     Code = "S" + i,
                     Description = "some Description",
                     Keyword = "K" + i
                 });
             }
-            return serviceNeededList.AsQueryable();
+            return conditionList.AsQueryable();
         }
 
         public IQueryable<MessageFromDrugShop> ListOfMessagesFromDrugSho()

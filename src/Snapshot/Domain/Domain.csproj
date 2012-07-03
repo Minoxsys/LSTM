@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RawSmsReceived.cs" />
     <Compile Include="Region.cs" />
-    <Compile Include="ServiceNeeded.cs" />
+    <Compile Include="Condition.cs" />
     <Compile Include="Treatment.cs" />
     <Compile Include="WorkItem.cs" />
     <Compile Include="SmsRequest.cs" />
@@ -65,6 +65,9 @@
       <Project>{D60E4952-6F10-4285-A42D-352D11A15711}</Project>
       <Name>Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

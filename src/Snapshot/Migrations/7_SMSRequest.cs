@@ -14,7 +14,7 @@ namespace Migrations
             Delete.RemoveForeignKey("RawSmsReceiveds");
             Delete.Table("RawSmsReceiveds");
 
-            Delete.Table("MessageFromDrugShopServiceNeededs");
+            Delete.Table("MessageFromDrugShopConditions");
             Delete.Table("AdviceMessageFromDispensarys");
             Delete.Table("DiagnosisMessageFromDispensarys");
             Delete.Table("MessageFromDispensaryTreatments");
@@ -67,8 +67,8 @@ namespace Migrations
             Create.AddForeignKey("MessageFromDispensarys");
             Create.AddForeignKey("MessageFromDispensarys", "MessageFromDrugShop_FK", "MessageFromDrugShops");
 
-            Create.Table("MessageFromDrugShopServiceNeededs")
-                .WithColumn("ServiceNeeded_FK").AsGuid().NotNullable()
+            Create.Table("MessageFromDrugShopConditions")
+                .WithColumn("Condition_FK").AsGuid().NotNullable()
                 .WithColumn("MessageFromDrugShop_FK").AsGuid().NotNullable();
 
             Create.Table("AdviceMessageFromDispensarys")

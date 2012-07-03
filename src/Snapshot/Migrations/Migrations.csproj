@@ -50,6 +50,7 @@
     <Compile Include="5_InsertUsersRolesClient.cs" />
     <Compile Include="6_Services.cs" />
     <Compile Include="7_SMSRequest.cs" />
+    <Compile Include="8_ChangedNames.cs" />
     <Compile Include="AssignCommonColumnsExtensions.cs" />
     <Compile Include="ConstraintUtility.cs" />
     <Compile Include="DeleteExtensions.cs" />

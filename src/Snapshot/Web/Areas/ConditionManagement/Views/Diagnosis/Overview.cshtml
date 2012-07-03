@@ -20,10 +20,10 @@
         var diagnosisBtn = Ext.getCmp(diagnosisSideBarBtnId);
         diagnosisBtn.toggle(true);
 
-        var serviceAdministrationBtnId = window.res.header.subnavigation.buttonTabs.services;
-        var serviceAdministrationBtn = Ext.getCmp(serviceAdministrationBtnId);
-        serviceAdministrationBtn.toggle(true);
-        serviceAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+        var ConditionAdministrationBtnId = window.res.header.subnavigation.buttonTabs.services;
+        var ConditionAdministrationBtn = Ext.getCmp(ConditionAdministrationBtnId);
+        ConditionAdministrationBtn.toggle(true);
+        ConditionAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
     });
 </script>
 <script type="text/javascript">

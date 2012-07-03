@@ -351,7 +351,7 @@ INSERT INTO [Permissions]
            )
 end
 GO
-if not exists(select [Name] from Permissions where [Name]=N'ServiceNeeded.View')
+if not exists(select [Name] from Permissions where [Name]=N'Condition.View')
 begin
 
 
@@ -363,13 +363,13 @@ INSERT INTO [Permissions]
      VALUES
            (
 			'51BC7941-7F69-4193-93B7-ACC35028890E'
-			,'ServiceNeeded.View'
+			,'Condition.View'
 			,GETDATE()
            )
 end
 GO
 
-if not exists(select [Name] from Permissions where [Name]=N'ServiceNeeded.Edit')
+if not exists(select [Name] from Permissions where [Name]=N'Condition.Edit')
 begin
 
 
@@ -381,13 +381,13 @@ INSERT INTO [Permissions]
      VALUES
            (
 			'397C3DC6-96A6-4DF7-ABA7-99260183184B'
-			,'ServiceNeeded.Edit'
+			,'Condition.Edit'
 			,GETDATE()
            )
 end
 GO
 
-if not exists(select [Name] from Permissions where [Name]=N'ServiceNeeded.Delete')
+if not exists(select [Name] from Permissions where [Name]=N'Condition.Delete')
 begin
 
 
@@ -399,7 +399,7 @@ INSERT INTO [Permissions]
      VALUES
            (
 			'A2B2EF2C-C6F4-4A34-894C-57B8B486AD54'
-			,'ServiceNeeded.Delete'
+			,'Condition.Delete'
 			,GETDATE()
            )
 end

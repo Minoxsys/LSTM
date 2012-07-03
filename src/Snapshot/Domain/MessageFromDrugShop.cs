@@ -14,19 +14,19 @@ namespace Domain
         public virtual Guid OutpostId { get; set; }
         public virtual DateTime SentDate { get; set; }
         public virtual string IDCode { get; set; }
-        public virtual IList<ServiceNeeded> ServicesNeeded { get; set; }
+        public virtual IList<Condition> ServicesNeeded { get; set; }
 
         public MessageFromDrugShop()
         {
-            ServicesNeeded = new List<ServiceNeeded>();
+            ServicesNeeded = new List<Condition>();
         }
 
-        public virtual void AddServiceNeeded(ServiceNeeded service)
+        public virtual void AddCondition(Condition service)
         {
             ServicesNeeded.Add(service);
         }
 
-        public virtual void RemoveServiceNeeded(ServiceNeeded service)
+        public virtual void RemoveCondition(Condition service)
         {
             service.Messages.Remove(this);
             this.ServicesNeeded.Remove(service);

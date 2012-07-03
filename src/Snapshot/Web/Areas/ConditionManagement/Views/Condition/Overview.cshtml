@@ -16,33 +16,33 @@
         var administrationBtn = Ext.getCmp(administrationBtnId);
         administrationBtn.toggle(true);
 
-        var serviceNeededSideBarBtnId = window.res.content.maincontent.sidebar.serviceneeded;
-        var serviceneededBtn = Ext.getCmp(serviceNeededSideBarBtnId);
-        serviceneededBtn.toggle(true);
+        var conditionSideBarBtnId = window.res.content.maincontent.sidebar.condition;
+        var conditionBtn = Ext.getCmp(conditionSideBarBtnId);
+        conditionBtn.toggle(true);
 
-        var serviceAdministrationBtnId = window.res.header.subnavigation.buttonTabs.services;
-        var serviceAdministrationBtn = Ext.getCmp(serviceAdministrationBtnId);
-        serviceAdministrationBtn.toggle(true);
-        serviceAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+        var ConditionAdministrationBtnId = window.res.header.subnavigation.buttonTabs.services;
+        var ConditionAdministrationBtn = Ext.getCmp(ConditionAdministrationBtnId);
+        ConditionAdministrationBtn.toggle(true);
+        ConditionAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
     });
 </script>
 <script type="text/javascript">
     Ext.onReady(function () {
         window.feature = {};
-        window.feature.formServiceNeededCodeId = "Form-ServiceNeeded-Code-Id";
-        window.feature.formServiceNeededKeywordId = "Form-ServiceNeeded-Keyword-Id";
-        itemId: window.feature.formServiceNeededDescriptionId = "Form-ServiceNeeded-Description-Id";
-        window.feature.searchServiceNeeded = "Search-ServiceNeeded-Id";
+        window.feature.formConditionCodeId = "Form-Condition-Code-Id";
+        window.feature.formConditionKeywordId = "Form-Condition-Keyword-Id";
+        itemId: window.feature.formConditionDescriptionId = "Form-Condition-Description-Id";
+        window.feature.searchCondition = "Search-Condition-Id";
 
-        window.feature.serviceNeededStore = Ext.create('Ext.data.Store', {
+        window.feature.conditionStore = Ext.create('Ext.data.Store', {
             pageSize: 50,
             fields: ['Id', 'Keyword', 'Code', 'Description'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Condition", action = "GetServiceNeeded" })',
+                url: '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Condition", action = "GetCondition" })',
                 reader: {
                     type: 'json',
-                    root: 'ServiceNeeded',
+                    root: 'Condition',
                     totalProperty: 'TotalItems'
                 },
                 extraParams: { searchValue: '' },
@@ -55,7 +55,7 @@
             }]
         });
 
-        window.feature.modal = Ext.define('Ext.feature.serviceNeeded.Modal', {
+        window.feature.modal = Ext.define('Ext.feature.condition.Modal', {
             extend: 'Ext.window.Window',
             modal: true,
             ui: 'snapshot-popup-window',
@@ -76,20 +76,20 @@
                         name: 'Keyword',
                         fieldLabel: 'Keyword',
                         anchor: '100%',
-                        itemId: window.feature.formServiceNeededKeywordId
+                        itemId: window.feature.formConditionKeywordId
                     }, {
                         xtype: 'textfield',
                         name: 'Code',
                         fieldLabel: 'Code',
                         anchor: '100%',
-                        itemId: window.feature.formServiceNeededCodeId
+                        itemId: window.feature.formConditionCodeId
                     }, {
                         xtype: 'textareafield',
                         name: 'Description',
                         fieldLabel: 'Description',
                         grow: true,
                         anchor: '100%',
-                        itemId: window.feature.formServiceNeededDescriptionId
+                        itemId: window.feature.formConditionDescriptionId
                     }]
                 });
 
@@ -98,7 +98,7 @@
         });
 
         window.feature.doSearch = new Ext.util.DelayedTask(function () {
-            window.feature.serviceNeededStore.loadPage(1);
+            window.feature.conditionStore.loadPage(1);
         });
 
         window.feature.container = Ext.create('Ext.container.Container', {
@@ -158,18 +158,18 @@
                                     ui: 'snapshot-add-btn',
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
-                                        var serviceNeededKeyword = winAdd.down('#' + window.feature.formServiceNeededKeywordId);
-                                        var serviceNeededCode = winAdd.down('#' + window.feature.formServiceNeededCodeId);
-                                        var serviceNeededDescription = winAdd.down('#' + window.feature.formServiceNeededDescriptionId);
+                                        var conditionKeyword = winAdd.down('#' + window.feature.formConditionKeywordId);
+                                        var conditionCode = winAdd.down('#' + window.feature.formConditionCodeId);
+                                        var conditionDescription = winAdd.down('#' + window.feature.formConditionDescriptionId);
 
-                                        if (serviceNeededCode.getValue() == '') {
-                                            serviceNeededCode.markInvalid('Field Code is required!');
-                                            serviceNeededCode.setValue(null);
+                                        if (conditionCode.getValue() == '') {
+                                            conditionCode.markInvalid('Field Code is required!');
+                                            conditionCode.setValue(null);
                                         } else {
                                             var values = {
-                                                Keyword: serviceNeededKeyword.getValue(),
-                                                Code: serviceNeededCode.getValue(),
-                                                Description: serviceNeededDescription.getValue()
+                                                Keyword: conditionKeyword.getValue(),
+                                                Code: conditionCode.getValue(),
+                                                Description: conditionDescription.getValue()
                                             };
                                             var postToUrl = '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Condition", action = "Create" })';
                                             var action = $.post(postToUrl, values);
@@ -184,7 +184,7 @@
                                                 } else {
                                                     winAdd.close();
                                                     winAdd.destroy();
-                                                    window.feature.serviceNeededStore.loadPage(1);
+                                                    window.feature.conditionStore.loadPage(1);
                                                 }
                                             });
                                         }
@@ -204,7 +204,7 @@
                     height: 80,
                     items: [{
                         xtype: 'textfield',
-                        itemId: window.feature.searchServiceNeeded,
+                        itemId: window.feature.searchCondition,
                         width: 200,
                         frame: true,
                         cls: 'text-field-rounded',
@@ -213,8 +213,8 @@
                         listeners: {
                             'keyup': {
                                 fn: function (key) {
-                                    var searchValue = window.feature.container.down('#' + window.feature.searchServiceNeeded).getValue();
-                                    window.feature.serviceNeededStore.proxy.extraParams.searchValue = searchValue;
+                                    var searchValue = window.feature.container.down('#' + window.feature.searchCondition).getValue();
+                                    window.feature.conditionStore.proxy.extraParams.searchValue = searchValue;
                                     window.feature.doSearch.delay(500);
                                 }
                             }
@@ -225,8 +225,8 @@
             }, {
                 xtype: 'gridpanel',
                 cls: 'white-border',
-                itemId: window.feature.gridServiceNeededId,
-                store: window.feature.serviceNeededStore,
+                itemId: window.feature.gridConditionId,
+                store: window.feature.conditionStore,
                 loadMask: true,
                 disableSelection: true,
                 flex: 3,
@@ -283,19 +283,19 @@
                                     cls: 'x-add-button-gradient',
                                     handler: function () {
 
-                                        var serviceNeededKeyword = winEdit.down('#' + window.feature.formServiceNeededKeywordId);
-                                        var serviceNeededCode = winEdit.down('#' + window.feature.formServiceNeededCodeId);
-                                        var serviceNeededDescription = winEdit.down('#' + window.feature.formServiceNeededDescriptionId);
+                                        var conditionKeyword = winEdit.down('#' + window.feature.formConditionKeywordId);
+                                        var conditionCode = winEdit.down('#' + window.feature.formConditionCodeId);
+                                        var conditionDescription = winEdit.down('#' + window.feature.formConditionDescriptionId);
 
-                                        if (serviceNeededCode.getValue() == '') {
-                                            serviceNeededCode.markInvalid('Field Code is required!');
-                                            serviceNeededCode.setValue(null);
+                                        if (conditionCode.getValue() == '') {
+                                            conditionCode.markInvalid('Field Code is required!');
+                                            conditionCode.setValue(null);
                                         } else {
                                             var values = {
                                                 Id: rec.get('Id'),
-                                                Keyword: serviceNeededKeyword.getValue(),
-                                                Code: serviceNeededCode.getValue(),
-                                                Description: serviceNeededDescription.getValue()
+                                                Keyword: conditionKeyword.getValue(),
+                                                Code: conditionCode.getValue(),
+                                                Description: conditionDescription.getValue()
                                             };
                                             var postToUrl = '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Condition", action = "Edit" })';
                                             var action = $.post(postToUrl, values);
@@ -311,7 +311,7 @@
 
                                                     winEdit.close();
                                                     winEdit.destroy();
-                                                    window.feature.serviceNeededStore.loadPage(1);
+                                                    window.feature.conditionStore.loadPage(1);
                                                 }
                                             });
                                         }
@@ -320,9 +320,9 @@
                                 }]
                             });
 
-                            winEdit.down('#' + window.feature.formServiceNeededCodeId).setValue(rec.get('Code'));
-                            winEdit.down('#' + window.feature.formServiceNeededKeywordId).setValue(rec.get('Keyword'));
-                            winEdit.down('#' + window.feature.formServiceNeededDescriptionId).setValue(rec.get('Description'));
+                            winEdit.down('#' + window.feature.formConditionCodeId).setValue(rec.get('Code'));
+                            winEdit.down('#' + window.feature.formConditionKeywordId).setValue(rec.get('Keyword'));
+                            winEdit.down('#' + window.feature.formConditionDescriptionId).setValue(rec.get('Description'));
 
                             winEdit.show();
                             }
@@ -361,7 +361,7 @@
                                                 msgAlert.msgButtons['ok'].margin = '10 10 20 0',
                                                 msgAlert.alert(serverResponse.Status, serverResponse.Message);
                                             }
-                                            window.feature.serviceNeededStore.loadPage(1);
+                                            window.feature.conditionStore.loadPage(1);
                                         });
                                     }
 
@@ -371,7 +371,7 @@
                     }]
                 }],
                 bbar: Ext.create('Ext.PagingToolbar', {
-                    store: window.feature.serviceNeededStore,
+                    store: window.feature.conditionStore,
                     displayInfo: true,
                     displayMsg: 'Displaying topics {0} - {1} of {2}',
                     emptyMsg: "No topics to display",
@@ -384,7 +384,7 @@
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.serviceNeededStore.loadPage(1);
+        window.feature.conditionStore.loadPage(1);
     });
 
 </script>

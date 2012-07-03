@@ -23,16 +23,16 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public void ItShouldCreateAMessageFromDrugShop_FromAGivenRawSmsReceived()
         {
             //Arrange
-            var services = objectMother.ListOfServiceNeeded();
+            var services = objectMother.ListOfCondition();
             var messages = objectMother.ListOfMessagesFromDrugSho();
-            objectMother.queryServiceNeeded.Expect(call => call.Query()).Return(services);
+            objectMother.queryCondition.Expect(call => call.Query()).Return(services);
             objectMother.queryMessageFromDrugShop.Expect(call => call.Query()).Return(messages);
 
             //Act
             var result = objectMother.service.CreateMessageFromDrugShop(objectMother.rawSmsReceived);
 
             //Assert
-            objectMother.queryServiceNeeded.VerifyAllExpectations();
+            objectMother.queryCondition.VerifyAllExpectations();
             objectMother.queryMessageFromDrugShop.VerifyAllExpectations();
 
             Assert.IsInstanceOf<MessageFromDrugShop>(result);

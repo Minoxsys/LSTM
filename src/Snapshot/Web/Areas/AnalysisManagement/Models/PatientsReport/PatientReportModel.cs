@@ -12,7 +12,7 @@ namespace Web.Areas.AnalysisManagement.Models.PatientsReport
         public PatientReportoutputModel ReportModel { get; set; }
 
         public Outpost Outpost { get; set; }
-        public IList<ServiceNeeded> ConditionList { get; set; }
+        public IList<Condition> ConditionList { get; set; }
         public IList<Diagnosis> DiagnosisList { get; set; }
         public IList<Treatment> TreatmentList { get; set; }
         public IList<Advice> AdviceList { get; set; }
@@ -21,7 +21,7 @@ namespace Web.Areas.AnalysisManagement.Models.PatientsReport
         {
             ReportModel = new PatientReportoutputModel();
             Outpost = new Outpost();
-            ConditionList = new List<ServiceNeeded>();
+            ConditionList = new List<Condition>();
             DiagnosisList = new List<Diagnosis>();
             TreatmentList = new List<Treatment>();
             AdviceList = new List<Advice>();

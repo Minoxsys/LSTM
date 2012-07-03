@@ -19,7 +19,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
         public IQueryService<MessageFromDispensary> queryMessageFromDispensary;
         public IQueryService<Outpost> queryOutpost;
 
-        public IQueryService<ServiceNeeded> queryServiceNeeded;
+        public IQueryService<Condition> queryCondition;
         public IQueryService<Diagnosis> queryDiagnosis;
         public IQueryService<Treatment> queryTreatment;
         public IQueryService<Advice> queryAdvice;
@@ -36,8 +36,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
         public Advice advice;
         public Guid diagnosisId;
         public Diagnosis diagnosis;
-        public Guid serviceNeededId;
-        public ServiceNeeded serviceNeeded;
+        public Guid conditionId;
+        public Condition condition;
         public Guid treatmentId;
         public Treatment treatment;
 
@@ -77,7 +77,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
             queryMessageFromDispensary = MockRepository.GenerateMock<IQueryService<MessageFromDispensary>>();
             queryOutpost = MockRepository.GenerateMock<IQueryService<Outpost>>();
 
-            queryServiceNeeded = MockRepository.GenerateMock<IQueryService<ServiceNeeded>>();
+            queryCondition = MockRepository.GenerateMock<IQueryService<Condition>>();
             queryDiagnosis = MockRepository.GenerateMock<IQueryService<Diagnosis>>();
             queryTreatment = MockRepository.GenerateMock<IQueryService<Treatment>>();
             queryAdvice = MockRepository.GenerateMock<IQueryService<Advice>>();
@@ -95,7 +95,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
             controller.QueryOutpost = queryOutpost;
             controller.QueryAdvice = queryAdvice;
             controller.QueryDiagnosis = queryDiagnosis;
-            controller.QueryServiceNeeded = queryServiceNeeded;
+            controller.QueryCondition = queryCondition;
             controller.QueryTreatment = queryTreatment;
         }
 
@@ -139,12 +139,12 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
             diagnosis.Code = "D1";
             diagnosis.Client = client;
 
-            serviceNeededId = Guid.NewGuid();
-            serviceNeeded = MockRepository.GeneratePartialMock<ServiceNeeded>();
-            serviceNeeded.Stub(c => c.Id).Return(serviceNeededId);
-            serviceNeeded.Keyword = "ServiceNeeded1";
-            serviceNeeded.Code = "S1";
-            serviceNeeded.Client = client;
+            conditionId = Guid.NewGuid();
+            condition = MockRepository.GeneratePartialMock<Condition>();
+            condition.Stub(c => c.Id).Return(conditionId);
+            condition.Keyword = "Condition1";
+            condition.Code = "S1";
+            condition.Client = client;
 
             treatmentId = Guid.NewGuid();
             treatment = MockRepository.GeneratePartialMock<Treatment>();
@@ -208,7 +208,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
                 messageDrugShop.Initials = "XY";
                 messageDrugShop.OutpostId = drugshopId;
                 messageDrugShop.SentDate = DateTime.UtcNow.AddDays(-i);
-                messageDrugShop.ServicesNeeded = new List<ServiceNeeded> { serviceNeeded, new ServiceNeeded { Keyword = "a", Code = "SS" + i, Client = client } };
+                messageDrugShop.ServicesNeeded = new List<Condition> { condition, new Condition { Keyword = "a", Code = "SS" + i, Client = client } };
 
                 listOfMessagesFromDrugShop.Add(messageDrugShop);
 
@@ -237,7 +237,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
                 message.Initials = "ZZ";
                 message.OutpostId = Guid.NewGuid();
                 message.SentDate = DateTime.UtcNow.AddDays(-i);
-                message.ServicesNeeded = new List<ServiceNeeded> { new ServiceNeeded { Keyword = "a", Code = "SS" + i, Client = client } };
+                message.ServicesNeeded = new List<Condition> { new Condition { Keyword = "a", Code = "SS" + i, Client = client } };
 
                 listOfMessagesFromDrugShop.Add(message);
 
@@ -284,7 +284,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
             messageDrugShop1.Initials = "XY";
             messageDrugShop1.OutpostId = drugshopId1;
             messageDrugShop1.SentDate = DateTime.UtcNow.AddDays(-5);
-            messageDrugShop1.ServicesNeeded = new List<ServiceNeeded> { new ServiceNeeded { Keyword = "a", Code = "SA", Client = client } };
+            messageDrugShop1.ServicesNeeded = new List<Condition> { new Condition { Keyword = "a", Code = "SA", Client = client } };
 
             MessageFromDrugShop messageDrugShop2 = new MessageFromDrugShop();
             messageDrugShop2.BirthDate = DateTime.UtcNow.AddYears(-16);
@@ -293,7 +293,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
             messageDrugShop2.Initials = "XY";
             messageDrugShop2.OutpostId = drugshopId2;
             messageDrugShop2.SentDate = DateTime.UtcNow.AddDays(-6);
-            messageDrugShop2.ServicesNeeded = new List<ServiceNeeded> { serviceNeeded, new ServiceNeeded { Keyword = "a", Code = "WS", Client = client } };
+            messageDrugShop2.ServicesNeeded = new List<Condition> { condition, new Condition { Keyword = "a", Code = "WS", Client = client } };
 
             listOfMessagesFromDrugShop.Add(messageDrugShop1);
             listOfMessagesFromDrugShop.Add(messageDrugShop2);

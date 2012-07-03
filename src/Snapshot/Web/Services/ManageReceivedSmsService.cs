@@ -19,7 +19,7 @@ namespace Web.Services
         private const string XMLDateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
 
-        private IQueryService<ServiceNeeded> queryServiceNeeded;
+        private IQueryService<Condition> queryCondition;
         private IQueryService<Diagnosis> queryDiagnosis;
         private IQueryService<Treatment> queryTreatment;
         private IQueryService<Advice> queryAdvice;
@@ -27,7 +27,7 @@ namespace Web.Services
         private IQueryService<Contact> queryServiceContact;
         private IQueryOutposts queryOutposts;
 
-        public ManageReceivedSmsService(IQueryService<ServiceNeeded> queryServiceNeeded,
+        public ManageReceivedSmsService(IQueryService<Condition> queryCondition,
                                 IQueryService<Diagnosis> queryDiagnosis,
                                 IQueryService<Treatment> queryTreatment,
                                 IQueryService<Advice> queryAdvice,
@@ -40,7 +40,7 @@ namespace Web.Services
             this.queryMessageFromDrugShop = queryMessageFromDrugShop;
             this.queryOutposts = queryOutposts;
             this.queryServiceContact = queryServiceContact;
-            this.queryServiceNeeded = queryServiceNeeded;
+            this.queryCondition = queryCondition;
             this.queryTreatment = queryTreatment;
         }
 
@@ -87,8 +87,8 @@ namespace Web.Services
                 {
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
-                        var existServiceNeeded = queryServiceNeeded.Query().Where(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper()).Any();
-                        if (!existServiceNeeded)
+                        var existCondition = queryCondition.Query().Where(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper()).Any();
+                        if (!existCondition)
                         {
                             rawSmsReceived.ParseSucceeded = false;
                             rawSmsReceived.ParseErrorMessage = "Service " + parsedLine[i].Trim() + " is incorect. Please check and retry. Thank you.";
@@ -174,8 +174,8 @@ namespace Web.Services
             {
                 if (!string.IsNullOrEmpty(parsedLine[i]))
                 {
-                    ServiceNeeded serviceNeeded = queryServiceNeeded.Query().Where(it => it.Code == parsedLine[i].Trim()).FirstOrDefault();
-                    message.AddServiceNeeded(serviceNeeded);
+                    Condition condition = queryCondition.Query().Where(it => it.Code == parsedLine[i].Trim()).FirstOrDefault();
+                    message.AddCondition(condition);
                 }
             }
 

@@ -96,7 +96,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
 
             for (int i = 0; i < 3; i++)
             {
-                messageFromDrugShop.ServicesNeeded.Add(new ServiceNeeded
+                messageFromDrugShop.ServicesNeeded.Add(new Condition
                 {
                     Code = "S" + i,
                     Description = "some Description",

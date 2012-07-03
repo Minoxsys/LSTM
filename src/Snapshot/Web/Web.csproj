@@ -250,9 +250,9 @@
     <Compile Include="Areas\ConditionManagement\Models\Diagnosis\DiagnosisIndexOuputModel.cs" />
     <Compile Include="Areas\ConditionManagement\Models\Diagnosis\DiagnosisInputModel.cs" />
     <Compile Include="Areas\ConditionManagement\Models\Diagnosis\DiagnosisModel.cs" />
-    <Compile Include="Areas\ConditionManagement\Models\Condition\ServiceNeededIndexModel.cs" />
-    <Compile Include="Areas\ConditionManagement\Models\Condition\ServiceNeededIndexOuputModel.cs" />
-    <Compile Include="Areas\ConditionManagement\Models\Condition\ServiceNeededModel.cs" />
+    <Compile Include="Areas\ConditionManagement\Models\Condition\ConditionIndexModel.cs" />
+    <Compile Include="Areas\ConditionManagement\Models\Condition\ConditionIndexOuputModel.cs" />
+    <Compile Include="Areas\ConditionManagement\Models\Condition\ConditionModel.cs" />
     <Compile Include="Areas\ConditionManagement\Models\Treatment\TreatmentIndexModel.cs" />
     <Compile Include="Areas\ConditionManagement\Models\Treatment\TreatmentIndexOuputModel.cs" />
     <Compile Include="Areas\ConditionManagement\Models\Treatment\TreatmentInputModel.cs" />

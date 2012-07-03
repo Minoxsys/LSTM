@@ -4,10 +4,10 @@
         sidebar: {
             id: 'SideBar',
             group: 'SideBarGroup',
-            serviceneeded: 'Sidebar-ServiceAdministration-ServiceNeeded-Button',
-            diagnosis: 'Sidebar-ServiceAdministration-Diagnosis-Button',
-            treatment: 'Sidebar-ServiceAdministration-Treatment-Button',
-            advice: 'Sidebar-ServiceAdministration-Advice-Button'
+            condition: 'Sidebar-ConditionAdministration-Condition-Button',
+            diagnosis: 'Sidebar-ConditionAdministration-Diagnosis-Button',
+            treatment: 'Sidebar-ConditionAdministration-Treatment-Button',
+            advice: 'Sidebar-ConditionAdministration-Advice-Button'
         }
     };
     Ext.onReady(function () {
@@ -44,7 +44,7 @@
                         items: [
                             {
                                 xtype: 'button',
-                                id: contentRes.maincontent.sidebar.serviceneeded,
+                                id: contentRes.maincontent.sidebar.condition,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Symptom',
@@ -52,7 +52,7 @@
                                 height: 30,
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {
-                                    navigateTo(window.res.link.serviceneeded);
+                                    navigateTo(window.res.link.condition);
                                 }
                             },
                             {

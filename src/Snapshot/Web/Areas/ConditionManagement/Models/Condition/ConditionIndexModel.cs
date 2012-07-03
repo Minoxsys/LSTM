@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Web.Areas.ConditionManagement.Models.Condition
 {
-    public class ServiceNeededIndexModel
+    public class ConditionIndexModel
     {
         public string _dc { get; set; }
 

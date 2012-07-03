@@ -7,7 +7,7 @@ using Web.Models.Shared;
 using Rhino.Mocks;
 using Domain;
 
-namespace Tests.Unit.Controllers.Areas.ConditionManagement.ServiceNeededControllerTests
+namespace Tests.Unit.Controllers.Areas.ConditionManagement.ConditionControllerTests
 {
     [TestFixture]
     public class DeleteMethod
@@ -21,7 +21,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.ServiceNeededControll
         }
 
         [Test]
-        public void Returns_JSON_With_ErrorMessage_When_ServiceNeededId_IsNull()
+        public void Returns_JSON_With_ErrorMessage_When_ConditionId_IsNull()
         {
             //Arrange
 
@@ -32,27 +32,27 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.ServiceNeededControll
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Error"));
-            Assert.That(response.Message, Is.EqualTo("You must supply a conditionId in order to remove the condition."));
+            Assert.That(response.Message, Is.EqualTo("You must supply a symptomId in order to remove the condition."));
         }
 
         [Test]
-        public void Returns_JSON_With_SuccessMessage_When_ServiceNeeded_HasBeenDeleted()
+        public void Returns_JSON_With_SuccessMessage_When_Condition_HasBeenDeleted()
         {
             //Arrange
-            objectMother.queryServiceNeeded.Expect(call => call.Load(objectMother.serviceNeededId)).Return(objectMother.serviceNeeded);
-            objectMother.deleteCommand.Expect(call => call.Execute(Arg<ServiceNeeded>.Matches(p => p.Id == objectMother.serviceNeededId)));
+            objectMother.queryCondition.Expect(call => call.Load(objectMother.conditionId)).Return(objectMother.condition);
+            objectMother.deleteCommand.Expect(call => call.Execute(Arg<Condition>.Matches(p => p.Id == objectMother.conditionId)));
 
             //Act
-            var jsonResult = objectMother.controller.Delete(objectMother.serviceNeeded.Id);
+            var jsonResult = objectMother.controller.Delete(objectMother.condition.Id);
 
             //Assert
-            objectMother.queryServiceNeeded.VerifyAllExpectations();
+            objectMother.queryCondition.VerifyAllExpectations();
             objectMother.deleteCommand.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             var response = jsonResult.Data as JsonActionResponse;
             Assert.That(response.Status, Is.EqualTo("Success"));
-            Assert.That(response.Message, Is.EqualTo("Condition with code "+objectMother.serviceNeeded.Code+" was removed."));
+            Assert.That(response.Message, Is.EqualTo("Symptom with code " + objectMother.condition.Code + " was removed."));
         }
     }
 }

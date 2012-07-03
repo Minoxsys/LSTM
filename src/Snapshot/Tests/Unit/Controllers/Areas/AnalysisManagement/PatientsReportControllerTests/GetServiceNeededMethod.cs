@@ -10,7 +10,7 @@ using Web.Areas.AnalysisManagement.Models.PatientsReport;
 namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControllerTests
 {
     [TestFixture]
-    public class GetServiceNeededMethod
+    public class GetConditionMethod
     {
         public ObjectMother objectMother = new ObjectMother();
 
@@ -24,13 +24,13 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.PatientsReportControll
         public void Returns_JSON_With_List_Of_Service_Needed_For_User()
         {
             //Arange
-            objectMother.queryServiceNeeded.Expect(call => call.Query()).Return(new ServiceNeeded[] { objectMother.serviceNeeded }.AsQueryable());
+            objectMother.queryCondition.Expect(call => call.Query()).Return(new Condition[] { objectMother.condition }.AsQueryable());
 
             //Act
-            var jsonResult = objectMother.controller.GetServiceNeeded();
+            var jsonResult = objectMother.controller.GetCondition();
 
             //Assert
-            objectMother.queryServiceNeeded.VerifyAllExpectations();
+            objectMother.queryCondition.VerifyAllExpectations();
 
             Assert.IsNotNull(jsonResult);
             Assert.IsInstanceOf<ServiceIndexOutputModel>(jsonResult.Data);

@@ -161,11 +161,11 @@
     <Compile Include="Unit\Controllers\Areas\ConditionManagement\DiagnosisControllerTests\EditMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\ConditionManagement\DiagnosisControllerTests\GetDiagnosisMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\ConditionManagement\DiagnosisControllerTests\ObjectMother.cs" />
-    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ServiceNeededControllerTests\CreateMethod.cs" />
-    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ServiceNeededControllerTests\DeleteMethod.cs" />
-    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ServiceNeededControllerTests\EditMethod.cs" />
-    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ServiceNeededControllerTests\GetServiceNeededMethod.cs" />
-    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ServiceNeededControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ConditionControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ConditionControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ConditionControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ConditionControllerTests\GetConditionMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\ConditionControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\ConditionManagement\TreatmentControllerTests\CreateMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\ConditionManagement\TreatmentControllerTests\DeleteMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\ConditionManagement\TreatmentControllerTests\EditMethod.cs" />

@@ -54,8 +54,8 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         {
             //Arrange
             RawSmsReceived smsReceived = new RawSmsReceived { Content = ObjectMother.WRONGSERVICEMESSAGEFROMDRUGSHOP };
-            var services = objectMother.ListOfServiceNeeded();
-            objectMother.queryServiceNeeded.Expect(call => call.Query()).Return(services);
+            var services = objectMother.ListOfCondition();
+            objectMother.queryCondition.Expect(call => call.Query()).Return(services);
 
             //Act
             var result = objectMother.service.ParseRawSmsReceivedFromDrugShop(smsReceived);
@@ -71,8 +71,8 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         {
             //Arrange
             RawSmsReceived smsReceived = new RawSmsReceived { Content = ObjectMother.CORRECTMESSAGEFROMDRUGSHOP };
-            var services = objectMother.ListOfServiceNeeded();
-            objectMother.queryServiceNeeded.Expect(call => call.Query()).Return(services);
+            var services = objectMother.ListOfCondition();
+            objectMother.queryCondition.Expect(call => call.Query()).Return(services);
 
             //Act
             var result = objectMother.service.ParseRawSmsReceivedFromDrugShop(smsReceived);

@@ -10,21 +10,21 @@ using Rhino.Mocks;
 using MvcContrib.TestHelper.Fakes;
 using Web.Areas.ConditionManagement.Models.Condition;
 
-namespace Tests.Unit.Controllers.Areas.ConditionManagement.ServiceNeededControllerTests
+namespace Tests.Unit.Controllers.Areas.ConditionManagement.ConditionControllerTests
 {
     public class ObjectMother
     {
         public ConditionController controller;
 
-        public IQueryService<ServiceNeeded> queryServiceNeeded;
-        public ISaveOrUpdateCommand<ServiceNeeded> saveCommand;
-        public IDeleteCommand<ServiceNeeded> deleteCommand;
+        public IQueryService<Condition> queryCondition;
+        public ISaveOrUpdateCommand<Condition> saveCommand;
+        public IDeleteCommand<Condition> deleteCommand;
 
         public IQueryService<User> queryUses;
         public IQueryService<Client> queryClient;
 
-        public Guid serviceNeededId;
-        public ServiceNeeded serviceNeeded;
+        public Guid conditionId;
+        public Condition condition;
         public Guid clientId;
         public Client client;
         public Guid userId;
@@ -45,11 +45,11 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.ServiceNeededControll
 
         private void MockServices()
         {
-            queryServiceNeeded = MockRepository.GenerateMock<IQueryService<ServiceNeeded>>();
+            queryCondition = MockRepository.GenerateMock<IQueryService<Condition>>();
             queryUses = MockRepository.GenerateMock<IQueryService<User>>();
             queryClient = MockRepository.GenerateMock<IQueryService<Client>>();
-            saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<ServiceNeeded>>();
-            deleteCommand = MockRepository.GenerateMock<IDeleteCommand<ServiceNeeded>>();
+            saveCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<Condition>>();
+            deleteCommand = MockRepository.GenerateMock<IDeleteCommand<Condition>>();
         }
 
         private void Setup_Controller()
@@ -60,7 +60,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.ServiceNeededControll
             FakeControllerContext.Initialize(controller);
 
             controller.QueryClients = queryClient;
-            controller.QueryServiceNeeded = queryServiceNeeded;
+            controller.QueryCondition = queryCondition;
             controller.QueryUsers = queryUses;
 
             controller.SaveOrUpdateCommand = saveCommand;
@@ -84,22 +84,22 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.ServiceNeededControll
             queryClient.Stub(c => c.Load(clientId)).Return(client);
             queryUses.Stub(c => c.Query()).Return(new[] { user }.AsQueryable());
 
-            serviceNeededId = Guid.NewGuid();
-            serviceNeeded = MockRepository.GeneratePartialMock<ServiceNeeded>();
-            serviceNeeded.Stub(c => c.Id).Return(serviceNeededId);
-            serviceNeeded.Code = SERVICENEEDED_CODE;
-            serviceNeeded.Keyword = SERVICENEEDED_KEYWORD;
-            serviceNeeded.Description = SERVICENEEDED_DESCRIPTION;
-            serviceNeeded.Client = client;
+            conditionId = Guid.NewGuid();
+            condition = MockRepository.GeneratePartialMock<Condition>();
+            condition.Stub(c => c.Id).Return(conditionId);
+            condition.Code = SERVICENEEDED_CODE;
+            condition.Keyword = SERVICENEEDED_KEYWORD;
+            condition.Description = SERVICENEEDED_DESCRIPTION;
+            condition.Client = client;
         }
 
-        public IQueryable<ServiceNeeded> PageOfServiceNeededData(ServiceNeededIndexModel indexModel)
+        public IQueryable<Condition> PageOfConditionData(ConditionIndexModel indexModel)
         {
-            List<ServiceNeeded> serviceNeededList = new List<ServiceNeeded>();
+            List<Condition> conditionList = new List<Condition>();
 
             for (int i = indexModel.start.Value; i < indexModel.limit.Value; i++)
             {
-                serviceNeededList.Add(new ServiceNeeded
+                conditionList.Add(new Condition
                 {
                     Code = SERVICENEEDED_CODE + i,
                     Description = SERVICENEEDED_DESCRIPTION,
@@ -107,7 +107,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.ServiceNeededControll
                     Client = client
                 });
             }
-            return serviceNeededList.AsQueryable();
+            return conditionList.AsQueryable();
         }
     }
 }

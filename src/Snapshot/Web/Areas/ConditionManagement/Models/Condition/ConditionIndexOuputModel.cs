@@ -5,9 +5,9 @@ using System.Web;
 
 namespace Web.Areas.ConditionManagement.Models.Condition
 {
-    public class ServiceNeededIndexOuputModel
+    public class ConditionIndexOuputModel
     {
-        public ServiceNeededModel[] ServiceNeeded { get; set; }
+        public ConditionModel[] Condition { get; set; }
         public int TotalItems { get; set; }
     }
 }
