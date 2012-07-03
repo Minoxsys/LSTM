@@ -4,7 +4,7 @@
         sidebar: {
             id: 'SideBar',
             group: 'SideBarGroup',
-            drugstore: 'Sidebar-Messages-DrugStore-Button',
+            drugshop: 'Sidebar-Messages-DrugShop-Button',
             dispensary: 'Sidebar-Messages-Dispensary-Button',
             healthcenter: 'Sidebar-Messages-Health-Center-Button'
         }
@@ -43,7 +43,7 @@
                         items: [
                             {
                                 xtype: 'button',
-                                id: contentRes.maincontent.sidebar.drugstore,
+                                id: contentRes.maincontent.sidebar.drugshop,
                                 toggleGroup: contentRes.maincontent.sidebar.group,
                                 enableToggle: true,
                                 text: 'Shop/ADDO',
@@ -51,7 +51,7 @@
                                 height: 30,
                                 ui: 'snapshot-sidebar-btn',
                                 handler: function () {
-                                    navigateTo(window.res.link.drugstore);
+                                    navigateTo(window.res.link.drugshop);
                                 }
                             },
                             {

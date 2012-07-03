@@ -84,7 +84,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
             return rawSMSList.AsQueryable();
         }
 
-        public IQueryable<RawSmsReceived> PageOfDrugstoreData(MessagesIndexModel indexModel)
+        public IQueryable<RawSmsReceived> PageOfDrugShopData(MessagesIndexModel indexModel)
         {
             List<RawSmsReceived> rawSMSList = new List<RawSmsReceived>();
 

@@ -53,7 +53,7 @@
             diagnosis: '@(Url.RouteUrl<DiagnosisController>(x=>x.Overview(), ConditionManagementAreaRegistration.DEFAULT_ROUTE))',
             treatment: '@(Url.RouteUrl<TreatmentController>(x=>x.Overview(), ConditionManagementAreaRegistration.DEFAULT_ROUTE))',
             advice: '@(Url.RouteUrl<AdviceController>(x=>x.Overview(), ConditionManagementAreaRegistration.DEFAULT_ROUTE))',
-            drugstore: '@(Url.RouteUrl<DrugstoreController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))',
+            drugshop: '@(Url.RouteUrl<DrugShopController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))',
             dispensary: '@(Url.RouteUrl<DispensaryController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))',
             healthcenter: '@(Url.RouteUrl<HealthCenterController>(x=>x.Overview(), MessagesManagementAreaRegistration.DEFAULT_ROUTE))'
         },
@@ -65,7 +65,7 @@
                 logo: 'Logo',
                 dashboard:'Dashboard',
                 administration: 'Administration',
-                drugstore: 'Messages',
+                drugshop: 'Messages',
                 analysisAndReports:'AnalysisAndReports'
 
             },
@@ -153,7 +153,7 @@
                             },
                             {
                                 xtype: 'button',
-                                id: res.header.navigation.drugstore,
+                                id: res.header.navigation.drugshop,
                                 height: 70,
                                 padding: '0 0 0 5',
                                 width: 140,
@@ -162,7 +162,7 @@
                                 ui: 'snapshot-navigation-btn',
                                 toggleGroup: res.header.navigation.toggleGroup,
                                 handler: function () {
-                                    navigateTo(res.link.drugstore);
+                                    navigateTo(res.link.drugshop);
                                 },
                                 enableToggle: true,
                                 text: '&nbsp;&nbsp;&nbsp;&nbsp;Messages'

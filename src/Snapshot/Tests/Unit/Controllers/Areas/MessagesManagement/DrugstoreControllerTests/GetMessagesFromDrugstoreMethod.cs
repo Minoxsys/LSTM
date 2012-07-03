@@ -7,10 +7,10 @@ using Web.Areas.MessagesManagement.Models;
 using Rhino.Mocks;
 using Web.Areas.MessagesManagement.Models.Messages;
 
-namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTests
+namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugShopControllerTests
 {
     [TestFixture]
-    public class GetMessagesFromDrugstoreMethod
+    public class GetMessagesFromDrugShopMethod
     {
         public ObjectMother objectMother = new ObjectMother();
 
@@ -36,7 +36,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDrugstore(indexModel);
+            var jsonResult = objectMother.controller.GetMessagesFromDrugShop(indexModel);
 
             //Assert
             objectMother.queryRawSms.VerifyAllExpectations();
@@ -49,7 +49,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
         }
 
         [Test]
-        public void Returns_OnlyMessagesFromDrugstores()
+        public void Returns_OnlyMessagesFromDrugShops()
         {
             //Arrange
             var indexModel = new MessagesIndexModel
@@ -60,11 +60,11 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                 start = 0,
                 sort = "Sender"
             };
-            var pageOfData = objectMother.PageOfDrugstoreData(indexModel);
+            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDrugstore(indexModel);
+            var jsonResult = objectMother.controller.GetMessagesFromDrugShop(indexModel);
 
             //Assert
             objectMother.queryRawSms.VerifyAllExpectations();
@@ -77,7 +77,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
         }
 
         [Test]
-        public void Returns_OnlyMessagesFromDrugstores_Order_DESC_by_Content()
+        public void Returns_OnlyMessagesFromDrugShops_Order_DESC_by_Content()
         {
             //Arrange
             var indexModel = new MessagesIndexModel
@@ -88,11 +88,11 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                 start = 0,
                 sort = "Content"
             };
-            var pageOfData = objectMother.PageOfDrugstoreData(indexModel);
+            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDrugstore(indexModel);
+            var jsonResult = objectMother.controller.GetMessagesFromDrugShop(indexModel);
 
             //Assert
             objectMother.queryRawSms.VerifyAllExpectations();
@@ -101,7 +101,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             Assert.That(jsonData.Messages[0].Content, Is.EqualTo(objectMother.rawSms.Content+ "-8"));
         }
         [Test]
-        public void Returns_OnlyMessagesFromDrugstores_WhereContentContains_SearchValue()
+        public void Returns_OnlyMessagesFromDrugShops_WhereContentContains_SearchValue()
         {
             //Arrange
             var indexModel = new MessagesIndexModel
@@ -114,11 +114,11 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
                 searchValue = "-8"
             };
 
-            var pageOfData = objectMother.PageOfDrugstoreData(indexModel);
+            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDrugstore(indexModel);
+            var jsonResult = objectMother.controller.GetMessagesFromDrugShop(indexModel);
 
             //Assert
             objectMother.queryRawSms.VerifyAllExpectations();

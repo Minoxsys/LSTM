@@ -59,7 +59,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 start = 0,
                 sort = "Sender"
             };
-            var pageOfData = objectMother.PageOfDrugstoreData(indexModel);
+            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
@@ -87,7 +87,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 start = 0,
                 sort = "Content"
             };
-            var pageOfData = objectMother.PageOfDrugstoreData(indexModel);
+            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
@@ -113,7 +113,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 searchValue = "-8"
             };
 
-            var pageOfData = objectMother.PageOfDrugstoreData(indexModel);
+            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
             objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act

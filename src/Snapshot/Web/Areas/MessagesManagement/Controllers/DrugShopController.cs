@@ -11,7 +11,7 @@ using Web.Security;
 
 namespace Web.Areas.MessagesManagement.Controllers
 {
-    public class DrugstoreController : Controller
+    public class DrugShopController : Controller
     {
         public IQueryService<RawSmsReceived> QueryRawSms { get; set; }
         public IQueryService<Outpost> QueryOutpost { get; set; }
@@ -24,7 +24,7 @@ namespace Web.Areas.MessagesManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetMessagesFromDrugstore(MessagesIndexModel indexModel)
+        public JsonResult GetMessagesFromDrugShop(MessagesIndexModel indexModel)
         {
             var pageSize = indexModel.limit.Value;
             var rawDataQuery = this.QueryRawSms.Query().Where(it => it.OutpostType == 0);

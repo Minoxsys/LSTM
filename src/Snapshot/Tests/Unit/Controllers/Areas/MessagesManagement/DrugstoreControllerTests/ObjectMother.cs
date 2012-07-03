@@ -9,11 +9,11 @@ using Rhino.Mocks;
 using Web.Areas.MessagesManagement.Models;
 using Web.Areas.MessagesManagement.Models.Messages;
 
-namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTests
+namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugShopControllerTests
 {
     public class ObjectMother
     {
-        public DrugstoreController controller;
+        public DrugShopController controller;
         public IQueryService<RawSmsReceived> queryRawSms;
         public IQueryService<Outpost> queryOutposts;
 
@@ -51,7 +51,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
 
         private void Setup_Controller()
         {
-            controller = new DrugstoreController();
+            controller = new DrugShopController();
             controller.QueryRawSms = queryRawSms;
             controller.QueryOutpost = queryOutposts;
         }
@@ -84,7 +84,7 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DrugstoreControllerTes
             return rawSMSList.AsQueryable();
         }
 
-        public IQueryable<RawSmsReceived> PageOfDrugstoreData(MessagesIndexModel indexModel)
+        public IQueryable<RawSmsReceived> PageOfDrugShopData(MessagesIndexModel indexModel)
         {
             List<RawSmsReceived> rawSMSList = new List<RawSmsReceived>();
 

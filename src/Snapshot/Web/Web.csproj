@@ -188,7 +188,7 @@
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentReportIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentReportModel.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\DispensaryController.cs" />
-    <Compile Include="Areas\MessagesManagement\Controllers\DrugstoreController.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\DrugShopController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\HealthCenterController.cs" />
     <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
@@ -2120,7 +2120,7 @@
     <Content Include="Areas\ConditionManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ConditionManagement\Views\Web.config" />
     <Content Include="Areas\MessagesManagement\Views\Web.config" />
-    <Content Include="Areas\MessagesManagement\Views\Drugstore\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\DrugShop\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\_ViewStart.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\Shared\_MessagesSideBar.cshtml" />
     <Content Include="Areas\ConditionManagement\Views\Treatment\Overview.cshtml" />
