@@ -15,7 +15,7 @@ Send message
         window.feature = {};
 
         window.feature.fileStore = Ext.create('Ext.data.Store', {
-            fields: ['Name'],
+            fields: ['Name', 'Size'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "GetBackupFileList" })',
@@ -177,6 +177,13 @@ Send message
                             dataIndex: 'Name',
                             minWidth: 250,
                             flex: 2,
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            header: "File Length",
+                            dataIndex: 'Size',
+                            minWidth: 100,
+                            flex: 1,
                             menuDisabled: true,
                             sortable: true
                         }, {

@@ -6,6 +6,7 @@ using WebBackgrounder;
 using System.Threading.Tasks;
 using Web.Services;
 using System.Data.SqlClient;
+using Web.Bootstrap;
 
 namespace Web.BackgroundJobs
 {
@@ -32,7 +33,7 @@ namespace Web.BackgroundJobs
                     fileService.CreateDirectory(backupDirectory);
                     
                 SqlConnection connect;
-                string con = "Data Source=.\\sqlexpress;Initial Catalog=LSTMDB;Integrated Security=True";
+                string con = AppSettings.ServerConnectionStrings;
                 connect = new SqlConnection(con);
                 connect.Open();
 

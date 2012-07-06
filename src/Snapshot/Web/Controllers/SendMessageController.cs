@@ -141,7 +141,7 @@ namespace Web.Controllers
                     FileService.CreateDirectory(backupDirectory);
 
                 SqlConnection connect;
-                string con = "Data Source=.\\sqlexpress;Initial Catalog=LSTMDB;Integrated Security=True";
+                string con = AppSettings.ServerConnectionStrings;  //"Data Source=.\\sqlexpress;Initial Catalog=LSTMDB;Integrated Security=True";
                 connect = new SqlConnection(con);
                 connect.Open();
 
@@ -182,7 +182,7 @@ namespace Web.Controllers
                 if (FileService.ExistsFile(file))
                 {
                     SqlConnection connect;
-                    string con = "Data Source=.\\sqlexpress;Initial Catalog=LSTMDB;Integrated Security=True";
+                    string con = AppSettings.ServerConnectionStrings;
                     connect = new SqlConnection(con);
                     connect.Open();
 
@@ -234,7 +234,8 @@ namespace Web.Controllers
             foreach (var file in fileList)
             {
                 string fileName = file.Substring(backupDirector.Length + 1, file.Length - backupDirector.Length-1);
-                FileBackupModel model = new FileBackupModel { Name = fileName };
+                string size = file.Length.ToString();
+                FileBackupModel model = new FileBackupModel { Name = fileName, Size = size };
                 files.Add(model);
             }
 
