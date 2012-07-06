@@ -38,5 +38,11 @@ namespace Web.Services
         {
             return File.Exists(path);
         }
+
+
+        public void DeleteFile(string path)
+        {
+            File.Delete(path);
+        }
     }
 }

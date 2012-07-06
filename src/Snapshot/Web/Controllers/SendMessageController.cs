@@ -224,6 +224,36 @@ namespace Web.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult DeleteFile(string fileName)
+        {
+            string backupDirectory = FileService.GetDBBackupDirector();
+            string file = backupDirectory + "\\" + fileName;
+            if (FileService.ExistsFile(file))
+            {
+                try
+                {
+                    FileService.DeleteFile(file);
+                }
+                catch (Exception exp)
+                {
+                    return Json(
+                       new JsonActionResponse
+                       {
+                           Status = "Error",
+                           Message = exp.Message
+                       });
+                }
+            }
+            return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "Error",
+                       Message = "File " + fileName + " does not exist!"
+                   });
+        }
+        
+
         [HttpGet]
         public JsonResult GetBackupFileList()
         {
@@ -239,6 +269,7 @@ namespace Web.Controllers
                 FileBackupModel model = new FileBackupModel { Name = fileName, Size = size.ToString() };
                 files.Add(model);
             }
+            files = files.OrderByDescending(it => it.Name).ToList();
 
             return Json(new FileBackupIndexOutputModel
             {

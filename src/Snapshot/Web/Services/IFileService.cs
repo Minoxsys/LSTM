@@ -12,5 +12,6 @@ namespace Web.Services
         void CreateDirectory(string path);
         string[] GetFilesFromDirectory(string path);
         bool ExistsFile(string path);
+        void DeleteFile(string path);
     }
 }
