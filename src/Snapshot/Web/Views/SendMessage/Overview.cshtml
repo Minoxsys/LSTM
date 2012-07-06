@@ -62,6 +62,66 @@ Send message
                         msgAlert.alert(serverResponse.Status, serverResponse.Message);
                     });
                 }
+            }, {
+                xtype: 'button',
+                margin: '0 0 0 20',
+                ui: 'snapshot-add-btn',
+                cls: 'x-add-button-gradient',
+                text: 'Send Email',
+                handler: function () {
+                    var values = { message: "ABF230487F S1" };
+                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendEmail" })';
+                    var action = $.post(postToUrl, values);
+
+                    action.success(function (serverResponse) {
+                        var msgAlert = Ext.Msg;
+                        msgAlert.ui = 'snapshot-popup-window';
+                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                    });
+                }
+            }, {
+                xtype: 'button',
+                margin: '0 0 0 20',
+                ui: 'snapshot-add-btn',
+                cls: 'x-add-button-gradient',
+                text: 'DB Backup',
+                handler: function () {
+                    var values = { message: "ABF230487F S1" };
+                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "DBBackup" })';
+                    var action = $.post(postToUrl, values);
+
+                    action.success(function (serverResponse) {
+                        var msgAlert = Ext.Msg;
+                        msgAlert.ui = 'snapshot-popup-window';
+                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                    });
+                }
+            }, {
+                xtype: 'button',
+                margin: '0 0 0 20',
+                ui: 'snapshot-add-btn',
+                cls: 'x-add-button-gradient',
+                text: 'Restore BD',
+                handler: function () {
+                    var values = { message: "ABF230487F S1" };
+                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "RestoreDB" })';
+                    var action = $.post(postToUrl, values);
+
+                    action.success(function (serverResponse) {
+                        var msgAlert = Ext.Msg;
+                        msgAlert.ui = 'snapshot-popup-window';
+                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                    });
+                }
             }]
         });
 

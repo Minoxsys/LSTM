@@ -8,12 +8,16 @@ using Web.Services;
 using Web.Bootstrap;
 using System.Net;
 using System.IO;
+using System.Net.Mail;
+using System.Data.SqlClient;
+using FluentNHibernate.Cfg.Db;
 
 namespace Web.Controllers
 {
     public class SendMessageController : Controller
     {
         public ISmsGatewayService smsGatewayService { get; set; }
+        public IEmailService EmailService { get; set; }
 
         public ActionResult Overview()
         {
@@ -100,6 +104,122 @@ namespace Web.Controllers
             
 
 
+        }
+
+        [HttpPost]
+        public JsonResult SendEmail(string message)
+        {
+            MailMessage mail = new MailMessage();
+
+            mail.To.Add(new MailAddress("be_juggernant@yahoo.com"));
+
+            mail.From = new MailAddress("snapshot@evozon.com");
+            mail.Subject = "Test";
+            mail.IsBodyHtml = false;
+            mail.Body = "This is a test";
+
+            var ok = EmailService.SendMail(mail);
+
+            return Json(
+                   new JsonActionResponse
+                   {
+                       Status = ok.ToString(),
+                       Message = ok.ToString()
+                   });
+        }
+
+        [HttpPost]
+        public JsonResult DBBackup(string message)
+        {
+            //bool bBackUpStatus = true;
+
+            //Cursor.Current = Cursors.WaitCursor;
+
+            //if (Directory.Exists(@"c:\SQLBackup"))
+            //{
+            //    if (File.Exists(@"c:\SQLBackup\wcBackUp1.bak"))
+            //    {
+            //        if (MessageBox.Show(@"Do you want to replace it?", "Back", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            //        {
+            //            File.Delete(@"c:\SQLBackup\wcBackUp1.bak");
+            //        }
+            //        else
+            //            bBackUpStatus = false;
+            //    }
+            //}
+            //else
+            //    Directory.CreateDirectory(@"c:\SQLBackup");
+
+            //if (bFileStatus)
+            //{
+                //Connect to DB
+                SqlConnection connect;
+                string con =  "Data Source=.\\sqlexpress;Initial Catalog=LSTMDB;Integrated Security=True";
+                connect = new SqlConnection(con);
+                connect.Open();
+
+                //Execute SQL---------------
+                SqlCommand command;
+                command = new SqlCommand(@"backup database LSTMDB to disk ='D:\wcBackUp1.bak' with init,stats=10", connect);
+                command.ExecuteNonQuery();
+                //-------------------------------------------------------------------------------------------------------------------------------
+
+                connect.Close();
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "OK",
+                       Message = "The support of the database was successfully performed"
+                   });
+                
+            //}
+
+        }
+
+        [HttpPost]
+        public JsonResult RestoreDB(string message)
+        {
+            try
+            {
+                //if (File.Exists(@"c:\SQLBackup\wcBackUp1.bak"))
+                //{
+                //    if (MessageBox.Show("Are you sure you restore?", "Back", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                //    {
+                        //Connect SQL-----------
+                        SqlConnection connect;
+                        string con = "Data Source=.\\sqlexpress;Initial Catalog=LSTMDB;Integrated Security=True";
+                        connect = new SqlConnection(con);
+                        connect.Open();
+                        //-----------------------------------------------------------------------------------------
+
+                        //Excute SQL----------------
+                        SqlCommand command;
+                        command = new SqlCommand("use master", connect);
+                        command.ExecuteNonQuery();
+                        command = new SqlCommand("drop database LSTMDB", connect);
+                        command.ExecuteNonQuery();
+                        command = new SqlCommand(@"restore database LSTMDB from disk = 'D:\wcBackUp1.bak'", connect);
+                        command.ExecuteNonQuery();
+                        //--------------------------------------------------------------------------------------------------------
+                        connect.Close();
+                        
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "OK",
+                       Message = "Database has been restored"
+                   });
+                
+            }
+            catch (Exception exp)
+            {
+                return Json(
+                   new JsonActionResponse
+                   {
+                       Status = "OK",
+                       Message = exp.Message
+                   });
+            }
         }
     }
 }

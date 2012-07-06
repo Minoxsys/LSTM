@@ -36,5 +36,8 @@ namespace Web.Bootstrap
 
         public static string SmsGatewayKeyword = ConfigurationManager.AppSettings["SmsGateway.Keyword"];
 
+        public static string SendEmailHost = ConfigurationManager.AppSettings["SendEmail.Host"];
+        public static string SendEmailPort = ConfigurationManager.AppSettings["SendEmail.Port"];
+
 	}
 }
