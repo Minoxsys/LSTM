@@ -229,28 +229,39 @@ namespace Web.Controllers
         {
             string backupDirectory = FileService.GetDBBackupDirector();
             string file = backupDirectory + "\\" + fileName;
-            if (FileService.ExistsFile(file))
+            
+            try
             {
-                try
+                if (FileService.ExistsFile(file))
                 {
                     FileService.DeleteFile(file);
+                    return Json(
+                        new JsonActionResponse
+                        {
+                            Status = "Success",
+                            Message = "File " + fileName + " has been deleted"
+                        });
                 }
-                catch (Exception exp)
+                else
                 {
                     return Json(
-                       new JsonActionResponse
-                       {
-                           Status = "Error",
-                           Message = exp.Message
-                       });
+                        new JsonActionResponse
+                        {
+                            Status = "Error",
+                            Message = "File " + fileName + " does not exist!"
+                        });
                 }
             }
-            return Json(
-                   new JsonActionResponse
-                   {
-                       Status = "Error",
-                       Message = "File " + fileName + " does not exist!"
-                   });
+            catch (Exception exp)
+            {
+                return Json(
+                    new JsonActionResponse
+                    {
+                        Status = "Error",
+                        Message = exp.Message
+                    });
+            }
+           
         }
         
 

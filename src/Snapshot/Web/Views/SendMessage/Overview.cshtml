@@ -228,7 +228,35 @@ Send message
                                 icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                                 action: 'Delete',
                                 handler: function (grid, rowIndex, colIndex) {
+                                    var rec = grid.getStore().getAt(rowIndex);
 
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Delete file {0} ?', rec.get('Name')), function (btn) {
+                                        if (btn == 'yes') {
+                                            var values = { fileName: rec.get('Name') };
+                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "DeleteFile" })';
+                                            var action = $.post(postToUrl, values);
+
+                                            action.success(function (serverResponse) {
+
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+
+                                                window.feature.fileStore.load();
+                                            });
+                                        }
+
+                                    });
                                 }
                             }]
                         }]

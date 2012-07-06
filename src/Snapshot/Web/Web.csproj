@@ -2058,8 +2058,8 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Areas\LocationManagement\Services\" />
+    <Folder Include="Backup\DBBackup\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
