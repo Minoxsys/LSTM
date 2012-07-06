@@ -35,7 +35,7 @@ namespace Migrations
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+                .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
                 
             Create.AddForeignKey("Diagnosiss");
             Create.AddClientForeignKey("Diagnosiss");
@@ -45,7 +45,7 @@ namespace Migrations
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+                .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
 
             Create.AddForeignKey("Treatments");
             Create.AddClientForeignKey("Treatments");
@@ -55,7 +55,7 @@ namespace Migrations
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+                .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
 
             Create.AddForeignKey("Conditions");
             Create.AddClientForeignKey("Conditions");
@@ -65,7 +65,7 @@ namespace Migrations
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Description").AsString(ConstraintUtility.NAME_LENGTH).Nullable();
+                .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
 
             Create.AddForeignKey("Advices");
             Create.AddClientForeignKey("Advices");

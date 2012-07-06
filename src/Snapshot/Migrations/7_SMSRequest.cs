@@ -31,18 +31,18 @@ namespace Migrations
         {
             Create.Table("RawSmsReceiveds")
                 .WithCommonColumns()
-                .WithColumn("SmsId").AsString(255)
-                .WithColumn("Sender").AsString(255)
-                .WithColumn("ServiceNumber").AsString(255)
-                .WithColumn("Operator").AsString(255).Nullable()
-                .WithColumn("OperatorId").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable()
-                .WithColumn("Keyword").AsString(255).Nullable()
-                .WithColumn("Content").AsString(255)
+                .WithColumn("SmsId").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("Sender").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("ServiceNumber").AsString(ConstraintUtility.NAME_LENGTH)
+                .WithColumn("Operator").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("OperatorId").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
+                .WithColumn("Content").AsString(ConstraintUtility.DESCRIPTION_LENGTH)
                 .WithColumn("ReceivedDate").AsDateTime().Nullable()
                 .WithColumn("OutpostId").AsGuid().Nullable()
                 .WithColumn("OutpostType").AsInt32().Nullable()
                 .WithColumn("ParseSucceeded").AsBoolean().Nullable()
-                .WithColumn("ParseErrorMessage").AsString(255).Nullable();
+                .WithColumn("ParseErrorMessage").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
 
             Create.AddForeignKey("RawSmsReceiveds");
 
@@ -53,7 +53,7 @@ namespace Migrations
                 .WithColumn("Gender").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("OutpostId").AsGuid().Nullable()
                 .WithColumn("SentDate").AsDateTime().Nullable()
-                .WithColumn("IDCode").AsString(255);
+                .WithColumn("IDCode").AsString(ConstraintUtility.NAME_LENGTH);
 
             Create.AddForeignKey("MessageFromDrugShops");
 
