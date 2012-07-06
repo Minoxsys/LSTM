@@ -147,7 +147,7 @@ namespace Web.Controllers
 
                 SqlCommand command;
                 string file = backupDirectory + "\\Backup_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmm") + ".bak";
-                command = new SqlCommand(@"backup database LSTMDB to disk ='" + file + "' with init,stats=10", connect);
+                command = new SqlCommand(@"backup database " + AppSettings.ServerDatabase + " to disk ='" + file + "' with init,stats=10", connect);
                 command.ExecuteNonQuery();
 
                 connect.Close();
@@ -189,9 +189,9 @@ namespace Web.Controllers
                     SqlCommand command;
                     command = new SqlCommand("use master", connect);
                     command.ExecuteNonQuery();
-                    command = new SqlCommand("drop database LSTMDB", connect);
+                    command = new SqlCommand("drop database "+ AppSettings.ServerDatabase+" ", connect);
                     command.ExecuteNonQuery();
-                    command = new SqlCommand(@"restore database LSTMDB from disk = '" + file + "'", connect);
+                    command = new SqlCommand(@"restore database " + AppSettings.ServerDatabase + " from disk = '" + file + "'", connect);
                     command.ExecuteNonQuery();
                     connect.Close();
 
@@ -234,8 +234,9 @@ namespace Web.Controllers
             foreach (var file in fileList)
             {
                 string fileName = file.Substring(backupDirector.Length + 1, file.Length - backupDirector.Length-1);
-                string size = file.Length.ToString();
-                FileBackupModel model = new FileBackupModel { Name = fileName, Size = size };
+                var fi = new FileInfo(file);
+                long size = fi.Length;
+                FileBackupModel model = new FileBackupModel { Name = fileName, Size = size.ToString() };
                 files.Add(model);
             }
 

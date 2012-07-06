@@ -39,7 +39,8 @@ namespace Web.Bootstrap
         public static string SendEmailHost = ConfigurationManager.AppSettings["SendEmail.Host"];
         public static string SendEmailPort = ConfigurationManager.AppSettings["SendEmail.Port"];
 
-        public static string ServerConnectionStrings = ConfigurationManager.AppSettings["ServerConnectionStrings"];
-
+        public static string ServerConnectionStrings = ConfigurationManager.AppSettings["Server.ConnectionStrings"];
+        public static string ServerDatabase = ConfigurationManager.AppSettings["Server.Database"];
+        
 	}
 }

@@ -39,7 +39,7 @@ namespace Web.BackgroundJobs
 
                 SqlCommand command;
                 string file = backupDirectory + "\\Backup_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmm") + ".bak";
-                command = new SqlCommand(@"backup database LSTMDB to disk ='" + file + "' with init,stats=10", connect);
+                command = new SqlCommand(@"backup database " + AppSettings.ServerDatabase + " to disk ='" + file + "' with init,stats=10", connect);
                 command.ExecuteNonQuery();
 
                 connect.Close();
