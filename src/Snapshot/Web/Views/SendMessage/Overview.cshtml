@@ -224,6 +224,12 @@ Send message
 
                                     });
                                 }
+                            }, {
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                action: 'Delete',
+                                handler: function (grid, rowIndex, colIndex) {
+
+                                }
                             }]
                         }]
                     }]
