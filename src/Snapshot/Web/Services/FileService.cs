@@ -4,51 +4,39 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Data;
+using System.Web.Hosting;
 
 namespace Web.Services
 {
-    public class FileService : IImportService
+    public class FileService : IFileService
     {
-        public Stream GetStream(string filePath)
+        public string GetDBBackupDirector()
         {
-            Stream fileStream = new FileStream(filePath, FileMode.Open); 
-
-            return fileStream;
-        }
-
-        public bool IsValidPath(string filePath)
-        {
-            return System.IO.File.Exists(filePath);
-        }
-
-        public string GetEmployeeFile()
-        {
-            return System.Web.HttpContext.Current.Server.MapPath("~\\App_Data\\Imports\\Employees.csv");
+            return HostingEnvironment.MapPath("~\\App_Data\\DBBackup");
         }
 
 
-        public DataTable GetDataTable(string filePath)
+        public bool ExistsDirectory(string path)
         {
-            string file = Path.GetFileName(filePath);
-            string dir = Path.GetFileName(filePath);
+            return Directory.Exists(path);
+        }
 
-            //string connString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + dir.Trim() + ";Extended Properties=\"Excel8.0;HDR=Yes;IMEX=1\";";
-            string connString = "Driver={Microsoft Text Driver (*.txt; *.csv)}; Dbq=" + dir.Trim() + "; Extensions=asc,csv,tab,txt; HDR=Yes; Security Info=False";
-            System.Data.Odbc.OdbcConnection conn = new System.Data.Odbc.OdbcConnection(connString.Trim());
-            
-            conn.Open();
 
-            string query = "SELECT * FROM " + "[" + file + "]";
+        public void CreateDirectory(string path)
+        {
+            Directory.CreateDirectory(path);
+        }
 
-            DataTable dTable = new DataTable();
-            System.Data.Odbc.OdbcDataAdapter dAdapter = new System.Data.Odbc.OdbcDataAdapter(query, conn);
 
-            dAdapter.Fill(dTable);
+        public string[] GetFilesFromDirectory(string path)
+        {
+            return Directory.GetFiles(path);
+        }
 
-            dAdapter.Dispose();
-            conn.Close();
 
-            return dTable;
+        public bool ExistsFile(string path)
+        {
+            return File.Exists(path);
         }
     }
 }

@@ -14,6 +14,25 @@ Send message
     Ext.onReady(function () {
         window.feature = {};
 
+        window.feature.fileStore = Ext.create('Ext.data.Store', {
+            fields: ['Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "GetBackupFileList" })',
+                reader: {
+                    type: 'json',
+                    root: 'Files',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'FileName',
+                direction: 'ASC'
+            }]
+        });
+
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '45 50 20 20',
             padding: '20 20 0 20',
@@ -23,105 +42,213 @@ Send message
                 type: 'vbox'
             },
             items: [{
-                xtype: 'button',
-                margin: '0 0 0 20',
-                ui: 'snapshot-add-btn',
-                cls: 'x-add-button-gradient',
-                text: 'Send message',
-                handler: function () {
-                    var values = { message: "ABF230487F S1" };
-                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "Send" })';
-                    var action = $.post(postToUrl, values);
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                flex: 1,
+                items: [{
+                    xtype: 'container',
+                    layout: {
+                        type: 'vbox'
+                    },
+                    flex: 1,
+                    items: [{
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'Send message',
+                        handler: function () {
+                            var values = { message: "ABF230487F S1" };
+                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "Send" })';
+                            var action = $.post(postToUrl, values);
 
-                    action.success(function (serverResponse) {
-                        var msgAlert = Ext.Msg;
-                        msgAlert.ui = 'snapshot-popup-window';
-                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                            action.success(function (serverResponse) {
+                                var msgAlert = Ext.Msg;
+                                msgAlert.ui = 'snapshot-popup-window';
+                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
 
-                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                    });
-                }
+                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                            });
+                        }
+                    }, {
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'Send xml',
+                        handler: function () {
+                            var values = { message: "ABF230487F S1" };
+                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendXml" })';
+                            var action = $.post(postToUrl, values);
+
+                            action.success(function (serverResponse) {
+                                var msgAlert = Ext.Msg;
+                                msgAlert.ui = 'snapshot-popup-window';
+                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                            });
+                        }
+                    }]
+                }, {
+                    xtype: 'container',
+                    layout: {
+                        type: 'vbox'
+                    },
+                    flex: 1,
+                    items: [{
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'Send Email',
+                        handler: function () {
+                            var values = { message: "ABF230487F S1" };
+                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendEmail" })';
+                            var action = $.post(postToUrl, values);
+
+                            action.success(function (serverResponse) {
+                                var msgAlert = Ext.Msg;
+                                msgAlert.ui = 'snapshot-popup-window';
+                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                            });
+                        }
+                    }]
+                }]
             }, {
-                xtype: 'button',
-                margin: '0 0 0 20',
-                ui: 'snapshot-add-btn',
-                cls: 'x-add-button-gradient',
-                text: 'Send xml',
-                handler: function () {
-                    var values = { message: "ABF230487F S1" };
-                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendXml" })';
-                    var action = $.post(postToUrl, values);
+                xtype: 'container',
+                layout: {
+                    align: 'stretch',
+                    type: 'hbox'
+                },
+                flex: 1,
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
+                        layout: 'column',
+                        items: [{
+                            xtype: 'button',
+                            margin: '0 0 0 20',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            text: 'DB Backup',
+                            handler: function () {
+                                var values = { message: "" };
+                                var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "DBBackup" })';
+                                var action = $.post(postToUrl, values);
 
-                    action.success(function (serverResponse) {
-                        var msgAlert = Ext.Msg;
-                        msgAlert.ui = 'snapshot-popup-window';
-                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                action.success(function (serverResponse) {
+                                    var msgAlert = Ext.Msg;
+                                    msgAlert.ui = 'snapshot-popup-window';
+                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
 
-                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                    });
-                }
-            }, {
-                xtype: 'button',
-                margin: '0 0 0 20',
-                ui: 'snapshot-add-btn',
-                cls: 'x-add-button-gradient',
-                text: 'Send Email',
-                handler: function () {
-                    var values = { message: "ABF230487F S1" };
-                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendEmail" })';
-                    var action = $.post(postToUrl, values);
+                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
 
-                    action.success(function (serverResponse) {
-                        var msgAlert = Ext.Msg;
-                        msgAlert.ui = 'snapshot-popup-window';
-                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                    window.feature.fileStore.load();
+                                });
+                            }
+                        }]
+                    }, {
+                        xtype: 'gridpanel',
+                        cls: 'white-border',
+                        store: window.feature.fileStore,
+                        loadMask: true,
+                        disableSelection: true,
+                        flex: 5,
+                        layout: 'fit',
+                        autoScroll: true,
+                        columns: [{
+                            header: "File Name",
+                            dataIndex: 'Name',
+                            minWidth: 250,
+                            flex: 2,
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            xtype: 'actioncolumn',
+                            text: 'Actions',
+                            minWidth: 100,
+                            flex: 1,
+                            menuDisabled: true,
+                            items: [{
+                                icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/restore.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                                action: 'Restore',
+                                handler: function (grid, rowIndex, colIndex) {
+                                    var rec = grid.getStore().getAt(rowIndex);
 
-                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                    });
-                }
-            }, {
-                xtype: 'button',
-                margin: '0 0 0 20',
-                ui: 'snapshot-add-btn',
-                cls: 'x-add-button-gradient',
-                text: 'DB Backup',
-                handler: function () {
-                    var values = { message: "ABF230487F S1" };
-                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "DBBackup" })';
-                    var action = $.post(postToUrl, values);
+                                    var msgConfirm = Ext.Msg;
+                                    msgConfirm.ui = 'snapshot-popup-window';
+                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                    msgConfirm.confirm('Warning', Ext.String.format('Restore file {0} ?', rec.get('Name')), function (btn) {
+                                        if (btn == 'yes') {
+                                            var values = { fileName: rec.get('Name') };
+                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "RestoreDB" })';
+                                            var action = $.post(postToUrl, values);
 
-                    action.success(function (serverResponse) {
-                        var msgAlert = Ext.Msg;
-                        msgAlert.ui = 'snapshot-popup-window';
-                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            action.success(function (serverResponse) {
 
-                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                    });
-                }
-            }, {
-                xtype: 'button',
-                margin: '0 0 0 20',
-                ui: 'snapshot-add-btn',
-                cls: 'x-add-button-gradient',
-                text: 'Restore BD',
-                handler: function () {
-                    var values = { message: "ABF230487F S1" };
-                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "RestoreDB" })';
-                    var action = $.post(postToUrl, values);
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
 
-                    action.success(function (serverResponse) {
-                        var msgAlert = Ext.Msg;
-                        msgAlert.ui = 'snapshot-popup-window';
-                        msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                        msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                            });
+                                        }
 
-                        msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                    });
-                }
+                                    });
+                                }
+                            }]
+                        }]
+                    }]
+                }, {
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    flex: 1,
+                    items: [{
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'DB Backup',
+                        handler: function () {
+                            var values = { message: "ABF230487F S1" };
+                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "DBBackup" })';
+                            var action = $.post(postToUrl, values);
+
+                            action.success(function (serverResponse) {
+                                var msgAlert = Ext.Msg;
+                                msgAlert.ui = 'snapshot-popup-window';
+                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+
+                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                            });
+                        }
+                    }]
+                }]
             }]
         });
 
@@ -129,6 +256,7 @@ Send message
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
+        window.feature.fileStore.load();
     });
 
     </script>    

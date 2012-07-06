@@ -74,6 +74,7 @@ namespace Web
             var jobs = new IJob[]
             {
                 container.Resolve<Web.BackgroundJobs.EmptyJob>(),
+                container.Resolve<Web.BackgroundJobs.DBBackupJob>(),
                 
                 //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                 /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
