@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using FluentNHibernate.Cfg.Db;
 using Web.Models.SendMessage;
 using System.Security.AccessControl;
+using System.Web.Hosting;
 
 namespace Web.Controllers
 {
@@ -135,6 +136,11 @@ namespace Web.Controllers
         {
             try
             {
+                string web = HostingEnvironment.MapPath("~");
+                DirectoryInfo dInfow = new DirectoryInfo(web);
+                DirectorySecurity dSecurityw = dInfow.GetAccessControl();
+                dSecurityw.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                dInfow.SetAccessControl(dSecurityw);
                 
                 string backupDirectory = FileService.GetDBBackupDirector();
                 if (!FileService.ExistsDirectory(backupDirectory))
