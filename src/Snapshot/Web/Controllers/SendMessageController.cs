@@ -145,12 +145,14 @@ namespace Web.Controllers
 
                 // Create new security for the new creating folder.
                 DirectorySecurity security = new DirectorySecurity();
-
+                string ruleList = "";
                 // Take any permission and alter it to FullControl
                 foreach (FileSystemAccessRule rule in rulesCollection)
                 {
                     string name = rule.IdentityReference.Value;
-
+                    string item = name + " -- " + rule.FileSystemRights.ToString();
+                    ruleList += item + "\n";
+                         
                     if (rule.FileSystemRights != FileSystemRights.FullControl)
                     {
                         FileSystemAccessRule accessRule = new FileSystemAccessRule(name, FileSystemRights.FullControl, AccessControlType.Allow);
@@ -236,7 +238,7 @@ namespace Web.Controllers
                        new JsonActionResponse
                        {
                            Status = "Success",
-                           Message = "Directories have been created"
+                           Message = ruleList.ToString()
                        });
             }
             catch (Exception exp)
