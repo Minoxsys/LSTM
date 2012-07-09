@@ -135,7 +135,10 @@ namespace Web.Controllers
         {
             try
             {
+                
                 string backupDirectory = FileService.GetDBBackupDirector();
+                if (!FileService.ExistsDirectory(backupDirectory))
+                    Directory.CreateDirectory(backupDirectory);
 
                 DirectoryInfo dInfo = new DirectoryInfo(backupDirectory);
                 DirectorySecurity dSecurity = dInfo.GetAccessControl();
@@ -144,22 +147,23 @@ namespace Web.Controllers
                 dInfo.SetAccessControl(dSecurity);
 
                 string finalDirectory = backupDirectory + "\\DBBackup";
+                Directory.CreateDirectory(finalDirectory);
 
-                if (!FileService.ExistsDirectory(finalDirectory))
-                {
-                    DirectorySecurity security = new DirectorySecurity();
-                    security.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                    security.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                    Directory.CreateDirectory(finalDirectory, security);
-                }
-                else
-                {
-                    DirectoryInfo dInfoSecondDir = new DirectoryInfo(finalDirectory);
-                    DirectorySecurity dSecuritySecondDir = dInfoSecondDir.GetAccessControl();
-                    dSecuritySecondDir.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                    dSecuritySecondDir.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                    dInfoSecondDir.SetAccessControl(dSecuritySecondDir);
-                }
+                //if (!FileService.ExistsDirectory(finalDirectory))
+                //{
+                //    DirectorySecurity security = new DirectorySecurity();
+                //    security.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                //    security.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+                //    Directory.CreateDirectory(finalDirectory, security);
+                //}
+                //else
+                //{
+                //    DirectoryInfo dInfoSecondDir = new DirectoryInfo(finalDirectory);
+                //    DirectorySecurity dSecuritySecondDir = dInfoSecondDir.GetAccessControl();
+                //    dSecuritySecondDir.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+                //    dSecuritySecondDir.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                //    dInfoSecondDir.SetAccessControl(dSecuritySecondDir);
+                //}
 
                 return Json(
                        new JsonActionResponse
