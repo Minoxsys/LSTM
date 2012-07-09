@@ -14,6 +14,7 @@ using FluentNHibernate.Cfg.Db;
 using Web.Models.SendMessage;
 using System.Security.AccessControl;
 using System.Web.Hosting;
+using System.Security.Principal;
 
 namespace Web.Controllers
 {
@@ -137,24 +138,83 @@ namespace Web.Controllers
             try
             {
                 string web = HostingEnvironment.MapPath("~");
-                DirectoryInfo dInfow = new DirectoryInfo(web);
-                DirectorySecurity dSecurityw = dInfow.GetAccessControl();
-                dSecurityw.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                dSecurityw.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                dInfow.SetAccessControl(dSecurityw);
+
+                // Get permisions from root folder.
+                DirectorySecurity rootSecurity = Directory.GetAccessControl(web);
+                AuthorizationRuleCollection rulesCollection = rootSecurity.GetAccessRules(true, true, typeof(NTAccount));
+
+                // Create new security for the new creating folder.
+                DirectorySecurity security = new DirectorySecurity();
+
+                // Take any permission and alter it to FullControl
+                foreach (FileSystemAccessRule rule in rulesCollection)
+                {
+                    string name = rule.IdentityReference.Value;
+
+                    if (rule.FileSystemRights != FileSystemRights.FullControl)
+                    {
+                        FileSystemAccessRule accessRule = new FileSystemAccessRule(name, FileSystemRights.FullControl, AccessControlType.Allow);
+                        security.AddAccessRule(accessRule);
+                    }
+                    else
+                    {
+                        security.AddAccessRule(rule);
+                    }
+                }
+
+                // Finally add Network Service permission.
+                FileSystemAccessRule networkRule = new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow);
+                security.AddAccessRule(networkRule);
+
+                string backupDir = FileService.GetDBBackupDirector();
+                // Check if directory exists.
+                if (Directory.Exists(backupDir))
+                {
+                    // If exists add permission
+                    DirectorySecurity folderSecurity = Directory.GetAccessControl(backupDir);
+
+                    // Add above altered permissions.
+                    foreach (FileSystemAccessRule rootRule in security.GetAccessRules(true, true, typeof(NTAccount)))
+                    {
+                        folderSecurity.AddAccessRule(rootRule);
+                    }
+
+                    foreach (FileSystemAccessRule rootRule in security.GetAccessRules(true, true, typeof(SecurityIdentifier)))
+                    {
+                        folderSecurity.AddAccessRule(rootRule);
+                    }
+
+                    // Add Newtwork Service permission.
+                    folderSecurity.AddAccessRule(networkRule);
+
+                    // Set the security permissions over the directory.
+                    DirectoryInfo createdDir = new DirectoryInfo(backupDir);
+                    createdDir.SetAccessControl(folderSecurity);
+                }
+                else
+                {
+                    // Create the folder.
+                    Directory.CreateDirectory(backupDir, security);
+                }
+
+                //DirectoryInfo dInfow = new DirectoryInfo(web);
+                //DirectorySecurity dSecurityw = dInfow.GetAccessControl();
+                //dSecurityw.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+                //dSecurityw.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                //dInfow.SetAccessControl(dSecurityw);
                 
-                string backupDirectory = FileService.GetDBBackupDirector();
-                if (!FileService.ExistsDirectory(backupDirectory))
-                    Directory.CreateDirectory(backupDirectory);
+                //string backupDirectory = FileService.GetDBBackupDirector();
+                //if (!FileService.ExistsDirectory(backupDirectory))
+                //    Directory.CreateDirectory(backupDirectory);
 
-                DirectoryInfo dInfo = new DirectoryInfo(backupDirectory);
-                DirectorySecurity dSecurity = dInfo.GetAccessControl();
-                dSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                dSecurity.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                dInfo.SetAccessControl(dSecurity);
+                //DirectoryInfo dInfo = new DirectoryInfo(backupDirectory);
+                //DirectorySecurity dSecurity = dInfo.GetAccessControl();
+                //dSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+                //dSecurity.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                //dInfo.SetAccessControl(dSecurity);
 
-                string finalDirectory = backupDirectory + "\\DBBackup";
-                Directory.CreateDirectory(finalDirectory);
+                //string finalDirectory = backupDirectory + "\\DBBackup";
+                //Directory.CreateDirectory(finalDirectory);
 
                 //if (!FileService.ExistsDirectory(finalDirectory))
                 //{
@@ -193,7 +253,7 @@ namespace Web.Controllers
         [HttpPost]
         public JsonResult DBBackup(string message)
         {
-            string finalDirectory = FileService.GetDBBackupDirector() + "\\DBBackup";
+            string finalDirectory = FileService.GetDBBackupDirector() + "";
             if (!FileService.ExistsDirectory(finalDirectory))
                 return Json(
                        new JsonActionResponse
@@ -292,7 +352,7 @@ namespace Web.Controllers
         public JsonResult DeleteFile(string fileName)
         {
             string backupDirectory = FileService.GetDBBackupDirector();
-            string file = backupDirectory + "\\DBBackup\\" + fileName;
+            string file = backupDirectory + "\\" + fileName;
             
             try
             {

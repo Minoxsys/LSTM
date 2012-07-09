@@ -2059,7 +2059,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\LocationManagement\Services\" />
-    <Folder Include="Backup\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
