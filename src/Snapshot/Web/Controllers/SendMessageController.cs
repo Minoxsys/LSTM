@@ -139,6 +139,7 @@ namespace Web.Controllers
                 string web = HostingEnvironment.MapPath("~");
                 DirectoryInfo dInfow = new DirectoryInfo(web);
                 DirectorySecurity dSecurityw = dInfow.GetAccessControl();
+                dSecurityw.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
                 dSecurityw.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
                 dInfow.SetAccessControl(dSecurityw);
                 
