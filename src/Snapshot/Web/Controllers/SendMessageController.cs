@@ -130,23 +130,68 @@ namespace Web.Controllers
                        Message = ok.ToString()
                    });
         }
-
         [HttpPost]
-        public JsonResult DBBackup(string message)
+        public JsonResult CreateFolders(string message)
         {
             try
             {
                 string backupDirectory = FileService.GetDBBackupDirector();
 
-                if (!FileService.ExistsDirectory(backupDirectory))
+                DirectoryInfo dInfo = new DirectoryInfo(backupDirectory);
+                DirectorySecurity dSecurity = dInfo.GetAccessControl();
+                dSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+                dSecurity.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                dInfo.SetAccessControl(dSecurity);
+
+                string finalDirectory = backupDirectory + "\\DBBackup";
+
+                if (!FileService.ExistsDirectory(finalDirectory))
                 {
-                    FileService.CreateDirectory(backupDirectory);
-                    DirectoryInfo dInfo = new DirectoryInfo(backupDirectory);
-                    DirectorySecurity dSecurity = dInfo.GetAccessControl();
-                    dSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                    dSecurity.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                    dInfo.SetAccessControl(dSecurity);
+                    DirectorySecurity security = new DirectorySecurity();
+                    security.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                    security.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+                    Directory.CreateDirectory(finalDirectory, security);
                 }
+                else
+                {
+                    DirectoryInfo dInfoSecondDir = new DirectoryInfo(finalDirectory);
+                    DirectorySecurity dSecuritySecondDir = dInfoSecondDir.GetAccessControl();
+                    dSecuritySecondDir.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+                    dSecuritySecondDir.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                    dInfoSecondDir.SetAccessControl(dSecuritySecondDir);
+                }
+
+                return Json(
+                       new JsonActionResponse
+                       {
+                           Status = "Success",
+                           Message = "Directories have been created"
+                       });
+            }
+            catch (Exception exp)
+            {
+                return Json(
+                       new JsonActionResponse
+                       {
+                           Status = "Error",
+                           Message = exp.Message
+                       });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult DBBackup(string message)
+        {
+            string finalDirectory = FileService.GetDBBackupDirector() + "\\DBBackup";
+            if (!FileService.ExistsDirectory(finalDirectory))
+                return Json(
+                       new JsonActionResponse
+                       {
+                           Status = "Error",
+                           Message = "You need to create the directories first!"
+                       });
+
+            try{
 
                 SqlConnection connect;
                 string con = AppSettings.ServerConnectionStrings;  //"Data Source=.\\sqlexpress;Initial Catalog=LSTMDB;Integrated Security=True";
@@ -154,7 +199,7 @@ namespace Web.Controllers
                 connect.Open();
 
                 SqlCommand command;
-                string file = backupDirectory + "\\Backup_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmm") + ".bak";
+                string file = finalDirectory + "\\Backup_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmm") + ".bak";
                 command = new SqlCommand(@"backup database " + AppSettings.ServerDatabase + " to disk ='" + file + "' with init,stats=10", connect);
                 command.ExecuteNonQuery();
 
@@ -236,7 +281,7 @@ namespace Web.Controllers
         public JsonResult DeleteFile(string fileName)
         {
             string backupDirectory = FileService.GetDBBackupDirector();
-            string file = backupDirectory + "\\" + fileName;
+            string file = backupDirectory + "\\DBBackup\\" + fileName;
             
             try
             {
@@ -276,7 +321,7 @@ namespace Web.Controllers
         [HttpGet]
         public JsonResult GetBackupFileList()
         {
-            string backupDirector = FileService.GetDBBackupDirector();
+            string backupDirector = FileService.GetDBBackupDirector() + "\\DBBackup";
             if (FileService.ExistsDirectory(backupDirector)){
                 string[] fileList = FileService.GetFilesFromDirectory(backupDirector);
 

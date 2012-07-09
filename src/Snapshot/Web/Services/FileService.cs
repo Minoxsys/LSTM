@@ -12,7 +12,7 @@ namespace Web.Services
     {
         public string GetDBBackupDirector()
         {
-            return HostingEnvironment.MapPath("~\\Backup\\DBBackup");
+            return HostingEnvironment.MapPath("~\\Backup");
         }
 
 
