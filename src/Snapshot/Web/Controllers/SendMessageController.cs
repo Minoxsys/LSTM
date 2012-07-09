@@ -12,6 +12,7 @@ using System.Net.Mail;
 using System.Data.SqlClient;
 using FluentNHibernate.Cfg.Db;
 using Web.Models.SendMessage;
+using System.Security.AccessControl;
 
 namespace Web.Controllers
 {
@@ -138,7 +139,14 @@ namespace Web.Controllers
                 string backupDirectory = FileService.GetDBBackupDirector();
 
                 if (!FileService.ExistsDirectory(backupDirectory))
+                {
                     FileService.CreateDirectory(backupDirectory);
+                    DirectoryInfo dInfo = new DirectoryInfo(backupDirectory);
+                    DirectorySecurity dSecurity = dInfo.GetAccessControl();
+                    dSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
+                    dSecurity.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
+                    dInfo.SetAccessControl(dSecurity);
+                }
 
                 SqlConnection connect;
                 string con = AppSettings.ServerConnectionStrings;  //"Data Source=.\\sqlexpress;Initial Catalog=LSTMDB;Integrated Security=True";
@@ -269,23 +277,31 @@ namespace Web.Controllers
         public JsonResult GetBackupFileList()
         {
             string backupDirector = FileService.GetDBBackupDirector();
-            string[] fileList = FileService.GetFilesFromDirectory(backupDirector);
+            if (FileService.ExistsDirectory(backupDirector)){
+                string[] fileList = FileService.GetFilesFromDirectory(backupDirector);
 
-            List<FileBackupModel> files = new List<FileBackupModel>();
-            foreach (var file in fileList)
-            {
-                string fileName = file.Substring(backupDirector.Length + 1, file.Length - backupDirector.Length-1);
-                var fi = new FileInfo(file);
-                long size = fi.Length;
-                FileBackupModel model = new FileBackupModel { Name = fileName, Size = size.ToString() };
-                files.Add(model);
+                List<FileBackupModel> files = new List<FileBackupModel>();
+                foreach (var file in fileList)
+                {
+                    string fileName = file.Substring(backupDirector.Length + 1, file.Length - backupDirector.Length-1);
+                    var fi = new FileInfo(file);
+                    long size = fi.Length;
+                    FileBackupModel model = new FileBackupModel { Name = fileName, Size = size.ToString() };
+                    files.Add(model);
+                }
+                files = files.OrderByDescending(it => it.Name).ToList();
+
+                return Json(new FileBackupIndexOutputModel
+                {
+                    Files = files.ToArray(),
+                    TotalItems = files.Count()
+                }, JsonRequestBehavior.AllowGet);
             }
-            files = files.OrderByDescending(it => it.Name).ToList();
 
             return Json(new FileBackupIndexOutputModel
             {
-                Files = files.ToArray(),
-                TotalItems = files.Count()
+                Files = null,
+                TotalItems = 0
             }, JsonRequestBehavior.AllowGet);
         }
     }
