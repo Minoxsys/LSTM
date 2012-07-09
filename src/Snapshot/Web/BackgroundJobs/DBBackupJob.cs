@@ -27,22 +27,23 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
             {
-                string backupDirectory = fileService.GetDBBackupDirector();
+                string backupDirectory = fileService.GetDBBackupDirector() + "\\DBBackup";
 
-                if (!fileService.ExistsDirectory(backupDirectory))
-                    fileService.CreateDirectory(backupDirectory);
-                    
-                SqlConnection connect;
-                string con = AppSettings.ServerConnectionStrings;
-                connect = new SqlConnection(con);
-                connect.Open();
+                if (fileService.ExistsDirectory(backupDirectory))
+                {
 
-                SqlCommand command;
-                string file = backupDirectory + "\\Backup_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmm") + ".bak";
-                command = new SqlCommand(@"backup database " + AppSettings.ServerDatabase + " to disk ='" + file + "' with init,stats=10", connect);
-                command.ExecuteNonQuery();
+                    SqlConnection connect;
+                    string con = AppSettings.ServerConnectionStrings;
+                    connect = new SqlConnection(con);
+                    connect.Open();
 
-                connect.Close();
+                    SqlCommand command;
+                    string file = backupDirectory + "\\Backup_" + DateTime.UtcNow.ToString("yyyyMMdd_HHmm") + ".bak";
+                    command = new SqlCommand(@"backup database " + AppSettings.ServerDatabase + " to disk ='" + file + "' with init,stats=10", connect);
+                    command.ExecuteNonQuery();
+
+                    connect.Close();
+                }
             });
         }
 
