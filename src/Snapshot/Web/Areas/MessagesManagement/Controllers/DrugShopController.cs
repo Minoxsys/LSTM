@@ -58,7 +58,7 @@ namespace Web.Areas.MessagesManagement.Controllers
                                                 select new MessageModel
                                                 {
                                                     Sender = message.Sender,
-                                                    Date = message.ReceivedDate.ToShortDateString(),
+                                                    Date = message.ReceivedDate.ToString("dd/MM/yyyy"),
                                                     Content = message.Content,
                                                     ParseSucceeded = message.ParseSucceeded,
                                                     ParseErrorMessage = message.ParseErrorMessage,
