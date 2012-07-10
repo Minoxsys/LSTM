@@ -43,7 +43,7 @@ namespace Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         public void ReceiveSms(string message, string msisdn)
         {
             RawSmsReceived rawSmsReceived = new RawSmsReceived { Content = message, Sender = msisdn, ReceivedDate = DateTime.UtcNow};
