@@ -19,6 +19,7 @@ namespace Web.Services
         private const string DateFormat = "ddMMyy";
         private const string XMLDateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
+        private string KEYWORD = "ALFA";
 
         private IQueryService<Condition> queryCondition;
         private IQueryService<Diagnosis> queryDiagnosis;
@@ -72,7 +73,7 @@ namespace Web.Services
             {
                 string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
                 var index = 0;
-                if (parsedLine[0].ToUpper().Contains(AppSettings.SmsGatewayKeyword.ToUpper()))
+                if (parsedLine[0].ToUpper().Contains(KEYWORD))
                     index = 1;
                 string stringDate = parsedLine[index].Substring(parsedLine[index].Length - 7, 6);
                 DateTime dateRetult;
@@ -160,7 +161,7 @@ namespace Web.Services
             string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
 
             var index = 0;
-            if (parsedLine[0].ToUpper().Contains(AppSettings.SmsGatewayKeyword.ToUpper()))
+            if (parsedLine[0].ToUpper().Contains(KEYWORD))
                 index = 1;
 
             message.Gender = parsedLine[index].Substring(parsedLine[index].Length - 1, 1).ToUpper();
@@ -190,7 +191,7 @@ namespace Web.Services
             string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
 
             var index = 0;
-            if (parsedLine[0].ToUpper().Contains(AppSettings.SmsGatewayKeyword.ToUpper()))
+            if (parsedLine[0].ToUpper().Contains(KEYWORD))
                 index = 1;
 
             string IdCode = parsedLine[index].Substring(0, 8);

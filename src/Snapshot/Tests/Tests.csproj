@@ -219,15 +219,12 @@
     <Compile Include="Unit\Security\RequiresAttributeTests.cs" />
     <Compile Include="Unit\Security\SecurePassword_Tests.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\AssignOutpostToRawSmsReceivedBySenderNumberMethod.cs" />
-    <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageFromDispensaryMethod.cs" />
-    <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageFromDrugShopMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\ParseRawSmsReceivedFromDispensaryMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\ParseRawSmsReceivedFromDrugShopMethod.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTests\CreateMessageToBeSentToDispensaryMethod.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\SmsRequestServiceTests\SendMessageMethod.cs" />
-    <Compile Include="Unit\Services\SmsRequestServiceTests\SendMessageToDispensaryMethod.cs" />
     <Compile Include="Utils\AutoMock.cs" />
     <Compile Include="Utils\FakeControllerContext.cs" />
     <Compile Include="Utils\MoqFactory.cs" />
