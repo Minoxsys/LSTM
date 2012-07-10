@@ -44,7 +44,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public void ReceiveSms(string message, string msisdn)
+        public ActionResult ReceiveSms(string message, string msisdn)
         {
             RawSmsReceived rawSmsReceived = new RawSmsReceived { Content = message, Sender = msisdn, ReceivedDate = DateTime.UtcNow};
             rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
@@ -55,7 +55,7 @@ namespace Web.Controllers
                 rawSmsReceived.ParseSucceeded = false;
                 SaveCommandRawSmsReceived.Execute(rawSmsReceived);
 
-                SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
+                //SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
             }
             else
             {
@@ -70,11 +70,11 @@ namespace Web.Controllers
                         MessageFromDrugShop drugshopMessage = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
                         SaveCommandMessageFromDrugShop.Execute(drugshopMessage);
 
-                        SmsRequestService.SendMessageToDispensary(drugshopMessage, rawSmsReceived);
+                        //SmsRequestService.SendMessageToDispensary(drugshopMessage, rawSmsReceived);
                     }
                     else
                     {
-                        SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                        //SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                     }
                 }
                 else
@@ -88,11 +88,12 @@ namespace Web.Controllers
                     }
                     else
                     {
-                        SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                        //SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                     }
                 }
             }
 
+            return new EmptyResult();
         }
     }
 }
