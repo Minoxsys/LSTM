@@ -8,6 +8,7 @@ using System.Globalization;
 using Core.Persistence;
 using Persistence.Queries.Outposts;
 using System.Xml;
+using Web.Bootstrap;
 
 namespace Web.Services
 {
@@ -71,7 +72,7 @@ namespace Web.Services
             {
                 string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
                 var index = 0;
-                if (parsedLine[0].ToUpper().Contains("TEST"))
+                if (parsedLine[0].ToUpper().Contains(AppSettings.SmsGatewayKeyword.ToUpper()))
                     index = 1;
                 string stringDate = parsedLine[index].Substring(parsedLine[index].Length - 7, 6);
                 DateTime dateRetult;
@@ -159,7 +160,7 @@ namespace Web.Services
             string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
 
             var index = 0;
-            if (parsedLine[0].ToUpper().Contains("TEST"))
+            if (parsedLine[0].ToUpper().Contains(AppSettings.SmsGatewayKeyword.ToUpper()))
                 index = 1;
 
             message.Gender = parsedLine[index].Substring(parsedLine[index].Length - 1, 1).ToUpper();
@@ -187,14 +188,19 @@ namespace Web.Services
             MessageFromDispensary message = new MessageFromDispensary();
 
             string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
-            string IdCode = parsedLine[0].Substring(0, 8);
+
+            var index = 0;
+            if (parsedLine[0].ToUpper().Contains(AppSettings.SmsGatewayKeyword.ToUpper()))
+                index = 1;
+
+            string IdCode = parsedLine[index].Substring(0, 8);
 
             message.OutpostId = rawSmsReceived.OutpostId;
             message.OutpostType = rawSmsReceived.OutpostType;
             message.MessageFromDrugShop = queryMessageFromDrugShop.Query().Where(it => it.IDCode == IdCode).FirstOrDefault();
             message.SentDate = rawSmsReceived.ReceivedDate;
 
-            for (var i = 1; i < parsedLine.Count(); i++)
+            for (var i = index+1; i < parsedLine.Count(); i++)
             {
                 if (!string.IsNullOrEmpty(parsedLine[i]))
                 {
@@ -223,39 +229,6 @@ namespace Web.Services
             }
             return code;
 
-        }
-
-
-        public RawSmsReceived GetRawSmsReceivedFromXMLString(string request)
-        {
-            XmlDocument doc = new XmlDocument();
-            RawSmsReceived rawSmsReceived = new RawSmsReceived();
-
-            if (string.IsNullOrEmpty(request))
-                return null;
-
-            doc.LoadXml(request);
-            XmlNodeList list = doc.GetElementsByTagName("message");
-
-            if (list.Count > 0)
-            {
-                rawSmsReceived.SmsId = list[0].Attributes["id"].Value;
-                rawSmsReceived.Sender = list[0].Attributes["msisdn"].Value;
-                rawSmsReceived.ServiceNumber = list[0].Attributes["service-number"].Value;
-                rawSmsReceived.Operator = list[0].Attributes["operator"].Value;
-                rawSmsReceived.OperatorId = list[0].Attributes["operator-id"].Value;
-                rawSmsReceived.Keyword = list[0].Attributes["keyword"].Value;
-                rawSmsReceived.Content = list[0].InnerText;
-
-                var date = HttpUtility.UrlDecode(list[0].Attributes["submit-date"].Value);
-                DateTime dateRetult;
-                if (DateTime.TryParseExact(date, XMLDateFormat, FormatProvider, DateTimeStyles.None, out dateRetult))
-                    rawSmsReceived.ReceivedDate = dateRetult;
-                else
-                    rawSmsReceived.ReceivedDate = DateTime.UtcNow;
-            }
-
-            return rawSmsReceived;
         }
     }
 }

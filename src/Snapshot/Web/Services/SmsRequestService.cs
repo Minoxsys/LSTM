@@ -30,13 +30,11 @@ namespace Web.Services
         public bool SendMessage(string message,  RawSmsReceived response)
         {
             ResponseModel model = new ResponseModel();
-            model.Id = response.SmsId;
             model.Content = message;
             model.DeferDate = "";
             model.Operator = "";
             model.PhoneNumber = response.Sender;
             model.Priority = "1";
-            model.RefId = response.SmsId;
             model.ServiceNo = AppSettings.SmsGatewayShortcode;
             model.Valability = "3";
 
@@ -56,30 +54,17 @@ namespace Web.Services
 
         public bool SendMessageToDispensary(MessageFromDrugShop message, RawSmsReceived rawSms)
         {
-            ResponseModel model = new ResponseModel();
-            model.Id = Get7Digits();
-            model.Content = CreateMessageToBeSentToDispensary(message);
-            model.DeferDate = "";
-            model.Operator = "";
-            model.PhoneNumber = GetWarehousePhoneNumber(message.OutpostId);
-            model.Priority = "1";
-            model.ServiceNo = AppSettings.SmsGatewayShortcode;
-            model.Valability = "3";
 
-            string request = CreateDispensaryData(model);
-
-            if (model.PhoneNumber != null)
-            {
                 try
                 {
-                    smsGatewayService.SendSmsRequest(request);
+                    smsGatewayService.SendSmsRequest("");
                     return true;
                 }
                 catch (Exception)
                 {
                     return false;
                 }
-            }
+
             return false;
         }
 

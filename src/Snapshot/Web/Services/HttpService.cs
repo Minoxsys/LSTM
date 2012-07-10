@@ -12,27 +12,36 @@ namespace Web.Services
     {
         public string Post(string url, string data)
         {
-            byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(data);
-
             WebRequest request = WebRequest.Create(url);
-            request.Method = "POST";
-            request.ContentLength = byteArray.Length;
-            request.ContentType = "text/xml; charset=UTF-8";
+            request.Method = "GET";
+            request.ContentLength = Encoding.UTF8.GetByteCount(data);
+            request.ContentType = "application/x-www-form-urlencoded";
 
-            Stream dataStream = request.GetRequestStream();
-            dataStream.Write(byteArray, 0, byteArray.Length);
-            
-            WebResponse response = request.GetResponse();
-            string value = ((HttpWebResponse)response).StatusDescription;
-            dataStream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string responseFromServer = reader.ReadToEnd();
+            StreamWriter myWriter = null;
+            try
+            {
+                myWriter = new StreamWriter(request.GetRequestStream());
+                myWriter.Write(data);
+                myWriter.Flush();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                myWriter.Close();
+            }
 
-            reader.Close();
-            dataStream.Close();
-            response.Close();
+            String result = "";
+            HttpWebResponse objResponse = (HttpWebResponse)request.GetResponse();
+            using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
+            {
+                result = sr.ReadToEnd();
+                sr.Close();
+            }
 
-            return value; //ok - for sent messages
+            return result; 
         }
     }
 }

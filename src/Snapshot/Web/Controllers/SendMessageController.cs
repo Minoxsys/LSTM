@@ -23,6 +23,7 @@ namespace Web.Controllers
         public ISmsGatewayService smsGatewayService { get; set; }
         public IEmailService EmailService { get; set; }
         public IFileService FileService { get; set; }
+        public IHttpService HttpService { get; set; }
 
         public ActionResult Overview()
         {
@@ -32,13 +33,12 @@ namespace Web.Controllers
         [HttpPost]
         public JsonResult Send(string message)
         {
-            string request = CreatePostData(message);
-
-            string responseMessage = "";
+            string url = @"http://lstm-staging.apphb.com/SmsRequest/ReceiveSms?message='lalalalalalla'&msisdn='hhhh'";
+            string responseMessage = "lalalalalalalala";
             try
             {
-                
-                responseMessage = smsGatewayService.SendSmsRequest(request);
+
+                responseMessage = HttpService.Post(url, responseMessage);
                 
                 return Json(
                    new JsonActionResponse
@@ -59,56 +59,17 @@ namespace Web.Controllers
                         
         }
 
-        private string CreatePostData(string model)
-        {
-            //string response = "<?xml version='1.0' encoding='UTF-8'?><sms-response login='" + AppSettings.SmsGatewayUserName + "' password='" + AppSettings.SmsGatewayPassword + "' delivery-notification-requested='true' version='1.0'> ";
-            //response += "<message id='1' msisdn='0040747651059' service-number='" + AppSettings.SmsGatewayShortcode + "' ";
-            //response += "validity-period='3' priority='1'>";
-            //response += "<content type='text/plain'>" + model + "</content></message></sms-response>";
-
-            string bulkRequest = "<?xml version='1.0' encoding='UTF-8'?>";
-            bulkRequest += "<bulk-request login='"+AppSettings.SmsGatewayUserName+"' password='"+AppSettings.SmsGatewayPassword+"' request-id='1013' delivery-notification-requested='true' version='1.0'>";
-            bulkRequest += "<message id='1' msisdn='255787959070' service-number='" + AppSettings.SmsGatewayShortcode + "' validity-period='3' priority='1'> ";
-            bulkRequest += "<content type='text/plain'>Test from Claudia</content>";
-            bulkRequest += "</message></bulk-request>";
-
-            return bulkRequest;
-        }
 
         [HttpPost]
         public JsonResult SendXml(string message)
         {
-            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-request version=\"1.0\"><message id=\"6644999\" keyword=\"test\" message-count=\"1\" msisdn=\"0040747651059\" operator=\"tigo-smpp\" operator-id=\"10003\" service-number=\"15046\" submit-date=\"2012-06-28 14:01:49\"><content type=\"text/plain\">test DR120387F S1</content></message></sms-request>";
-            string url = "http://lstm-staging.apphb.com/SmsRequest/ReceiveSms";
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-
-            byte[] requestBytes = System.Text.Encoding.ASCII.GetBytes(xml);
-            req.Method = "POST";
-            req.ContentType = "text/xml;charset=utf-8";
-            req.ContentLength = requestBytes.Length;
-            Stream requestStream = req.GetRequestStream();
-            requestStream.Write(requestBytes, 0, requestBytes.Length);
-            requestStream.Close();
-
-
-            HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-            StreamReader sr = new StreamReader(res.GetResponseStream(), System.Text.Encoding.Default);
-            string backstr = sr.ReadToEnd();
-            string description = res.StatusDescription;
-
-            sr.Close();
-            res.Close();
 
             return Json(
                    new JsonActionResponse
                    {
-                       Status = backstr,
-                       Message = String.Format(backstr)
+                       Status = "",
+                       Message = ""
                    });
-
-            
-
-
         }
 
         [HttpPost]
@@ -132,137 +93,11 @@ namespace Web.Controllers
                        Message = ok.ToString()
                    });
         }
-        [HttpPost]
-        public JsonResult CreateFolders(string message)
-        {
-            try
-            {
-                string web = HostingEnvironment.MapPath("~");
-
-                // Get permisions from root folder.
-                DirectorySecurity rootSecurity = Directory.GetAccessControl(web);
-                AuthorizationRuleCollection rulesCollection = rootSecurity.GetAccessRules(true, true, typeof(NTAccount));
-
-                // Create new security for the new creating folder.
-                DirectorySecurity security = new DirectorySecurity();
-                string ruleList = "";
-                // Take any permission and alter it to FullControl
-                foreach (FileSystemAccessRule rule in rulesCollection)
-                {
-                    string name = rule.IdentityReference.Value;
-                    string item = name + " -- " + rule.FileSystemRights.ToString();
-                    ruleList += item + "\n";
-                         
-                    if (rule.FileSystemRights != FileSystemRights.FullControl)
-                    {
-                        FileSystemAccessRule accessRule = new FileSystemAccessRule(name, FileSystemRights.FullControl, AccessControlType.Allow);
-                        security.AddAccessRule(accessRule);
-                    }
-                    else
-                    {
-                        security.AddAccessRule(rule);
-                    }
-                }
-
-                // Finally add Network Service permission.
-                FileSystemAccessRule networkRule = new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow);
-                security.AddAccessRule(networkRule);
-
-                string backupDir = FileService.GetDBBackupDirector();
-                // Check if directory exists.
-                if (Directory.Exists(backupDir))
-                {
-                    // If exists add permission
-                    DirectorySecurity folderSecurity = Directory.GetAccessControl(backupDir);
-
-                    // Add above altered permissions.
-                    foreach (FileSystemAccessRule rootRule in security.GetAccessRules(true, true, typeof(NTAccount)))
-                    {
-                        folderSecurity.AddAccessRule(rootRule);
-                    }
-
-                    foreach (FileSystemAccessRule rootRule in security.GetAccessRules(true, true, typeof(SecurityIdentifier)))
-                    {
-                        folderSecurity.AddAccessRule(rootRule);
-                    }
-
-                    // Add Newtwork Service permission.
-                    folderSecurity.AddAccessRule(networkRule);
-
-                    // Set the security permissions over the directory.
-                    DirectoryInfo createdDir = new DirectoryInfo(backupDir);
-                    createdDir.SetAccessControl(folderSecurity);
-                }
-                else
-                {
-                    // Create the folder.
-                    Directory.CreateDirectory(backupDir, security);
-                }
-
-                //DirectoryInfo dInfow = new DirectoryInfo(web);
-                //DirectorySecurity dSecurityw = dInfow.GetAccessControl();
-                //dSecurityw.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                //dSecurityw.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                //dInfow.SetAccessControl(dSecurityw);
-                
-                //string backupDirectory = FileService.GetDBBackupDirector();
-                //if (!FileService.ExistsDirectory(backupDirectory))
-                //    Directory.CreateDirectory(backupDirectory);
-
-                //DirectoryInfo dInfo = new DirectoryInfo(backupDirectory);
-                //DirectorySecurity dSecurity = dInfo.GetAccessControl();
-                //dSecurity.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                //dSecurity.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                //dInfo.SetAccessControl(dSecurity);
-
-                //string finalDirectory = backupDirectory + "\\DBBackup";
-                //Directory.CreateDirectory(finalDirectory);
-
-                //if (!FileService.ExistsDirectory(finalDirectory))
-                //{
-                //    DirectorySecurity security = new DirectorySecurity();
-                //    security.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                //    security.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                //    Directory.CreateDirectory(finalDirectory, security);
-                //}
-                //else
-                //{
-                //    DirectoryInfo dInfoSecondDir = new DirectoryInfo(finalDirectory);
-                //    DirectorySecurity dSecuritySecondDir = dInfoSecondDir.GetAccessControl();
-                //    dSecuritySecondDir.AddAccessRule(new FileSystemAccessRule("Everyone", FileSystemRights.FullControl, AccessControlType.Allow));
-                //    dSecuritySecondDir.AddAccessRule(new FileSystemAccessRule("NETWORK SERVICE", FileSystemRights.FullControl, AccessControlType.Allow));
-                //    dInfoSecondDir.SetAccessControl(dSecuritySecondDir);
-                //}
-
-                return Json(
-                       new JsonActionResponse
-                       {
-                           Status = "Success",
-                           Message = ruleList.ToString()
-                       });
-            }
-            catch (Exception exp)
-            {
-                return Json(
-                       new JsonActionResponse
-                       {
-                           Status = "Error",
-                           Message = exp.Message
-                       });
-            }
-        }
 
         [HttpPost]
         public JsonResult DBBackup(string message)
         {
-            string finalDirectory = FileService.GetDBBackupDirector() + "";
-            if (!FileService.ExistsDirectory(finalDirectory))
-                return Json(
-                       new JsonActionResponse
-                       {
-                           Status = "Error",
-                           Message = "You need to create the directories first!"
-                       });
+            string finalDirectory = FileService.GetDBBackupDirector();
 
             try{
 
@@ -396,6 +231,7 @@ namespace Web.Controllers
         {
             string backupDirector = FileService.GetDBBackupDirector() + "\\DBBackup";
             if (FileService.ExistsDirectory(backupDirector)){
+
                 string[] fileList = FileService.GetFilesFromDirectory(backupDirector);
 
                 List<FileBackupModel> files = new List<FileBackupModel>();

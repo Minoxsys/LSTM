@@ -44,78 +44,55 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public void ReceiveSms()
+        public void ReceiveSms(string message, string msisdn)
         {
-            string emptyxml = "<?xml version=" + "\"" + "1.0" + "\"" + " encoding=" + "\"" + "UTF-8" + "\"" + "?><sms-response version=" + "\"" + "1.0" + "\"" + "/>";
-            byte[] byteArray = System.Text.Encoding.ASCII.GetBytes(emptyxml);
-            
-            Response.Clear();
-            Response.StatusCode = 200;
-            Response.StatusDescription = "OK";
-            Response.ContentType = "text/xml";
+            RawSmsReceived rawSmsReceived = new RawSmsReceived { Content = message, Sender = msisdn, ReceivedDate = DateTime.UtcNow};
+            rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
-            StreamWriter writer = new StreamWriter(Response.OutputStream);
-            writer.WriteLine(byteArray);
-            writer.Flush();
-
-            writer.Close();
-            Response.End();
-
-
-            var stream = Request.InputStream;
-            byte[] buffer = new byte[stream.Length];
-            stream.Read(buffer, 0, buffer.Length);
-            string xml = Encoding.UTF8.GetString(buffer);
-
-            RawSmsReceived rawSmsReceived = ManageReceivedSmsService.GetRawSmsReceivedFromXMLString(xml);
-            if (rawSmsReceived != null)
+            if (rawSmsReceived.OutpostId == Guid.Empty)
             {
-                rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
+                rawSmsReceived.ParseErrorMessage = "Phone number is not valid.";
+                rawSmsReceived.ParseSucceeded = false;
+                SaveCommandRawSmsReceived.Execute(rawSmsReceived);
 
-                if (rawSmsReceived.OutpostId == Guid.Empty)
+                SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
+            }
+            else
+            {
+                SaveCommandRawSmsReceived.Execute(rawSmsReceived);
+
+                if (rawSmsReceived.OutpostType == 0)
                 {
-                    rawSmsReceived.ParseErrorMessage = "Phone number is not valid.";
-                    rawSmsReceived.ParseSucceeded = false;
+                    rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDrugShop(rawSmsReceived);
                     SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-
-                    SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
-                }
-                else
-                {
-                    SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-
-                    if (rawSmsReceived.OutpostType == 0)
+                    if (rawSmsReceived.ParseSucceeded)
                     {
-                        rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDrugShop(rawSmsReceived);
-                        SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-                        if (rawSmsReceived.ParseSucceeded)
-                        {
-                            MessageFromDrugShop message = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
-                            SaveCommandMessageFromDrugShop.Execute(message);
+                        MessageFromDrugShop drugshopMessage = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
+                        SaveCommandMessageFromDrugShop.Execute(drugshopMessage);
 
-                            SmsRequestService.SendMessageToDispensary(message, rawSmsReceived);
-                        }
-                        else
-                        {
-                            SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
-                        }
+                        SmsRequestService.SendMessageToDispensary(drugshopMessage, rawSmsReceived);
                     }
                     else
                     {
-                        rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDispensary(rawSmsReceived);
-                        SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-                        if (rawSmsReceived.ParseSucceeded)
-                        {
-                            MessageFromDispensary message = ManageReceivedSmsService.CreateMessageFromDispensary(rawSmsReceived);
-                            SaveCommandMessageFromDispensary.Execute(message);
-                        }
-                        else
-                        {
-                            SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
-                        }
+                        SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                    }
+                }
+                else
+                {
+                    rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDispensary(rawSmsReceived);
+                    SaveCommandRawSmsReceived.Execute(rawSmsReceived);
+                    if (rawSmsReceived.ParseSucceeded)
+                    {
+                        MessageFromDispensary dispensaryMessage = ManageReceivedSmsService.CreateMessageFromDispensary(rawSmsReceived);
+                        SaveCommandMessageFromDispensary.Execute(dispensaryMessage);
+                    }
+                    else
+                    {
+                        SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                     }
                 }
             }
+
         }
     }
 }

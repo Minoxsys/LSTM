@@ -13,6 +13,6 @@ namespace Web.Services
         RawSmsReceived ParseRawSmsReceivedFromDispensary(RawSmsReceived rawSmsReceived);
         MessageFromDrugShop CreateMessageFromDrugShop(RawSmsReceived rawSmsReceived);
         MessageFromDispensary CreateMessageFromDispensary(RawSmsReceived rawSmsReceived);
-        RawSmsReceived GetRawSmsReceivedFromXMLString(string request);
+
     }
 }

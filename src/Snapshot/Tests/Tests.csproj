@@ -221,7 +221,6 @@
     <Compile Include="Unit\Services\ManageReceivedSmsTests\AssignOutpostToRawSmsReceivedBySenderNumberMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageFromDispensaryMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageFromDrugShopMethod.cs" />
-    <Compile Include="Unit\Services\ManageReceivedSmsTests\GetRawSmsReceivedFromXMLStringMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\ParseRawSmsReceivedFromDispensaryMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\ParseRawSmsReceivedFromDrugShopMethod.cs" />

@@ -80,8 +80,6 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
             rawSms = MockRepository.GeneratePartialMock<RawSmsReceived>();
             rawSms.Stub(c => c.Id).Return(rawSmsId);
             rawSms.Sender = CORRECTNUMBER;
-            rawSms.SmsId = "25485";
-            rawSms.ServiceNumber = "12458";
 
             messageFromDrugShopId = Guid.NewGuid();
             messageFromDrugShop = MockRepository.GeneratePartialMock<MessageFromDrugShop>();

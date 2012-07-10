@@ -8,13 +8,8 @@ namespace Domain
 {
     public class RawSmsReceived : DomainEntity
     {
-        public virtual string SmsId { get; set; }
         public virtual DateTime ReceivedDate { get; set; }
         public virtual string Sender { get; set; }
-        public virtual string ServiceNumber { get; set; }
-        public virtual string Operator { get; set; }
-        public virtual string OperatorId { get; set; }
-        public virtual string Keyword { get; set; }
         public virtual string Content { get; set; }
         
         public virtual Guid OutpostId { get; set; }
