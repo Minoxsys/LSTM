@@ -53,7 +53,10 @@ namespace Web.Controllers
             if (rawSmsReceived.OutpostId == Guid.Empty)
             {
                 SaveRawSmsReceived(rawSmsReceived, "Phone number is not valid.", false);
-                SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
+                Response.Status = "200 OK";
+                Response.StatusCode = 200;
+                Response.Write(Url.Encode(INVALIDNUMBERERRORMESSAGE));
+                //SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
             }
             else
             {
@@ -71,11 +74,19 @@ namespace Web.Controllers
                         string messageForDrugShop = password + " for " + rawSmsReceived.Content;
                         string messageForDispensary = password + " " + ManageReceivedSmsService.CreateMessageToBeSentToDispensary(drugshopMessage);
 
-                        SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
+                        Response.Status = "200 OK";
+                        Response.StatusCode = 200;
+                        Response.Write(Url.Encode(messageForDrugShop));
+                        //SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
                         SmsRequestService.SendMessageToDispensary(messageForDispensary, rawSmsReceived);
                     }
                     else
-                        SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                    {
+                        Response.Status = "200 OK";
+                        Response.StatusCode = 200;
+                        Response.Write(Url.Encode(INVALIDFORMATERRORMESSAGE));
+                        //SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                    }
                 }
                 else
                 {
@@ -85,7 +96,12 @@ namespace Web.Controllers
                     if (rawSmsReceived.ParseSucceeded)
                         SaveMessageFromDispensary(rawSmsReceived);
                     else
-                        SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                    {
+                        Response.Status = "200 OK";
+                        Response.StatusCode = 200;
+                        Response.Write(Url.Encode(INVALIDFORMATERRORMESSAGE));
+                        //SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                    }
                 }
             }
 

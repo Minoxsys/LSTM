@@ -63,7 +63,7 @@ namespace Web.Services
         private string GeneratePostData(string message, string phoneNumber)
         {
             String postMessage = HttpUtility.UrlEncode(message);
-            String strPost = "uname=" + AppSettings.SmsGatewayUserName + "&pword=" + AppSettings.SmsGatewayPassword + "&message=" + postMessage + "&from=INTHEC" + "&selectednums=" + phoneNumber + "&info=1";
+            String strPost = "?phonenumber=%2B" + phoneNumber + "&user=" + AppSettings.SmsGatewayUserName + "&password=" + AppSettings.SmsGatewayPassword + "&text=" + postMessage;
             return strPost;
         }
 

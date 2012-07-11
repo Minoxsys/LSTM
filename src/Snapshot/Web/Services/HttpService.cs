@@ -15,30 +15,13 @@ namespace Web.Services
 
         public string Post(string data)
         {
-            WebRequest request = WebRequest.Create(URL);
-            request.Method = "POST";
-            request.ContentLength = Encoding.UTF8.GetByteCount(data);
-            request.ContentType = "application/x-www-form-urlencoded";
+            string url = URL + data;
 
-            StreamWriter myWriter = null;
-            try
-            {
-                myWriter = new StreamWriter(request.GetRequestStream());
-                myWriter.Write(data);
-                myWriter.Flush();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            finally
-            {
-                myWriter.Close();
-            }
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-            String result = "";
-            HttpWebResponse objResponse = (HttpWebResponse)request.GetResponse();
-            using (StreamReader sr = new StreamReader(objResponse.GetResponseStream()))
+            var result = "";
+            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
             {
                 result = sr.ReadToEnd();
                 sr.Close();

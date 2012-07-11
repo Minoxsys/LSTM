@@ -33,29 +33,25 @@ namespace Web.Controllers
         [HttpPost]
         public JsonResult Send(string message)
         {
-            string url = @"http://lstm-staging.apphb.com/SmsRequest/ReceiveSms?message='lalalalalalla'&msisdn='hhhh'";
-            string responseMessage = "lalalalalalalala";
-            try
-            {
+            //string url = AppSettings.SmsGatewayUrl + "?phonenumber=%2B" + phoneNumber + "&user=" + AppSettings.SmsGatewayUserName + "&password=" + AppSettings.SmsGatewayPassword + "&text=" + postMessage;
+            string url = @"http://localhost:53692/SmsRequest/ReceiveSms?message='lalalalalalla'&msisdn='hhhh'";
+   
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                responseMessage = HttpService.Post(responseMessage);
-                
-                return Json(
-                   new JsonActionResponse
-                   {
-                       Status = "Success",
-                       Message = String.Format("Message sent: " + responseMessage)
-                    });
-            }
-            catch (Exception)
+            var result = "";
+            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
             {
-                return Json(
+                result = sr.ReadToEnd();
+                sr.Close();
+            }
+
+            return Json(
                    new JsonActionResponse
                    {
-                       Status = "Error",
-                       Message = String.Format("Message NOT sent: " + responseMessage)
-                    });
-            }
+                       Status = result,
+                       Message = result
+                   });
                         
         }
 
