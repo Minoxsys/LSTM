@@ -55,7 +55,7 @@ namespace Web.Controllers
                 SaveRawSmsReceived(rawSmsReceived, "Phone number is not valid.", false);
                 Response.Status = "200 OK";
                 Response.StatusCode = 200;
-                Response.Write(Url.Encode(INVALIDNUMBERERRORMESSAGE));
+                Response.Write(INVALIDNUMBERERRORMESSAGE);
                 //SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
             }
             else
@@ -76,7 +76,7 @@ namespace Web.Controllers
 
                         Response.Status = "200 OK";
                         Response.StatusCode = 200;
-                        Response.Write(Url.Encode(messageForDrugShop));
+                        Response.Write(messageForDrugShop);
                         //SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
                         SmsRequestService.SendMessageToDispensary(messageForDispensary, rawSmsReceived);
                     }
@@ -84,7 +84,7 @@ namespace Web.Controllers
                     {
                         Response.Status = "200 OK";
                         Response.StatusCode = 200;
-                        Response.Write(Url.Encode(INVALIDFORMATERRORMESSAGE));
+                        Response.Write(INVALIDFORMATERRORMESSAGE);
                         //SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                     }
                 }
@@ -99,7 +99,7 @@ namespace Web.Controllers
                     {
                         Response.Status = "200 OK";
                         Response.StatusCode = 200;
-                        Response.Write(Url.Encode(INVALIDFORMATERRORMESSAGE));
+                        Response.Write(INVALIDFORMATERRORMESSAGE);
                         //SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                     }
                 }
