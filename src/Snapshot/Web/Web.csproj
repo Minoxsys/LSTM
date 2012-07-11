@@ -258,7 +258,6 @@
     <Compile Include="Areas\ConditionManagement\Models\Treatment\TreatmentInputModel.cs" />
     <Compile Include="Areas\ConditionManagement\Models\Treatment\TreatmentModel.cs" />
     <Compile Include="Areas\ConditionManagement\ServicesManagementAreaRegistration.cs" />
-    <Compile Include="BackgroundJobs\DBBackupJob.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
@@ -375,13 +374,9 @@
     <Compile Include="Services\IHttpService.cs" />
     <Compile Include="Services\IImportService.cs" />
     <Compile Include="Services\ISmsGatewayService.cs" />
-    <Compile Include="Services\ISmsGatewaySettingsService.cs" />
     <Compile Include="Services\ISmsRequestService.cs" />
-    <Compile Include="Services\RawSmsReceivedParseResult.cs" />
     <Compile Include="Services\SendEmailService.cs" />
     <Compile Include="Services\SmsGatewayService.cs" />
-    <Compile Include="Services\SmsGatewaySettingsService.cs" />
-    <Compile Include="Services\SmsReceived.cs" />
     <Compile Include="Services\IURLService.cs" />
     <Compile Include="Services\SmsRequestService.cs" />
     <Compile Include="Services\URLService.cs" />

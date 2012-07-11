@@ -15,12 +15,10 @@ namespace Web.Services
     public class SmsGatewayService : ISmsGatewayService
     {
         private IHttpService httpService;
-        private ISmsGatewaySettingsService smsGatewaySettingsService;
 
-        public SmsGatewayService(ISmsGatewaySettingsService smsGatewaySettingsService, IHttpService httpService)
+        public SmsGatewayService(IHttpService httpService)
         {
             this.httpService = httpService;
-            this.smsGatewaySettingsService = smsGatewaySettingsService;
         }
 
         public string SendSmsRequest(string smsRequest)
