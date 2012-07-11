@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Domain;
 
 namespace Tests.Unit.Services.SmsRequestServiceTests
 {
     [TestFixture]
-    public class SendMessageMethod
+    public class SendMessageToDispensaryMethod
     {
         public ObjectMother objectMother = new ObjectMother();
 
@@ -20,7 +19,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
         }
 
         [Test]
-        public void WhenWeWantToSendMessage_AndMessageIsSuccesfullySent_ItShouldReturn_True()
+        public void WhenWeWantToSendMessageToDispensary_AndMessageIsSuccesfullySent_ItShouldReturn_True()
         {
             //Arrange
             objectMother.httpService.Expect(call => call.Post(Arg<string>.Is.Anything)).Return("");

@@ -21,6 +21,7 @@ namespace Web.Services
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
         private string KEYWORD = "ALFA";
 
+
         private IQueryService<Condition> queryCondition;
         private IQueryService<Diagnosis> queryDiagnosis;
         private IQueryService<Treatment> queryTreatment;
@@ -85,7 +86,7 @@ namespace Web.Services
                     return rawSmsReceived;
                 }
 
-                for (var i = index+1; i < parsedLine.Count(); i++)
+                for (var i = index + 1; i < parsedLine.Count(); i++)
                 {
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
@@ -128,7 +129,7 @@ namespace Web.Services
                     return rawSmsReceived;
                 }
 
-                for (var i = index+1; i < parsedLine.Count(); i++)
+                for (var i = index + 1; i < parsedLine.Count(); i++)
                 {
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
@@ -172,7 +173,7 @@ namespace Web.Services
             message.OutpostId = rawSmsReceived.OutpostId;
             message.SentDate = rawSmsReceived.ReceivedDate;
 
-            for (var i = index+1; i < parsedLine.Count(); i++)
+            for (var i = index + 1; i < parsedLine.Count(); i++)
             {
                 if (!string.IsNullOrEmpty(parsedLine[i]))
                 {
@@ -201,7 +202,7 @@ namespace Web.Services
             message.MessageFromDrugShop = queryMessageFromDrugShop.Query().Where(it => it.IDCode == IdCode).FirstOrDefault();
             message.SentDate = rawSmsReceived.ReceivedDate;
 
-            for (var i = index+1; i < parsedLine.Count(); i++)
+            for (var i = index + 1; i < parsedLine.Count(); i++)
             {
                 if (!string.IsNullOrEmpty(parsedLine[i]))
                 {
@@ -217,6 +218,19 @@ namespace Web.Services
                         message.Advices.Add(advice);
                 }
             }
+
+            return message;
+        }
+
+        public string CreateMessageToBeSentToDispensary(MessageFromDrugShop messageFromDrugShop)
+        {
+            string OutpostName = queryOutposts.GetOutpostName(messageFromDrugShop.OutpostId);
+
+            string message = messageFromDrugShop.IDCode + " " + messageFromDrugShop.SentDate.ToString("ddMMyy") + OutpostName;
+            message = message + " " + messageFromDrugShop.Initials + messageFromDrugShop.BirthDate.ToString("ddMMyy") + messageFromDrugShop.Gender;
+
+            foreach (var service in messageFromDrugShop.ServicesNeeded)
+                message = message + " " + service.Code;
 
             return message;
         }

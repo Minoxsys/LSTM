@@ -38,7 +38,7 @@ namespace Web.Controllers
             try
             {
 
-                responseMessage = HttpService.Post(url, responseMessage);
+                responseMessage = HttpService.Post(responseMessage);
                 
                 return Json(
                    new JsonActionResponse

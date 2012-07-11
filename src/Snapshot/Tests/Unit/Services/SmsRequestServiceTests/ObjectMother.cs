@@ -14,7 +14,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
     {
         public ISmsRequestService service;
 
-        public ISmsGatewayService smsGatewayService;
+        public IHttpService httpService;
         public IQueryOutposts queryOutposts;
         public IQueryService<Contact> queryContact;
 
@@ -43,14 +43,14 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
 
         private void MockServices()
         {
-            smsGatewayService = MockRepository.GenerateMock<ISmsGatewayService>();
+            httpService = MockRepository.GenerateMock<IHttpService>();
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
             queryContact = MockRepository.GenerateMock<IQueryService<Contact>>();
         }
 
         private void Setup_Service()
         {
-            service = new SmsRequestService(smsGatewayService, queryOutposts, queryContact);
+            service = new SmsRequestService(httpService, queryOutposts, queryContact);
         }
 
         private void SetUp_StubData()

@@ -5,15 +5,18 @@ using System.Web;
 using System.Net;
 using System.IO;
 using System.Text;
+using Web.Bootstrap;
 
 namespace Web.Services
 {
     public class HttpService : IHttpService
     {
-        public string Post(string url, string data)
+        private string URL = AppSettings.SmsGatewayUrl;
+
+        public string Post(string data)
         {
-            WebRequest request = WebRequest.Create(url);
-            request.Method = "GET";
+            WebRequest request = WebRequest.Create(URL);
+            request.Method = "POST";
             request.ContentLength = Encoding.UTF8.GetByteCount(data);
             request.ContentType = "application/x-www-form-urlencoded";
 
@@ -41,7 +44,7 @@ namespace Web.Services
                 sr.Close();
             }
 
-            return result; 
+            return result;
         }
     }
 }

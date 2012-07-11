@@ -28,6 +28,10 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
 
         public const string WRONGPHONENUMBER = "00000000012";
         public const string CORRECTPHONENUMBER = "0123456789";
+        public const string CORRECTMESSAGEFROMDRUGSHOP = "ALFA XY120387F S1";
+        public const string INCORRECTMESSAGEFROMDRUGSHOP = "ALFA XYY1215F S1";
+        public const string CORRECTMESSAGEFROMDISPENSARY = "";
+        public const string INCORRECTMESSAGEFROMDISPENSARY = "ALFA 154854521 D1 D2 S1";
 
         public Guid contactId;
         public Contact contact;
@@ -52,17 +56,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
 
         public Guid rawSmsCorerctFormatDispensaryId;
         public RawSmsReceived rawSmsCorerctFormatDispensary;
-        
-        public string XMLStringInvalidPhoneNumber = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='00000000012' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>This is a test message</content> </message> </sms-request>";
-        public string XMLStringFromDrugShop = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='00000000012' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>This is a test message</content> </message> </sms-request>";
-        public string XMLCorrectStringFromDrugShop = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='0123456789' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>XRT120572F S1</content> </message> </sms-request>";
-        public string XMLStringDispensary = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='00000000012' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>This is a test message</content> </message> </sms-request>";
-        public string XMLCorrectStringDispensary = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='0123456789' service-number='1234' operator='operator-smpp' operator_id='100' keyword='This' message-count='1'> <content type='text/plain'>124585488 D1 T1 A2</content> </message> </sms-request>";
-        
-        
-        public HttpContextBase mockedhttpContext;
-        public HttpRequestBase mockedHttpRequest;
-        
+
         public void Init()
         {
             MockServices();
@@ -88,7 +82,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             messageFromDrugShop.OutpostId = outpostId;
             messageFromDrugShop.IDCode = "12345678";
             messageFromDrugShop.Initials = "XY";
-            messageFromDrugShop.Gender = "M";
+            messageFromDrugShop.Gender = "F";
 
             messageFromDispensaryId = Guid.NewGuid();
             messageFromDispensary = MockRepository.GeneratePartialMock<MessageFromDispensary>();
@@ -111,7 +105,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             rawSmsIncorectFormatDrugShop.Sender = CORRECTPHONENUMBER;
             rawSmsIncorectFormatDrugShop.OutpostId = outpostId;
             rawSmsIncorectFormatDrugShop.OutpostType = 0;
-            rawSmsIncorectFormatDrugShop.Content = "XRT12 0512F SS5";
+            rawSmsIncorectFormatDrugShop.Content = INCORRECTMESSAGEFROMDRUGSHOP;
             rawSmsIncorectFormatDrugShop.ParseSucceeded = false;
 
             rawSmsCorerctFormatDrugShopId = Guid.NewGuid();
@@ -120,7 +114,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             rawSmsCorerctFormatDrugShop.Sender = CORRECTPHONENUMBER;
             rawSmsCorerctFormatDrugShop.OutpostId = outpostId;
             rawSmsCorerctFormatDrugShop.OutpostType = 0;
-            rawSmsCorerctFormatDrugShop.Content = "XRT120572F S1";
+            rawSmsCorerctFormatDrugShop.Content = CORRECTMESSAGEFROMDRUGSHOP;
             rawSmsCorerctFormatDrugShop.ParseSucceeded = true;
 
             rawSmsIncorectFormatDispensaryId = Guid.NewGuid();
@@ -129,7 +123,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             rawSmsIncorectFormatDispensary.Sender = CORRECTPHONENUMBER;
             rawSmsIncorectFormatDispensary.OutpostId = outpostId;
             rawSmsIncorectFormatDispensary.OutpostType = 1;
-            rawSmsIncorectFormatDispensary.Content = "124585488 DD1Tr1A2";
+            rawSmsIncorectFormatDispensary.Content = INCORRECTMESSAGEFROMDISPENSARY;
             rawSmsIncorectFormatDispensary.ParseSucceeded = false;
 
             rawSmsCorerctFormatDispensaryId = Guid.NewGuid();
@@ -138,7 +132,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             rawSmsCorerctFormatDispensary.Sender = CORRECTPHONENUMBER;
             rawSmsCorerctFormatDispensary.OutpostId = outpostId;
             rawSmsCorerctFormatDispensary.OutpostType = 1;
-            rawSmsCorerctFormatDispensary.Content = "124585488 D1 T1 A2";
+            rawSmsCorerctFormatDispensary.Content = CORRECTMESSAGEFROMDISPENSARY;
             rawSmsCorerctFormatDispensary.ParseSucceeded = true;
         }
 
@@ -162,22 +156,5 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             controller.ManageReceivedSmsService = manageReceivedSmsService;
             controller.SmsRequestService = smsRequestService;
         }
-
-        public void MockRequest(string message)
-        {
-            MockRepository mocks = new MockRepository();
-
-            mockedhttpContext = mocks.DynamicMock<HttpContextBase>();
-            mockedHttpRequest = mocks.DynamicMock<HttpRequestBase>();
-
-            MemoryStream m = new MemoryStream(System.Text.Encoding.Default.GetBytes(message));
-            SetupResult.For(mockedHttpRequest.InputStream).Return(m);
-
-            SetupResult.For(mockedhttpContext.Request).Return(mockedHttpRequest);
-            mocks.ReplayAll();
-            controller.ControllerContext = new ControllerContext(mockedhttpContext, new RouteData(), controller);
-        }
-
-        
     }
 }

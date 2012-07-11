@@ -8,6 +8,6 @@ namespace Web.Services
 {
     public interface IHttpService
     {
-        String Post(String url, String data);
+        String Post(String data);
     }
 }

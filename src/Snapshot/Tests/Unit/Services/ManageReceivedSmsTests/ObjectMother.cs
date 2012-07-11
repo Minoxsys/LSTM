@@ -34,9 +34,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public const string WRONGIDCODEMESSAGEDISPENSARY = "12343214 TR1 TR2";
         public const string WRONGSERVICECODEFORDISPENSARYMESSAGE = "10000008 DIAG1 TREAT1 ADV1";
         public const string CORRECTMESSAGEFROMDISPENSARY = "10000008  D1  D2     T4  T3 A1        ";
-
-        public const string CORRECTXML = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><message id='54321' submit-date='2008-10-13 13:30:10' msisdn='+79991234567' service-number='1234' operator='operator-smpp' operator-id='100' keyword='This' message-count='1'> <content type='text/plain'>This is a test message</content> </message> </sms-request>";
-        public const string WRONGXML = "<?xml version='1.0' encoding='UTF-8'?><sms-request version='1.0'><messasage id='54321' submit-date='2008-10-13 13:30:10' msisdn='+79991234567' service-number='1234' operator='operator-smpp' operator-id='100' keyword='This' message-count='1'> <content type='text/plain'>This is a test message</content> </messasage> </sms-request>";
+        public string MESSAGE = "10000008 " + DateTime.UtcNow.AddMonths(-1).ToString("ddMMyy") + " XY" + DateTime.UtcNow.ToString("ddMMyy") + "F";
 
         public Guid contactId;
         public Contact contact;
@@ -48,7 +46,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public MessageFromDrugShop messageFromDrugShop;
         public Guid outpostTypeId;
         public OutpostType outpostType;
-        
+
         public void Init()
         {
             MockServices();
@@ -161,7 +159,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
                     Code = "D" + i,
                     Keyword = "Diagnosis " + i,
                     Description = "Some description for D" + i
-                    
+
                 });
             }
             return list.AsQueryable();

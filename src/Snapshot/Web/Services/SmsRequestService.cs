@@ -14,35 +14,28 @@ namespace Web.Services
 {
     public class SmsRequestService : ISmsRequestService
     {
-        private ISmsGatewayService smsGatewayService;
+        private IHttpService httpService;
         private IQueryOutposts queryOutposts;
         private IQueryService<Contact> queryContact;
 
         private const string DateFormat = "ddMMyy";
+        private string URL = AppSettings.SmsGatewayUrl;
 
-        public SmsRequestService(ISmsGatewayService smsGatewayService, IQueryOutposts queryOutposts, IQueryService<Contact> queryContact)
+        public SmsRequestService(IHttpService httpService, IQueryOutposts queryOutposts, IQueryService<Contact> queryContact)
         {
-            this.smsGatewayService = smsGatewayService;
+            this.httpService = httpService;
             this.queryOutposts = queryOutposts;
             this.queryContact = queryContact;
         }
 
-        public bool SendMessage(string message,  RawSmsReceived response)
+        public bool SendMessage(string message, RawSmsReceived response)
         {
-            ResponseModel model = new ResponseModel();
-            model.Content = message;
-            model.DeferDate = "";
-            model.Operator = "";
-            model.PhoneNumber = response.Sender;
-            model.Priority = "1";
-            model.ServiceNo = AppSettings.SmsGatewayShortcode;
-            model.Valability = "3";
-
-            string request = CreatePostData(model);
+            string phoneNumber = response.Sender;
+            string postData = GeneratePostData(message, phoneNumber);
 
             try
             {
-                smsGatewayService.SendSmsRequest(request);
+                this.httpService.Post(postData);
                 return true;
             }
             catch (Exception)
@@ -51,21 +44,27 @@ namespace Web.Services
             }
         }
 
-
-        public bool SendMessageToDispensary(MessageFromDrugShop message, RawSmsReceived rawSms)
+        public bool SendMessageToDispensary(string message, RawSmsReceived rawSms)
         {
+            string phoneNumber = GetWarehousePhoneNumber(rawSms.OutpostId);
+            string postData = GeneratePostData(message, phoneNumber);
 
-                try
-                {
-                    smsGatewayService.SendSmsRequest("");
-                    return true;
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
+            try
+            {
+                this.httpService.Post(postData);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
-            return false;
+        private string GeneratePostData(string message, string phoneNumber)
+        {
+            String postMessage = HttpUtility.UrlEncode(message);
+            String strPost = "uname=" + AppSettings.SmsGatewayUserName + "&pword=" + AppSettings.SmsGatewayPassword + "&message=" + postMessage + "&from=INTHEC" + "&selectednums=" + phoneNumber + "&info=1";
+            return strPost;
         }
 
         private string GetWarehousePhoneNumber(Guid guid)
@@ -79,72 +78,5 @@ namespace Web.Services
             }
             return null;
         }
-
-        public string CreateMessageToBeSentToDispensary(MessageFromDrugShop messageFromDrugShop)
-        {
-            string OutpostName = queryOutposts.GetOutpostName(messageFromDrugShop.OutpostId);
-
-            string message = messageFromDrugShop.IDCode + " " + messageFromDrugShop.SentDate.ToString("ddMMyy") + OutpostName;
-            message = message + " " + messageFromDrugShop.Initials + messageFromDrugShop.BirthDate.ToString("ddMMyy") + messageFromDrugShop.Gender;
-
-            foreach (var service in messageFromDrugShop.ServicesNeeded)
-            {
-                message = message + " " + service.Code;
-            }
-
-            return message;
-        }
-
-        private string CreatePostData(ResponseModel model)
-        {
-            string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sms-response login=\"" + AppSettings.SmsGatewayUserName + "\" password=\"" + AppSettings.SmsGatewayPassword + "\" delivery-notification-requested=\"true\" version=\"1.0\"> ";
-            response += "<message id=\"" + model.Id + "\" ref-id=\"" + model.RefId + "\" msisdn=\"" + model.PhoneNumber + "\" service-number=\"" + model.ServiceNo + "\" operator=\"" + model.Operator + "\" ";
-            response += "validity-period=\"" + model.Valability + "\" priority=\"" + model.Priority + "\">";
-            response += "<content type=\"text/plain\">" + model.Content + "</content></message></sms-response>";
-
-            return response;
-        }
-
-        public bool SendResponseMessage()
-        {
-            string request = CreateEmptyPostData();
-
-            try
-            {
-                smsGatewayService.SendSmsRequest(request);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private string CreateEmptyPostData()
-        {
-            string xml = "<?xml version=" + "\"" + "1.0" + "\"" + " encoding=" + "\"" + "UTF-8" + "\"" + "?><sms-response version=" + "\"" + "1.0" + "\"" + "/>\r\n";
-            return xml;
-        }
-
-        private string CreateDispensaryData(ResponseModel model)
-        {
-            string bulkRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-            bulkRequest += "<bulk-request login=\"" + AppSettings.SmsGatewayUserName + "\" password=\"" + AppSettings.SmsGatewayPassword + "\" request-id=\""+model.Id+"\" delivery-notification-requested=\"true\" version=\"1.0\">";
-            bulkRequest += "<message id=\"1\" msisdn=\""+model.PhoneNumber+"\" service-number=\"" + AppSettings.SmsGatewayShortcode + "\" validity-period=\""+model.Valability+"\" priority=\""+model.Priority+"\"> ";
-            bulkRequest += "<content type=\"text/plain\">"+model.Content+"</content>";
-            bulkRequest += "</message></bulk-request>";
-
-            return bulkRequest;
-        }
-
-        private string Get7Digits()
-        {
-            var bytes = new byte[4];
-            var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(bytes);
-            int random = BitConverter.ToInt32(bytes, 0) % 10000000;
-            return String.Format("{0:D7}", random);
-        }
-
     }
 }

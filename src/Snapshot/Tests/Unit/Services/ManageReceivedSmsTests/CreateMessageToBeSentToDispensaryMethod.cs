@@ -5,7 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 
-namespace Tests.Unit.Services.SmsRequestServiceTests
+namespace Tests.Unit.Services.ManageReceivedSmsTests
 {
     [TestFixture]
     public class CreateMessageToBeSentToDispensaryMethod
@@ -30,7 +30,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
             //Assert
             objectMother.queryOutposts.VerifyAllExpectations();
             Assert.IsInstanceOf<string>(result);
-            Assert.AreEqual(objectMother.CORRECTMESSAGE, result);
+            Assert.AreEqual(objectMother.MESSAGE, result);
         }
     }
 }
