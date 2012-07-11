@@ -13,6 +13,9 @@ Send message
 <script type="text/javascript">
     Ext.onReady(function () {
         window.feature = {};
+        window.feature.phoneNumber = 'Send-message-phone-number';
+        window.feature.message = 'Send-message-the-message';
+        window.feature.gateway = 'Send-message-gateway';
 
         window.feature.fileStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Size'],
@@ -54,34 +57,43 @@ Send message
                     },
                     flex: 1,
                     items: [{
+                        xtype: 'textfield',
+                        name: 'phoneNumber',
+                        fieldLabel: 'Phone number',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.phoneNumber
+                    }, {
+                        xtype: 'textfield',
+                        name: 'message',
+                        fieldLabel: 'Message',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.message
+                    }, {
+                        xtype: 'textfield',
+                        name: 'gateway',
+                        fieldLabel: 'Gateway',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.gateway
+                    }, {
                         xtype: 'button',
                         margin: '0 0 0 20',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
                         text: 'Send message',
                         handler: function () {
-                            var values = { message: "ABF230487F S1" };
+                            var phoneNumber = window.feature.container.down('#' + window.feature.phoneNumber).getValue();
+                            var message = window.feature.container.down('#' + window.feature.message).getValue();
+                            var gateway = window.feature.container.down('#' + window.feature.gateway).getValue();
+
+                            var values = {
+                                phoneNumber: phoneNumber,
+                                message: message,
+                                gateway: gateway
+                            };
                             var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "Send" })';
-                            var action = $.post(postToUrl, values);
-
-                            action.success(function (serverResponse) {
-                                var msgAlert = Ext.Msg;
-                                msgAlert.ui = 'snapshot-popup-window';
-                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-
-                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
-                            });
-                        }
-                    }, {
-                        xtype: 'button',
-                        margin: '0 0 0 20',
-                        ui: 'snapshot-add-btn',
-                        cls: 'x-add-button-gradient',
-                        text: 'Send xml',
-                        handler: function () {
-                            var values = { message: "ABF230487F S1" };
-                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendXml" })';
                             var action = $.post(postToUrl, values);
 
                             action.success(function (serverResponse) {

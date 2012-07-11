@@ -47,16 +47,16 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult ReceiveSms(string message, string msisdn)
         {
+            string responseMessage = "";
+
             RawSmsReceived rawSmsReceived = new RawSmsReceived { Content = message, Sender = msisdn, ReceivedDate = DateTime.UtcNow };
             rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
             if (rawSmsReceived.OutpostId == Guid.Empty)
             {
                 SaveRawSmsReceived(rawSmsReceived, "Phone number is not valid.", false);
-                Response.Status = "200 OK";
-                Response.StatusCode = 200;
-                Response.Write(INVALIDNUMBERERRORMESSAGE);
-                //SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
+                responseMessage = INVALIDNUMBERERRORMESSAGE;
+                SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
             }
             else
             {
@@ -74,18 +74,14 @@ namespace Web.Controllers
                         string messageForDrugShop = password + " for " + rawSmsReceived.Content;
                         string messageForDispensary = password + " " + ManageReceivedSmsService.CreateMessageToBeSentToDispensary(drugshopMessage);
 
-                        Response.Status = "200 OK";
-                        Response.StatusCode = 200;
-                        Response.Write(messageForDrugShop);
-                        //SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
+                        responseMessage = messageForDrugShop;
+                        SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
                         SmsRequestService.SendMessageToDispensary(messageForDispensary, rawSmsReceived);
                     }
                     else
                     {
-                        Response.Status = "200 OK";
-                        Response.StatusCode = 200;
-                        Response.Write(INVALIDFORMATERRORMESSAGE);
-                        //SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                        responseMessage = INVALIDFORMATERRORMESSAGE;
+                        SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                     }
                 }
                 else
@@ -97,13 +93,14 @@ namespace Web.Controllers
                         SaveMessageFromDispensary(rawSmsReceived);
                     else
                     {
-                        Response.Status = "200 OK";
-                        Response.StatusCode = 200;
-                        Response.Write(INVALIDFORMATERRORMESSAGE);
-                        //SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                        responseMessage = INVALIDFORMATERRORMESSAGE;
+                        SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
                     }
                 }
             }
+            Response.Status = "200 OK";
+            Response.StatusCode = 200;
+            Response.Write(responseMessage);
 
             return new EmptyResult();
         }

@@ -31,10 +31,14 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult Send(string message)
+        public JsonResult Send(string phoneNumber, string message, string gateway)
         {
-            //string url = AppSettings.SmsGatewayUrl + "?phonenumber=%2B" + phoneNumber + "&user=" + AppSettings.SmsGatewayUserName + "&password=" + AppSettings.SmsGatewayPassword + "&text=" + postMessage;
-            string url = @"http://localhost:53692/SmsRequest/ReceiveSms?message='lalalalalalla'&msisdn='hhhh'";
+            string url = @"http://localhost:53692/SmsRequest/ReceiveSms?";
+
+            if (gateway == "remote")
+                url = AppSettings.SmsGatewayUrl + "?phonenumber=%2B" + phoneNumber + "&user=" + AppSettings.SmsGatewayUserName + "&password=" + AppSettings.SmsGatewayPassword + "&text=" + Url.Encode(message);
+            else
+                url += "?message=" + message + "&msisdn=" + phoneNumber;
    
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -49,7 +53,7 @@ namespace Web.Controllers
             return Json(
                    new JsonActionResponse
                    {
-                       Status = result,
+                       Status = response.StatusCode.ToString(),
                        Message = result
                    });
                         
