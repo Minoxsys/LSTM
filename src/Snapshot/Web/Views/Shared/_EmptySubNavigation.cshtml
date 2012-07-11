@@ -71,7 +71,15 @@
                             xtype: 'label',
                             margin: '0, 20, 0, 0',
                             cls: 'x-userMenu-label',
-                            text: 'Help'
+                            text: 'Help',
+                            listeners: {
+                                render: function (c) {
+                                    c.getEl().on('click', function () {
+                                        alert("Support and help for all web users where any functionality related to the system and solution is unavailable shall be processed by email request. \nSupport is available from 08:00-18:00 GMT, (Monday to Friday except public holidays).\n\nPlease contact us at help@evozon.com\nAcknowledgement shall be received within one (1) business hour from receipt of report and resolution target is five (5) days for 95% of incidents.");
+                                    });
+
+                                }
+                            }
                         }, {
                             xtype: 'label',
                             margin: '0, 20, 0, 0',
