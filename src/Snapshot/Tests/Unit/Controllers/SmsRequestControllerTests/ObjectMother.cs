@@ -57,6 +57,9 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         public Guid rawSmsCorerctFormatDispensaryId;
         public RawSmsReceived rawSmsCorerctFormatDispensary;
 
+        public HttpResponseBase Response;
+
+
         public void Init()
         {
             MockServices();
@@ -144,6 +147,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
 
             manageReceivedSmsService = MockRepository.GenerateMock<IManageReceivedSmsService>();
             smsRequestService = MockRepository.GenerateMock<ISmsRequestService>();
+            Response = MockRepository.GenerateMock<HttpResponseBase>();
         }
 
         private void Setup_Controller()
@@ -155,6 +159,14 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             controller.SaveCommandRawSmsReceived = saveCommandRawSmsReceived;
             controller.ManageReceivedSmsService = manageReceivedSmsService;
             controller.SmsRequestService = smsRequestService;
+
+            var mockHttpContext = MockRepository.GenerateMock<HttpContextBase>();
+            var response = MockRepository.GenerateMock<HttpResponseBase>();
+            var controllerContext = MockRepository.GenerateMock<ControllerContext>();
+            controllerContext.Stub(c => c.HttpContext.Response).Return(response);
+
+            controller.ControllerContext = controllerContext;
+
         }
     }
 }
