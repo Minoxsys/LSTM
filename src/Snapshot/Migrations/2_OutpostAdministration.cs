@@ -47,7 +47,7 @@ namespace Migrations
 			Delete.Table("Outposts");
             Delete.Table("OutpostTypes");
 
-			Delete.Table("Clients");
+			//Delete.Table("Clients");
 		}
 
 		public override void Up()

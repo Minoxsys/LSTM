@@ -14,10 +14,10 @@ namespace Migrations
             Delete.RemoveForeignKey("RawSmsReceiveds");
             Delete.Table("RawSmsReceiveds");
 
-            Delete.Table("MessageFromDrugShopConditions");
-            Delete.Table("AdviceMessageFromDispensarys");
-            Delete.Table("DiagnosisMessageFromDispensarys");
-            Delete.Table("MessageFromDispensaryTreatments");
+            //Delete.Table("MessageFromDrugShopConditions");
+            //Delete.Table("AdviceMessageFromDispensarys");
+            //Delete.Table("DiagnosisMessageFromDispensarys");
+            //Delete.Table("MessageFromDispensaryTreatments");
 
             //Delete.RemoveForeignKey("MessageFromDispensarys", "MessageFromDrugShop_FK", "MessageFromDispensarys");
             Delete.RemoveForeignKey("MessageFromDispensarys");
@@ -33,7 +33,6 @@ namespace Migrations
                 .WithCommonColumns()
 
                 .WithColumn("Sender").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Content").AsString(ConstraintUtility.DESCRIPTION_LENGTH)
                 .WithColumn("ReceivedDate").AsDateTime().Nullable()
                 .WithColumn("OutpostId").AsGuid().Nullable()

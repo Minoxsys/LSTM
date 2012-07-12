@@ -19,9 +19,9 @@ namespace Migrations
             Delete.RemoveClientForeignKey("Treatments");
             Delete.Table("Treatments");
 
-            Delete.RemoveForeignKey("Conditions");
-            Delete.RemoveClientForeignKey("Conditions");
-            Delete.Table("Conditions");
+            //Delete.RemoveForeignKey("Conditions");
+            //Delete.RemoveClientForeignKey("Conditions");
+            //Delete.Table("Conditions");
 
             Delete.RemoveForeignKey("Advices");
             Delete.RemoveClientForeignKey("Advices");

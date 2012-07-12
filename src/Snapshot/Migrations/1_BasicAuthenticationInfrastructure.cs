@@ -49,7 +49,7 @@ namespace Migrations
 			Delete.Table("PermissionRoles");
 			Delete.Table("Permissions");
 			Delete.Table("Roles");
-			Delete.Table("Users");
+			//Delete.Table("Users");
 		}
   
 		
