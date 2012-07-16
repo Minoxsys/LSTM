@@ -21,6 +21,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public IQueryService<MessageFromDrugShop> queryMessageFromDrugShop;
         public IQueryService<Contact> queryServiceContact;
         public IQueryOutposts queryOutposts;
+        public IQueryService<Appointment> queryAppointment;
 
         public const string MOBILE_NUMBER = "0123456789";
         public const string WRONG_MOBILE_NUMBER = "1245781584";
@@ -30,7 +31,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public const string WRONGCONTENTDRUGSHOP = "AFYA XRTDRDR485478654651354 RETFF";
         public const string WRONGDATEMESSAGEFROMDRUGSHOP = "AFYA XY231398F RX1 RX2";
         public const string WRONGSERVICEMESSAGEFROMDRUGSHOP = "AFYA XY230498F RX1 RX2";
-        public const string CORRECTMESSAGEFROMDRUGSHOP = "AFYA XYXX230498F    S1 S5  S6   ";
+        public const string CORRECTMESSAGEFROMDRUGSHOP = "AFYA XYXX230498F    S1 S5  S6  H1 H2 ";
         public const string WRONGIDCODEMESSAGEDISPENSARY = "AFYA 12343214 TR1 TR2";
         public const string WRONGSERVICECODEFORDISPENSARYMESSAGE = "AFYA 10000008 DIAG1 TREAT1 ADV1";
         public const string CORRECTMESSAGEFROMDISPENSARY = "AFYA 10000008  D1  D2     T4  T3 A1        ";
@@ -46,6 +47,8 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public MessageFromDrugShop messageFromDrugShop;
         public Guid outpostTypeId;
         public OutpostType outpostType;
+        public Guid rawSmsReceivedFromDispensaryId;
+        public RawSmsReceived rawSmsReceivedFromDispensary;
 
         public void Init()
         {
@@ -86,6 +89,18 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             rawSmsReceived.ReceivedDate = DateTime.UtcNow;
             rawSmsReceived.Sender = MOBILE_NUMBER;
 
+            rawSmsReceivedFromDispensaryId = Guid.NewGuid();
+            rawSmsReceivedFromDispensary = MockRepository.GeneratePartialMock<RawSmsReceived>();
+            rawSmsReceivedFromDispensary.Stub(c => c.Id).Return(rawSmsReceivedFromDispensaryId);
+            rawSmsReceivedFromDispensary.Content = CORRECTMESSAGEFROMDISPENSARY;
+            rawSmsReceivedFromDispensary.OutpostType = 1;
+            rawSmsReceivedFromDispensary.OutpostId = outpostId;
+            rawSmsReceivedFromDispensary.ParseErrorMessage = null;
+            rawSmsReceivedFromDispensary.ParseSucceeded = true;
+            rawSmsReceivedFromDispensary.ReceivedDate = DateTime.UtcNow;
+            rawSmsReceivedFromDispensary.Sender = MOBILE_NUMBER;
+            
+
             messageFromDrugShopId = Guid.NewGuid();
             messageFromDrugShop = MockRepository.GeneratePartialMock<MessageFromDrugShop>();
             messageFromDrugShop.Stub(c => c.Id).Return(messageFromDrugShopId);
@@ -95,6 +110,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             messageFromDrugShop.Initials = "XY";
             messageFromDrugShop.OutpostId = outpostId;
             messageFromDrugShop.SentDate = DateTime.UtcNow.AddMonths(-1);
+
         }
 
         private void MockServices()
@@ -106,11 +122,12 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             queryMessageFromDrugShop = MockRepository.GenerateMock<IQueryService<MessageFromDrugShop>>();
             queryServiceContact = MockRepository.GenerateMock<IQueryService<Contact>>();
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
+            queryAppointment = MockRepository.GenerateMock<IQueryService<Appointment>>();
         }
 
         private void Setup_Service()
         {
-            service = new ManageReceivedSmsService(queryCondition, queryDiagnosis, queryTreatment, queryAdvice, queryMessageFromDrugShop, queryServiceContact, queryOutposts);
+            service = new ManageReceivedSmsService(queryCondition, queryDiagnosis, queryTreatment, queryAdvice, queryMessageFromDrugShop, queryServiceContact, queryOutposts, queryAppointment);
         }
 
         public IQueryable<Condition> ListOfCondition()
@@ -127,6 +144,22 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
                 });
             }
             return conditionList.AsQueryable();
+        }
+
+        public IQueryable<Appointment> ListOfAppointment()
+        {
+            List<Appointment> list = new List<Appointment>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                list.Add(new Appointment
+                {
+                    Code = "H" + i,
+                    Description = "some Description",
+                    Keyword = "H" + i
+                });
+            }
+            return list.AsQueryable();
         }
 
         public IQueryable<MessageFromDrugShop> ListOfMessagesFromDrugSho()

@@ -20,6 +20,7 @@ namespace Domain
         public MessageFromDrugShop()
         {
             ServicesNeeded = new List<Condition>();
+            Appointments = new List<Appointment>();
         }
 
         public virtual void AddCondition(Condition service)

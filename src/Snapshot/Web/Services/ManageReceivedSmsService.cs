@@ -29,6 +29,7 @@ namespace Web.Services
         private IQueryService<MessageFromDrugShop> queryMessageFromDrugShop;
         private IQueryService<Contact> queryServiceContact;
         private IQueryOutposts queryOutposts;
+        private IQueryService<Appointment> queryAppointment;
 
         public ManageReceivedSmsService(IQueryService<Condition> queryCondition,
                                 IQueryService<Diagnosis> queryDiagnosis,
@@ -36,7 +37,8 @@ namespace Web.Services
                                 IQueryService<Advice> queryAdvice,
                                 IQueryService<MessageFromDrugShop> queryMessageFromDrugShop,
                                 IQueryService<Contact> queryServiceContact,
-                                IQueryOutposts queryOutposts)
+                                IQueryOutposts queryOutposts,
+                                IQueryService<Appointment> queryAppointment)
         {
             this.queryAdvice = queryAdvice;
             this.queryDiagnosis = queryDiagnosis;
@@ -45,6 +47,7 @@ namespace Web.Services
             this.queryServiceContact = queryServiceContact;
             this.queryCondition = queryCondition;
             this.queryTreatment = queryTreatment;
+            this.queryAppointment = queryAppointment;
         }
 
 
@@ -82,7 +85,7 @@ namespace Web.Services
                 if (!DateTime.TryParseExact(stringDate, DateFormat, FormatProvider, DateTimeStyles.None, out dateRetult))
                 {
                     rawSmsReceived.ParseSucceeded = false;
-                    rawSmsReceived.ParseErrorMessage = "Date " + stringDate.Trim() + " is incorect. Please check and retry. Thank you.";
+                    rawSmsReceived.ParseErrorMessage = "Date " + stringDate.Trim() + " is incorect.";
                     return rawSmsReceived;
                 }
 
@@ -91,10 +94,12 @@ namespace Web.Services
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
                         var existCondition = queryCondition.Query().Where(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper()).Any();
-                        if (!existCondition)
+                        var existAppointment = queryAppointment.Query().Where(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper()).Any();
+
+                        if (!existCondition && !existAppointment)
                         {
                             rawSmsReceived.ParseSucceeded = false;
-                            rawSmsReceived.ParseErrorMessage = "Service " + parsedLine[i].Trim() + " is incorect. Please check and retry. Thank you.";
+                            rawSmsReceived.ParseErrorMessage = "Service " + parsedLine[i].Trim() + " is incorect.";
                             return rawSmsReceived;
                         }
                     }
@@ -105,7 +110,7 @@ namespace Web.Services
             }
 
             rawSmsReceived.ParseSucceeded = false;
-            rawSmsReceived.ParseErrorMessage = "The format of your message is incorrect. Please check and retry. Thank you.";
+            rawSmsReceived.ParseErrorMessage = "The format of the message is incorrect.";
             return rawSmsReceived;
         }
 
@@ -125,7 +130,7 @@ namespace Web.Services
                 if (!queryMessageFromDrugShop.Query().Where(it => it.IDCode.ToUpper() == IdCode.ToUpper()).Any())
                 {
                     rawSmsReceived.ParseSucceeded = false;
-                    rawSmsReceived.ParseErrorMessage = "ID code " + IdCode + " is incorect. Please check and retry. Thank you.";
+                    rawSmsReceived.ParseErrorMessage = "ID code " + IdCode + " is incorect.";
                     return rawSmsReceived;
                 }
 
@@ -140,7 +145,7 @@ namespace Web.Services
                         if (!existDiagnosis && !existTreatment && !existAdvice)
                         {
                             rawSmsReceived.ParseSucceeded = false;
-                            rawSmsReceived.ParseErrorMessage = "Service " + parsedLine[i] + " is incorect. Please check and retry. Thank you.";
+                            rawSmsReceived.ParseErrorMessage = "Service " + parsedLine[i] + " is incorect.";
                             return rawSmsReceived;
                         }
                     }
@@ -151,7 +156,7 @@ namespace Web.Services
             }
 
             rawSmsReceived.ParseSucceeded = false;
-            rawSmsReceived.ParseErrorMessage = "The format of your message is incorrect. Please check and retry. Thank you.";
+            rawSmsReceived.ParseErrorMessage = "The format of the message is incorrect.";
             return rawSmsReceived;
         }
 
@@ -175,11 +180,13 @@ namespace Web.Services
 
             for (var i = index + 1; i < parsedLine.Count(); i++)
             {
-                if (!string.IsNullOrEmpty(parsedLine[i]))
-                {
-                    Condition condition = queryCondition.Query().Where(it => it.Code == parsedLine[i].Trim()).FirstOrDefault();
-                    message.AddCondition(condition);
-                }
+                var condition = queryCondition.Query().Where(it => it.Code == parsedLine[i]).FirstOrDefault();
+                var appointment = queryAppointment.Query().Where(it => it.Code == parsedLine[i]).FirstOrDefault();
+
+                if (condition != null)
+                    message.ServicesNeeded.Add(condition);
+                if (appointment != null)
+                    message.Appointments.Add(appointment);
             }
 
             return message;
@@ -230,6 +237,9 @@ namespace Web.Services
             message = message + " " + messageFromDrugShop.Initials + messageFromDrugShop.BirthDate.ToString("ddMMyy") + messageFromDrugShop.Gender;
 
             foreach (var service in messageFromDrugShop.ServicesNeeded)
+                message = message + " " + service.Code;
+
+            foreach (var service in messageFromDrugShop.Appointments)
                 message = message + " " + service.Code;
 
             return message;

@@ -224,6 +224,8 @@
     <Compile Include="Unit\Security\RequiresAttributeTests.cs" />
     <Compile Include="Unit\Security\SecurePassword_Tests.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\AssignOutpostToRawSmsReceivedBySenderNumberMethod.cs" />
+    <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageFromDispensaryMethod.cs" />
+    <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageFromDrugShopMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageToBeSentToDispensaryMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\ObjectMother.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\ParseRawSmsReceivedFromDispensaryMethod.cs" />

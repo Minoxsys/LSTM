@@ -31,7 +31,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("The format of your message is incorrect. Please check and retry. Thank you.", result.ParseErrorMessage);
+            Assert.AreEqual("The format of the message is incorrect.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("Date 231398 is incorect. Please check and retry. Thank you.", result.ParseErrorMessage);
+            Assert.AreEqual("Date 231398 is incorect.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -56,6 +56,8 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             RawSmsReceived smsReceived = new RawSmsReceived { Content = ObjectMother.WRONGSERVICEMESSAGEFROMDRUGSHOP };
             var services = objectMother.ListOfCondition();
             objectMother.queryCondition.Expect(call => call.Query()).Return(services);
+            var appointment = objectMother.ListOfAppointment();
+            objectMother.queryAppointment.Expect(call => call.Query()).Return(appointment);
 
             //Act
             var result = objectMother.service.ParseRawSmsReceivedFromDrugShop(smsReceived);
@@ -63,7 +65,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("Service RX1 is incorect. Please check and retry. Thank you.", result.ParseErrorMessage);
+            Assert.AreEqual("Service RX1 is incorect.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -72,7 +74,10 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Arrange
             RawSmsReceived smsReceived = new RawSmsReceived { Content = ObjectMother.CORRECTMESSAGEFROMDRUGSHOP };
             var services = objectMother.ListOfCondition();
+            var appointment = objectMother.ListOfAppointment();
+
             objectMother.queryCondition.Expect(call => call.Query()).Return(services);
+            objectMother.queryAppointment.Expect(call => call.Query()).Return(appointment);
 
             //Act
             var result = objectMother.service.ParseRawSmsReceivedFromDrugShop(smsReceived);

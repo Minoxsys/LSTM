@@ -31,7 +31,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("The format of your message is incorrect. Please check and retry. Thank you.", result.ParseErrorMessage);
+            Assert.AreEqual("The format of the message is incorrect.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
 
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("ID code 12343214 is incorect. Please check and retry. Thank you.", result.ParseErrorMessage);
+            Assert.AreEqual("ID code 12343214 is incorect.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
 
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("Service DIAG1 is incorect. Please check and retry. Thank you.", result.ParseErrorMessage);
+            Assert.AreEqual("Service DIAG1 is incorect.", result.ParseErrorMessage);
         }
 
         [Test]
