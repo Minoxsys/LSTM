@@ -187,6 +187,10 @@
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentIndexModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentReportIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentReportModel.cs" />
+    <Compile Include="Areas\ConditionManagement\Controllers\AppointmentController.cs" />
+    <Compile Include="Areas\ConditionManagement\Models\Appointment\AppointmentIndexModel.cs" />
+    <Compile Include="Areas\ConditionManagement\Models\Appointment\AppointmentIndexOuputModel.cs" />
+    <Compile Include="Areas\ConditionManagement\Models\Appointment\AppointmentModel.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\DispensaryController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\DrugShopController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\HealthCenterController.cs" />
@@ -2136,6 +2140,7 @@
     <Content Include="Areas\AnalysisManagement\Views\TreatmentReport\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\AdviceReport\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\SummaryReport\Overview.cshtml" />
+    <Content Include="Areas\ConditionManagement\Views\Appointment\Overview.cshtml" />
     <None Include="Assets\resources\clientsreports\estimari.xlsx" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />

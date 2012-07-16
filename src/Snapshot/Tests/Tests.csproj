@@ -113,6 +113,11 @@
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\PatientsReportControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\TreatmentReportControllerTests\GetTreatmentReportMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\TreatmentReportControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\AppointmentControllerTests\CreateMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\AppointmentControllerTests\DeleteMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\AppointmentControllerTests\EditMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\AppointmentControllerTests\GetAppointmentMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\ConditionManagement\AppointmentControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\DispensaryControllerTests\GetMessagesFromDispensaryMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\DispensaryControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\DrugstoreControllerTests\GetMessagesFromDrugstoreMethod.cs" />

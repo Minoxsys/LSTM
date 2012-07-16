@@ -1,0 +1,390 @@
+﻿@using Web.Areas.ConditionManagement;
+@using Web.Areas.ConditionManagement.Controllers;
+@using Microsoft.Web.Mvc;
+
+@section page_title{
+    Appointment Item: Overview
+}
+@{
+    Html.RenderPartial("_SubNavigation");
+    Html.RenderPartial("_ServicesAdministrationSideBar");
+}
+<script type="text/javascript">
+    Ext.onReady(function () {
+
+        var administrationBtnId = window.res.header.navigation.administration;
+        var administrationBtn = Ext.getCmp(administrationBtnId);
+        administrationBtn.toggle(true);
+
+        var appointmentSideBarBtnId = window.res.content.maincontent.sidebar.appointment;
+        var appointmentBtn = Ext.getCmp(appointmentSideBarBtnId);
+        appointmentBtn.toggle(true);
+
+        var ConditionAdministrationBtnId = window.res.header.subnavigation.buttonTabs.services;
+        var ConditionAdministrationBtn = Ext.getCmp(ConditionAdministrationBtnId);
+        ConditionAdministrationBtn.toggle(true);
+        ConditionAdministrationBtn.setIcon('@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))');
+    });
+</script>
+<script type="text/javascript">
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.formAppointmentCodeId = "Form-Appointment-Code-Id";
+        window.feature.formAppointmentKeywordId = "Form-Appointment-Keyword-Id";
+        itemId: window.feature.formAppointmentDescriptionId = "Form-Appointment-Description-Id";
+        window.feature.searchAppointment = "Search-Appointment-Id";
+
+        window.feature.appointmentStore = Ext.create('Ext.data.Store', {
+            pageSize: 50,
+            fields: ['Id', 'Keyword', 'Code', 'Description'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Appointment", action = "GetAppointment" })',
+                reader: {
+                    type: 'json',
+                    root: 'Appointment',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { searchValue: '' },
+                simpleSortMode: true
+            },
+            remoteSort: true,
+            sorters: [{
+                property: 'Code',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.modal = Ext.define('Ext.feature.appointment.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            height: 260,
+            width: 390,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+
+            initComponent: function () {
+                var me = this;
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'Keyword',
+                        fieldLabel: 'Keyword',
+                        anchor: '100%',
+                        itemId: window.feature.formAppointmentKeywordId
+                    }, {
+                        xtype: 'textfield',
+                        name: 'Code',
+                        fieldLabel: 'Code',
+                        anchor: '100%',
+                        itemId: window.feature.formAppointmentCodeId
+                    }, {
+                        xtype: 'textareafield',
+                        name: 'Description',
+                        fieldLabel: 'Description',
+                        grow: true,
+                        anchor: '100%',
+                        itemId: window.feature.formAppointmentDescriptionId
+                    }]
+                });
+
+                me.callParent(arguments);
+            }
+        });
+
+        window.feature.doSearch = new Ext.util.DelayedTask(function () {
+            window.feature.appointmentStore.loadPage(1);
+        });
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: '45 50 20 20',
+            padding: '20 0 0 20',
+            autoScroll: true,
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'hbox'
+                },
+                height: 60,
+                items: [{
+                    xtype: 'container',
+                    flex: 1,
+                    height: 70,
+                    layout: {
+                        type: 'column'
+                    },
+                    items: [{
+                        xtype: 'container',
+                        height: 30,
+                        width: 30,
+                        html: '&nbsp;'
+                    }, {
+                        xtype: 'image',
+                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/SubMenu/ProductSelected.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        margin: '0 10 10 10'
+                    }, {
+                        xtype: 'label',
+                        cls: 'x-title-label',
+                        text: 'Appointment'
+                    }, {
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        disabled: @(ViewBag.HasNoRightsToAdd),
+                        text: 'Add New Appointment',
+                        handler: function () {
+                            var winAdd = new window.feature.modal({
+                                title: 'Add New Appointment',
+                                buttons: [{
+                                    text: 'Cancel',
+                                    margin: '10 10 20 0',
+                                    ui: 'snapshot-cancel-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () { winAdd.close(); winAdd.destroy(); }
+                                }, {
+                                    text: 'Save',
+                                    margin: '0 20 20 10',
+                                    ui: 'snapshot-add-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () {
+                                        var appointmentKeyword = winAdd.down('#' + window.feature.formAppointmentKeywordId);
+                                        var appointmentCode = winAdd.down('#' + window.feature.formAppointmentCodeId);
+                                        var appointmentDescription = winAdd.down('#' + window.feature.formAppointmentDescriptionId);
+
+                                        if (appointmentCode.getValue() == '') {
+                                            appointmentCode.markInvalid('Field Code is required!');
+                                            appointmentCode.setValue(null);
+                                        } else {
+                                            var values = {
+                                                Keyword: appointmentKeyword.getValue(),
+                                                Code: appointmentCode.getValue(),
+                                                Description: appointmentDescription.getValue()
+                                            };
+                                            var postToUrl = '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Appointment", action = "Create" })';
+                                            var action = $.post(postToUrl, values);
+
+                                            action.success(function (serverResponse) {
+                                                if (serverResponse.CloseModal == false) {
+                                                    var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                } else {
+                                                    winAdd.close();
+                                                    winAdd.destroy();
+                                                    window.feature.appointmentStore.loadPage(1);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }]
+                            });
+                            winAdd.show();
+                        }
+                    }]
+                }, {
+                    xtype: 'container',
+                    flex: 1,
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
+                    },
+                    height: 80,
+                    items: [{
+                        xtype: 'textfield',
+                        itemId: window.feature.searchAppointment,
+                        width: 200,
+                        frame: true,
+                        cls: 'text-field-rounded',
+                        emptyText: 'Code Search',
+                        enableKeyEvents: true,
+                        listeners: {
+                            'keyup': {
+                                fn: function (key) {
+                                    var searchValue = window.feature.container.down('#' + window.feature.searchAppointment).getValue();
+                                    window.feature.appointmentStore.proxy.extraParams.searchValue = searchValue;
+                                    window.feature.doSearch.delay(500);
+                                }
+                            }
+                        }
+                    }]
+
+                }]
+            }, {
+                xtype: 'gridpanel',
+                cls: 'white-border',
+                itemId: window.feature.gridAppointmentId,
+                store: window.feature.appointmentStore,
+                loadMask: true,
+                disableSelection: true,
+                flex: 3,
+                autoScroll: true,
+                columns: [{
+                    header: "Keyword",
+                    dataIndex: 'Keyword',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    text: "Code",
+                    dataIndex: 'Code',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    text: "Description",
+                    dataIndex: 'Description',
+                    flex: 1,
+                    menuDisabled: true,
+                    sortable: true
+                }, {
+                    xtype: 'actioncolumn',
+                    text: 'Actions',
+                    flex: 1,
+                    menuDisabled: true,
+                    items: [{
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        action: 'Edit',
+                        handler: function (grid, rowIndex, colIndex) {
+                            if(@(ViewBag.HasNoRightsToAdd) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+
+                            var rec = grid.getStore().getAt(rowIndex);
+
+                            var winEdit = new window.feature.modal({
+                                title: 'Edit Appointment',
+                                buttons: [{
+                                    text: 'Cancel',
+                                    margin: '10 10 20 0',
+                                    ui: 'snapshot-cancel-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () { winEdit.close(); winEdit.destroy(); }
+                                }, {
+                                    text: 'Save',
+                                    margin: '0 20 20 10',
+                                    ui: 'snapshot-add-btn',
+                                    cls: 'x-add-button-gradient',
+                                    handler: function () {
+
+                                        var appointmentKeyword = winEdit.down('#' + window.feature.formAppointmentKeywordId);
+                                        var appointmentCode = winEdit.down('#' + window.feature.formAppointmentCodeId);
+                                        var appointmentDescription = winEdit.down('#' + window.feature.formAppointmentDescriptionId);
+
+                                        if (appointmentCode.getValue() == '') {
+                                            appointmentCode.markInvalid('Field Code is required!');
+                                            appointmentCode.setValue(null);
+                                        } else {
+                                            var values = {
+                                                Id: rec.get('Id'),
+                                                Keyword: appointmentKeyword.getValue(),
+                                                Code: appointmentCode.getValue(),
+                                                Description: appointmentDescription.getValue()
+                                            };
+                                            var postToUrl = '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Appointment", action = "Edit" })';
+                                            var action = $.post(postToUrl, values);
+                                            action.success(function (serverResponse) {
+                                                if (serverResponse.CloseModal == false) {
+                                                    var msgAlert = Ext.Msg;
+                                                    msgAlert.ui = 'snapshot-popup-window';
+                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                                }
+                                                else {
+
+                                                    winEdit.close();
+                                                    winEdit.destroy();
+                                                    window.feature.appointmentStore.loadPage(1);
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                }]
+                            });
+
+                            winEdit.down('#' + window.feature.formAppointmentCodeId).setValue(rec.get('Code'));
+                            winEdit.down('#' + window.feature.formAppointmentKeywordId).setValue(rec.get('Keyword'));
+                            winEdit.down('#' + window.feature.formAppointmentDescriptionId).setValue(rec.get('Description'));
+
+                            winEdit.show();
+                            }
+                        }
+                    }, {
+                        icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                        action: 'Delete',
+                        handler: function (grid, rowIndex, colIndex) {
+                            if(@(ViewBag.HasNoRightsToDelete) === true){
+                                           var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert("Alert","You have no rights for this action!");
+                            }else{
+                                var rec = grid.getStore().getAt(rowIndex);
+
+                                var msgConfirm = Ext.Msg;
+                                msgConfirm.ui = 'snapshot-popup-window';
+                                msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                                msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                                msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                                msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                                msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete appointment {0} ?', rec.get('Code')), function (btn) {
+                                    if (btn == 'yes') {
+                                        var values = { id: rec.get('Id') };
+                                        var postToUrl = '@Url.RouteUrl(ConditionManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Appointment", action = "Delete" })';
+                                        var action = $.post(postToUrl, values);
+
+                                        action.success(function (serverResponse) {
+                                            if (serverResponse.Status == "Error") {
+                                                var msgAlert = Ext.Msg;
+                                                msgAlert.ui = 'snapshot-popup-window';
+                                                msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                                msgAlert.msgButtons['ok'].margin = '10 10 20 0',
+                                                msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                            }
+                                            window.feature.appointmentStore.loadPage(1);
+                                        });
+                                    }
+
+                                });
+                            }
+                        }
+                    }]
+                }],
+                bbar: Ext.create('Ext.PagingToolbar', {
+                    store: window.feature.appointmentStore,
+                    displayInfo: true,
+                    displayMsg: 'Displaying topics {0} - {1} of {2}',
+                    emptyMsg: "No topics to display",
+                    ui: 'snapshot-pagination-toolbar'
+                })
+            }]
+        });
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.appointmentStore.loadPage(1);
+    });
+
+</script>

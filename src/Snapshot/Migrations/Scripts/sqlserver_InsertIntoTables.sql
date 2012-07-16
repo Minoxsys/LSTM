@@ -404,6 +404,59 @@ INSERT INTO [Permissions]
            )
 end
 GO
+if not exists(select [Name] from Permissions where [Name]=N'Appointment.View')
+begin
+
+
+INSERT INTO [Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'51BC7941-7F69-4193-93B7-ACC35028890F'
+			,'Appointment.View'
+			,GETDATE()
+           )
+end
+GO
+
+if not exists(select [Name] from Permissions where [Name]=N'Appointment.Edit')
+begin
+
+
+INSERT INTO [Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'397C3DC6-96A6-4DF7-ABA7-99260183184F'
+			,'Appointment.Edit'
+			,GETDATE()
+           )
+end
+GO
+
+if not exists(select [Name] from Permissions where [Name]=N'Appointment.Delete')
+begin
+
+
+INSERT INTO [Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'A2B2EF2C-C6F4-4A34-894C-57B8B486AD5F'
+			,'Appointment.Delete'
+			,GETDATE()
+           )
+end
+GO
 
 if not exists(select [Name] from Permissions where [Name]=N'Diagnosis.View')
 begin
@@ -1143,6 +1196,36 @@ INSERT INTO PermissionRoles
            ,Role_FK)
      VALUES
            ('7E508FF1-D448-4151-9C8B-906AF73505F5'
+           ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
+end
+GO
+if not exists(select [Permission_FK], [Role_FK] from [PermissionRoles] where [Permission_FK]='51BC7941-7F69-4193-93B7-ACC35028890F' and [Role_FK] ='461e581b-e60b-4dfd-a5a8-88229f14379b')
+begin
+INSERT INTO PermissionRoles
+           (Permission_FK
+           ,Role_FK)
+     VALUES
+           ('51BC7941-7F69-4193-93B7-ACC35028890F'
+           ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
+end
+GO
+if not exists(select [Permission_FK], [Role_FK] from [PermissionRoles] where [Permission_FK]='397C3DC6-96A6-4DF7-ABA7-99260183184F' and [Role_FK] ='461e581b-e60b-4dfd-a5a8-88229f14379b')
+begin
+INSERT INTO PermissionRoles
+           (Permission_FK
+           ,Role_FK)
+     VALUES
+           ('397C3DC6-96A6-4DF7-ABA7-99260183184F'
+           ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
+end
+GO
+if not exists(select [Permission_FK], [Role_FK] from [PermissionRoles] where [Permission_FK]='A2B2EF2C-C6F4-4A34-894C-57B8B486AD5F' and [Role_FK] ='461e581b-e60b-4dfd-a5a8-88229f14379b')
+begin
+INSERT INTO PermissionRoles
+           (Permission_FK
+           ,Role_FK)
+     VALUES
+           ('A2B2EF2C-C6F4-4A34-894C-57B8B486AD5F'
            ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
 end
 GO
