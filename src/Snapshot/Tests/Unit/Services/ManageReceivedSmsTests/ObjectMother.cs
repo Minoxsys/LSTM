@@ -27,13 +27,13 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public const string IN_NUMBER = "1234";
         public const string OPERATOR = "Operator";
         public const string DATE = "2008-10-10%2013:30:10";
-        public const string WRONGCONTENTDRUGSHOP = "XRTDRDR485478654651354 RETFF";
-        public const string WRONGDATEMESSAGEFROMDRUGSHOP = "XY231398F RX1 RX2";
-        public const string WRONGSERVICEMESSAGEFROMDRUGSHOP = "XY230498F RX1 RX2";
-        public const string CORRECTMESSAGEFROMDRUGSHOP = "alfa XYXX230498F    S1 S5  S6   ";
-        public const string WRONGIDCODEMESSAGEDISPENSARY = "12343214 TR1 TR2";
-        public const string WRONGSERVICECODEFORDISPENSARYMESSAGE = "10000008 DIAG1 TREAT1 ADV1";
-        public const string CORRECTMESSAGEFROMDISPENSARY = "10000008  D1  D2     T4  T3 A1        ";
+        public const string WRONGCONTENTDRUGSHOP = "AFYA XRTDRDR485478654651354 RETFF";
+        public const string WRONGDATEMESSAGEFROMDRUGSHOP = "AFYA XY231398F RX1 RX2";
+        public const string WRONGSERVICEMESSAGEFROMDRUGSHOP = "AFYA XY230498F RX1 RX2";
+        public const string CORRECTMESSAGEFROMDRUGSHOP = "AFYA XYXX230498F    S1 S5  S6   ";
+        public const string WRONGIDCODEMESSAGEDISPENSARY = "AFYA 12343214 TR1 TR2";
+        public const string WRONGSERVICECODEFORDISPENSARYMESSAGE = "AFYA 10000008 DIAG1 TREAT1 ADV1";
+        public const string CORRECTMESSAGEFROMDISPENSARY = "AFYA 10000008  D1  D2     T4  T3 A1        ";
         public string MESSAGE = "10000008 " + DateTime.UtcNow.AddMonths(-1).ToString("ddMMyy") + " XY" + DateTime.UtcNow.ToString("ddMMyy") + "F";
 
         public Guid contactId;

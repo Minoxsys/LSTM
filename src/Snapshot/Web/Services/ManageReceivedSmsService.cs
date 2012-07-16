@@ -19,7 +19,7 @@ namespace Web.Services
         private const string DateFormat = "ddMMyy";
         private const string XMLDateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
-        private string KEYWORD = "ALFA";
+        private string KEYWORD = "AFYA";
 
 
         private IQueryService<Condition> queryCondition;
@@ -119,7 +119,7 @@ namespace Web.Services
             {
                 string[] parsedLine = rawSmsReceived.Content.Trim().Split(' ');
                 var index = 0;
-                if (parsedLine[0].ToUpper().Contains("TEST"))
+                if (parsedLine[0].ToUpper().Contains(KEYWORD))
                     index = 1;
                 string IdCode = parsedLine[index].Substring(0, 8);
                 if (!queryMessageFromDrugShop.Query().Where(it => it.IDCode.ToUpper() == IdCode.ToUpper()).Any())

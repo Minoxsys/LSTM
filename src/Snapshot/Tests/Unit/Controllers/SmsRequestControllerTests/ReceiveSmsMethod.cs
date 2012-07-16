@@ -151,7 +151,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
 
 
             //Act
-            var result = objectMother.controller.ReceiveSms("", "");
+            var result = objectMother.controller.ReceiveSms(ObjectMother.CORRECTMESSAGEFROMDISPENSARY, ObjectMother.CORRECTPHONENUMBER);
 
             //Assert
             objectMother.manageReceivedSmsService.VerifyAllExpectations();

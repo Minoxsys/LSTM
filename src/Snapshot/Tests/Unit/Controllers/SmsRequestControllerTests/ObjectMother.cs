@@ -28,10 +28,10 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
 
         public const string WRONGPHONENUMBER = "00000000012";
         public const string CORRECTPHONENUMBER = "0123456789";
-        public const string CORRECTMESSAGEFROMDRUGSHOP = "ALFA XY120387F S1";
-        public const string INCORRECTMESSAGEFROMDRUGSHOP = "ALFA XYY1215F S1";
-        public const string CORRECTMESSAGEFROMDISPENSARY = "";
-        public const string INCORRECTMESSAGEFROMDISPENSARY = "ALFA 154854521 D1 D2 S1";
+        public const string CORRECTMESSAGEFROMDRUGSHOP = "AFYA XY120387F S1";
+        public const string INCORRECTMESSAGEFROMDRUGSHOP = "AFYA XYY1215F S1";
+        public const string CORRECTMESSAGEFROMDISPENSARY = "AFYA 10000008Shop1 D1 T1 A1";
+        public const string INCORRECTMESSAGEFROMDISPENSARY = "AFYA 154854521 D1 D2 S1";
 
         public Guid contactId;
         public Contact contact;
