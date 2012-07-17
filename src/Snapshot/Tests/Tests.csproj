@@ -124,6 +124,8 @@
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\DrugstoreControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\HealthCenterControllerTests\GetMessagesFromHealthCenterMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\MessagesManagement\HealthCenterControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\MessagesManagement\SentMessagesControllerTests\GetSentMessagesMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\MessagesManagement\SentMessagesControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\ContactControllerTests\IndexMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\ContactControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\OutpostManagement\CountryControllerTests\CreateMethod.cs" />

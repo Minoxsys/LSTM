@@ -6,7 +6,8 @@
             group: 'SideBarGroup',
             drugshop: 'Sidebar-Messages-DrugShop-Button',
             dispensary: 'Sidebar-Messages-Dispensary-Button',
-            healthcenter: 'Sidebar-Messages-Health-Center-Button'
+            healthcenter: 'Sidebar-Messages-Health-Center-Button',
+            sentMessage: 'Sidebar-Messages-Sent-Message-Button'
         }
     };
     Ext.onReady(function () {
@@ -80,7 +81,20 @@
                                 handler: function () {
                                     navigateTo(window.res.link.healthcenter);
                                 }
-  
+
+                            },
+                            {
+                                xtype: 'button',
+                                id: contentRes.maincontent.sidebar.sentMessage,
+                                toggleGroup: contentRes.maincontent.sidebar.group,
+                                text: 'Sent Messages',
+                                height: 30,
+                                enableToggle: true,
+                                margin: '0 50 0 0',
+                                ui: 'snapshot-sidebar-btn',
+                                handler: function () {
+                                    navigateTo(window.res.link.sentMessage);
+                                }
                             }
                         ]
                     }

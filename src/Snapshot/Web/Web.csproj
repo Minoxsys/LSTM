@@ -194,6 +194,7 @@
     <Compile Include="Areas\MessagesManagement\Controllers\DispensaryController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\DrugShopController.cs" />
     <Compile Include="Areas\MessagesManagement\Controllers\HealthCenterController.cs" />
+    <Compile Include="Areas\MessagesManagement\Controllers\SentMessagesController.cs" />
     <Compile Include="Areas\MessagesManagement\MessagesManagementAreaRegistration.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\Messages\MessageModel.cs" />
@@ -262,6 +263,9 @@
     <Compile Include="Areas\ConditionManagement\Models\Treatment\TreatmentInputModel.cs" />
     <Compile Include="Areas\ConditionManagement\Models\Treatment\TreatmentModel.cs" />
     <Compile Include="Areas\ConditionManagement\ServicesManagementAreaRegistration.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageIndexOuputModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageModel.cs" />
+    <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessagesIndexModel.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
@@ -2141,6 +2145,7 @@
     <Content Include="Areas\AnalysisManagement\Views\AdviceReport\Overview.cshtml" />
     <Content Include="Areas\AnalysisManagement\Views\SummaryReport\Overview.cshtml" />
     <Content Include="Areas\ConditionManagement\Views\Appointment\Overview.cshtml" />
+    <Content Include="Areas\MessagesManagement\Views\SentMessages\Overview.cshtml" />
     <None Include="Assets\resources\clientsreports\estimari.xlsx" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />
