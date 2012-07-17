@@ -15,6 +15,8 @@ using Web.Models.SendMessage;
 using System.Security.AccessControl;
 using System.Web.Hosting;
 using System.Security.Principal;
+using Domain;
+using Core.Persistence;
 
 namespace Web.Controllers
 {
@@ -24,6 +26,7 @@ namespace Web.Controllers
         public IEmailService EmailService { get; set; }
         public IFileService FileService { get; set; }
         public IHttpService HttpService { get; set; }
+        public ISaveOrUpdateCommand<SentSms> SaveOrUpdateCommand { get; set; }
 
         public ActionResult Overview()
         {
@@ -33,30 +36,58 @@ namespace Web.Controllers
         [HttpPost]
         public JsonResult Send(string phoneNumber, string message, string gateway)
         {
-            string url = @"http://localhost:53692/SmsRequest/ReceiveSms?";
-
             if (gateway == "remote")
-                url = AppSettings.SmsGatewayUrl + "?phonenumber=%2B" + phoneNumber + "&user=" + AppSettings.SmsGatewayUserName + "&password=" + AppSettings.SmsGatewayPassword + "&text=" + Url.Encode(message);
-            else
-                url += "?message=" + message + "&msisdn=" + phoneNumber;
-   
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-            var result = "";
-            using (StreamReader sr = new StreamReader(response.GetResponseStream()))
             {
-                result = sr.ReadToEnd();
-                sr.Close();
-            }
+                string postData = GeneratePostData(message, phoneNumber);
+                string responseString = "";
 
-            return Json(
-                   new JsonActionResponse
-                   {
-                       Status = response.StatusCode.ToString(),
-                       Message = result
-                   });
+                try
+                {
+                    responseString = HttpService.Post(postData);
+                    SaveMessage("+" + phoneNumber, message, responseString);
+
+                    return Json(
+                       new JsonActionResponse
+                       {
+                           Status = "Success",
+                           Message = responseString
+                       });
+                }
+                catch (Exception ext)
+                {
+                    SaveMessage("+" + phoneNumber, message, ext.Message);
+                    return Json(
+                       new JsonActionResponse
+                       {
+                           Status = "Error",
+                           Message = ext.Message
+                       });
+                }
+            }
+            else
+            {
+
+                return Json(
+                       new JsonActionResponse
+                       {
+                           Status = "Error",
+                           Message = "Message not sent!"
+                       });
+            }
                         
+        }
+
+        private void SaveMessage(string sender, string message, string responseString)
+        {
+            SentSms sentSms = new SentSms { PhoneNumber = sender, Message = message, Response = responseString, SentDate = DateTime.UtcNow };
+            SaveOrUpdateCommand.Execute(sentSms);
+        }
+
+        private string GeneratePostData(string message, string phoneNumber)
+        {
+            String postMessage = HttpUtility.UrlEncode(message);
+            String strPost = "?phonenumber=%2B" + phoneNumber + "&user=" + AppSettings.SmsGatewayUserName + "&password=" + AppSettings.SmsGatewayPassword + "&text=" + postMessage;
+            return strPost;
         }
 
         [HttpPost]
