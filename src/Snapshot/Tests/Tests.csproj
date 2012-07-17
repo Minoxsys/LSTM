@@ -111,6 +111,8 @@
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\PatientsReportControllerTests\GetServiceNeededMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\PatientsReportControllerTests\GetTreatmentMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\PatientsReportControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\SummaryReportControllerTests\GetSummaryReportMethod.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\SummaryReportControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\TreatmentReportControllerTests\GetTreatmentReportMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\TreatmentReportControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\ConditionManagement\AppointmentControllerTests\CreateMethod.cs" />

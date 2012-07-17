@@ -25,7 +25,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private Client _client;
         private User _user;
-        private string NOTREATMENT = "NOT/AV";
+
+        private string NOTAVAILABLE = "N";
+        private string NOTREATMENT = "NP";
+        private string WEEKS4 = "NS4";
+        private string NOARRIVAL = "NSA";
 
         [HttpGet]
         [Requires(Permissions = "Report.View")]
@@ -78,29 +82,23 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
         private int GetNumberOfPatientsWhoFailedToReportToDispensary(Outpost dispensary, SummaryIndexModel inputModel)
         {
-            var drugshopsFrorDispensary = QueryOutpost.Query().Where(it => it.Warehouse.Id == dispensary.Id).ToList();
-            var drugshopMessages = QueryMessageFromDrugShop.Query();
+            var queryMessage = QueryMessageFromDispensary.Query();
 
             DateTime startDate;
             if (!string.IsNullOrEmpty(inputModel.startDate))
                 if (DateTime.TryParse(inputModel.startDate, out startDate))
-                    drugshopMessages = drugshopMessages.Where(it => it.SentDate  >= startDate);
+                    queryMessage = queryMessage.Where(it => it.SentDate >= startDate);
             DateTime endDate;
             if (!string.IsNullOrEmpty(inputModel.endDate))
                 if (DateTime.TryParse(inputModel.endDate, out endDate))
-                    drugshopMessages = drugshopMessages.Where(it => it.SentDate <= endDate);
+                    queryMessage = queryMessage.Where(it => it.SentDate <= endDate);
 
-            int sum = 0;
-            foreach(var drugshop in drugshopsFrorDispensary)
-            {
-                var messageList = drugshopMessages.Where(it => it.OutpostId == drugshop.Id);
-                foreach (var message in messageList)
-                {
-                    if (QueryMessageFromDispensary.Query().Where(it => it.MessageFromDrugShop.Id == message.Id).Any() == false)
-                        sum++;
-                }
-            }
-            return sum;
+            queryMessage = queryMessage.Where(it => it.OutpostId == dispensary.Id);
+            var queryMessageAfter4Weeks = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == WEEKS4) != null);
+            var queryMessageNotArrived = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOARRIVAL) != null);
+
+            return queryMessageAfter4Weeks.Count() + queryMessageNotArrived.Count();
+
         }
 
         private int GetNumberOfPatientsNotTreatedAt(Outpost dispensary, SummaryIndexModel inputModel)
@@ -116,7 +114,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 if (DateTime.TryParse(inputModel.endDate, out endDate))
                     queryMessage = queryMessage.Where(it => it.SentDate <= endDate);
 
-            return queryMessage.Where(it => it.OutpostId == dispensary.Id && it.Treatments.FirstOrDefault(c => c.Code == NOTREATMENT) != null).Count();
+            queryMessage = queryMessage.Where(it => it.OutpostId == dispensary.Id);
+            var queryMessageNotAv = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOTAVAILABLE) != null);
+            var queryMessageNoTreatment = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOTREATMENT) != null);
+
+            return queryMessageNotAv.Count() + queryMessageNoTreatment.Count();
         }
 
         private int GetNumberOfPatientsTreatedAt(Outpost dispensary, SummaryIndexModel inputModel)
@@ -132,15 +134,23 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 if (DateTime.TryParse(inputModel.endDate, out endDate))
                     queryMessage = queryMessage.Where(it => it.SentDate <= endDate);
 
-            return queryMessage.Where(it => it.OutpostId == dispensary.Id && it.Treatments.FirstOrDefault(c => c.Code == NOTREATMENT) == null).Count();
+            queryMessage = queryMessage.Where(it => it.OutpostId == dispensary.Id);
+            queryMessage = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOTAVAILABLE) == null);
+            queryMessage = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOTREATMENT) == null);
+            queryMessage = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == WEEKS4) == null);
+            queryMessage = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOARRIVAL) == null);
+
+            return queryMessage.Count();
         }
 
         private int GetIndividualPatientsAt(Outpost dispensary, SummaryIndexModel inputModel)
         {
-            var drugshopsFrorDispensary = QueryOutpost.Query().Where(it => it.Warehouse.Id == dispensary.Id).ToList();
+            var drugShops = QueryOutpost.Query().Where(it => it.Client == _client && it.Warehouse != null);
+            var drugshopsForDispensary = drugShops.Where(it => it.Warehouse.Id == dispensary.Id).ToList();
+
             int sum = 0;
 
-            foreach (var drugshop in drugshopsFrorDispensary)
+            foreach (var drugshop in drugshopsForDispensary)
             {
                 sum += GetDistinctPatientsFor(drugshop, inputModel);
                 
@@ -162,14 +172,22 @@ namespace Web.Areas.AnalysisManagement.Controllers
                     queryMessage = queryMessage.Where(it => it.SentDate <= endDate);
 
             List<PatientModel> patientsList = new List<PatientModel>();
-            foreach (var patient in queryMessage.ToList())
+            foreach (var message in queryMessage.ToList())
             {
-                PatientModel model = new PatientModel { Initials = patient.Initials.ToUpper(), Gender = patient.Gender.ToUpper(), BirthDate = patient.BirthDate.ToShortDateString() };
-                if (patientsList.FirstOrDefault(it => it.Initials == model.Initials && it.Gender == model.Gender && it.BirthDate == model.BirthDate) == null)
-                    patientsList.Add(model);
+                if (ExistsMessageFromDispensary(message))
+                {
+                    PatientModel model = new PatientModel { Initials = message.Initials.ToUpper(), Gender = message.Gender.ToUpper(), BirthDate = message.BirthDate.ToShortDateString() };
+                    if (patientsList.FirstOrDefault(it => it.Initials == model.Initials && it.Gender == model.Gender && it.BirthDate == model.BirthDate) == null)
+                        patientsList.Add(model);
+                }
             }
 
             return patientsList.Count();
+        }
+
+        private bool ExistsMessageFromDispensary(MessageFromDrugShop message)
+        {
+            return QueryMessageFromDispensary.Query().Where(it => it.MessageFromDrugShop.Id == message.Id).Any();
         }
 
         [HttpPost]
