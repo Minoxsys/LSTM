@@ -30,7 +30,7 @@ namespace Web.Services
 
         public bool SendMessage(string message, RawSmsReceived response)
         {
-            string phoneNumber = response.Sender;
+            string phoneNumber = response.Sender.Trim('+');
             string postData = GeneratePostData(message, phoneNumber);
 
             try
@@ -46,7 +46,7 @@ namespace Web.Services
 
         public bool SendMessageToDispensary(string message, RawSmsReceived rawSms)
         {
-            string phoneNumber = GetWarehousePhoneNumber(rawSms.OutpostId);
+            string phoneNumber = GetWarehousePhoneNumber(rawSms.OutpostId).Trim('+'); ;
             string postData = GeneratePostData(message, phoneNumber);
 
             try

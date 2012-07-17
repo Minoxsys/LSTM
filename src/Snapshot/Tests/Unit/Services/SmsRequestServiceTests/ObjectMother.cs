@@ -18,7 +18,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
         public IQueryOutposts queryOutposts;
         public IQueryService<Contact> queryContact;
 
-        public const string CORRECTNUMBER = "0747858959";
+        public const string CORRECTNUMBER = "+255747858959";
         public const string WRONGNUMBER = "0000000000";
         public const string MESSAGE = "Some message here";
         public string CORRECTMESSAGE = "10000008 " + DateTime.UtcNow.ToString("ddMMyy") + "DrugShop1 XY" + DateTime.UtcNow.AddYears(-20).ToString("ddMMyy") + "F S0 S1 S2";
