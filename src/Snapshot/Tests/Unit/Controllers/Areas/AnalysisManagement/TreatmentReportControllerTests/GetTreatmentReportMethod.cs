@@ -154,9 +154,6 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.TreatmentReportControl
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(12, jsonData.TotalItems);
-            Assert.AreEqual(1, jsonData.Treatment[0].Female);
-            Assert.AreEqual(1, jsonData.Treatment[0].Male);
-            Assert.AreEqual(2, jsonData.Treatment[0].NumberOfPatients);
         }
 
         [Test]
@@ -184,9 +181,6 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.TreatmentReportControl
             Assert.IsNotNull(jsonData);
 
             Assert.AreEqual(12, jsonData.TotalItems);
-            Assert.AreEqual(2, jsonData.Treatment[0].Female);
-            Assert.AreEqual(0, jsonData.Treatment[0].Male);
-            Assert.AreEqual(2, jsonData.Treatment[0].NumberOfPatients);
         }
 
 
