@@ -17,45 +17,61 @@ namespace Web.Services
         private IHttpService httpService;
         private IQueryOutposts queryOutposts;
         private IQueryService<Contact> queryContact;
+        private ISaveOrUpdateCommand<SentSms> saveOrUpdateCommand;
 
         private const string DateFormat = "ddMMyy";
         private string URL = AppSettings.SmsGatewayUrl;
 
-        public SmsRequestService(IHttpService httpService, IQueryOutposts queryOutposts, IQueryService<Contact> queryContact)
+        public SmsRequestService(IHttpService httpService, IQueryOutposts queryOutposts, IQueryService<Contact> queryContact, ISaveOrUpdateCommand<SentSms> saveOrUpdateCommand)
         {
             this.httpService = httpService;
             this.queryOutposts = queryOutposts;
             this.queryContact = queryContact;
+            this.saveOrUpdateCommand = saveOrUpdateCommand;
         }
 
         public bool SendMessage(string message, RawSmsReceived response)
         {
             string phoneNumber = response.Sender.Trim('+');
             string postData = GeneratePostData(message, phoneNumber);
+            string responseString = "";
 
             try
             {
-                this.httpService.Post(postData);
+                responseString = this.httpService.Post(postData);
+                SaveMessage("+" + phoneNumber, message, responseString);
+
                 return true;
             }
-            catch (Exception)
+            catch (Exception ext)
             {
+                SaveMessage("+" + phoneNumber, message, ext.Message);
                 return false;
             }
+        }
+
+        private void SaveMessage(string sender, string message, string responseString)
+        {
+            SentSms sentSms = new SentSms { PhoneNumber = sender, Message = message, Response = responseString, SentDate = DateTime.UtcNow };
+            this.saveOrUpdateCommand.Execute(sentSms);
         }
 
         public bool SendMessageToDispensary(string message, RawSmsReceived rawSms)
         {
             string phoneNumber = GetWarehousePhoneNumber(rawSms.OutpostId).Trim('+'); ;
             string postData = GeneratePostData(message, phoneNumber);
+            string responseString = "";
 
             try
             {
-                this.httpService.Post(postData);
+                responseString = this.httpService.Post(postData);
+                SaveMessage("+" + phoneNumber, message, responseString);
+
                 return true;
             }
-            catch (Exception)
+            catch (Exception ext)
             {
+                SaveMessage("+" + phoneNumber, message, ext.Message);
                 return false;
             }
         }

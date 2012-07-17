@@ -24,11 +24,13 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
         {
             //Arrange
             objectMother.httpService.Expect(call => call.Post(Arg<string>.Is.Anything)).Return("");
+            objectMother.saveOrUpdateCommand.Expect(call => call.Execute(Arg<SentSms>.Matches(p => p.Message == ObjectMother.MESSAGE && p.PhoneNumber == "+" + objectMother.rawSms.Sender.Trim('+'))));
 
             //Act
             var result = objectMother.service.SendMessage(ObjectMother.MESSAGE, objectMother.rawSms);
 
             //Assert
+            objectMother.saveOrUpdateCommand.VerifyAllExpectations();
             objectMother.httpService.VerifyAllExpectations();
             Assert.IsInstanceOf<bool>(result);
             Assert.AreEqual(true, result);

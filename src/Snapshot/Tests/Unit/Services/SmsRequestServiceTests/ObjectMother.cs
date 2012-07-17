@@ -17,6 +17,7 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
         public IHttpService httpService;
         public IQueryOutposts queryOutposts;
         public IQueryService<Contact> queryContact;
+        public ISaveOrUpdateCommand<SentSms> saveOrUpdateCommand;
 
         public const string CORRECTNUMBER = "+255747858959";
         public const string WRONGNUMBER = "0000000000";
@@ -46,11 +47,12 @@ namespace Tests.Unit.Services.SmsRequestServiceTests
             httpService = MockRepository.GenerateMock<IHttpService>();
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
             queryContact = MockRepository.GenerateMock<IQueryService<Contact>>();
+            saveOrUpdateCommand = MockRepository.GenerateMock<ISaveOrUpdateCommand<SentSms>>();
         }
 
         private void Setup_Service()
         {
-            service = new SmsRequestService(httpService, queryOutposts, queryContact);
+            service = new SmsRequestService(httpService, queryOutposts, queryContact, saveOrUpdateCommand);
         }
 
         private void SetUp_StubData()

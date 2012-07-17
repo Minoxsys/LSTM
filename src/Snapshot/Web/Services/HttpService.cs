@@ -27,7 +27,7 @@ namespace Web.Services
                 sr.Close();
             }
 
-            return result;
+            return "Status code: " + response.StatusCode + " Description:" + response.StatusDescription;
         }
     }
 }
