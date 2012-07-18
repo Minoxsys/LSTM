@@ -25,6 +25,8 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         public ISaveOrUpdateCommand<MessageFromDispensary> saveCommandMessageFromDispensary;
         public IManageReceivedSmsService manageReceivedSmsService;
         public ISmsRequestService smsRequestService;
+        public IQueryService<MessageFromDispensary> queryMessageFromDispensary;
+        public IDeleteCommand<MessageFromDispensary> deleteCommand;
 
         public const string WRONGPHONENUMBER = "00000000012";
         public const string CORRECTPHONENUMBER = "0123456789";
@@ -144,6 +146,10 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
 
             manageReceivedSmsService = MockRepository.GenerateMock<IManageReceivedSmsService>();
             smsRequestService = MockRepository.GenerateMock<ISmsRequestService>();
+
+            queryMessageFromDispensary = MockRepository.GenerateMock<IQueryService<MessageFromDispensary>>();
+            deleteCommand = MockRepository.GenerateMock<IDeleteCommand<MessageFromDispensary>>();
+
         }
 
         private void Setup_Controller()
@@ -155,6 +161,8 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             controller.SaveCommandRawSmsReceived = saveCommandRawSmsReceived;
             controller.ManageReceivedSmsService = manageReceivedSmsService;
             controller.SmsRequestService = smsRequestService;
+            controller.QueryMessageFromDispensary = queryMessageFromDispensary;
+            controller.DeleteCommand = deleteCommand;
 
             var response = MockRepository.GenerateMock<HttpResponseBase>();
             var controllerContext = MockRepository.GenerateMock<ControllerContext>();

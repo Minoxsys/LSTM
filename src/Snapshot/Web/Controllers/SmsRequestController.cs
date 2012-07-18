@@ -25,6 +25,8 @@ namespace Web.Controllers
         public ISaveOrUpdateCommand<RawSmsReceived> SaveCommandRawSmsReceived { get; set; }
         public ISaveOrUpdateCommand<MessageFromDrugShop> SaveCommandMessageFromDrugShop { get; set; }
         public ISaveOrUpdateCommand<MessageFromDispensary> SaveCommandMessageFromDispensary { get; set; }
+        public IQueryService<MessageFromDispensary> QueryMessageFromDispensary { get; set; }
+        public IDeleteCommand<MessageFromDispensary> DeleteCommand { get; set; }
 
         private const string INVALIDNUMBERERRORMESSAGE = "Namba ya simu uliotumia haijasajiliwa na waongozi wa mtandao huu. Tafadhali wasiliana na utawala au tuma tena kwa kutumia namba ya simu iliyosajiliwa.Ahsante.";
         private const string INVALIDFORMATERRORMESSAGE = "Muundo wa ujumbe wako si sahihi.Tafadhali angalia na utume tena.Ahsante.";
@@ -119,6 +121,10 @@ namespace Web.Controllers
         private void SaveMessageFromDispensary(RawSmsReceived rawSmsReceived)
         {
             MessageFromDispensary dispensaryMessage = ManageReceivedSmsService.CreateMessageFromDispensary(rawSmsReceived);
+            var existingMessage = QueryMessageFromDispensary.Query().Where(it => it.MessageFromDrugShop.Id == dispensaryMessage.MessageFromDrugShop.Id).OrderByDescending(it => it.SentDate).FirstOrDefault();
+            if (existingMessage != null)
+                DeleteCommand.Execute(existingMessage);
+
             SaveCommandMessageFromDispensary.Execute(dispensaryMessage);
         }
 

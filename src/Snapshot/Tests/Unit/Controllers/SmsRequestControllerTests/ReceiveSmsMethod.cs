@@ -136,6 +136,9 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.manageReceivedSmsService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Is.Anything)).Return(objectMother.rawSmsCorerctFormatDispensary);
             objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDispensary(objectMother.rawSmsCorerctFormatDispensary)).Return(objectMother.rawSmsCorerctFormatDispensary);
             objectMother.manageReceivedSmsService.Expect(call => call.CreateMessageFromDispensary(objectMother.rawSmsCorerctFormatDispensary)).Return(objectMother.messageFromDispensary);
+            objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(new MessageFromDispensary[] {objectMother.messageFromDispensary}.AsQueryable());
+            objectMother.deleteCommand.Expect(call => call.Execute(Arg<MessageFromDispensary>.Matches(p => p.Id == objectMother.messageFromDispensaryId)));
+
 
             objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
                 p => p.OutpostId == objectMother.outpostId &&
@@ -157,6 +160,9 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.manageReceivedSmsService.VerifyAllExpectations();
             objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
             objectMother.saveCommandMessageFromDispensary.VerifyAllExpectations();
+            objectMother.queryMessageFromDispensary.VerifyAllExpectations();
+            objectMother.deleteCommand.VerifyAllExpectations();
+
             var res = result as EmptyResult;
             Assert.IsNotNull(res);
         }
