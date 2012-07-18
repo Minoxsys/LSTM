@@ -22,6 +22,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public IQueryService<Contact> queryServiceContact;
         public IQueryOutposts queryOutposts;
         public IQueryService<Appointment> queryAppointment;
+        public IQueryService<WrongMessage> queryWrongMessage;
 
         public const string MOBILE_NUMBER = "0123456789";
         public const string WRONG_MOBILE_NUMBER = "1245781584";
@@ -123,11 +124,12 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             queryServiceContact = MockRepository.GenerateMock<IQueryService<Contact>>();
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
             queryAppointment = MockRepository.GenerateMock<IQueryService<Appointment>>();
+            queryWrongMessage = MockRepository.GenerateMock<IQueryService<WrongMessage>>();
         }
 
         private void Setup_Service()
         {
-            service = new ManageReceivedSmsService(queryCondition, queryDiagnosis, queryTreatment, queryAdvice, queryMessageFromDrugShop, queryServiceContact, queryOutposts, queryAppointment);
+            service = new ManageReceivedSmsService(queryCondition, queryDiagnosis, queryTreatment, queryAdvice, queryMessageFromDrugShop, queryServiceContact, queryOutposts, queryAppointment, queryWrongMessage);
         }
 
         public IQueryable<Condition> ListOfCondition()

@@ -17,6 +17,7 @@ using System.Web.Hosting;
 using System.Security.Principal;
 using Domain;
 using Core.Persistence;
+using Web.Security;
 
 namespace Web.Controllers
 {
@@ -28,6 +29,7 @@ namespace Web.Controllers
         public IHttpService HttpService { get; set; }
         public ISaveOrUpdateCommand<SentSms> SaveOrUpdateCommand { get; set; }
 
+        [Requires(Permissions = "Client.View")]
         public ActionResult Overview()
         {
             return View();

@@ -30,6 +30,7 @@ namespace Web.Services
         private IQueryService<Contact> queryServiceContact;
         private IQueryOutposts queryOutposts;
         private IQueryService<Appointment> queryAppointment;
+        private IQueryService<WrongMessage> queryWrongMessage;
 
         public ManageReceivedSmsService(IQueryService<Condition> queryCondition,
                                 IQueryService<Diagnosis> queryDiagnosis,
@@ -38,7 +39,8 @@ namespace Web.Services
                                 IQueryService<MessageFromDrugShop> queryMessageFromDrugShop,
                                 IQueryService<Contact> queryServiceContact,
                                 IQueryOutposts queryOutposts,
-                                IQueryService<Appointment> queryAppointment)
+                                IQueryService<Appointment> queryAppointment,
+                                IQueryService<WrongMessage> queryWrongMessage)
         {
             this.queryAdvice = queryAdvice;
             this.queryDiagnosis = queryDiagnosis;
@@ -48,6 +50,7 @@ namespace Web.Services
             this.queryCondition = queryCondition;
             this.queryTreatment = queryTreatment;
             this.queryAppointment = queryAppointment;
+            this.queryWrongMessage = queryWrongMessage;
         }
 
 

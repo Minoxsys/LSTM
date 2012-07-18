@@ -13,8 +13,6 @@ namespace Web.Bootstrap
 
 		public static string ScriptsVersion = ConfigurationManager.AppSettings["ScriptsVersion"];
 
-        public static string SendMailFrom = ConfigurationManager.AppSettings["SendMail.From"];
-
         public static string EmailResponseUrl = ConfigurationManager.AppSettings["EmailResponse.Url"];
 
         /// <summary>
@@ -38,6 +36,8 @@ namespace Web.Bootstrap
 
         public static string SendEmailHost = ConfigurationManager.AppSettings["SendEmail.Host"];
         public static string SendEmailPort = ConfigurationManager.AppSettings["SendEmail.Port"];
+        public static string SendEmailFrom = ConfigurationManager.AppSettings["SendEmail.From"];
+        public static string SendEmailTo = ConfigurationManager.AppSettings["SendEmail.To"];
         
 	}
 }

@@ -61,6 +61,7 @@
     <Compile Include="WorkItem.cs" />
     <Compile Include="SmsRequest.cs" />
     <Compile Include="WorldCountryRecord.cs" />
+    <Compile Include="WrongMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

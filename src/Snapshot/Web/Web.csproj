@@ -367,6 +367,8 @@
     <Compile Include="Security\AuthenticateUser.cs" />
     <Compile Include="Security\RequiresAttribute.cs" />
     <Compile Include="Security\SecurePassword.cs" />
+    <Compile Include="Services\EmailMessageService.cs" />
+    <Compile Include="Services\IEmailMessageService.cs" />
     <Compile Include="Services\IFileService.cs" />
     <Compile Include="Services\IManageReceivedSmsService.cs" />
     <Compile Include="Services\ISendEmailService.cs" />

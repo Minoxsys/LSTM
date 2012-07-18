@@ -25,6 +25,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private Client _client;
         private User _user;
 
+        private string NOTAVAILABLE = "N";
+        private string NOTREATMENT = "NP";
+        private string WEEKS4 = "NS4";
+        private string NOARRIVAL = "NSA";
+
         [HttpGet]
         [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
@@ -106,7 +111,15 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 return QueryMessageFromDrugShops.Query().Where(it => it.OutpostId == outpost.Id).Count();
 
             if (outpost.OutpostType.Type == 1 || outpost.OutpostType.Type == 2)
-                return QueryMessageFromDispensarys.Query().Where(it => it.OutpostId == outpost.Id).Count();
+            {
+                var queryMessage = QueryMessageFromDispensarys.Query().Where(it => it.OutpostId == outpost.Id);
+                queryMessage = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOTAVAILABLE) == null);
+                queryMessage = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOTREATMENT) == null);
+                queryMessage = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == WEEKS4) == null);
+                queryMessage = queryMessage.Where(it => it.Treatments.FirstOrDefault(c => c.Code == NOARRIVAL) == null);
+
+                return queryMessage.Count();
+            }
 
             return 0;
         }

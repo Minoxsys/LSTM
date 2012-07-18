@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.IO;
 using System.Text;
+using Web.Bootstrap;
 
 namespace Web.Controllers
 {
@@ -21,17 +22,22 @@ namespace Web.Controllers
     {
         public IManageReceivedSmsService ManageReceivedSmsService { get; set; }
         public ISmsRequestService SmsRequestService { get; set; }
+        public IEmailMessageService EmailMessageService { get; set; }
 
         public ISaveOrUpdateCommand<RawSmsReceived> SaveCommandRawSmsReceived { get; set; }
         public ISaveOrUpdateCommand<MessageFromDrugShop> SaveCommandMessageFromDrugShop { get; set; }
         public ISaveOrUpdateCommand<MessageFromDispensary> SaveCommandMessageFromDispensary { get; set; }
+        public ISaveOrUpdateCommand<WrongMessage> SaveCommandWrongMessage { get; set; }
         public IQueryService<MessageFromDispensary> QueryMessageFromDispensary { get; set; }
+        public IQueryService<WrongMessage> QueryWrongMessage { get; set; }
         public IDeleteCommand<MessageFromDispensary> DeleteCommand { get; set; }
 
         private const string INVALIDNUMBERERRORMESSAGE = "Namba ya simu uliotumia haijasajiliwa na waongozi wa mtandao huu. Tafadhali wasiliana na utawala au tuma tena kwa kutumia namba ya simu iliyosajiliwa.Ahsante.";
         private const string INVALIDFORMATERRORMESSAGE = "Muundo wa ujumbe wako si sahihi.Tafadhali angalia na utume tena.Ahsante.";
         private string[] passwordList = new string[] { "Simba", "Tembo", "Twiga", "Chui", "Nyati", "Duma", "Fisi", "Kiboko", "Kifaru", "Sungura", "Swala" };
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
+        private string KEYWORD = "AFYA";
+
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
 
         public ActionResult Create()
@@ -54,7 +60,7 @@ namespace Web.Controllers
             RawSmsReceived rawSmsReceived = new RawSmsReceived { Content = message, Sender = msisdn, ReceivedDate = DateTime.UtcNow };
             rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
-            if (message.Substring(0, 5).ToUpper() == "AFYA ")
+            if (message.Substring(0, 4).ToUpper() == KEYWORD)
             {
 
                 if (rawSmsReceived.OutpostId == Guid.Empty)
@@ -87,6 +93,10 @@ namespace Web.Controllers
                         {
                             responseMessage = INVALIDFORMATERRORMESSAGE;
                             SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                            int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
+                            if (noOfWrongMessages % 3 == 0)
+                                EmailMessageService.SendEmail(rawSmsReceived);
+                                
                         }
                     }
                     else
@@ -100,6 +110,9 @@ namespace Web.Controllers
                         {
                             responseMessage = INVALIDFORMATERRORMESSAGE;
                             SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                            int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
+                            if (noOfWrongMessages % 3 == 0)
+                                EmailMessageService.SendEmail(rawSmsReceived);
                         }
                     }
                 }
@@ -109,6 +122,22 @@ namespace Web.Controllers
             Response.Write(responseMessage);
 
             return new EmptyResult();
+        }
+
+        private int SaveWrongMessage(RawSmsReceived rawSmsReceived)
+        {
+            var message = QueryWrongMessage.Query().Where(it => it.PhoneNumber == rawSmsReceived.Sender).FirstOrDefault();
+            if (message != null)
+            {
+                message.NoOfWrongMessages++;
+                SaveCommandWrongMessage.Execute(message);
+                return message.NoOfWrongMessages;
+            }
+
+            WrongMessage newMessage = new WrongMessage { PhoneNumber = rawSmsReceived.Sender, NoOfWrongMessages = 1};
+            SaveCommandWrongMessage.Execute(newMessage);
+            return 1;
+            
         }
 
         private void SaveRawSmsReceived(RawSmsReceived rawSmsReceived, string errorMessage, bool succeeded)
