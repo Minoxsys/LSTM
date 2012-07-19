@@ -14,5 +14,9 @@ namespace Web.Services
         MessageFromDrugShop CreateMessageFromDrugShop(RawSmsReceived rawSmsReceived);
         MessageFromDispensary CreateMessageFromDispensary(RawSmsReceived rawSmsReceived);
         string CreateMessageToBeSentToDispensary(MessageFromDrugShop messageFromDrugShop);
+
+        bool DoesMessageStartWithKeyword(string message);
+
+        bool DoesMessageContainRRCode(MessageFromDrugShop drugshopMessage);
     }
 }

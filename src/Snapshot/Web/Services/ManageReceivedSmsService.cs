@@ -20,7 +20,7 @@ namespace Web.Services
         private const string XMLDateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
         private string KEYWORD = "AFYA";
-
+        private string REFUSEDCODE = "RR";
 
         private IQueryService<Condition> queryCondition;
         private IQueryService<Diagnosis> queryDiagnosis;
@@ -257,6 +257,17 @@ namespace Web.Services
             }
             return code;
 
+        }
+
+
+        public bool DoesMessageStartWithKeyword(string message)
+        {
+            return message.Substring(0, 4).ToUpper() == KEYWORD;
+        }
+
+        public bool DoesMessageContainRRCode(MessageFromDrugShop drugshopMessage)
+        {
+            return drugshopMessage.ServicesNeeded.FirstOrDefault(it => it.Code == REFUSEDCODE) == null;
         }
     }
 }

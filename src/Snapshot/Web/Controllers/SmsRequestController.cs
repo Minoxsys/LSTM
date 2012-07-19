@@ -36,8 +36,7 @@ namespace Web.Controllers
         private const string INVALIDFORMATERRORMESSAGE = "Muundo wa ujumbe wako si sahihi.Tafadhali angalia na utume tena.Ahsante.";
         private string[] passwordList = new string[] { "Simba", "Tembo", "Twiga", "Chui", "Nyati", "Duma", "Fisi", "Kiboko", "Kifaru", "Sungura", "Swala" };
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
-        private string KEYWORD = "AFYA";
-        private string REFUSEDCODE = "RR";
+        
 
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
 
@@ -56,75 +55,136 @@ namespace Web.Controllers
         [HttpGet]
         public ActionResult ReceiveSms(string message, string msisdn)
         {
-            string responseMessage = "";
+            Response.Status = "200 OK";
+            Response.StatusCode = 200;
+
+            if (ManageReceivedSmsService.DoesMessageStartWithKeyword(message) == false)
+            {
+                Response.Write("Wrong keyword.");
+                return new EmptyResult();
+            }
 
             RawSmsReceived rawSmsReceived = new RawSmsReceived { Content = message, Sender = msisdn, ReceivedDate = DateTime.UtcNow };
             rawSmsReceived = ManageReceivedSmsService.AssignOutpostToRawSmsReceivedBySenderNumber(rawSmsReceived);
 
-            if (message.Substring(0, 4).ToUpper() == KEYWORD)
+            if (IsARegisteredPhoneNumber(rawSmsReceived) == false)
             {
-
-                if (rawSmsReceived.OutpostId == Guid.Empty)
-                {
-                    SaveRawSmsReceived(rawSmsReceived, "Phone number is not valid.", false);
-                    responseMessage = INVALIDNUMBERERRORMESSAGE;
-                    SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
-                }
-                else
-                {
-                    if (rawSmsReceived.OutpostType == 0)
-                    {
-                        rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDrugShop(rawSmsReceived);
-                        SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-
-                        if (rawSmsReceived.ParseSucceeded)
-                        {
-                            MessageFromDrugShop drugshopMessage = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
-                            SaveCommandMessageFromDrugShop.Execute(drugshopMessage);
-                            if (drugshopMessage.ServicesNeeded.FirstOrDefault(it => it.Code == REFUSEDCODE) == null)
-                            {
-                                string password = GeneratePassword();
-                                string messageForDrugShop = password + " for " + rawSmsReceived.Content;
-                                string messageForDispensary = password + " " + ManageReceivedSmsService.CreateMessageToBeSentToDispensary(drugshopMessage);
-
-                                responseMessage = messageForDrugShop;
-                                SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
-                                SmsRequestService.SendMessageToDispensary(messageForDispensary, rawSmsReceived);
-                            }
-                        }
-                        else
-                        {
-                            responseMessage = INVALIDFORMATERRORMESSAGE;
-                            SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
-                            int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
-                            if (noOfWrongMessages % 3 == 0)
-                                EmailMessageService.SendEmail(rawSmsReceived);
-                                
-                        }
-                    }
-                    else
-                    {
-                        rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDispensary(rawSmsReceived);
-                        SaveCommandRawSmsReceived.Execute(rawSmsReceived);
-
-                        if (rawSmsReceived.ParseSucceeded)
-                            SaveMessageFromDispensary(rawSmsReceived);
-                        else
-                        {
-                            responseMessage = INVALIDFORMATERRORMESSAGE;
-                            SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
-                            int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
-                            if (noOfWrongMessages % 3 == 0)
-                                EmailMessageService.SendEmail(rawSmsReceived);
-                        }
-                    }
-                }
+                string responseMessage = ProcessMessageFromInvalidPhoneNumber(rawSmsReceived);
+                Response.Write(responseMessage);
+                return new EmptyResult();
             }
-            Response.Status = "200 OK";
-            Response.StatusCode = 200;
-            Response.Write(responseMessage);
 
-            return new EmptyResult();
+            if (IsMessageFromDrugShop(rawSmsReceived))
+            {
+                string responseMessage = ProcessMessageFromDrugShop(rawSmsReceived);
+                Response.Write(responseMessage);
+                return new EmptyResult();
+            }
+            else
+            {
+                string responseMessage = ProcessMessageFromDispensary(rawSmsReceived);
+                Response.Write(responseMessage);
+                return new EmptyResult();
+            }
+        }
+
+        private string  ProcessMessageFromInvalidPhoneNumber(RawSmsReceived rawSmsReceived)
+        {
+            SaveRawSmsReceived(rawSmsReceived, "Phone number is not valid.", false);
+            SmsRequestService.SendMessage(INVALIDNUMBERERRORMESSAGE, rawSmsReceived);
+            return INVALIDNUMBERERRORMESSAGE;
+        }
+
+        private void SaveRawSmsReceived(RawSmsReceived rawSmsReceived, string errorMessage, bool succeeded)
+        {
+            rawSmsReceived.ParseErrorMessage = errorMessage;
+            rawSmsReceived.ParseSucceeded = succeeded;
+            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
+        }
+
+        private string ProcessMessageFromDrugShop(RawSmsReceived rawSmsReceived)
+        {
+            string responseMessage = "";
+
+            rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDrugShop(rawSmsReceived);
+            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
+            
+            if (rawSmsReceived.ParseSucceeded)
+            {
+                MessageFromDrugShop drugshopMessage = SaveDrugShopMessage(rawSmsReceived);
+
+                if (ManageReceivedSmsService.DoesMessageContainRRCode(drugshopMessage) == false)
+                {
+                    string password = GeneratePassword();
+                    responseMessage = SendMessageToDrugShopWithPassword(password, rawSmsReceived);
+                    SendMessageToDispensary(password, rawSmsReceived, drugshopMessage);
+                } 
+            }
+            else
+            {
+                responseMessage = INVALIDFORMATERRORMESSAGE;
+                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
+                if (noOfWrongMessages % 3 == 0)
+                    EmailMessageService.SendEmail(rawSmsReceived);
+
+            }
+
+            return responseMessage;
+        }
+
+        private MessageFromDrugShop SaveDrugShopMessage(RawSmsReceived rawSmsReceived)
+        {
+            MessageFromDrugShop drugshopMessage = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
+            SaveCommandMessageFromDrugShop.Execute(drugshopMessage);
+            return drugshopMessage;
+        }
+
+        private void SendMessageToDispensary(string password, RawSmsReceived rawSmsReceived, MessageFromDrugShop drugshopMessage)
+        {
+            string messageForDispensary = password + " " + ManageReceivedSmsService.CreateMessageToBeSentToDispensary(drugshopMessage);
+            SmsRequestService.SendMessageToDispensary(messageForDispensary, rawSmsReceived);
+        }
+
+        private string SendMessageToDrugShopWithPassword(string password, RawSmsReceived rawSmsReceived)
+        {
+            string messageForDrugShop = password + " for " + rawSmsReceived.Content;
+            SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
+            return messageForDrugShop;
+        }
+
+        private string ProcessMessageFromDispensary(RawSmsReceived rawSmsReceived)
+        {
+            string responseMessage = "";
+
+            rawSmsReceived = ManageReceivedSmsService.ParseRawSmsReceivedFromDispensary(rawSmsReceived);
+            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
+
+            if (rawSmsReceived.ParseSucceeded)
+            {
+                SaveMessageFromDispensary(rawSmsReceived);
+                responseMessage = "OK";
+            }
+            else
+            {
+                responseMessage = INVALIDFORMATERRORMESSAGE;
+                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
+                int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
+                if (noOfWrongMessages % 3 == 0)
+                    EmailMessageService.SendEmail(rawSmsReceived);
+            }
+
+            return responseMessage;
+        }
+
+        private bool IsMessageFromDrugShop(RawSmsReceived rawSmsReceived)
+        {
+            return rawSmsReceived.OutpostType == 0;
+        }
+
+        private bool IsARegisteredPhoneNumber(RawSmsReceived rawSmsReceived)
+        {
+            return rawSmsReceived.OutpostId != Guid.Empty;
         }
 
         private int SaveWrongMessage(RawSmsReceived rawSmsReceived)
@@ -141,13 +201,6 @@ namespace Web.Controllers
             SaveCommandWrongMessage.Execute(newMessage);
             return 1;
             
-        }
-
-        private void SaveRawSmsReceived(RawSmsReceived rawSmsReceived, string errorMessage, bool succeeded)
-        {
-            rawSmsReceived.ParseErrorMessage = errorMessage;
-            rawSmsReceived.ParseSucceeded = succeeded;
-            SaveCommandRawSmsReceived.Execute(rawSmsReceived);
         }
 
         private void SaveMessageFromDispensary(RawSmsReceived rawSmsReceived)
