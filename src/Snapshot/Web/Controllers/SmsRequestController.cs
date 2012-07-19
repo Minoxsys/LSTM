@@ -37,6 +37,7 @@ namespace Web.Controllers
         private string[] passwordList = new string[] { "Simba", "Tembo", "Twiga", "Chui", "Nyati", "Duma", "Fisi", "Kiboko", "Kifaru", "Sungura", "Swala" };
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
         private string KEYWORD = "AFYA";
+        private string REFUSEDCODE = "RR";
 
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
 
@@ -80,14 +81,16 @@ namespace Web.Controllers
                         {
                             MessageFromDrugShop drugshopMessage = ManageReceivedSmsService.CreateMessageFromDrugShop(rawSmsReceived);
                             SaveCommandMessageFromDrugShop.Execute(drugshopMessage);
+                            if (drugshopMessage.ServicesNeeded.FirstOrDefault(it => it.Code == REFUSEDCODE) == null)
+                            {
+                                string password = GeneratePassword();
+                                string messageForDrugShop = password + " for " + rawSmsReceived.Content;
+                                string messageForDispensary = password + " " + ManageReceivedSmsService.CreateMessageToBeSentToDispensary(drugshopMessage);
 
-                            string password = GeneratePassword();
-                            string messageForDrugShop = password + " for " + rawSmsReceived.Content;
-                            string messageForDispensary = password + " " + ManageReceivedSmsService.CreateMessageToBeSentToDispensary(drugshopMessage);
-
-                            responseMessage = messageForDrugShop;
-                            SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
-                            SmsRequestService.SendMessageToDispensary(messageForDispensary, rawSmsReceived);
+                                responseMessage = messageForDrugShop;
+                                SmsRequestService.SendMessage(messageForDrugShop, rawSmsReceived);
+                                SmsRequestService.SendMessageToDispensary(messageForDispensary, rawSmsReceived);
+                            }
                         }
                         else
                         {
