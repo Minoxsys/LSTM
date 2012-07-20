@@ -19,14 +19,14 @@ namespace IntegrationTests
             Guid OUTPOSTID = Guid.NewGuid();
             DateTime SENTDATE = DateTime.UtcNow.AddDays(-1);
             string IDCODE = Guid.NewGuid().ToString().Substring(0,9);
-            ServiceNeeded SERVICENEEDED = new ServiceNeeded() { Keyword = "Hiv", Code = "D3" };
+            Condition SERVICENEEDED = new Condition() { Keyword = "Hiv", Code = "D3" };
 
             var message = Specs
                 .CheckProperty(p => p.Initials, INITIALS)
                 .CheckProperty(p => p.Gender, GENDER)
                 .CheckProperty(p => p.OutpostId, OUTPOSTID)
                 .CheckProperty(p => p.IDCode, IDCODE)
-                .CheckList(p => p.ServicesNeeded, new List<ServiceNeeded> { SERVICENEEDED })
+                .CheckList(p => p.ServicesNeeded, new List<Condition> { SERVICENEEDED })
                 .VerifyTheMappings();
 
             Assert.IsNotNull(message);

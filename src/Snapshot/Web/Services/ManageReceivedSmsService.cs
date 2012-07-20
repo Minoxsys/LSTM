@@ -267,7 +267,7 @@ namespace Web.Services
 
         public bool DoesMessageContainRRCode(MessageFromDrugShop drugshopMessage)
         {
-            return drugshopMessage.ServicesNeeded.FirstOrDefault(it => it.Code == REFUSEDCODE) == null;
+            return drugshopMessage.ServicesNeeded.FirstOrDefault(it => it.Code == REFUSEDCODE) != null;
         }
     }
 }

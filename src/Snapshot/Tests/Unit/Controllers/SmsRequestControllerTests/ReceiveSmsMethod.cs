@@ -193,6 +193,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop)).Return(objectMother.rawSmsCorerctFormatDrugShop);
             objectMother.manageReceivedSmsService.Expect(call => call.CreateMessageFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop)).Return(objectMother.messageFromDrugShop);
             objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
+            objectMother.manageReceivedSmsService.Expect(call => call.DoesMessageContainRRCode(Arg<MessageFromDrugShop>.Is.Anything)).Return(false);
             objectMother.smsRequestService.Expect(call => call.SendMessageToDispensary(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
             objectMother.manageReceivedSmsService.Expect(call => call.CreateMessageToBeSentToDispensary(Arg<MessageFromDrugShop>.Is.Anything)).Return("Simbad");
 

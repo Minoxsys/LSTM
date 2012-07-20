@@ -24,7 +24,6 @@ namespace IntegrationTests
 
             var rawsms = Specs.CheckProperty(e => e.Sender, SENDER)
                 .CheckProperty(c => c.Content, CONTENT)
-                .CheckProperty(c => c.Credits, CREDITS)
                 .CheckProperty(c => c.OutpostId, OUTPOSTOID)
                 .CheckProperty(c => c.ParseSucceeded, PARSESUCCEEDED)
                 .CheckProperty(c => c.ParseErrorMessage, PARSEERRORMESSAGE)
@@ -34,7 +33,6 @@ namespace IntegrationTests
             Assert.IsInstanceOf<Guid>(rawsms.Id);
             Assert.AreEqual(rawsms.Sender, SENDER);
             Assert.AreEqual(rawsms.Content, CONTENT);
-            Assert.AreEqual(rawsms.Credits, CREDITS);
             Assert.AreEqual(rawsms.OutpostId, OUTPOSTOID);
             Assert.AreEqual(rawsms.ParseSucceeded, PARSESUCCEEDED);
             Assert.AreEqual(rawsms.ParseErrorMessage, PARSEERRORMESSAGE);
