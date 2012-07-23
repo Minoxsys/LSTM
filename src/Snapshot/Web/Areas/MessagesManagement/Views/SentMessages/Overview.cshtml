@@ -125,29 +125,34 @@
                 loadMask: true,
                 disableSelection: true,
                 flex: 3,
+                layout: 'fit',
                 autoScroll: true,
                 columns: [{
                     header: "Destination phone number",
                     dataIndex: 'PhoneNumber',
                     flex: 1,
+                    minWidth: 200,
                     menuDisabled: true,
                     sortable: true
                 }, {
                     header: "Message",
                     dataIndex: 'Message',
-                    flex: 1,
+                    flex: 3,
+                    minWidth: 400,
                     menuDisabled: true,
                     sortable: true
                 }, {
                     text: "Sent date",
                     dataIndex: 'SentDate',
                     flex: 1,
+                    minWidth: 150,
                     menuDisabled: true,
                     sortable: false
                 }, {
                     text: "Server response",
                     dataIndex: 'Response',
-                    flex: 1,
+                    flex: 2,
+                    minWidth: 300,
                     menuDisabled: true,
                     sortable: false
                 }],

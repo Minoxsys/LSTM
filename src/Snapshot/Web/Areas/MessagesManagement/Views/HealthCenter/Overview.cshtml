@@ -125,29 +125,34 @@
                 loadMask: true,
                 disableSelection: true,
                 flex: 3,
+                layout: 'fit',
                 autoScroll: true,
                 columns: [{
                     header: "Phone number",
                     dataIndex: 'Sender',
                     flex: 1,
+                    minWidth: 150,
                     menuDisabled: true,
                     sortable: true
                 }, {
                     header: "Health Center",
                     dataIndex: 'OutpostName',
                     flex: 1,
+                    minWidth: 150,
                     menuDisabled: true,
                     sortable: true
                 }, {
                     text: "Date",
                     dataIndex: 'Date',
                     flex: 1,
+                    minWidth: 150,
                     menuDisabled: true,
                     sortable: false
                 }, {
                     text: "Content",
                     dataIndex: 'Content',
-                    flex: 1,
+                    flex: 2,
+                    minWidth: 250,
                     menuDisabled: true,
                     sortable: false
                 }, {
@@ -158,12 +163,14 @@
                     text: "Is message correct",
                     dataIndex: 'ParseSucceeded',
                     flex: 1,
+                    minWidth: 150,
                     menuDisabled: true,
                     sortable: false
                 }, {
                     text: "Error messages",
                     dataIndex: 'ParseErrorMessage',
-                    flex: 1,
+                    flex: 2,
+                    minWidth: 250,
                     menuDisabled: true,
                     sortable: false
                 }],
