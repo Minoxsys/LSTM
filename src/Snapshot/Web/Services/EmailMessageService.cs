@@ -25,6 +25,7 @@ namespace Web.Services
             MailMessage mail = new MailMessage();
 
             mail.To.Add(new MailAddress(AppSettings.SendEmailTo));
+            mail.CC.Add(new MailAddress(AppSettings.SendEmailCC));
             mail.From = new MailAddress(AppSettings.SendEmailFrom);
 
             mail.Subject = "Ongezeko la muundo usio sahihi";

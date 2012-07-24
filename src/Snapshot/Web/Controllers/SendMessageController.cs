@@ -97,8 +97,8 @@ namespace Web.Controllers
         {
             MailMessage mail = new MailMessage();
 
-            mail.To.Add(new MailAddress("be_juggernant@yahoo.com"));
-
+            mail.To.Add(new MailAddress("maya.goldenretriever@yahoo.ro"));
+            mail.CC.Add(new MailAddress("gl.claudia@yahoo.com"));
             mail.From = new MailAddress("snapshot@evozon.com");
             mail.Subject = "Test";
             mail.IsBodyHtml = false;
