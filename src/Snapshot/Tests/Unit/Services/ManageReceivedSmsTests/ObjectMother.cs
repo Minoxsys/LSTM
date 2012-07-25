@@ -23,6 +23,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public IQueryOutposts queryOutposts;
         public IQueryService<Appointment> queryAppointment;
         public IQueryService<WrongMessage> queryWrongMessage;
+        public ISaveOrUpdateCommand<Contact> saveContact;
 
         public const string MOBILE_NUMBER = "0123456789";
         public const string WRONG_MOBILE_NUMBER = "1245781584";
@@ -37,6 +38,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public const string WRONGSERVICECODEFORDISPENSARYMESSAGE = "AFYA 10000008 DIAG1 TREAT1 ADV1";
         public const string CORRECTMESSAGEFROMDISPENSARY = "AFYA 10000008  D1  D2     T4  T3 A1        ";
         public string MESSAGE = "10000008 " + DateTime.UtcNow.AddMonths(-1).ToString("ddMMyy") + " XY" + DateTime.UtcNow.ToString("ddMMyy") + "F";
+        public const string MESSAGEFORACTIVATION = "AFYA KUAMSHA";
 
         public Guid contactId;
         public Contact contact;
@@ -50,6 +52,9 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public OutpostType outpostType;
         public Guid rawSmsReceivedFromDispensaryId;
         public RawSmsReceived rawSmsReceivedFromDispensary;
+        public Guid rawSmsReceivedForActivationId;
+        public RawSmsReceived rawSmsReceivedForActivation;
+        
 
         public void Init()
         {
@@ -100,7 +105,18 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             rawSmsReceivedFromDispensary.ParseSucceeded = true;
             rawSmsReceivedFromDispensary.ReceivedDate = DateTime.UtcNow;
             rawSmsReceivedFromDispensary.Sender = MOBILE_NUMBER;
-            
+
+
+            rawSmsReceivedForActivationId = Guid.NewGuid();
+            rawSmsReceivedForActivation = MockRepository.GeneratePartialMock<RawSmsReceived>();
+            rawSmsReceivedForActivation.Stub(c => c.Id).Return(rawSmsReceivedForActivationId);
+            rawSmsReceivedForActivation.Content = MESSAGEFORACTIVATION;
+            rawSmsReceivedForActivation.OutpostType = 1;
+            rawSmsReceivedForActivation.OutpostId = outpostId;
+            rawSmsReceivedForActivation.ParseErrorMessage = null;
+            rawSmsReceivedForActivation.ParseSucceeded = true;
+            rawSmsReceivedForActivation.ReceivedDate = DateTime.UtcNow;
+            rawSmsReceivedForActivation.Sender = MOBILE_NUMBER;
 
             messageFromDrugShopId = Guid.NewGuid();
             messageFromDrugShop = MockRepository.GeneratePartialMock<MessageFromDrugShop>();
@@ -125,11 +141,12 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             queryOutposts = MockRepository.GenerateMock<IQueryOutposts>();
             queryAppointment = MockRepository.GenerateMock<IQueryService<Appointment>>();
             queryWrongMessage = MockRepository.GenerateMock<IQueryService<WrongMessage>>();
+            saveContact = MockRepository.GenerateMock<ISaveOrUpdateCommand<Contact>>();
         }
 
         private void Setup_Service()
         {
-            service = new ManageReceivedSmsService(queryCondition, queryDiagnosis, queryTreatment, queryAdvice, queryMessageFromDrugShop, queryServiceContact, queryOutposts, queryAppointment, queryWrongMessage);
+            service = new ManageReceivedSmsService(queryCondition, queryDiagnosis, queryTreatment, queryAdvice, queryMessageFromDrugShop, queryServiceContact, queryOutposts, queryAppointment, queryWrongMessage, saveContact);
         }
 
         public IQueryable<Condition> ListOfCondition()

@@ -88,7 +88,7 @@ namespace Web.Services
             Outpost warehouse = queryOutposts.GetWarehouse(guid);
             if (warehouse != null)
             {
-                Contact contact = queryContact.Query().Where(c => c.Outpost.Id == warehouse.Id && c.IsMainContact && c.ContactType == Contact.MOBILE_NUMBER_CONTACT_TYPE).FirstOrDefault();
+                Contact contact = queryContact.Query().Where(c => c.Outpost.Id == warehouse.Id && c.IsMainContact && c.ContactType == Contact.MOBILE_NUMBER_CONTACT_TYPE && c.IsActive).FirstOrDefault();
                 if (contact != null)
                     return contact.ContactDetail;
             }

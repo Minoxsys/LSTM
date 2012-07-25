@@ -227,6 +227,7 @@
     <Compile Include="Unit\Security\AuthenticateUser_Tests.cs" />
     <Compile Include="Unit\Security\RequiresAttributeTests.cs" />
     <Compile Include="Unit\Security\SecurePassword_Tests.cs" />
+    <Compile Include="Unit\Services\ManageReceivedSmsTests\ActivateThePhoneNumberMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\AssignOutpostToRawSmsReceivedBySenderNumberMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageFromDispensaryMethod.cs" />
     <Compile Include="Unit\Services\ManageReceivedSmsTests\CreateMessageFromDrugShopMethod.cs" />

@@ -15,6 +15,7 @@
                 { name: 'ContactType', type: 'string' },
                 { name: 'ContactDetail', type: 'string' },
                 { name: 'IsMainContact', type: 'boolean' },
+                { name: 'IsActive', type: 'boolean' },
                 { name: 'Id', type: 'string' }
             ]
         });
@@ -72,9 +73,23 @@
                         });
                     }
 
+                    //set IsActive to false on all other records
+                    if (e.record.get('IsActive')) {
+                        e.store.each(function (record) {
+                            if (e.record.id !== record.id) {
+                                record.set('IsActive', false);
+                            }
+                        });
+                    }
+
                     // set this as the MainContact if there are no others
                     if (e.store.getCount() == 1){
                         e.record.set('IsMainContact', true);
+                    }
+
+                    // set this as the Active if there are no others
+                    if (e.store.getCount() == 1) {
+                        e.record.set('IsActive', true);
                     }
 
                     Ext.getCmp('SaveButtonOutpost').enable();
@@ -103,6 +118,15 @@
                         xtype:'textfield',
                         allowBlank: false
                     }
+                }, {
+                    xtype: 'booleancolumn',
+                    trueText: 'Yes',
+                    falseText: 'No',
+                    header: _t('Active'), dataIndex: 'IsActive',
+                    menuDisabled: true,
+                    editor: {
+                        xtype: 'checkbox'
+                    }
                 },{
                     xtype: 'booleancolumn', 
                     trueText: 'Yes',
@@ -112,7 +136,6 @@
                     editor: {
                         xtype:'checkbox'
                     }
-    
                 }, {
                     xtype: 'actioncolumn',
                     menuDisabled: true,

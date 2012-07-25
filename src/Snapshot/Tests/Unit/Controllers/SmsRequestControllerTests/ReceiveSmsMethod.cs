@@ -261,6 +261,33 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             Assert.IsNotNull(res);
         }
 
+        [Test]
+        public void WhenMessageIsForActivation_ItshouldActivateThePhoneNumber_ANDSaveTheRawSMS()
+        {
+            //Arrange
+            objectMother.manageReceivedSmsService.Expect(call => call.DoesMessageStartWithKeyword(Arg<string>.Is.Anything)).Return(true);
+            objectMother.manageReceivedSmsService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Is.Anything)).Return(objectMother.rawSmsCorerctFormatDispensary);
+            objectMother.manageReceivedSmsService.Expect(call => call.IsMessageForActivation(Arg<RawSmsReceived>.Is.Anything)).Return(true);
+            objectMother.manageReceivedSmsService.Expect(call => call.ActivateThePhoneNumber(Arg<RawSmsReceived>.Is.Anything));
+            objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
+            objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
+                p => p.OutpostId == objectMother.outpostId &&
+                     p.Sender == ObjectMother.CORRECTPHONENUMBER &&
+                     p.ParseSucceeded == true
+                     )));
+
+            //Act
+            var result = objectMother.controller.ReceiveSms(ObjectMother.CORRECTMESSAGEFROMDISPENSARY, ObjectMother.CORRECTPHONENUMBER);
+
+            //Assert
+            objectMother.manageReceivedSmsService.VerifyAllExpectations();
+            objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
+            objectMother.smsRequestService.VerifyAllExpectations();
+
+            var res = result as EmptyResult;
+            Assert.IsNotNull(res);
+        }
+
 
     }
 }

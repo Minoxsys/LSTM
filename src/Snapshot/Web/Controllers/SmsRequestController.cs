@@ -34,6 +34,7 @@ namespace Web.Controllers
 
         private const string INVALIDNUMBERERRORMESSAGE = "Namba ya simu uliotumia haijasajiliwa na waongozi wa mtandao huu. Tafadhali wasiliana na utawala au tuma tena kwa kutumia namba ya simu iliyosajiliwa.Ahsante.";
         private const string INVALIDFORMATERRORMESSAGE = "Muundo wa ujumbe wako si sahihi.Tafadhali angalia na utume tena.Ahsante.";
+        private const string ACTIVATESUCCESS = "Ulioamilishwa";
         private string[] passwordList = new string[] { "Simba", "Tembo", "Twiga", "Chui", "Nyati", "Duma", "Fisi", "Kiboko", "Kifaru", "Sungura", "Swala" };
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
         
@@ -74,6 +75,13 @@ namespace Web.Controllers
                 return new EmptyResult();
             }
 
+            if (ManageReceivedSmsService.IsMessageForActivation(rawSmsReceived))
+            {
+                string response = ActivatePhoneNumber(rawSmsReceived); 
+                Response.Write(response);
+                return new EmptyResult();
+            }
+
             if (IsMessageFromDrugShop(rawSmsReceived))
             {
                 string responseMessage = ProcessMessageFromDrugShop(rawSmsReceived);
@@ -86,6 +94,14 @@ namespace Web.Controllers
                 Response.Write(responseMessage);
                 return new EmptyResult();
             }
+        }
+
+        private string ActivatePhoneNumber(RawSmsReceived rawSmsReceived)
+        {
+            ManageReceivedSmsService.ActivateThePhoneNumber(rawSmsReceived);
+            SaveRawSmsReceived(rawSmsReceived, "", true);
+            SmsRequestService.SendMessage(ACTIVATESUCCESS, rawSmsReceived);
+            return ACTIVATESUCCESS;
         }
 
         private string  ProcessMessageFromInvalidPhoneNumber(RawSmsReceived rawSmsReceived)

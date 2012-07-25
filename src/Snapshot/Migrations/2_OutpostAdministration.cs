@@ -129,6 +129,7 @@ namespace Migrations
 				.WithColumn("ContactType").AsString(15).Nullable()
 				.WithColumn("ContactDetail").AsString(100).Nullable()
                 .WithColumn("IsMainContact").AsBoolean()
+                .WithColumn("IsActive").AsBoolean()
 				.WithColumn("Outpost_FK").AsGuid();
 
 			Create.AddClientForeignKey("Contacts");

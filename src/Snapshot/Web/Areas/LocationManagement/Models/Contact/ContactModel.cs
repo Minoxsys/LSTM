@@ -9,6 +9,7 @@ namespace Web.Areas.LocationManagement.Models.Contact
         public string ContactType { get; set; }
         public string ContactDetail { get; set; }
         public bool IsMainContact { get; set; }
+        public bool IsActive { get; set; }
         public Guid? OutpostId { get; set; }
     }
 }

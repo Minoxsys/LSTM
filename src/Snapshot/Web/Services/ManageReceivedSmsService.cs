@@ -19,8 +19,9 @@ namespace Web.Services
         private const string DateFormat = "ddMMyy";
         private const string XMLDateFormat = "yyyy-MM-dd HH:mm:ss";
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
-        private string KEYWORD = "AFYA";
-        private string REFUSEDCODE = "RR";
+        private const string KEYWORD = "AFYA";
+        private const string REFUSEDCODE = "RR";
+        private const string ACTIVATION = KEYWORD + " " + "KUAMSHA";
 
         private IQueryService<Condition> queryCondition;
         private IQueryService<Diagnosis> queryDiagnosis;
@@ -31,6 +32,7 @@ namespace Web.Services
         private IQueryOutposts queryOutposts;
         private IQueryService<Appointment> queryAppointment;
         private IQueryService<WrongMessage> queryWrongMessage;
+        private ISaveOrUpdateCommand<Contact> saveCommandContact;
 
         public ManageReceivedSmsService(IQueryService<Condition> queryCondition,
                                 IQueryService<Diagnosis> queryDiagnosis,
@@ -40,7 +42,8 @@ namespace Web.Services
                                 IQueryService<Contact> queryServiceContact,
                                 IQueryOutposts queryOutposts,
                                 IQueryService<Appointment> queryAppointment,
-                                IQueryService<WrongMessage> queryWrongMessage)
+                                IQueryService<WrongMessage> queryWrongMessage,
+                                ISaveOrUpdateCommand<Contact> saveCommandContact)
         {
             this.queryAdvice = queryAdvice;
             this.queryDiagnosis = queryDiagnosis;
@@ -51,6 +54,7 @@ namespace Web.Services
             this.queryTreatment = queryTreatment;
             this.queryAppointment = queryAppointment;
             this.queryWrongMessage = queryWrongMessage;
+            this.saveCommandContact = saveCommandContact;
         }
 
 
@@ -119,8 +123,6 @@ namespace Web.Services
 
         public Domain.RawSmsReceived ParseRawSmsReceivedFromDispensary(Domain.RawSmsReceived rawSmsReceived)
         {
-            //XY150697F RX1 RX2                 ^([A-Za-z]{2}[0-9]{6}[M,F,m,f][ \t]+[A-Za-z0-9 +-;]+)$
-            //123432144 TR1 TR2                 ^([0-9]{9}[A-Za-z0-9 +-;]+)$
             Regex regexFromDispensary = new Regex(CONTENT_FROMDISPENSARY_REGEX);
 
             if (regexFromDispensary.IsMatch(rawSmsReceived.Content))
@@ -268,6 +270,32 @@ namespace Web.Services
         public bool DoesMessageContainRRCode(MessageFromDrugShop drugshopMessage)
         {
             return drugshopMessage.ServicesNeeded.FirstOrDefault(it => it.Code == REFUSEDCODE) != null;
+        }
+
+        public bool  IsMessageForActivation(RawSmsReceived rawSmsReceived)
+        {
+            return rawSmsReceived.Content.Trim().ToUpper() == ACTIVATION;
+        }
+
+        public void ActivateThePhoneNumber(RawSmsReceived rawSmsReceived)
+        {
+            string number = rawSmsReceived.Sender;
+            Contact contact = queryServiceContact.Query().Where(
+                c => c.ContactType.Equals(Contact.MOBILE_NUMBER_CONTACT_TYPE) && c.ContactDetail.Contains(number)).FirstOrDefault();
+            contact.IsActive = true;
+
+            Outpost outpost = queryOutposts.GetAllContacts().Where(o => o.Contacts.Contains(contact)).FirstOrDefault();
+            foreach (var cont in outpost.Contacts)
+            {
+                if (cont.Id == contact.Id)
+                    cont.IsActive = true;
+                else
+                    cont.IsActive = false;
+                saveCommandContact.Execute(cont);
+            }
+
+            saveCommandContact.Execute(contact);
+
         }
     }
 }

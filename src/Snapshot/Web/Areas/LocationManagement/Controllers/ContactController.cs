@@ -47,6 +47,7 @@ namespace Web.Areas.LocationManagement.Controllers
                                       {
                                           OutpostId = outpost.Id,
                                           IsMainContact = c.IsMainContact,
+                                          IsActive = c.IsActive,
                                           ContactDetail = c.ContactDetail,
                                           ContactType = c.ContactType,
                                           Id = c.Id
@@ -77,7 +78,8 @@ namespace Web.Areas.LocationManagement.Controllers
                 Outpost = outpost,
                 ContactType = input.ContactType,
                 ContactDetail = input.ContactDetail,
-                IsMainContact = input.IsMainContact
+                IsMainContact = input.IsMainContact,
+                IsActive = input.IsActive
             };
 
             if (input.ContactDetail != null)
@@ -105,6 +107,7 @@ namespace Web.Areas.LocationManagement.Controllers
                 Id = c.Id,
                 OutpostId = c.Outpost.Id,
                 IsMainContact = c.IsMainContact,
+                IsActive = c.IsActive,
                 ContactDetail = c.ContactDetail,
                 ContactType = c.ContactType
             };
@@ -129,6 +132,7 @@ namespace Web.Areas.LocationManagement.Controllers
             contact.ContactType = input.ContactType;
             contact.ContactDetail = input.ContactDetail;
             contact.IsMainContact = input.IsMainContact;
+            contact.IsActive = input.IsActive;
 
             SaveOrUpdateCommand.Execute(contact);
             ChangeDetailMethodOnOutpostWhenIsMainContact(outpost, contact);

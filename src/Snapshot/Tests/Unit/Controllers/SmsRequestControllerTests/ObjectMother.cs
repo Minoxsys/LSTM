@@ -41,6 +41,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         public const string CORRECTMESSAGEFROMDISPENSARY = "AFYA 10000008Shop1 D1 T1 A1";
         public const string INCORRECTMESSAGEFROMDISPENSARY = "AFYA 154854521 D1 D2 S1";
         public const string NOKEYWORDMESSAGE = "XY120387F RR";
+        public const string ACTIVATIONMESSAGE = "AFYA KUAMSHA";
 
         public Guid contactId;
         public Contact contact;
