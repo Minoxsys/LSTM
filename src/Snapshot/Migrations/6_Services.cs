@@ -39,7 +39,7 @@ namespace Migrations
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
+                .WithColumn("Description").AsString(1000).Nullable();
                 
             Create.AddForeignKey("Diagnosiss");
             Create.AddClientForeignKey("Diagnosiss");
@@ -49,7 +49,7 @@ namespace Migrations
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
+                .WithColumn("Description").AsString(1000).Nullable();
 
             Create.AddForeignKey("Treatments");
             Create.AddClientForeignKey("Treatments");
@@ -59,7 +59,7 @@ namespace Migrations
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
+                .WithColumn("Description").AsString(1000).Nullable();
 
             Create.AddForeignKey("Conditions");
             Create.AddClientForeignKey("Conditions");
@@ -69,7 +69,7 @@ namespace Migrations
                .WithClientColumn()
                .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-               .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
+               .WithColumn("Description").AsString(1000).Nullable();
 
             Create.AddForeignKey("Appointments");
             Create.AddClientForeignKey("Appointments");
@@ -79,7 +79,7 @@ namespace Migrations
                 .WithClientColumn()
                 .WithColumn("Keyword").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
                 .WithColumn("Code").AsString(ConstraintUtility.NAME_LENGTH)
-                .WithColumn("Description").AsString(ConstraintUtility.DESCRIPTION_LENGTH).Nullable();
+                .WithColumn("Description").AsString(1000).Nullable();
 
             Create.AddForeignKey("Advices");
             Create.AddClientForeignKey("Advices");
