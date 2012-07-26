@@ -34,7 +34,7 @@ namespace Web.Controllers
 
         private const string INVALIDNUMBERERRORMESSAGE = "Namba ya simu uliotumia haijasajiliwa na waongozi wa mtandao huu. Tafadhali wasiliana na utawala au tuma tena kwa kutumia namba ya simu iliyosajiliwa.Ahsante.";
         private const string INVALIDFORMATERRORMESSAGE = "Muundo wa ujumbe wako si sahihi.Tafadhali angalia na utume tena.Ahsante.";
-        private const string ACTIVATESUCCESS = "Ulioamilishwa";
+        private const string ACTIVATESUCCESS = "Simu yako imewezeshwa.";
         private string[] passwordList = new string[] { "Simba", "Tembo", "Twiga", "Chui", "Nyati", "Duma", "Fisi", "Kiboko", "Kifaru", "Sungura", "Swala" };
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
         

@@ -21,7 +21,7 @@ namespace Web.Services
         private IFormatProvider FormatProvider = CultureInfo.InvariantCulture;
         private const string KEYWORD = "AFYA";
         private const string REFUSEDCODE = "RR";
-        private const string ACTIVATION = KEYWORD + " " + "KUAMSHA";
+        private const string ACTIVATION = KEYWORD + " " + "WEZESHA";
 
         private IQueryService<Condition> queryCondition;
         private IQueryService<Diagnosis> queryDiagnosis;

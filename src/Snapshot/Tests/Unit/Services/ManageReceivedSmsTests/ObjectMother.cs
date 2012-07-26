@@ -38,7 +38,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public const string WRONGSERVICECODEFORDISPENSARYMESSAGE = "AFYA 10000008 DIAG1 TREAT1 ADV1";
         public const string CORRECTMESSAGEFROMDISPENSARY = "AFYA 10000008  D1  D2     T4  T3 A1        ";
         public string MESSAGE = "10000008 " + DateTime.UtcNow.AddMonths(-1).ToString("ddMMyy") + " XY" + DateTime.UtcNow.ToString("ddMMyy") + "F";
-        public const string MESSAGEFORACTIVATION = "AFYA KUAMSHA";
+        public const string MESSAGEFORACTIVATION = "AFYA WEZESHA";
 
         public Guid contactId;
         public Contact contact;
