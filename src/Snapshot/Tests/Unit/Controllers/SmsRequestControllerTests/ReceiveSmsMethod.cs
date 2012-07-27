@@ -223,7 +223,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         }
 
         [Test]
-        public void WhenMessageIsFromDispensary_AndContentIsCorrent_Itshould_SaveTheRawSms()
+        public void WhenMessageIsFromDispensary_AndContentIsCorrent_Itshould_SaveTheRawSms_AndSendConfirmationMessage()
         {
             //Arrange
             objectMother.manageReceivedSmsService.Expect(call => call.DoesMessageStartWithKeyword(Arg<string>.Is.Anything)).Return(true);
@@ -232,7 +232,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.manageReceivedSmsService.Expect(call => call.CreateMessageFromDispensary(objectMother.rawSmsCorerctFormatDispensary)).Return(objectMother.messageFromDispensary);
             objectMother.queryMessageFromDispensary.Expect(call => call.Query()).Return(new MessageFromDispensary[] {objectMother.messageFromDispensary}.AsQueryable());
             objectMother.deleteCommand.Expect(call => call.Execute(Arg<MessageFromDispensary>.Matches(p => p.Id == objectMother.messageFromDispensaryId)));
-
+            objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
 
             objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
                 p => p.OutpostId == objectMother.outpostId &&
@@ -256,6 +256,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.saveCommandMessageFromDispensary.VerifyAllExpectations();
             objectMother.queryMessageFromDispensary.VerifyAllExpectations();
             objectMother.deleteCommand.VerifyAllExpectations();
+            objectMother.smsRequestService.VerifyAllExpectations();
 
             var res = result as EmptyResult;
             Assert.IsNotNull(res);

@@ -178,8 +178,10 @@ namespace Web.Controllers
 
             if (rawSmsReceived.ParseSucceeded)
             {
-                SaveMessageFromDispensary(rawSmsReceived);
-                responseMessage = "OK";
+                string code = SaveMessageFromDispensary(rawSmsReceived);
+                string confirmation = "Asante kwa ujumbe wako.Matibabu ya " + code + " yamewekwa kwenye kumbukumbu.IntHEC (Thank you for your message.The message with code " + code + " was saved.IntHEC)";
+                SmsRequestService.SendMessage(confirmation, rawSmsReceived);
+                responseMessage = confirmation;
             }
             else
             {
@@ -219,7 +221,7 @@ namespace Web.Controllers
             
         }
 
-        private void SaveMessageFromDispensary(RawSmsReceived rawSmsReceived)
+        private string SaveMessageFromDispensary(RawSmsReceived rawSmsReceived)
         {
             MessageFromDispensary dispensaryMessage = ManageReceivedSmsService.CreateMessageFromDispensary(rawSmsReceived);
             var existingMessage = QueryMessageFromDispensary.Query().Where(it => it.MessageFromDrugShop.Id == dispensaryMessage.MessageFromDrugShop.Id).OrderByDescending(it => it.SentDate).FirstOrDefault();
@@ -227,6 +229,7 @@ namespace Web.Controllers
                 DeleteCommand.Execute(existingMessage);
 
             SaveCommandMessageFromDispensary.Execute(dispensaryMessage);
+            return dispensaryMessage.MessageFromDrugShop.IDCode;
         }
 
         private string GeneratePassword()
