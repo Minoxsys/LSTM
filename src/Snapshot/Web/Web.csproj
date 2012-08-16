@@ -267,8 +267,11 @@
     <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessagesIndexModel.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
+    <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
     <Compile Include="Helpers\ConvertHelper.cs" />
+    <Compile Include="Models\AccountOptions\PasswordModel.cs" />
+    <Compile Include="Models\AccountOptions\UserModel.cs" />
     <Compile Include="Models\SendMessage\FileBackupModel.cs" />
     <Compile Include="Models\SendMessage\FileBackupIndexOutputModel.cs" />
     <Compile Include="Models\Shared\ToModalJsonActionResponse.cs" />
@@ -2171,6 +2174,7 @@
     <Content Include="Views\Shared\_EmptySideBar.cshtml" />
     <Content Include="Views\Shared\_EmptySubNavigation.cshtml" />
     <Content Include="Views\SendMessage\Overview.cshtml" />
+    <Content Include="Views\AccountOptions\Overview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\mixins\_color-by-background.scss" />
