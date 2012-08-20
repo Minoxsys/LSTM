@@ -22,7 +22,8 @@ namespace Migrations
                 .WithCommonColumns()
 
                 .WithColumn("PhoneNumber").AsString(ConstraintUtility.NAME_LENGTH).Nullable()
-                .WithColumn("NoOfWrongMessages").AsInt32().Nullable();
+                .WithColumn("NoOfWrongMessages").AsInt32().Nullable()
+                .WithColumn("SentDate").AsDate();
 
             Create.AddForeignKey("WrongMessages");
         }

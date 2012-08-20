@@ -16,6 +16,10 @@ Send message
         window.feature.phoneNumber = 'Send-message-phone-number';
         window.feature.message = 'Send-message-the-message';
         window.feature.gateway = 'Send-message-gateway';
+        window.feature.emailmessage = 'Send-Email-Message';
+        window.feature.subject = 'Send-Email-Subject';
+        window.feature.cc = 'Send-Email-CC';
+        window.feature.to = 'Send-Email-To';
 
         window.feature.fileStore = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Size'],
@@ -113,13 +117,52 @@ Send message
                     },
                     flex: 1,
                     items: [{
+                        xtype: 'textfield',
+                        name: 'to',
+                        fieldLabel: 'To',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.to
+                    }, {
+                        xtype: 'textfield',
+                        name: 'CC',
+                        fieldLabel: 'CC',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.cc
+                    }, {
+                        xtype: 'textfield',
+                        name: 'subject',
+                        fieldLabel: 'Subject',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.subject
+                    }, {
+                    }, {
+                        xtype: 'textarea',
+                        name: 'message',
+                        fieldLabel: 'Message',
+                        anchor: '100%',
+                        width: 400,
+                        itemId: window.feature.emailmessage
+                    }, {
                         xtype: 'button',
                         margin: '0 0 0 20',
                         ui: 'snapshot-add-btn',
                         cls: 'x-add-button-gradient',
                         text: 'Send Email',
                         handler: function () {
-                            var values = { message: "ABF230487F S1" };
+                            var emailmessage = window.feature.container.down('#' + window.feature.emailmessage).getValue();
+                            var subject = window.feature.container.down('#' + window.feature.subject).getValue();
+                            var to = window.feature.container.down('#' + window.feature.to).getValue();
+                            var cc = window.feature.container.down('#' + window.feature.cc).getValue();
+
+                            var values = {
+                                Message: emailmessage,
+                                Subject: subject,
+                                TO: to,
+                                CC: cc 
+                            };
                             var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "SendMessage", action = "SendEmail" })';
                             var action = $.post(postToUrl, values);
 

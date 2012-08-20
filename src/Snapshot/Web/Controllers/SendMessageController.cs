@@ -93,16 +93,16 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult SendEmail(string message)
+        public JsonResult SendEmail(string Message, string Subject, string TO, string CC)
         {
             MailMessage mail = new MailMessage();
 
-            mail.To.Add(new MailAddress("maya.goldenretriever@yahoo.ro"));
-            mail.CC.Add(new MailAddress("gl.claudia@yahoo.com"));
+            mail.To.Add(new MailAddress(TO));
+            mail.CC.Add(new MailAddress(CC));
             mail.From = new MailAddress("snapshot@evozon.com");
-            mail.Subject = "Test";
+            mail.Subject = Subject;
             mail.IsBodyHtml = false;
-            mail.Body = "This is a test";
+            mail.Body = Message;
 
             var ok = EmailService.SendMail(mail);
 
