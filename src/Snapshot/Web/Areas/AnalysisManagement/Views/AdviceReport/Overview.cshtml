@@ -149,7 +149,9 @@ Analysis: Advice Report
                     fields: ['Female', 'Male'],
                     title: 'Number of patients',
                     grid: true,
-                    minimum: 0
+                    minimum: 0,
+                    minorTickSteps: 5,
+                    majorTickSteps: GetTheBiggestValue() - 1
                 }],
                 series: [{
                     type: 'bar',
@@ -619,6 +621,16 @@ Analysis: Advice Report
             });
 
             form.dom.submit();
+        }
+
+        function GetTheBiggestValue() {
+            var maxSum = 0;
+            window.feature.chartStore.each(function (record) {
+                var sum = record.get('Male') + record.get('Female');
+                if (sum > maxSum)
+                    maxSum = sum;
+            });
+            return maxSum;
         }
 
         var contentRes = window.res.content;

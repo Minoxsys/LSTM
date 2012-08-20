@@ -33,9 +33,11 @@ namespace Web.Controllers
         public IDeleteCommand<MessageFromDispensary> DeleteCommand { get; set; }
 
         private const string INVALIDNUMBERERRORMESSAGE = "Namba ya simu uliotumia haijasajiliwa na waongozi wa mtandao huu. Tafadhali wasiliana na utawala au tuma tena kwa kutumia namba ya simu iliyosajiliwa.Ahsante.";
-        private const string INVALIDFORMATERRORMESSAGE = "Muundo wa ujumbe wako si sahihi.Tafadhali angalia na utume tena.Ahsante.";
+        private const string INVALIDFORMATERRORMESSAGE1 = "Ujumbe wako sio sahihi, soma kwa makini kadi ya maelekezo, andika ujumbe sahihi, uhakiki ujumbe na utume tena.";
+        private const string INVALIDFORMATERRORMESSAGE2 = "Umetuma jumbe mbili zilizokosewa, tafadhali sahihisha makosa uliyofanya na utume tena. Usitume ujumbe mpaka utakapokuwa na uhakika kwamba ujumbe uko sahihi.";
+        private const string INVALIDFORMATERRORMESSAGE3 = "Umetuma jumbe tatu zilizokosewa, tafadhali acha kutuma na uwasiliane na mtawala kwa msaada zaidi.";
         private const string ACTIVATESUCCESS = "Simu yako imewezeshwa.";
-        private string[] passwordList = new string[] { "Simba", "Tembo", "Twiga", "Chui", "Nyati", "Duma", "Fisi", "Kiboko", "Kifaru", "Sungura", "Swala" };
+        private string[] passwordList = new string[] { "Simba", "Tembo", "Twiga", "Chui", "Nyati", "Duma", "Mamba", "Kiboko", "Kifaru", "Sungura", "Swala" };
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
         
 
@@ -129,21 +131,46 @@ namespace Web.Controllers
             {
                 MessageFromDrugShop drugshopMessage = SaveDrugShopMessage(rawSmsReceived);
 
-                if (ManageReceivedSmsService.DoesMessageContainRRCode(drugshopMessage) == false)
+                if (ManageReceivedSmsService.DoesMessageContainRRCode(drugshopMessage) == true)
+                {
+                    responseMessage = "Asante kwa ujumbe wako.IntHEC";
+                    SmsRequestService.SendMessage(responseMessage, rawSmsReceived);
+                }
+                else
                 {
                     string password = GeneratePassword();
                     responseMessage = SendMessageToDrugShopWithPassword(password, rawSmsReceived);
                     SendMessageToDispensary(password, rawSmsReceived, drugshopMessage);
-                } 
+                }
             }
             else
             {
-                responseMessage = INVALIDFORMATERRORMESSAGE;
-                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
-                int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
-                if (noOfWrongMessages % 3 == 0)
-                    EmailMessageService.SendEmail(rawSmsReceived);
+                responseMessage = ProcessWrongMessage(rawSmsReceived);
+            }
 
+            return responseMessage;
+        }
+
+        private string ProcessWrongMessage(RawSmsReceived rawSmsReceived)
+        {
+            string responseMessage = "";
+
+            int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
+            if (noOfWrongMessages % 3 == 1)
+            {
+                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE1, rawSmsReceived);
+                responseMessage = INVALIDFORMATERRORMESSAGE1;
+            }
+            if (noOfWrongMessages % 3 == 2)
+            {
+                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE2, rawSmsReceived);
+                responseMessage = INVALIDFORMATERRORMESSAGE2;
+            }
+            if (noOfWrongMessages % 3 == 0)
+            {
+                responseMessage = INVALIDFORMATERRORMESSAGE3;
+                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE3, rawSmsReceived);
+                EmailMessageService.SendEmail(rawSmsReceived);
             }
 
             return responseMessage;
@@ -185,11 +212,7 @@ namespace Web.Controllers
             }
             else
             {
-                responseMessage = INVALIDFORMATERRORMESSAGE;
-                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE, rawSmsReceived);
-                int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
-                if (noOfWrongMessages % 3 == 0)
-                    EmailMessageService.SendEmail(rawSmsReceived);
+                responseMessage = ProcessWrongMessage(rawSmsReceived);
             }
 
             return responseMessage;
@@ -207,7 +230,7 @@ namespace Web.Controllers
 
         private int SaveWrongMessage(RawSmsReceived rawSmsReceived)
         {
-            var message = QueryWrongMessage.Query().Where(it => it.PhoneNumber == rawSmsReceived.Sender).FirstOrDefault();
+            var message = QueryWrongMessage.Query().Where(it => it.PhoneNumber == rawSmsReceived.Sender && it.SentDate.Date == DateTime.UtcNow.Date).FirstOrDefault();
             if (message != null)
             {
                 message.NoOfWrongMessages++;
@@ -215,7 +238,7 @@ namespace Web.Controllers
                 return message.NoOfWrongMessages;
             }
 
-            WrongMessage newMessage = new WrongMessage { PhoneNumber = rawSmsReceived.Sender, NoOfWrongMessages = 1};
+            WrongMessage newMessage = new WrongMessage { PhoneNumber = rawSmsReceived.Sender, NoOfWrongMessages = 1, SentDate = DateTime.UtcNow};
             SaveCommandWrongMessage.Execute(newMessage);
             return 1;
             

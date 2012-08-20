@@ -99,7 +99,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDrugShop(objectMother.rawSmsIncorectFormatDrugShop)).Return(objectMother.rawSmsIncorectFormatDrugShop);
             objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
             objectMother.saveCommandWrongMessage.Expect(call => call.Execute(Arg<WrongMessage>.Matches(p => p.PhoneNumber == objectMother.rawSmsIncorectFormatDrugShop.Sender)));
-            objectMother.queryWrongMessage.Expect(call => call.Query()).Return(new WrongMessage[] { new WrongMessage { PhoneNumber = objectMother.rawSmsIncorectFormatDrugShop.Sender, NoOfWrongMessages = 2 } }.AsQueryable());
+            objectMother.queryWrongMessage.Expect(call => call.Query()).Return(new WrongMessage[] { new WrongMessage { PhoneNumber = objectMother.rawSmsIncorectFormatDrugShop.Sender, NoOfWrongMessages = 2, SentDate = DateTime.UtcNow} }.AsQueryable());
             objectMother.emailMessageService.Expect(call => call.SendEmail(Arg<RawSmsReceived>.Is.Anything)).Return(true);
             objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
                 p => p.OutpostId == objectMother.outpostId &&
@@ -160,7 +160,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDispensary(objectMother.rawSmsIncorectFormatDispensary)).Return(objectMother.rawSmsIncorectFormatDispensary);
             objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
             objectMother.saveCommandWrongMessage.Expect(call => call.Execute(Arg<WrongMessage>.Matches(p => p.PhoneNumber == objectMother.rawSmsIncorectFormatDispensary.Sender)));
-            objectMother.queryWrongMessage.Expect(call => call.Query()).Return(new WrongMessage[] { new WrongMessage{PhoneNumber = objectMother.rawSmsIncorectFormatDispensary.Sender, NoOfWrongMessages = 2}}.AsQueryable());
+            objectMother.queryWrongMessage.Expect(call => call.Query()).Return(new WrongMessage[] { new WrongMessage{PhoneNumber = objectMother.rawSmsIncorectFormatDispensary.Sender, NoOfWrongMessages = 2, SentDate = DateTime.UtcNow}}.AsQueryable());
             objectMother.emailMessageService.Expect(call => call.SendEmail(Arg<RawSmsReceived>.Is.Anything)).Return(true);
             objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
                 p => p.OutpostId == objectMother.outpostId &&
@@ -218,6 +218,41 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
             objectMother.saveCommandMessageFromDrugShop.VerifyAllExpectations();
             objectMother.smsRequestService.VerifyAllExpectations();
+            var res = result as EmptyResult;
+            Assert.IsNotNull(res);
+        }
+
+        [Test]
+        public void WhenMessageIsFromDrugShop_ContentIsCorrect_AndItContainsRRCode_Itshould_SaveTheRawSms_AndSendSmsToDrugShop()
+        {
+            //Arrange
+            objectMother.manageReceivedSmsService.Expect(call => call.DoesMessageStartWithKeyword(Arg<string>.Is.Anything)).Return(true);
+            objectMother.manageReceivedSmsService.Expect(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Is.Anything)).Return(objectMother.rawSmsCorerctFormatDrugShop);
+            objectMother.manageReceivedSmsService.Expect(call => call.ParseRawSmsReceivedFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop)).Return(objectMother.rawSmsCorerctFormatDrugShop);
+            objectMother.manageReceivedSmsService.Expect(call => call.CreateMessageFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop)).Return(objectMother.messageFromDrugShop);
+            objectMother.smsRequestService.Expect(call => call.SendMessage(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
+            objectMother.manageReceivedSmsService.Expect(call => call.DoesMessageContainRRCode(Arg<MessageFromDrugShop>.Is.Anything)).Return(true);
+
+            objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
+                p => p.OutpostId == objectMother.outpostId &&
+                     p.Sender == ObjectMother.CORRECTPHONENUMBER &&
+                     p.ParseSucceeded == true
+                     )));
+
+            objectMother.saveCommandMessageFromDrugShop.Expect(call => call.Execute(Arg<MessageFromDrugShop>.Matches(
+                p => p.OutpostId == objectMother.outpostId &&
+                     p.Gender == "F" &&
+                     p.IDCode == "12345678"
+                     )));
+
+            //Act
+            var result = objectMother.controller.ReceiveSms(ObjectMother.CORRECTMESSAGEFROMDRUGSHOP, ObjectMother.CORRECTPHONENUMBER);
+
+            //Assert
+            objectMother.manageReceivedSmsService.VerifyAllExpectations();
+            objectMother.smsRequestService.VerifyAllExpectations();
+            objectMother.saveCommandRawSmsReceived.VerifyAllExpectations();
+            objectMother.saveCommandMessageFromDrugShop.VerifyAllExpectations();
             var res = result as EmptyResult;
             Assert.IsNotNull(res);
         }

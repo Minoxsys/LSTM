@@ -10,5 +10,6 @@ namespace Domain
     {
         public virtual string PhoneNumber { get; set; }
         public virtual int NoOfWrongMessages { get; set; }
+        public virtual DateTime SentDate { get; set; }
     }
 }

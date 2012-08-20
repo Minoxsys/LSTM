@@ -281,7 +281,9 @@ Analysis: Product level information at district level
                     fields: ['Treated', 'NotTreated', 'FailedToReport', 'DistinctPatients'],
                     title: 'Number of patients',
                     grid: true,
-                    minimum: 0
+                    minimum: 0,
+                    minorTickSteps: 5,
+                    majorTickSteps: GetTheBiggestValue() - 1
                 }],
                 series: [{
                     type: 'bar',
@@ -561,6 +563,16 @@ Analysis: Product level information at district level
             });
 
             form.dom.submit();
+        }
+
+        function GetTheBiggestValue() {
+            var maxSum = 0;
+            window.feature.reportStore.each(function (record) {
+                var sum = record.get('Treated') + record.get('NotTreated') + record.get('FailedToReport') + record.get('DistinctPatients');
+                if (sum > maxSum)
+                    maxSum = sum;
+            });
+            return maxSum;
         }
 
         var contentRes = window.res.content;
