@@ -25,7 +25,7 @@ namespace Web.Services
                 client.Credentials = new NetworkCredential(fromAddress, fromPassword);
                 client.Send(message);
 
-                return "Email has been sent";
+                return "Email has been sent.";
             }
             catch (Exception ext)
             {
