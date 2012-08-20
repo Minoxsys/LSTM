@@ -24,7 +24,7 @@ namespace Web.Controllers
     public class SendMessageController : Controller
     {
         public ISmsGatewayService smsGatewayService { get; set; }
-        public IEmailService EmailService { get; set; }
+        public ISendEmailService EmailService { get; set; }
         public IFileService FileService { get; set; }
         public IHttpService HttpService { get; set; }
         public ISaveOrUpdateCommand<SentSms> SaveOrUpdateCommand { get; set; }
@@ -109,7 +109,7 @@ namespace Web.Controllers
             return Json(
                    new JsonActionResponse
                    {
-                       Status = ok.ToString(),
+                       Status = " ",
                        Message = ok.ToString()
                    });
         

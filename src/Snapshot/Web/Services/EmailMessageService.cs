@@ -12,9 +12,9 @@ namespace Web.Services
     public class EmailMessageService : IEmailMessageService
     {
         private IQueryService<Outpost> queryServiceOutpost;
-        private IEmailService emailService;
+        private ISendEmailService emailService;
 
-        public EmailMessageService(IQueryService<Outpost> queryServiceOutpost, IEmailService emailService)
+        public EmailMessageService(IQueryService<Outpost> queryServiceOutpost, ISendEmailService emailService)
         {
             this.queryServiceOutpost = queryServiceOutpost;
             this.emailService = emailService;
@@ -32,7 +32,7 @@ namespace Web.Services
             mail.IsBodyHtml = true;
             mail.Body = CreateBodyMessage(rawSmsReceived);
 
-            return emailService.SendMail(mail);
+            return (emailService.SendMail(mail) == "Email has been sent");
         }
 
         private string CreateBodyMessage(RawSmsReceived rawSmsReceived)

@@ -8,6 +8,6 @@ namespace Web.Services
 {
     public interface ISendEmailService
     {
-        bool SendMail(MailMessage message);
+        string SendMail(MailMessage message);
     }
 }

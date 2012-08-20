@@ -12,7 +12,7 @@ namespace Web.Services
         private string host = AppSettings.SendEmailHost;
         private int port = Int32.Parse(AppSettings.SendEmailPort);
 
-        public bool SendMail(System.Net.Mail.MailMessage message)
+        public string SendMail(System.Net.Mail.MailMessage message)
         {
             try
             {
@@ -21,11 +21,11 @@ namespace Web.Services
                 client.Port = port;
                 client.Send(message);
 
-                return true;
+                return "Email has been sent";
             }
-            catch
+            catch (Exception ext)
             {
-                return false;
+                return ext.Message;
             }
         }
     }
