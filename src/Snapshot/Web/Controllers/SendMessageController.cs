@@ -99,7 +99,7 @@ namespace Web.Controllers
 
             mail.To.Add(new MailAddress(TO));
             mail.CC.Add(new MailAddress(CC));
-            mail.From = new MailAddress("snapshot@evozon.com");
+            mail.From = new MailAddress(AppSettings.SendEmailFrom);
             mail.Subject = Subject;
             mail.IsBodyHtml = false;
             mail.Body = Message;

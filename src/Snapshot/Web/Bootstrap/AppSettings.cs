@@ -37,6 +37,7 @@ namespace Web.Bootstrap
         public static string SendEmailHost = ConfigurationManager.AppSettings["SendEmail.Host"];
         public static string SendEmailPort = ConfigurationManager.AppSettings["SendEmail.Port"];
         public static string SendEmailFrom = ConfigurationManager.AppSettings["SendEmail.From"];
+        public static string SendEmailPassword = ConfigurationManager.AppSettings["SendEmail.Password"];
         public static string SendEmailTo = ConfigurationManager.AppSettings["SendEmail.To"];
         public static string SendEmailCC = ConfigurationManager.AppSettings["SendEmail.CC"];
 	}
