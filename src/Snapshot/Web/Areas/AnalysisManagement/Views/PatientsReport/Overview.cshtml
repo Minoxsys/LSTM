@@ -4,7 +4,7 @@
 @using Web.Areas.LocationManagement;
 
 @section page_title{
-Analysis: Patients Report
+Analysis: 'Patient Report
 }
 
 @{
@@ -460,7 +460,7 @@ Analysis: Patients Report
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Patients Report'
+                        text: 'Patient Report'
                     }]
                 }, {
                     xtype: 'container',
@@ -572,40 +572,42 @@ Analysis: Patients Report
                     layout: 'fit',
                     autoScroll: true,
                     columns: [{
-                        header: "Patient initials",
+                        header: "Initials",
                         dataIndex: 'Initials',
-                        flex: 1,
-                        minWidth: 120,
+                        flex: 0.8,
+                        minWidth: 80,
                         menuDisabled: true,
-                        sortable: true
+                        sortable: true,
+                        tdCls: 'wrap'
                     }, {
-                        header: "Patient ID",
+                        header: "ID",
                         dataIndex: 'PatientID',
                         flex: 1,
-                        minWidth: 120,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Patient Gender",
-                        dataIndex: 'Gender',
-                        flex: 1,
-                        minWidth: 120,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Patient age",
-                        dataIndex: 'Age',
-                        flex: 1,
                         minWidth: 100,
+                        align: 'center',
+                        menuDisabled: true,
+                        sortable: true,
+                        tdCls: 'wrap'
+                    }, {
+                        header: "Gender",
+                        dataIndex: 'Gender',
+                        flex: 0.8,
+                        minWidth: 82,
+                        align: 'center',
+                        menuDisabled: true,
+                        sortable: true
+                    }, {
+                        header: "Age",
+                        dataIndex: 'Age',
+                        flex: 0.7,
+                        minWidth: 70,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
                     }, {
                         header: "Shop/ADDO",
                         dataIndex: 'Drugshop',
-                        flex: 1,
+                        flex: 1.2,
                         minWidth: 120,
                         align: 'center',
                         menuDisabled: true,
@@ -613,7 +615,7 @@ Analysis: Patients Report
                     }, {
                         header: "Date of arrival",
                         dataIndex: 'DrugshopDate',
-                        flex: 1,
+                        flex: 1.3,
                         minWidth: 130,
                         align: 'center',
                         menuDisabled: true,
@@ -621,7 +623,7 @@ Analysis: Patients Report
                     }, {
                         header: "Symptom",
                         dataIndex: 'Condition',
-                        flex: 1,
+                        flex: 1.3,
                         minWidth: 130,
                         align: 'center',
                         menuDisabled: true,
@@ -629,7 +631,7 @@ Analysis: Patients Report
                     }, {
                         header: "Dispensary",
                         dataIndex: 'Dispensary',
-                        flex: 1,
+                        flex: 1.2,
                         minWidth: 120,
                         align: 'center',
                         menuDisabled: true,
@@ -637,7 +639,7 @@ Analysis: Patients Report
                     }, {
                         header: "Date of arrival",
                         dataIndex: 'DispensaryDate',
-                        flex: 1,
+                        flex: 1.3,
                         minWidth: 130,
                         align: 'center',
                         menuDisabled: true,
@@ -645,7 +647,7 @@ Analysis: Patients Report
                     }, {
                         header: "Diagnosis",
                         dataIndex: 'Diagnosis',
-                        flex: 1,
+                        flex: 1.3,
                         minWidth: 130,
                         align: 'center',
                         menuDisabled: true,
@@ -653,7 +655,7 @@ Analysis: Patients Report
                     }, {
                         header: "Treatment",
                         dataIndex: 'Treatment',
-                        flex: 1,
+                        flex: 1.3,
                         minWidth: 130,
                         align: 'center',
                         menuDisabled: true,
@@ -661,7 +663,7 @@ Analysis: Patients Report
                     }, {
                         header: "Advice",
                         dataIndex: 'Advice',
-                        flex: 1,
+                        flex: 1.3,
                         minWidth: 130,
                         align: 'center',
                         menuDisabled: true,
