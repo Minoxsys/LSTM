@@ -10,7 +10,7 @@
     <!-- Important: Target must be your Migrations assembly name, not your dll file name.  The dll must be located where dotnet assembly loader can find it (usually same folder as the fluentmigrator dlls) -->
 
     <Migrate Database="sqlserver"
-             Connection="Server=1aa9faad-433d-402b-a63f-a04c00b5267e.sqlserver.sequelizer.com;Database=db1aa9faad433d402ba63fa04c00b5267e;User ID=urabmoypmaycvrfm;Password=2uMCwE2ktvRoFNwhMpYqQUeiHJhYsFhiByXdAFcsXYSgZSeXLXAJZ4VfqD4UwbZV;"
+             Connection="Data Source=(local)\sqlexpress;Database=LSTMDB;Trusted_Connection=true"
              Namespace="Migrations"
 			 Task="rollback"
              Steps="1"
