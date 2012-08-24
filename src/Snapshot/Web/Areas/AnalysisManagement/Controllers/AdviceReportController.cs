@@ -58,7 +58,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 foreach (var dispensary in outpostList)
                 {
                     AdviceReportModel model = new AdviceReportModel();
-                    model.Advice = advice.Code;
+                    model.Advice =  advice.Code;
                     model.Outpost = dispensary.Name + " (" + dispensary.District.Name + ")";
 
                     PatientsModel patients = GetNumberOfPatients(dispensary, inputModel.startDate, inputModel.endDate, advice);
@@ -143,7 +143,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
 
                 AdviceReportModel model = new AdviceReportModel();
-                model.Advice = advice.Code;
+                model.Advice = advice.Code + " (" + advice.Keyword + ")";
                 model.Female = female;
                 model.Male = male;
                 model.NumberOfPatients = total;

@@ -2427,7 +2427,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>53692</DevelopmentServerPort>
+          <DevelopmentServerPort>58254</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/Snapshot</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
