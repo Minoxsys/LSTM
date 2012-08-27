@@ -32,6 +32,8 @@ Analysis: Location Report
     Ext.onReady(function () {
         window.feature = {};
         window.feature.countryComboboxId = "Country-Combo-Box-Google-Map-Report";
+        window.feature.regionComboboxId = "Region-Combo-Box-Google-Map-Report";
+        window.feature.districtComboboxId = "District-Combo-Box-Google-Map-Report";
 
         var outpostMarkersArray = [];
         var districtMarkersArray = [];
@@ -42,7 +44,7 @@ Analysis: Location Report
         googleMapPanelConfig.zoom = 2;
         var googleMapPanel = Ext.create('Ext.feature.GoogleMapPanel', googleMapPanelConfig);
 
-        window.feature.outpostStore = Ext.create('Ext.data.Store', {
+        window.feature.outpostStoreMarkers = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Number', 'Type', 'Coordonates', 'FemaleYounger', 'FemaleOlder', 'MaleYounger', 'MaleOlder'],
             proxy: {
                 type: 'ajax',
@@ -56,7 +58,7 @@ Analysis: Location Report
             }
         });
 
-        window.feature.districtStore = Ext.create('Ext.data.Store', {
+        window.feature.districtStoreMarkers = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Number', 'Type', 'Coordonates', 'FemaleYounger', 'FemaleOlder', 'MaleYounger', 'MaleOlder'],
             proxy: {
                 type: 'ajax',
@@ -70,7 +72,7 @@ Analysis: Location Report
             }
         });
 
-        window.feature.regionStore = Ext.create('Ext.data.Store', {
+        window.feature.regionStoreMarkers = Ext.create('Ext.data.Store', {
             fields: ['Name', 'Number', 'Type', 'Coordonates', 'FemaleYounger', 'FemaleOlder', 'MaleYounger', 'MaleOlder'],
             proxy: {
                 type: 'ajax',
@@ -103,11 +105,66 @@ Analysis: Location Report
             }]
         });
 
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.LocationManagement.LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
+                reader: {
+                    type: 'json',
+                    root: 'regions',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.districtStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.LocationManagement.LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Districts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { regionId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        function ResetCountryDependencies() {
+            var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
+            regionCombobox.setValue(null);
+
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue(null);
+
+        };
+
+        function ResetRegionDependencies() {
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue(null);
+        };
+
         window.feature.country = Ext.create('Ext.form.ComboBox', {
             xtype: 'combobox',
             itemId: window.feature.countryComboboxId,
             store: window.feature.countryStore,
             margin: '0 0 20 50',
+            labelAlign: 'top',
             fieldLabel: 'Select Country',
             displayField: 'Name',
             valueField: 'Id',
@@ -117,14 +174,19 @@ Analysis: Location Report
             typeAhead: false,
             listeners: {
                 'select': function (combo, record) {
+                    ResetCountryDependencies();
+
+                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.regionStore.load();
+
                     var map = googleMapPanel.getMap();
 
-                    window.feature.outpostStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.outpostStore.load();
-                    window.feature.districtStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.districtStore.load();
-                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.regionStore.load(function () {
+                    window.feature.outpostStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.outpostStoreMarkers.load();
+                    window.feature.districtStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.districtStoreMarkers.load();
+                    window.feature.regionStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.regionStoreMarkers.load(function () {
                         map.setZoom(4);
                     });
 
@@ -133,6 +195,98 @@ Analysis: Location Report
                     deleteMarkers(regionMarkersArray);
 
                     centerOnPlace(combo.getRawValue(), map);
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        ResetCountryDependencies();
+
+                    }
+                }
+            }
+        });
+
+        window.feature.region = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.regionComboboxId,
+            store: window.feature.regionStore,
+            labelAlign: 'top',
+            fieldLabel: 'Select Region',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'Region List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    ResetRegionDependencies();
+
+                    window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.districtStore.load();
+
+                    //                    var map = googleMapPanel.getMap();
+
+                    //                    window.feature.outpostStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    //                    window.feature.outpostStoreMarkers.load();
+                    //                    window.feature.districtStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    //                    window.feature.districtStoreMarkers.load();
+                    //                    window.feature.regionStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    //                    window.feature.regionStoreMarkers.load(function () {
+                    //                        map.setZoom(4);
+                    //                    });
+
+                    //                    deleteMarkers(regionMarkersArray);
+                    //                    deleteMarkers(districtMarkersArray);
+                    //                    deleteMarkers(regionMarkersArray);
+
+                    //                    centerOnPlace(combo.getRawValue(), map);
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        ResetRegionDependencies();
+
+                    }
+                }
+            }
+        });
+
+        window.feature.district = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.districtComboboxId,
+            store: window.feature.districtStore,
+            labelAlign: 'top',
+            fieldLabel: 'Select District',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'District List',
+            editable: false,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    //                    var map = googleMapPanel.getMap();
+
+                    //                    window.feature.outpostStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    //                    window.feature.outpostStoreMarkers.load();
+                    //                    window.feature.districtStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    //                    window.feature.districtStoreMarkers.load();
+                    //                    window.feature.regionStoreMarkers.proxy.extraParams.countryId = combo.getValue();
+                    //                    window.feature.regionStoreMarkers.load(function () {
+                    //                        map.setZoom(4);
+                    //                    });
+
+                    //                    deleteMarkers(regionMarkersArray);
+                    //                    deleteMarkers(districtMarkersArray);
+                    //                    deleteMarkers(regionMarkersArray);
+
+                    //                    centerOnPlace(combo.getRawValue(), map);
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                    }
                 }
             }
         });
@@ -159,7 +313,7 @@ Analysis: Location Report
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    height: 35,
+                    height: 60,
                     items: [{
                         xtype: 'container',
                         flex: 1,
@@ -175,7 +329,10 @@ Analysis: Location Report
                             xtype: 'label',
                             cls: 'x-title-label',
                             text: 'Location Report'
-                        }, window.feature.country
+                        },
+                            window.feature.country,
+                            window.feature.region,
+                            window.feature.district
                         ]
                     }]
                 }, {
@@ -262,19 +419,19 @@ Analysis: Location Report
                 if (map.getZoom() >= 7) {
                     deleteMarkers(regionMarkersArray);
                     deleteMarkers(districtMarkersArray);
-                    createMarker(window.feature.outpostStore, outpostMarkersArray, map);
+                    createMarker(window.feature.outpostStoreMarkers, outpostMarkersArray, map);
                 }
 
                 if (map.getZoom() < 7 && map.getZoom() >= 5) {
                     deleteMarkers(outpostMarkersArray);
                     deleteMarkers(regionMarkersArray);
-                    createMarker(window.feature.districtStore, districtMarkersArray, map);
+                    createMarker(window.feature.districtStoreMarkers, districtMarkersArray, map);
                 }
 
                 if (map.getZoom() < 5) {
                     deleteMarkers(districtMarkersArray);
                     deleteMarkers(outpostMarkersArray);
-                    createMarker(window.feature.regionStore, regionMarkersArray, map);
+                    createMarker(window.feature.regionStoreMarkers, regionMarkersArray, map);
                 }
 
             });
