@@ -1,4 +1,18 @@
 [Bb]in
 [Oo]bj
+bin/
+obj/
+src/deploy/
 *.suo
+*.orig
+_ReSharper.EvozonAdministration/
+*resharper*
 *.user
+*.Cache
+*.dotCover
+
+# SAASS #
+#########
+*/*/.sass-cache
+*.scssc
+src/Snapshot/Web/Assets/.sass-cache
