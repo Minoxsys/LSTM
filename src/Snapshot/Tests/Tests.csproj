@@ -106,6 +106,7 @@
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\GoogleMapReportControllerTests\GetOutpostMarkersMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\GoogleMapReportControllerTests\GetRegionMarkersMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\GoogleMapReportControllerTests\ObjectMother.cs" />
+    <Compile Include="Unit\Controllers\Areas\AnalysisManagement\HealthFacilityReportControllerTests\FromGoogleMapMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\HealthFacilityReportControllerTests\GetHealthFacilityReportMethod.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\HealthFacilityReportControllerTests\ObjectMother.cs" />
     <Compile Include="Unit\Controllers\Areas\AnalysisManagement\PatientsReportControllerTests\GetAdviceMethod.cs" />

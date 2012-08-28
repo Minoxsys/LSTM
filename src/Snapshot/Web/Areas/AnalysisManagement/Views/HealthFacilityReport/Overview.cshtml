@@ -1,7 +1,8 @@
 ﻿@using Domain
-@using Microsoft.Web.Mvc;
-@using Web.Areas.AnalysisManagement;
-@using Web.Areas.LocationManagement;
+@using Microsoft.Web.Mvc
+@using Web.Areas.AnalysisManagement
+@using Web.Areas.LocationManagement
+@model Web.Areas.AnalysisManagement.Models.HealthFacilityReport.FromGoogleMapModel
 
 @section page_title{
 Analysis: Health Facility Report
@@ -647,12 +648,43 @@ Analysis: Health Facility Report
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
+
         window.feature.outpostTypeStore.load(function () {
             var combo = window.feature.container.down('#' + window.feature.outpostTypeComboboxId);
             combo.setValue(window.feature.outpostTypeStore.getAt(0).get('Type'));
+            if ('@Model.TypeId' != '@null') {
+                combo.setValue(window.feature.outpostTypeStore.getAt('@Model.TypeId').get('Type'));
+            }
+
             window.feature.reportStore.proxy.extraParams.outpostType = combo.getValue();
-            window.feature.reportStore.load();
+
+            if ('@Model.CountryId' != '@Guid.Empty') {
+                window.feature.countryStore.load();
+                window.feature.container.down('#' + window.feature.countryComboboxId).setValue('@Model.CountryId');
+
+                window.feature.regionStore.proxy.extraParams.countryId = '@Model.CountryId';
+                window.feature.regionStore.load();
+
+                window.feature.reportStore.proxy.extraParams.countryId = '@Model.CountryId';
+
+                if ('@Model.RegionId' != '@Guid.Empty') {
+                    window.feature.container.down('#' + window.feature.regionComboboxId).setValue('@Model.RegionId');
+
+                    window.feature.districtStore.proxy.extraParams.regionId = '@Model.RegionId';
+                    window.feature.districtStore.load();
+
+                    window.feature.reportStore.proxy.extraParams.regionId = '@Model.RegionId';
+
+                    if ('@Model.DistrictId' != '@Guid.Empty') {
+                        window.feature.container.down('#' + window.feature.districtComboboxId).setValue('@Model.DistrictId');
+                        window.feature.reportStore.proxy.extraParams.districtId = '@Model.DistrictId';
+                    }
+                }
+
+                window.feature.reportStore.load();
+            }
         });
 
+        
     });
 </script>

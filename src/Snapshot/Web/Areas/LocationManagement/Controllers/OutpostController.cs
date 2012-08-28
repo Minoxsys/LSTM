@@ -198,7 +198,7 @@ namespace Web.Areas.LocationManagement.Controllers
         {
             LoadUserAndClient();
 
-            var outpostTypes = QueryOutpostTypes.Query();
+            var outpostTypes = QueryOutpostTypes.Query().OrderBy(it => it.Type);
             int totalItems = outpostTypes.Count();
 
             var outpostTypesModelListProjection = (from type in outpostTypes.ToList()

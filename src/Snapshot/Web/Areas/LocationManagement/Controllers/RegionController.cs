@@ -55,6 +55,7 @@ namespace Web.Areas.LocationManagement.Controllers
         }
 
         [HttpGet]
+        [Requires(Permissions = "Region.View")]
         public ActionResult FromCountries(Guid? countryId)
         {
             if (countryId.HasValue)

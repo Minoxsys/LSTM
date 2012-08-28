@@ -36,7 +36,62 @@ namespace Web.Areas.AnalysisManagement.Controllers
         [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
         {
-            return View();
+            Guid? countryId = (Guid?)TempData["GoogleMapCountryId"];
+            Guid? regionId = (Guid?)TempData["GoogleMapRegionId"];
+            Guid? districtId = (Guid?)TempData["GoogleMapDistrictId"];
+            int? type = (int?)TempData["GoogleMapType"];
+
+            FromGoogleMapModel model = new FromGoogleMapModel();
+            if (countryId.HasValue)
+                model.CountryId = countryId.Value;
+            if (regionId.HasValue)
+                model.RegionId = regionId.Value;
+            if (districtId.HasValue)
+                model.DistrictId = districtId.Value;
+            if (type.HasValue)
+                model.TypeId = type.Value;               
+
+            return View("Overview", model);
+        }
+
+        [HttpGet]
+        [Requires(Permissions = "Report.View")]
+        public ActionResult FromGoogleMap(Guid? id, string location, int? type)
+        {
+            TempData.Clear();
+
+            if (type.HasValue)
+                TempData.Add("GoogleMapType", type);
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                if (id.HasValue){
+                    if (location == "outpost")
+                    {
+                        Outpost outpost = QueryOutpost.Load(id.Value);
+                        TempData.Add("GoogleMapCountryId", outpost.Country.Id);
+                        TempData.Add("GoogleMapRegionId", outpost.Region.Id);
+                        TempData.Add("GoogleMapDistrictId", outpost.District.Id);
+                    }
+
+                    if (location == "district")
+                    {
+                        District district = QueryDistrict.Load(id.Value);
+                        TempData.Add("GoogleMapCountryId", district.Region.Country.Id);
+                        TempData.Add("GoogleMapRegionId", district.Region.Id);
+                        TempData.Add("GoogleMapDistrictId", district.Id);
+                    }
+
+                    if (location == "region")
+                    {
+                        Region region = QueryRegion.Load(id.Value);
+                        TempData.Add("GoogleMapCountryId", region.Country.Id);
+                        TempData.Add("GoogleMapRegionId", region.Id);
+                    }
+                }
+            }
+
+            return RedirectToAction("Overview", "HealthFacilityReport");
         }
 
         public JsonResult GetHealthFacilityReport(HealthFacilityIndexModel inputModel)

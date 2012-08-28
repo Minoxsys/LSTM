@@ -55,6 +55,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var outpostModelListProjection = (from outpost in outpostDataQuery.ToList()
                                               select new MarkerModel
                                               {
+                                                  Id = outpost.Id,
                                                   Name = outpost.Name,
                                                   Number = GetNumberOfPatientsFor(outpost).ToString(),
                                                   Type = SetType(outpost.OutpostType.Type),
@@ -148,6 +149,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var districtModelListProjection = (from district in districtDataQuery.ToList()
                                               select new MarkerModel
                                               {
+                                                  Id = district.Id,
                                                   Name = district.Name,
                                                   Number = GetNumberOfPatientsFor(district, null).ToString(),
                                                   Type = "drugshop",
@@ -232,6 +234,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             var regionModelListProjection = (from region in regionDataQuery.ToList()
                                                select new MarkerModel
                                                {
+                                                   Id = region.Id,
                                                    Name = region.Name,
                                                    Number = GetNumberOfPatientsFor(null, region).ToString(),
                                                    Type = "drugshop",

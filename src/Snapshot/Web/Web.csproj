@@ -170,6 +170,7 @@
     <Compile Include="Areas\AnalysisManagement\Models\GoogleMapReport\FilterModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\GoogleMapReport\MarkerIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\GoogleMapReport\MarkerModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\HealthFacilityReport\FromGoogleMapModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\HealthFacilityReport\HealthFacilityIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\HealthFacilityReport\HealthFacilityModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\HealthFacilityReport\HealthFacilityIndexModel.cs" />
