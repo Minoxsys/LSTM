@@ -29,8 +29,7 @@ Snapshot Application
             },
             items: [{
                 xtype: 'container',
-                flex: 1,
-                cls: "dashboard-img",
+                height: 251,
                 layout: {
                     type: 'hbox'
                 },
@@ -39,17 +38,17 @@ Snapshot Application
                     autoEl: { html: "<a href='@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='570' onmouseout=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/map.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" onmouseover=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/maphover.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/map.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>"},
                 }, {
                     xtype: 'image',
-                    autoEl: { html: "<a href='@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='570' onmouseout=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/summary.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" onmouseover=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/summaryhover.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/summary.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'</a>"}
+                    autoEl: { html: "<a href='@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='570' onmouseout=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/summary.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" onmouseover=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/summaryhover.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/summary.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>"}
                 }]
             }, {
                 xtype: 'image',
                 height: 250,
-                autoEl: { html: "<a href='@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='1140' onmouseout=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patients.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" onmouseover=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patientshover.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patients.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'</a>"}
+                autoEl: { html: "<a href='@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='250' width='1140' onmouseout=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patients.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" onmouseover=\"this.src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patientshover.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'\" src='@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Patients.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>"}
             },{
                 xtype: 'image',
-                width: 1140,
+                width: 200,
                 height: 30,
-                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copyright.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                autoEl: { html: "<img height='30' width='1140' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/copyright.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" }
             }]
         });
 
