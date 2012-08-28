@@ -54,7 +54,7 @@ Analysis: Location Report
                     root: 'Markers',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { countryId: '' }
+                extraParams: { countryId: '', regionId: '', districtId: '' }
             }
         });
 
@@ -68,7 +68,7 @@ Analysis: Location Report
                     root: 'Markers',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { countryId: '' }
+                extraParams: { countryId: '', regionId: '', districtId: '' }
             }
         });
 
@@ -82,7 +82,7 @@ Analysis: Location Report
                     root: 'Markers',
                     totalProperty: 'TotalItems'
                 },
-                extraParams: { countryId: '' }
+                extraParams: { countryId: '', regionId: '', districtId: '' }
             }
         });
 
@@ -159,6 +159,28 @@ Analysis: Location Report
             districtCombobox.setValue(null);
         };
 
+        function ResetDistrictMarkers() {
+            window.feature.outpostStoreMarkers.proxy.extraParams.districtId = '';
+            window.feature.districtStoreMarkers.proxy.extraParams.districtId = '';
+            window.feature.regionStoreMarkers.proxy.extraParams.districtId = '';
+        }
+
+        function ResetRegionMarkers() {
+            window.feature.outpostStoreMarkers.proxy.extraParams.regionId = '';
+            window.feature.districtStoreMarkers.proxy.extraParams.regionId = '';
+            window.feature.regionStoreMarkers.proxy.extraParams.regionId = '';
+
+            ResetDistrictMarkers();
+        }
+
+        function ResetCountryMarkers() {
+            window.feature.outpostStoreMarkers.proxy.extraParams.countryId = '';
+            window.feature.districtStoreMarkers.proxy.extraParams.countryId = '';
+            window.feature.regionStoreMarkers.proxy.extraParams.countryId = '';
+
+            ResetRegionMarkers();
+        }
+
         window.feature.country = Ext.create('Ext.form.ComboBox', {
             xtype: 'combobox',
             itemId: window.feature.countryComboboxId,
@@ -179,7 +201,13 @@ Analysis: Location Report
                     window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.regionStore.load();
 
+                    ResetRegionMarkers();
+
                     var map = googleMapPanel.getMap();
+
+                    deleteMarkers(regionMarkersArray);
+                    deleteMarkers(districtMarkersArray);
+                    deleteMarkers(outpostMarkersArray);
 
                     window.feature.outpostStoreMarkers.proxy.extraParams.countryId = combo.getValue();
                     window.feature.outpostStoreMarkers.load();
@@ -190,10 +218,6 @@ Analysis: Location Report
                         map.setZoom(4);
                     });
 
-                    deleteMarkers(regionMarkersArray);
-                    deleteMarkers(districtMarkersArray);
-                    deleteMarkers(regionMarkersArray);
-
                     centerOnPlace(combo.getRawValue(), map);
                 },
                 specialkey: function (field, e) {
@@ -201,6 +225,18 @@ Analysis: Location Report
                         field.setValue(null);
                         ResetCountryDependencies();
 
+                        var map = googleMapPanel.getMap();
+                        deleteMarkers(regionMarkersArray);
+                        deleteMarkers(districtMarkersArray);
+                        deleteMarkers(outpostMarkersArray);
+
+                        ResetCountryMarkers();
+
+                        window.feature.outpostStoreMarkers.load();
+                        window.feature.districtStoreMarkers.load();
+                        window.feature.regionStoreMarkers.load(function () {
+                            map.setZoom(3);
+                        });
                     }
                 }
             }
@@ -225,28 +261,39 @@ Analysis: Location Report
                     window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.districtStore.load();
 
-                    //                    var map = googleMapPanel.getMap();
+                    ResetDistrictMarkers();
 
-                    //                    window.feature.outpostStoreMarkers.proxy.extraParams.countryId = combo.getValue();
-                    //                    window.feature.outpostStoreMarkers.load();
-                    //                    window.feature.districtStoreMarkers.proxy.extraParams.countryId = combo.getValue();
-                    //                    window.feature.districtStoreMarkers.load();
-                    //                    window.feature.regionStoreMarkers.proxy.extraParams.countryId = combo.getValue();
-                    //                    window.feature.regionStoreMarkers.load(function () {
-                    //                        map.setZoom(4);
-                    //                    });
+                    var map = googleMapPanel.getMap();
 
-                    //                    deleteMarkers(regionMarkersArray);
-                    //                    deleteMarkers(districtMarkersArray);
-                    //                    deleteMarkers(regionMarkersArray);
+                    deleteMarkers(regionMarkersArray);
+                    deleteMarkers(districtMarkersArray);
+                    deleteMarkers(outpostMarkersArray);
 
-                    //                    centerOnPlace(combo.getRawValue(), map);
+                    window.feature.outpostStoreMarkers.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.outpostStoreMarkers.load();
+                    window.feature.regionStoreMarkers.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.regionStoreMarkers.load();
+                    window.feature.districtStoreMarkers.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.districtStoreMarkers.load(function () {
+                        map.setZoom(5);
+                    });
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetRegionDependencies();
 
+                        var map = googleMapPanel.getMap();
+                        deleteMarkers(districtMarkersArray);
+                        deleteMarkers(outpostMarkersArray);
+
+                        ResetRegionMarkers();
+
+                        window.feature.outpostStoreMarkers.load();
+                        window.feature.districtStoreMarkers.load();
+                        window.feature.regionStoreMarkers.load(function () {
+                            map.setZoom(4);
+                        });
                     }
                 }
             }
@@ -266,26 +313,32 @@ Analysis: Location Report
             typeAhead: false,
             listeners: {
                 'select': function (combo, record) {
-                    //                    var map = googleMapPanel.getMap();
+                    var map = googleMapPanel.getMap();
 
-                    //                    window.feature.outpostStoreMarkers.proxy.extraParams.countryId = combo.getValue();
-                    //                    window.feature.outpostStoreMarkers.load();
-                    //                    window.feature.districtStoreMarkers.proxy.extraParams.countryId = combo.getValue();
-                    //                    window.feature.districtStoreMarkers.load();
-                    //                    window.feature.regionStoreMarkers.proxy.extraParams.countryId = combo.getValue();
-                    //                    window.feature.regionStoreMarkers.load(function () {
-                    //                        map.setZoom(4);
-                    //                    });
+                    deleteMarkers(districtMarkersArray);
+                    deleteMarkers(outpostMarkersArray);
 
-                    //                    deleteMarkers(regionMarkersArray);
-                    //                    deleteMarkers(districtMarkersArray);
-                    //                    deleteMarkers(regionMarkersArray);
-
-                    //                    centerOnPlace(combo.getRawValue(), map);
+                    window.feature.districtStoreMarkers.proxy.extraParams.districtId = combo.getValue();
+                    window.feature.districtStoreMarkers.load();
+                    window.feature.outpostStoreMarkers.proxy.extraParams.districtId = combo.getValue();
+                    window.feature.outpostStoreMarkers.load(function () {
+                        map.setZoom(7);
+                    });
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
+
+                        var map = googleMapPanel.getMap();
+                        deleteMarkers(outpostMarkersArray);
+
+                        ResetDistrictMarkers();
+
+                        window.feature.outpostStoreMarkers.load();
+                        window.feature.districtStoreMarkers.load();
+                        window.feature.regionStoreMarkers.load(function () {
+                            map.setZoom(5);
+                        });
                     }
                 }
             }
@@ -434,6 +487,8 @@ Analysis: Location Report
                     createMarker(window.feature.regionStoreMarkers, regionMarkersArray, map);
                 }
 
+                var countryCombobox = window.feature.container.down('#' + window.feature.countryComboboxId);
+                centerOnPlace(countryCombobox.getRawValue(), map);
             });
         }
 

@@ -38,11 +38,18 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetOutpostMarkers(Guid countryId)
+        public JsonResult GetOutpostMarkers(FilterModel model)
         {
             LoadUserAndClient();
-            
-            var outpostDataQuery = QueryOutposts.Query().Where(it => it.Client == _client && it.Country.Id == countryId);
+            var outpostDataQuery = QueryOutposts.Query().Where(it => it.Client == _client);
+
+            if (Guid.Empty != model.countryId)
+                outpostDataQuery = outpostDataQuery.Where(it => it.Country.Id == model.countryId);
+            if (Guid.Empty != model.regionId)
+                outpostDataQuery = outpostDataQuery.Where(it => it.Region.Id == model.regionId);
+            if (Guid.Empty != model.districtId)
+                outpostDataQuery = outpostDataQuery.Where(it => it.District.Id == model.districtId);
+
             var totalItems = outpostDataQuery.Count();
 
             var outpostModelListProjection = (from outpost in outpostDataQuery.ToList()
@@ -125,11 +132,18 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetDistrictMarkers(Guid countryId)
+        public JsonResult GetDistrictMarkers(FilterModel model)
         {
             LoadUserAndClient();
 
-            var districtDataQuery = QueryDistricts.Query().Where(it => it.Client == _client && it.Region.Country.Id == countryId);
+            var districtDataQuery = QueryDistricts.Query().Where(it => it.Client == _client);
+
+            if (Guid.Empty != model.countryId)
+                districtDataQuery = districtDataQuery.Where(it => it.Region.Country.Id == model.countryId);
+            if (Guid.Empty != model.regionId)
+                districtDataQuery = districtDataQuery.Where(it => it.Region.Id == model.regionId);
+            if (Guid.Empty != model.districtId)
+                districtDataQuery = districtDataQuery.Where(it => it.Id == model.districtId);
 
             var districtModelListProjection = (from district in districtDataQuery.ToList()
                                               select new MarkerModel
@@ -202,14 +216,20 @@ namespace Web.Areas.AnalysisManagement.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetRegionMarkers(Guid countryId)
+        public JsonResult GetRegionMarkers(FilterModel model)
         {
             LoadUserAndClient();
 
-            var regionDataQuery = QueryRegions.Query().Where(it => it.Client == _client && it.Country.Id == countryId);
+            var regionDataQuery = QueryRegions.Query().Where(it => it.Client == _client);
+
+            if (Guid.Empty != model.countryId)
+                regionDataQuery = regionDataQuery.Where(it => it.Country.Id == model.countryId);
+            if (Guid.Empty != model.regionId)
+                regionDataQuery = regionDataQuery.Where(it => it.Id == model.regionId);
+
             var totalItems = regionDataQuery.Count();
 
-            var districtModelListProjection = (from region in regionDataQuery.ToList()
+            var regionModelListProjection = (from region in regionDataQuery.ToList()
                                                select new MarkerModel
                                                {
                                                    Name = region.Name,
@@ -224,7 +244,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             return Json(new MarkerIndexOutputModel
             {
-                Markers = districtModelListProjection,
+                Markers = regionModelListProjection,
                 TotalItems = totalItems
             }, JsonRequestBehavior.AllowGet);
         }

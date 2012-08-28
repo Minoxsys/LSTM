@@ -38,6 +38,12 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
         public Region region;
         public Guid regionId;
         public Guid countryId;
+        public Guid regionId2;
+        public Region region2;
+        public Guid districtId22;
+        public District district22;
+        public Guid outpostId22;
+        public Outpost outpost22;
 
         private const string CLIENT_NAME = "Ion";
         private const string USER_NAME = "IonPopescu";
@@ -111,7 +117,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
             region.Name = "Region";
             region.Country = country;
             region.Client = client;
-
+            
             district1Id = Guid.NewGuid();
             district1 = MockRepository.GeneratePartialMock<District>();
             district1.Stub(c => c.Id).Return(district1Id);
@@ -148,13 +154,37 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
             dispensary.OutpostType = new OutpostType { Name = "Dispensary", Type = 1 };
             dispensary.Latitude = "(12.123212321,4.345434567)";
 
+            regionId2 = Guid.NewGuid();
+            region2 = MockRepository.GeneratePartialMock<Region>();
+            region2.Stub(c => c.Id).Return(regionId2);
+            region2.Name = "Region2";
+            region2.Country = country;
+            region2.Client = client;
+
+            districtId22 = Guid.NewGuid();
+            district22 = MockRepository.GeneratePartialMock<District>();
+            district22.Stub(c => c.Id).Return(districtId22);
+            district22.Name = "District22";
+            district22.Region = region2;
+            district22.Client = client;
+
+            outpostId22 = Guid.NewGuid();
+            outpost22 = MockRepository.GeneratePartialMock<Outpost>();
+            outpost22.Stub(c => c.Id).Return(outpostId22);
+            outpost22.Name = "Outpost22";
+            outpost22.Region = region2;
+            outpost22.Country = country;
+            outpost22.District = district22;
+            outpost22.Client = client;
+            outpost22.OutpostType = new OutpostType { Name = "DrugShop", Type = 0 };
+            outpost22.Latitude = "(2.123212321,5.345434567)";
         }
 
         public IQueryable<MessageFromDispensary> ListOfMessageFromDispensary()
         {
             List<MessageFromDispensary> list = new List<MessageFromDispensary>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 9; i++)
             {
                 list.Add(new MessageFromDispensary
                 {
@@ -164,6 +194,7 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
                     MessageFromDrugShop = new MessageFromDrugShop { Gender = (i % 2 == 0) ? "F" : "M", BirthDate = DateTime.UtcNow.AddYears(-i * 5) }
                 });
             }
+
             return list.AsQueryable();
         }
 
@@ -181,6 +212,15 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.GoogleMapReportControl
                     BirthDate = DateTime.UtcNow.AddYears(-i*5)
                 });
             }
+
+            list.Add(new MessageFromDrugShop
+            {
+                OutpostId = outpostId22,
+                SentDate = DateTime.UtcNow,
+                Gender = "M",
+                BirthDate = DateTime.UtcNow.AddYears(-22)
+            });
+
             return list.AsQueryable();
         }
     }

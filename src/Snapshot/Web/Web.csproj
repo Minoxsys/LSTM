@@ -167,6 +167,7 @@
     <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\DiagnosisReportIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\DiagnosisReportModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\DiagnosisReport\PatientsModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\GoogleMapReport\FilterModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\GoogleMapReport\MarkerIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\GoogleMapReport\MarkerModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\HealthFacilityReport\HealthFacilityIndexOutputModel.cs" />
