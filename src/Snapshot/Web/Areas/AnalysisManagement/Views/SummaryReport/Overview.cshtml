@@ -179,6 +179,7 @@ Analysis: Summary Report
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetCountryDependencies();
+                        window.feature.reportStore.proxy.extraParams.countryId = '';
                         window.feature.reportStore.load();
                     }
                 }
@@ -210,6 +211,7 @@ Analysis: Summary Report
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetRegionDependencies();
+                        window.feature.reportStore.proxy.extraParams.regionId = '';
                         window.feature.reportStore.load();
                     }
                 }
@@ -236,7 +238,7 @@ Analysis: Summary Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.districtId = "";
+                        window.feature.reportStore.proxy.extraParams.districtId = '';
                         window.feature.reportStore.load();
                     }
                 }
