@@ -453,9 +453,14 @@ Analysis: Location Report
                         content: "<h1>" + marker.title + "</h1><br/><p><h3>Female</h3></p><p>Younger than 20 years: " + item.get('FemaleYounger') + "</p><p>Older than 20 years: " + item.get('FemaleOlder') + "</p><br/><p><h3>Male</h3></p><p>Younger than 20 years: " + item.get('MaleYounger') + "</p><p>Older than 20 years: " + item.get('MaleOlder') + "</p>"
                     });
 
-                    google.maps.event.addListener(marker, 'click', function () {
+                    google.maps.event.addListener(marker, 'mouseover', function () {
                         infowindow.open(map, marker);
                     });
+
+                    google.maps.event.addListener(marker, 'mouseout', function () {
+                        infowindow.close(map, marker);
+                    });
+
 
                     markerArray[i] = marker;
                     i = i + 1;
