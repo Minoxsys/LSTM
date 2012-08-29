@@ -35,8 +35,13 @@ Analysis: Diagnosis Report
         window.feature.countryComboboxId = 'Overview-Combobox-Country-Diagnosis-Report';
         window.feature.regionComboboxId = 'Overview-Combobox-Region-Diagnosis-Report';
         window.feature.districtComboboxId = 'Overview-Combobox-District-Diagnosis-Report';
-        window.feature.StartDateId = 'Start-Date-Diagnosis-Report';
-        window.feature.EndDateId = 'End-Date-Diagnosis-Report';
+        window.feature.StartDateId = 'Overview-Start-Date-Diagnosis-Report';
+        window.feature.EndDateId = 'Overview-End-Date-Diagnosis-Report';
+        window.feature.modalCountryComboboxId = 'Overview-Window-Combobox-Country-Diagnosis-Report';
+        window.feature.modalRegionComboboxId = 'Overview-Window-Combobox-Region-Diagnosis-Report';
+        window.feature.modalDistrictComboboxId = 'Overview-Window-Combobox-District-Diagnosis-Report';
+        window.feature.modalStartDateId = 'Overview-Window-Start-Date-Diagnosis-Report';
+        window.feature.modalEndDateId = 'Overview-Window-End-Date-Diagnosis-Report';
         window.feature.DivChartContainer = 'Chart-Diagnosis-Report-Container-Id';
         window.feature.exportStartDate = "";
         window.feature.exportEndDate = "";
@@ -171,7 +176,7 @@ Analysis: Diagnosis Report
             }]
         });
 
-        function ResetCountryDependencies() {
+        function ResetCountryOverviewDependencies() {
             var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
             regionCombobox.setValue(null);
 
@@ -182,17 +187,18 @@ Analysis: Diagnosis Report
             window.feature.reportStore.proxy.extraParams.districtId = "";
         };
 
-        function ResetRegionDependencies() {
+        function ResetRegionOverviewDependencies() {
             var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
             districtCombobox.setValue(null);
 
             window.feature.reportStore.proxy.extraParams.districtId = "";
         };
 
-        window.feature.countryComnobox = Ext.create('Ext.form.ComboBox', {
+        window.feature.countryCombobox = Ext.create('Ext.form.ComboBox', {
             xtype: 'combobox',
             itemId: window.feature.countryComboboxId,
             store: window.feature.countryStore,
+            width: 170,
             labelAlign: 'top',
             fieldLabel: 'Selected Country',
             displayField: 'Name',
@@ -203,7 +209,7 @@ Analysis: Diagnosis Report
             typeAhead: false,
             listeners: {
                 'select': function (combo, record) {
-                    ResetCountryDependencies();
+                    ResetCountryOverviewDependencies();
 
                     window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.regionStore.load();
@@ -214,7 +220,7 @@ Analysis: Diagnosis Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        ResetCountryDependencies();
+                        ResetCountryOverviewDependencies();
                         window.feature.reportStore.proxy.extraParams.countryId = '';
                         window.feature.reportStore.load();
                     }
@@ -225,6 +231,7 @@ Analysis: Diagnosis Report
             xtype: 'combobox',
             itemId: window.feature.regionComboboxId,
             store: window.feature.regionStore,
+            width: 170,
             labelAlign: 'top',
             fieldLabel: 'Selected Region',
             displayField: 'Name',
@@ -235,7 +242,7 @@ Analysis: Diagnosis Report
             typeAhead: false,
             listeners: {
                 'select': function (combo, record) {
-                    ResetRegionDependencies();
+                    ResetRegionOverviewDependencies();
 
                     window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.districtStore.load();
@@ -246,7 +253,7 @@ Analysis: Diagnosis Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        ResetRegionDependencies();
+                        ResetRegionOverviewDependencies();
                         window.feature.reportStore.proxy.extraParams.regionId = '';
                         window.feature.reportStore.load();
                     }
@@ -258,6 +265,7 @@ Analysis: Diagnosis Report
             xtype: 'combobox',
             itemId: window.feature.districtComboboxId,
             store: window.feature.districtStore,
+            width: 170,
             labelAlign: 'top',
             fieldLabel: 'Selected District',
             displayField: 'Name',
@@ -302,9 +310,9 @@ Analysis: Diagnosis Report
                 animate: true,
                 shadow: true,
                 style: 'background:#fff',
-                minHeight: 300,
-                maxHeight: 600,
-                flex: 1,
+                minHeight: 600,
+                minWidth: 1070,
+                margin: '5 5 5 5',
                 store: window.feature.chartStore,
                 theme: 'MyTheme',
                 axes: [{
@@ -337,7 +345,7 @@ Analysis: Diagnosis Report
                         width: 140,
                         height: 28,
                         renderer: function (storeItem, item) {
-                            this.setTitle(item.value[0] + " "+ String(item.value[1]) + ' Patients');
+                            this.setTitle(String(item.value[1]) + ' Patients - ' + item.value[0]);
                         }
                     },
                     xField: 'Diagnosis',
@@ -351,6 +359,282 @@ Analysis: Diagnosis Report
         };
 
         var showSummary = true;
+        window.feature.modal = Ext.define('Ext.feature.DiagnosisReport.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            title: 'Diagnosis Report',
+            height: 700,
+            width: 1055,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+
+            initComponent: function () {
+                var me = this;
+                var countryOverviewCombobox = window.feature.container.down('#' + window.feature.countryComboboxId);
+                var regionOverviewCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
+                var districtOverviewCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+                var startDateOverviewCombobox = window.feature.container.down('#' + window.feature.StartDateId);
+                var endDateOverviewCombobox = window.feature.container.down('#' + window.feature.EndDateId);
+                var outpostTypeOverviewCombobox = window.feature.container.down('#' + window.feature.outpostTypeComboboxId);
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'container',
+                        height: 65,
+                        layout: 'fit',
+                        items: [{
+                            xtype: 'container',
+                            height: 65,
+                            autoScroll: true,
+                            scrollable:true,
+                            layout: {
+                                align: 'stretch',
+                                type: 'hbox'
+                            },
+                            padding: '0 0 0 7',
+                            items: [{
+                                xtype: 'combobox',
+                                itemId: window.feature.modalCountryComboboxId,
+                                store: window.feature.countryStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected Country',
+                                displayField: 'Name',
+                                valueField: 'Id',
+                                labelClsExtra: 'combo-label',
+                                emptyText: 'Country List',
+                                value: countryOverviewCombobox.getValue(),
+                                editable: false,
+                                typeAhead: false,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        ResetCountryOverviewDependencies();
+                                        countryOverviewCombobox.setValue(combo.getValue());
+                                        me.down('#' + window.feature.modalRegionComboboxId).setValue(null);
+                                        me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+
+                                        window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.regionStore.load();
+
+                                        window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            countryOverviewCombobox.setValue(null)
+                                            ResetCountryOverviewDependencies();
+                                            me.down('#' + window.feature.modalRegionComboboxId).setValue(null);
+                                            me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'combobox',
+                                itemId: window.feature.modalRegionComboboxId,
+                                store: window.feature.regionStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected Region',
+                                displayField: 'Name',
+                                valueField: 'Id',
+                                labelClsExtra: 'combo-label',
+                                emptyText: 'Region List',
+                                value: regionOverviewCombobox.getValue(),
+                                editable: false,
+                                typeAhead: false,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        ResetRegionOverviewDependencies();
+                                        regionOverviewCombobox.setValue(combo.getValue());
+                                        me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+
+                                        window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.districtStore.load();
+
+                                        window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            ResetRegionOverviewDependencies();
+                                            regionOverviewCombobox.setValue(null);
+                                            me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'combobox',
+                                itemId: window.feature.modalDistrictComboboxId,
+                                store: window.feature.districtStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected District',
+                                displayField: 'Name',
+                                labelClsExtra: 'combo-label',
+                                valueField: 'Id',
+                                emptyText: 'District List',
+                                value: districtOverviewCombobox.getValue(),
+                                editable: false,
+                                typeAhead: false,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        districtOverviewCombobox.setValue(combo.getValue());
+
+                                        window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            districtOverviewCombobox.setValue(null);
+                                            window.feature.reportStore.proxy.extraParams.districtId = "";
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'datefield',
+                                fieldLabel: 'Start Date',
+                                width: 170,
+                                format: 'd-M-Y',
+                                labelAlign: 'top',
+                                itemId: window.feature.modalStartDateId,
+                                value: startDateOverviewCombobox.getValue(),
+                                listeners: {
+                                    select: function (t, n, o) {
+                                        var date = t.getValue();
+                                        window.feature.exportStartDate = date;
+                                        startDateOverviewCombobox.setValue(date);
+                                        window.feature.reportStore.proxy.extraParams.startDate = date;
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            startDateOverviewCombobox.setValue(null);
+                                            window.feature.reportStore.proxy.extraParams.startDate = "";
+                                            window.feature.exportStartDate = "";
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'datefield',
+                                fieldLabel: 'End Date',
+                                width: 170,
+                                labelAlign: 'top',
+                                format: 'd-M-Y',
+                                itemId: window.feature.modalEndDateId,
+                                value: endDateOverviewCombobox.getValue(),
+                                listeners: {
+                                    select: function (t, n, o) {
+                                        var date = t.getValue();
+                                        window.feature.exportEndDate = date;
+                                        endDateOverviewCombobox.setValue(date);
+                                        window.feature.reportStore.proxy.extraParams.endDate = date;
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            endDateOverviewCombobox.setValue(null);
+                                            window.feature.reportStore.proxy.extraParams.endDate = "";
+                                            window.feature.exportEndDate = "";
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }]
+                        }]
+                    },{
+                        xtype: 'gridpanel',
+                        cls: 'white-border',
+                        store: window.feature.reportStore,
+                        loadMask: true,
+                        disableSelection: true,
+                        flex: 3,
+                        layout: 'fit',
+                        autoScroll: true,
+                        features: [{
+                            id: 'group',
+                            ftype: 'groupingsummary',
+                            enableGroupingMenu: false
+                        }],
+                        columns: [{
+                            header: "Diagnosis / Health Facility",
+                            dataIndex: 'Outpost',
+                            flex: 2,
+                            minWidth: 200,
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            header: "Females",
+                            dataIndex: 'Female',
+                            flex: 1,
+                            minWidth: 100,
+                            menuDisabled: true,
+                            sortable: true,
+                            align: 'center',
+                            summaryType: 'sum',
+                            summaryRenderer: function (value, summaryData, dataIndex) {
+                                return value + ' females';
+                            },
+                            field: {
+                                xtype: 'numberfield'
+                            }
+                        }, {
+                            header: "Males",
+                            dataIndex: 'Male',
+                            flex: 1,
+                            minWidth: 100,
+                            menuDisabled: true,
+                            sortable: true,
+                            align: 'center',
+                            summaryType: 'sum',
+                            summaryRenderer: function (value, summaryData, dataIndex) {
+                                return value + ' males';
+                            },
+                            field: {
+                                xtype: 'numberfield'
+                            }
+                        }, {
+                            header: "Number Of Patients",
+                            dataIndex: 'NumberOfPatients',
+                            flex: 1,
+                            minWidth: 150,
+                            menuDisabled: true,
+                            sortable: true,
+                            align: 'center',
+                            summaryType: 'sum',
+                            summaryRenderer: function (value, summaryData, dataIndex) {
+                                return value + ' patients';
+                            },
+                            field: {
+                                xtype: 'numberfield'
+                            }
+                        }],
+                        bbar: [{
+                            xtype: 'button',
+                            text: 'Export to Excel',
+                            handler: function () {
+                                DownloadFile();
+                            }
+                        }]
+                    }]
+                });
+
+                me.callParent(arguments);
+            }
+        });
+
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 25 15 15',
             padding: '20 0 0 20',
@@ -358,26 +642,19 @@ Analysis: Diagnosis Report
             id: 'TopContainer',
             layout: {
                 align: 'stretch',
-                type: 'hbox'
+                type: 'vbox'
             },
             items: [{
                 xtype: 'container',
-                flex: 1,
+                height: 40,
                 layout: {
                     align: 'stretch',
-                    type: 'vbox'
+                    type: 'hbox'
                 },
                 items: [{
                     xtype: 'container',
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
-                    height: 170,
-                    items: [
-                {
-                    xtype: 'container',
                     height: 40,
+                    flex: 1,
                     layout: {
                         type: 'column'
                     },
@@ -393,44 +670,58 @@ Analysis: Diagnosis Report
                     }]
                 }, {
                     xtype: 'container',
-                    flex: 1,
+                    height: 40,
                     layout: {
-                        type: 'column'
+                        type: 'hbox',
+                        pack: 'end'
                     },
                     items: [{
-                        xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html: '&nbsp;'
-                    }, window.feature.countryComnobox,
-                        window.feature.regionCombobox,
-                        window.feature.districtCombobox
-                    ]
-                }, {
+                        xtype: 'button',
+                        margin: '0 10 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'View Data Table',
+                        handler: function () {
+                            var winTabel = new window.feature.modal();
+                            winTabel.show();
+                        }
+                    }]
+                }]
+            }, {
+                xtype: 'container',
+                height: 65,
+                layout: 'fit',
+                items: [{
                     xtype: 'container',
-                    flex: 1,
+                    height: 65,
+                    autoScroll: true,
+                    scrollable:true,
                     layout: {
-                        type: 'column'
+                        align: 'stretch',
+                        type: 'hbox'
                     },
                     items: [{
                         xtype: 'container',
                         height: 30,
                         width: 30,
                         html: '&nbsp;'
-                    }, {
+                    },
+                        window.feature.countryCombobox,
+                        window.feature.regionCombobox,
+                        window.feature.districtCombobox,
+                    {
                         xtype: 'datefield',
                         fieldLabel: 'Start Date',
+                        width: 170,
                         format: 'd-M-Y',
                         labelAlign: 'top',
-                        margin: '5 0 5 0',
                         itemId: window.feature.StartDateId,
                         listeners: {
                             select: function (t, n, o) {
                                 var date = t.getValue();
-                                window.feature.reportStore.proxy.extraParams.startDate = date;
                                 window.feature.exportStartDate = date;
+                                window.feature.reportStore.proxy.extraParams.startDate = date;
                                 window.feature.reportStore.load();
-
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -438,7 +729,6 @@ Analysis: Diagnosis Report
                                     window.feature.reportStore.proxy.extraParams.startDate = "";
                                     window.feature.exportStartDate = "";
                                     window.feature.reportStore.load();
-
                                 }
                             }
                         }
@@ -446,16 +736,15 @@ Analysis: Diagnosis Report
                         xtype: 'datefield',
                         fieldLabel: 'End Date',
                         labelAlign: 'top',
-                        margin: '5 0 5 0',
+                        width: 170,
                         format: 'd-M-Y',
                         itemId: window.feature.EndDateId,
                         listeners: {
                             select: function (t, n, o) {
                                 var date = t.getValue();
-                                window.feature.reportStore.proxy.extraParams.endDate = date;
                                 window.feature.exportEndDate = date;
+                                window.feature.reportStore.proxy.extraParams.endDate = date;
                                 window.feature.reportStore.load();
-
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -463,106 +752,26 @@ Analysis: Diagnosis Report
                                     window.feature.reportStore.proxy.extraParams.endDate = "";
                                     window.feature.exportEndDate = "";
                                     window.feature.reportStore.load();
-
                                 }
                             }
                         }
                     }]
                 }]
-                }, {
-                    xtype: 'gridpanel',
-                    cls: 'white-border',
-                    store: window.feature.reportStore,
-                    loadMask: true,
-                    disableSelection: true,
-                    flex: 3,
-                    layout: 'fit',
-                    autoScroll: true,
-                    features: [{
-                        id: 'group',
-                        ftype: 'groupingsummary',
-                        enableGroupingMenu: false
-                    }],
-                    columns: [{
-                        header: "Diagnosis / Health Facility",
-                        dataIndex: 'Outpost',
-                        flex: 2,
-                        minWidth: 200,
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Females",
-                        dataIndex: 'Female',
-                        flex: 1,
-                        minWidth: 100,
-                        menuDisabled: true,
-                        sortable: true,
-                        align: 'center',
-                        summaryType: 'sum',
-                        summaryRenderer: function (value, summaryData, dataIndex) {
-                            return value + ' females';
-                        },
-                        field: {
-                            xtype: 'numberfield'
-                        }
-                    }, {
-                        header: "Males",
-                        dataIndex: 'Male',
-                        flex: 1,
-                        minWidth: 100,
-                        menuDisabled: true,
-                        sortable: true,
-                        align: 'center',
-                        summaryType: 'sum',
-                        summaryRenderer: function (value, summaryData, dataIndex) {
-                            return value + ' males';
-                        },
-                        field: {
-                            xtype: 'numberfield'
-                        }
-                    }, {
-                        header: "Number Of Patients",
-                        dataIndex: 'NumberOfPatients',
-                        flex: 1,
-                        minWidth: 150,
-                        menuDisabled: true,
-                        sortable: true,
-                        align: 'center',
-                        summaryType: 'sum',
-                        summaryRenderer: function (value, summaryData, dataIndex) {
-                            return value + ' patients';
-                        },
-                        field: {
-                            xtype: 'numberfield'
-                        }
-                    }],
-                    bbar: [{
-                        xtype: 'button',
-                        text: 'Export to Excel',
-                        handler: function () {
-                            DownloadFile();
-                        }
-                    }]
-                }]
             }, {
-                xtype: 'container',
                 flex: 1,
-                layout: {
-                    align: 'stretch',
-                    type: 'vbox'
-                },
-                padding: '0 0 0 20',
+                layout: 'fit',
+                padding: '3 10 0 0',
                 items: [{
                     xtype: 'container',
                     id: window.feature.DivChartContainer,
-                    flex: 2,
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
+                    layout: 'fit',
+                    scrollable:true,
                     autoScroll: true,
                     items: []
                 }]
+            }, {
+                xtype: 'container',
+                height: 10
             }]
         });
 

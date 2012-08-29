@@ -42,6 +42,12 @@ Analysis: Health Facility Report
         window.feature.outpostTypeComboboxId = 'Overview-Combobox-Outpost-Type-Health-Facility-Level';
         window.feature.StartDateId = 'Start-Date-Health-Facility-Level';
         window.feature.EndDateId = 'End-Date-Health-Facility-Level';
+        window.feature.modalCountryComboboxId = 'Overview-Window-Combobox-Country-Health-Facility-Level';
+        window.feature.modalRegionComboboxId = 'Overview-Window-Combobox-Region-Health-Facility-Level';
+        window.feature.modalDistrictComboboxId = 'Overview-Window-Combobox-District-Health-Facility-Level';
+        window.feature.modalOutpostTypeComboboxId = 'Overview-Window-Combobox-Outpost-Type-Health-Facility-Level';
+        window.feature.modalStartDateId = 'Window-Start-Date-Health-Facility-Level';
+        window.feature.modalEndDateId = 'Window-End-Date-Health-Facility-Level';
         window.feature.gridHealthFacilityLevelId = "Grid-Health-Facility-Level-Id";
         DivChartContainer = "Chart-Health-Facility-Level-Id";
         window.feature.exportStartDate = "";
@@ -151,7 +157,7 @@ Analysis: Health Facility Report
             listeners: allowUserToClearValue
         });
 
-        function ResetCountryDependencies() {
+        function ResetCountryOverviewDependencies() {
             var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
             regionCombobox.setValue(null);
 
@@ -162,7 +168,7 @@ Analysis: Health Facility Report
             window.feature.reportStore.proxy.extraParams.districtId = "";
         };
 
-        function ResetRegionDependencies() {
+        function ResetRegionOverviewDependencies() {
             var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
             districtCombobox.setValue(null);
 
@@ -173,6 +179,7 @@ Analysis: Health Facility Report
             xtype: 'combobox',
             itemId: window.feature.countryComboboxId,
             store: window.feature.countryStore,
+            width: 170,
             labelAlign: 'top',
             fieldLabel: 'Selected Country',
             displayField: 'Name',
@@ -183,7 +190,7 @@ Analysis: Health Facility Report
             typeAhead: false,
             listeners: {
                 'select': function (combo, record) {
-                    ResetCountryDependencies();
+                    ResetCountryOverviewDependencies();
 
                     window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.regionStore.load();
@@ -194,7 +201,8 @@ Analysis: Health Facility Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        ResetCountryDependencies();
+                        ResetCountryOverviewDependencies();
+                        window.feature.reportStore.proxy.extraParams.countryId = '';
                         window.feature.reportStore.load();
                     }
                 }
@@ -204,6 +212,7 @@ Analysis: Health Facility Report
             xtype: 'combobox',
             itemId: window.feature.regionComboboxId,
             store: window.feature.regionStore,
+            width: 170,
             labelAlign: 'top',
             fieldLabel: 'Selected Region',
             displayField: 'Name',
@@ -214,7 +223,7 @@ Analysis: Health Facility Report
             typeAhead: false,
             listeners: {
                 'select': function (combo, record) {
-                    ResetRegionDependencies();
+                    ResetRegionOverviewDependencies();
 
                     window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.districtStore.load();
@@ -225,7 +234,8 @@ Analysis: Health Facility Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        ResetRegionDependencies();
+                        ResetRegionOverviewDependencies();
+                        window.feature.reportStore.proxy.extraParams.regionId = '';
                         window.feature.reportStore.load();
                     }
                 }
@@ -236,6 +246,7 @@ Analysis: Health Facility Report
             xtype: 'combobox',
             itemId: window.feature.districtComboboxId,
             store: window.feature.districtStore,
+            width: 170,
             labelAlign: 'top',
             fieldLabel: 'Selected District',
             displayField: 'Name',
@@ -252,7 +263,7 @@ Analysis: Health Facility Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.districtId = "";
+                        window.feature.reportStore.proxy.extraParams.districtId = '';
                         window.feature.reportStore.load();
                     }
                 }
@@ -263,7 +274,7 @@ Analysis: Health Facility Report
             xtype: 'combobox',
             itemId: window.feature.outpostTypeComboboxId,
             store: window.feature.outpostTypeStore,
-            margin: '1 0 0 0',
+            width: 170,
             queryMode: 'local',
             displayField: 'Name',
             labelAlign: 'top',
@@ -335,10 +346,9 @@ Analysis: Health Facility Report
                 animate: true,
                 shadow: true,
                 style: 'background:#fff',
-                minHeight: 300,
-                maxHeight: 600,
-                minWidth:300,
-                flex: 1,
+                minHeight: 600,
+                minWidth: 1070,
+                margin: '5 5 5 5',
                 store: chartStore,
                 theme: 'MyTheme',
                 axes: [{
@@ -372,7 +382,7 @@ Analysis: Health Facility Report
                         width: 140,
                         //height: 28,
                         renderer: function (storeItem, item) {
-                            this.setTitle(item.value[0] + " "+ String(item.value[1]) + ' Patients');
+                            this.setTitle(String(item.value[1]) + ' Patients - ' + item.value[0]);
                         }
                     },
                     xField: 'outpostName',
@@ -387,6 +397,286 @@ Analysis: Health Facility Report
             });
         };
 
+        window.feature.modal = Ext.define('Ext.feature.HealthFacilityReport.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            title: 'Health Facility Report',
+            height: 700,
+            width: 1055,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+
+            initComponent: function () {
+                var me = this;
+                var countryOverviewCombobox = window.feature.container.down('#' + window.feature.countryComboboxId);
+                var regionOverviewCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
+                var districtOverviewCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+                var startDateOverviewCombobox = window.feature.container.down('#' + window.feature.StartDateId);
+                var endDateOverviewCombobox = window.feature.container.down('#' + window.feature.EndDateId);
+                var outpostTypeOverviewCombobox = window.feature.container.down('#' + window.feature.outpostTypeComboboxId);
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'container',
+                        height: 65,
+                        layout: 'fit',
+                        items: [{
+                            xtype: 'container',
+                            height: 65,
+                            autoScroll: true,
+                            scrollable:true,
+                            layout: {
+                                align: 'stretch',
+                                type: 'hbox'
+                            },
+                            padding: '0 0 0 7',
+                            items: [{
+                                xtype: 'combobox',
+                                itemId: window.feature.modalCountryComboboxId,
+                                store: window.feature.countryStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected Country',
+                                displayField: 'Name',
+                                valueField: 'Id',
+                                labelClsExtra: 'combo-label',
+                                emptyText: 'Country List',
+                                value: countryOverviewCombobox.getValue(),
+                                editable: false,
+                                typeAhead: false,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        ResetCountryOverviewDependencies();
+                                        countryOverviewCombobox.setValue(combo.getValue());
+                                        me.down('#' + window.feature.modalRegionComboboxId).setValue(null);
+                                        me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+
+                                        window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.regionStore.load();
+
+                                        window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            countryOverviewCombobox.setValue(null)
+                                            ResetCountryOverviewDependencies();
+                                            me.down('#' + window.feature.modalRegionComboboxId).setValue(null);
+                                            me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'combobox',
+                                itemId: window.feature.modalRegionComboboxId,
+                                store: window.feature.regionStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected Region',
+                                displayField: 'Name',
+                                valueField: 'Id',
+                                labelClsExtra: 'combo-label',
+                                emptyText: 'Region List',
+                                value: regionOverviewCombobox.getValue(),
+                                editable: false,
+                                typeAhead: false,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        ResetRegionOverviewDependencies();
+                                        regionOverviewCombobox.setValue(combo.getValue());
+                                        me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+
+                                        window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.districtStore.load();
+
+                                        window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            ResetRegionOverviewDependencies();
+                                            regionOverviewCombobox.setValue(null);
+                                            me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'combobox',
+                                itemId: window.feature.modalDistrictComboboxId,
+                                store: window.feature.districtStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected District',
+                                displayField: 'Name',
+                                labelClsExtra: 'combo-label',
+                                valueField: 'Id',
+                                emptyText: 'District List',
+                                value: districtOverviewCombobox.getValue(),
+                                editable: false,
+                                typeAhead: false,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        districtOverviewCombobox.setValue(combo.getValue());
+
+                                        window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            districtOverviewCombobox.setValue(null);
+                                            window.feature.reportStore.proxy.extraParams.districtId = "";
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'datefield',
+                                fieldLabel: 'Start Date',
+                                width: 170,
+                                format: 'd-M-Y',
+                                labelAlign: 'top',
+                                itemId: window.feature.modalStartDateId,
+                                value: startDateOverviewCombobox.getValue(),
+                                listeners: {
+                                    select: function (t, n, o) {
+                                        var date = t.getValue();
+                                        window.feature.exportStartDate = date;
+                                        startDateOverviewCombobox.setValue(date);
+                                        window.feature.reportStore.proxy.extraParams.startDate = date;
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            startDateOverviewCombobox.setValue(null);
+                                            window.feature.reportStore.proxy.extraParams.startDate = "";
+                                            window.feature.exportStartDate = "";
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'datefield',
+                                fieldLabel: 'End Date',
+                                width: 170,
+                                labelAlign: 'top',
+                                format: 'd-M-Y',
+                                itemId: window.feature.modalEndDateId,
+                                value: endDateOverviewCombobox.getValue(),
+                                listeners: {
+                                    select: function (t, n, o) {
+                                        var date = t.getValue();
+                                        window.feature.exportEndDate = date;
+                                        endDateOverviewCombobox.setValue(date);
+                                        window.feature.reportStore.proxy.extraParams.endDate = date;
+                                        window.feature.reportStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            endDateOverviewCombobox.setValue(null);
+                                            window.feature.reportStore.proxy.extraParams.endDate = "";
+                                            window.feature.exportEndDate = "";
+                                            window.feature.reportStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'combobox',
+                                itemId: window.feature.modalOutpostTypeComboboxId,
+                                store: window.feature.outpostTypeStore,
+                                width: 170,
+                                queryMode: 'local',
+                                displayField: 'Name',
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected Health Facility',
+                                labelClsExtra: 'combo-label',
+                                initialValue: 0,
+                                valueField: 'Type',
+                                emptyText: 'Type List',
+                                value: outpostTypeOverviewCombobox.getValue(),
+                                typeAhead: true,
+                                listeners: {
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            outpostTypeOverviewCombobox.setValue(null);
+                                        }
+                                    },
+                                    'select': function (combo, record) {
+                                        outpostTypeOverviewCombobox.setValue(combo.getValue());
+
+                                        window.feature.reportStore.proxy.extraParams.outpostType = combo.getValue();
+                                        window.feature.reportStore.load();
+                                    }
+                                }
+                            }]
+                        }]
+                    },{
+                        xtype: 'gridpanel',
+                        cls: 'white-border',
+                        itemId: window.feature.gridHealthFacilityLevelId,
+                        store: window.feature.reportStore,
+                        loadMask: true,
+                        disableSelection: true,
+                        flex: 3,
+                        layout: 'fit',
+                        autoScroll: true,
+                        columns: [{
+                            header: "Health Facility Name",
+                            dataIndex: 'OutpostName',
+                            flex: 2,
+                            minWidth: 200,
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            header: "Females",
+                            dataIndex: 'Female',
+                            flex: 1,
+                            minWidth: 70,
+                            align: 'center',
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            header: "Males",
+                            dataIndex: 'Male',
+                            flex: 1,
+                            minWidth: 70,
+                            align: 'center',
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            header: "Number Of Patients",
+                            dataIndex: 'NumberOfPatients',
+                            flex: 1,
+                            minWidth: 80,
+                            align: 'center',
+                            menuDisabled: true,
+                            sortable: true
+                        }],
+                        bbar: [{
+                            xtype: 'button',
+                            text: 'Export to Excel',
+                            handler: function () {
+                                DownloadFile();
+                            }
+                        }]
+                    }]
+                });
+
+                me.callParent(arguments);
+            }
+        });
+
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 25 15 15',
             padding: '20 0 0 20',
@@ -394,26 +684,19 @@ Analysis: Health Facility Report
             id: 'TopContainer',
             layout: {
                 align: 'stretch',
-                type: 'hbox'
+                type: 'vbox'
             },
             items: [{
                 xtype: 'container',
-                flex: 1,
+                height: 40,
                 layout: {
                     align: 'stretch',
-                    type: 'vbox'
+                    type: 'hbox'
                 },
                 items: [{
                     xtype: 'container',
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
-                    height: 170,
-                    items: [
-                {
-                    xtype: 'container',
                     height: 40,
+                    flex: 1,
                     layout: {
                         type: 'column'
                     },
@@ -429,36 +712,51 @@ Analysis: Health Facility Report
                     }]
                 }, {
                     xtype: 'container',
-                    flex: 1,
+                    height: 40,
                     layout: {
-                        type: 'column'
+                        type: 'hbox',
+                        pack: 'end'
                     },
                     items: [{
-                        xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html: '&nbsp;'
-                    }, window.feature.country,
-                        window.feature.region,
-                        window.feature.district
-                    ]
-                }, {
+                        xtype: 'button',
+                        margin: '0 10 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        text: 'View Data Table',
+                        handler: function () {
+                            var winTabel = new window.feature.modal();
+                            winTabel.show();
+                        }
+                    }]
+                }]
+            }, {
+                xtype: 'container',
+                height: 65,
+                layout: 'fit',
+                items: [{
                     xtype: 'container',
-                    flex: 1,
+                    height: 65,
+                    autoScroll: true,
+                    scrollable:true,
                     layout: {
-                        type: 'column'
+                        align: 'stretch',
+                        type: 'hbox'
                     },
                     items: [{
                         xtype: 'container',
                         height: 30,
                         width: 30,
                         html: '&nbsp;'
-                    }, {
+                    },
+                        window.feature.country,
+                        window.feature.region,
+                        window.feature.district,
+                    {
                         xtype: 'datefield',
                         fieldLabel: 'Start Date',
+                        width: 170,
                         format: 'd-M-Y',
                         labelAlign: 'top',
-                        margin: '5 0 5 0',
                         itemId: window.feature.StartDateId,
                         listeners: {
                             select: function (t, n, o) {
@@ -480,7 +778,7 @@ Analysis: Health Facility Report
                         xtype: 'datefield',
                         fieldLabel: 'End Date',
                         labelAlign: 'top',
-                        margin: '5 0 5 0',
+                        width: 170,
                         format: 'd-M-Y',
                         itemId: window.feature.EndDateId,
                         listeners: {
@@ -499,78 +797,25 @@ Analysis: Health Facility Report
                                 }
                             }
                         }
-                    }, window.feature.outpostType]
-                }]
-                }, {
-                    xtype: 'gridpanel',
-                    cls: 'white-border',
-                    itemId: window.feature.gridHealthFacilityLevelId,
-                    store: window.feature.reportStore,
-                    loadMask: true,
-                    disableSelection: true,
-                    flex: 3,
-                    layout: 'fit',
-                    autoScroll: true,
-                    columns: [{
-                        header: "Health Facility Name",
-                        dataIndex: 'OutpostName',
-                        flex: 2,
-                        minWidth: 200,
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Females",
-                        dataIndex: 'Female',
-                        flex: 1,
-                        minWidth: 70,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Males",
-                        dataIndex: 'Male',
-                        flex: 1,
-                        minWidth: 70,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Number Of Patients",
-                        dataIndex: 'NumberOfPatients',
-                        flex: 1,
-                        minWidth: 80,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }],
-                    bbar: [{
-                        xtype: 'button',
-                        text: 'Export to Excel',
-                        handler: function () {
-                            DownloadFile();
-                        }
-                    }]
+                    },
+                        window.feature.outpostType
+                    ]
                 }]
             }, {
-                xtype: 'container',
                 flex: 1,
-                layout: {
-                    align: 'stretch',
-                    type: 'vbox'
-                },
-                padding: '0 0 0 20',
+                layout: 'fit',
+                padding: '3 10 0 0',
                 items: [{
                     xtype: 'container',
                     id: 'DivChartContainer',
-                    flex: 2,
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
+                    layout: 'fit',
                     scrollable:true,
                     autoScroll: true,
                     items: []
                 }]
+            }, {
+                xtype: 'container',
+                height: 10
             }]
         });
 
