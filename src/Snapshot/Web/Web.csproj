@@ -412,6 +412,7 @@
     <Content Include="Assets\css\panel-template.css" />
     <Content Include="Assets\css\toolbar-template.css" />
     <Content Include="Assets\css\window-template.css" />
+    <Content Include="Assets\css\wrap-header.css" />
     <Content Include="Assets\js\ext-all.js" />
     <Content Include="Assets\resources\img\copyright.png" />
     <Content Include="Assets\resources\img\logo_inthec.png" />

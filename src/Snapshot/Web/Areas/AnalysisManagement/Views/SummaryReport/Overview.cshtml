@@ -268,27 +268,33 @@ Analysis: Summary Report
                 shadow: true,
                 style: 'background:#fff',
                 minHeight: 300,
-                maxHeight: 400,
+                maxHeight: 600,
                 flex: 1,
                 store: window.feature.reportStore,
                 theme: 'MyTheme',
                 axes: [{
                     type: 'Category',
-                    position: 'left',
+                    position: 'bottom',
                     fields: ['Outpost'],
-                    title: 'Health Facility'
+                    title: 'Health Facility',
+                    label: {
+                        orientation: 'horizontal',
+                        rotate: {
+                            degrees: 60,
+                        },
+                    },
                 }, {
                     type: 'Numeric',
-                    position: 'bottom',
+                    position: 'left',
                     fields: ['Treated', 'NotTreated', 'FailedToReport', 'DistinctPatients'],
                     title: 'Number of patients',
                     grid: true,
                     minimum: 0,
-                    minorTickSteps: 5,
+                    maximum: GetTheBiggestValue(),
                     majorTickSteps: GetTheBiggestValue() - 1
                 }],
                 series: [{
-                    type: 'bar',
+                    type: 'column',
                     axis: 'bottom',
                     highlight: true,
                     tips: {
@@ -296,7 +302,7 @@ Analysis: Summary Report
                         width: 140,
                         height: 28,
                         renderer: function (storeItem, item) {
-                            this.setTitle(String(item.value[1]) + ' Patients');
+                            this.setTitle(item.value[0] + " " + String(item.value[1]) + ' Patients');
                         }
                     },
                     xField: 'Outpost',

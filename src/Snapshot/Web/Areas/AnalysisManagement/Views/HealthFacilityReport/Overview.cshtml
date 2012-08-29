@@ -1,8 +1,7 @@
 ﻿@using Domain
-@using Microsoft.Web.Mvc
-@using Web.Areas.AnalysisManagement
-@using Web.Areas.LocationManagement
-@model Web.Areas.AnalysisManagement.Models.HealthFacilityReport.FromGoogleMapModel
+@using Microsoft.Web.Mvc;
+@using Web.Areas.AnalysisManagement;
+@using Web.Areas.LocationManagement;
 
 @section page_title{
 Analysis: Health Facility Report
@@ -12,6 +11,8 @@ Analysis: Health Facility Report
     Html.RenderPartial("_EmptySubNavigation");
     Html.RenderPartial("_AnalysisSideBar");
 }
+
+
 
 <script type="text/javascript">
 
@@ -194,7 +195,6 @@ Analysis: Health Facility Report
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetCountryDependencies();
-                        window.feature.reportStore.proxy.extraParams.countryId = '';
                         window.feature.reportStore.load();
                     }
                 }
@@ -226,7 +226,6 @@ Analysis: Health Facility Report
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetRegionDependencies();
-                        window.feature.reportStore.proxy.extraParams.regionId = '';
                         window.feature.reportStore.load();
                     }
                 }
@@ -253,7 +252,7 @@ Analysis: Health Facility Report
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.districtId = '';
+                        window.feature.reportStore.proxy.extraParams.districtId = "";
                         window.feature.reportStore.load();
                     }
                 }
@@ -314,8 +313,8 @@ Analysis: Health Facility Report
             while (i < rowNo) {
                 row = [];
                 row.push(window.feature.reportStore.getAt(i).get('OutpostName'));
-                row.push(window.feature.reportStore.getAt(i).get('Female'));
-                row.push(window.feature.reportStore.getAt(i).get('Male'));
+                row.push(parseInt(window.feature.reportStore.getAt(i).get('Female')));
+                row.push(parseInt(window.feature.reportStore.getAt(i).get('Male')));
                 dataStore.push(row);
                 i++;
             }
@@ -337,36 +336,43 @@ Analysis: Health Facility Report
                 shadow: true,
                 style: 'background:#fff',
                 minHeight: 300,
-                maxHeight: 400,
+                maxHeight: 600,
+                minWidth:300,
                 flex: 1,
                 store: chartStore,
                 theme: 'MyTheme',
                 axes: [{
                     type: 'Category',
-                    position: 'left',
+                    position: 'bottom',
                     fields: ['outpostName'],
-                    title: 'Health Facility'
+                    title: 'Health Facility',
+                    label: {
+                        orientation: 'horizontal',
+                        rotate: {
+                            degrees: 60,
+                        },
+                    },
                 }, {
                     type: 'Numeric',
-                    position: 'bottom',
+                    position: 'left',
                     fields: ['Female', 'Male'],
                     title: 'Number of patients',
                     grid: true,
                     minimum: 0,
-                    minorTickSteps: 5,
-                    majorTickSteps: GetTheBiggestValue() - 1
+                    maximum:GetTheBiggestValue(),
+                    majorTickSteps: GetTheBiggestValue() -1
 
                 }],
                 series: [{
-                    type: 'bar',
+                    type: 'column',
                     axis: 'bottom',
                     highlight: true,
                     tips: {
                         trackMouse: true,
                         width: 140,
-                        height: 28,
+                        //height: 28,
                         renderer: function (storeItem, item) {
-                            this.setTitle(String(item.value[1]) + ' Patients');
+                            this.setTitle(item.value[0] + " "+ String(item.value[1]) + ' Patients');
                         }
                     },
                     xField: 'outpostName',
@@ -375,6 +381,8 @@ Analysis: Health Facility Report
                 }],
                 legend: {
                     position: 'right'
+                },
+                listeners: {
                 }
             });
         };
@@ -514,7 +522,7 @@ Analysis: Health Facility Report
                         header: "Females",
                         dataIndex: 'Female',
                         flex: 1,
-                        minWidth: 100,
+                        minWidth: 70,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
@@ -522,7 +530,7 @@ Analysis: Health Facility Report
                         header: "Males",
                         dataIndex: 'Male',
                         flex: 1,
-                        minWidth: 100,
+                        minWidth: 70,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
@@ -530,7 +538,7 @@ Analysis: Health Facility Report
                         header: "Number Of Patients",
                         dataIndex: 'NumberOfPatients',
                         flex: 1,
-                        minWidth: 150,
+                        minWidth: 80,
                         align: 'center',
                         menuDisabled: true,
                         sortable: true
@@ -559,6 +567,7 @@ Analysis: Health Facility Report
                         align: 'stretch',
                         type: 'vbox'
                     },
+                    scrollable:true,
                     autoScroll: true,
                     items: []
                 }]
@@ -650,7 +659,6 @@ Analysis: Health Facility Report
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-
         window.feature.outpostTypeStore.load(function () {
             var combo = window.feature.container.down('#' + window.feature.outpostTypeComboboxId);
             combo.setValue(window.feature.outpostTypeStore.getAt(0).get('Type'));
@@ -683,10 +691,8 @@ Analysis: Health Facility Report
                     }
                 }
             }
-
             window.feature.reportStore.load();
         });
 
-        
     });
 </script>
