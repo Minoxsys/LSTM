@@ -47,7 +47,7 @@ Analysis
                 },
                 items: [{
                     xtype: 'container',
-                    flex: 1,
+                    height: 110,
                     layout: {
                         align: 'stretch',
                         type: 'hbox'
@@ -61,7 +61,7 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/OutpostList.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/PatientReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
                             margin: '20 20 0 20',
                             rowspan: 2
                         }, {
@@ -82,7 +82,7 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/HealthFacilityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
                             margin: '20 20 0 20',
                             rowspan: 2
                         }, {
@@ -97,7 +97,7 @@ Analysis
                     }]
                 }, {
                     xtype: 'container',
-                    flex: 1,
+                    height: 110,
                     layout: {
                         align: 'stretch',
                         type: 'hbox'
@@ -111,7 +111,7 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/DiagnosisReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
                             margin: '20 20 0 20',
                             rowspan: 2
                         }, {
@@ -132,7 +132,7 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/TreatmentReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
                             margin: '20 20 0 20',
                             rowspan: 2
                         }, {
@@ -147,7 +147,7 @@ Analysis
                     }]
                 }, {
                     xtype: 'container',
-                    flex: 1,
+                    height: 110,
                     layout: {
                         align: 'stretch',
                         type: 'hbox'
@@ -161,7 +161,7 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/AdviceReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
                             margin: '20 20 0 20',
                             rowspan: 2
                         }, {
@@ -182,7 +182,7 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/ActivityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/SummaryReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
                             margin: '20 20 0 20',
                             rowspan: 2
                         }, {
@@ -197,7 +197,7 @@ Analysis
                     }]
                 }, {
                     xtype: 'container',
-                    flex: 1,
+                    height: 110,
                     layout: {
                         align: 'stretch',
                         type: 'hbox'
@@ -211,7 +211,7 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Analysis/StockLevelRegion.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
                             margin: '20 20 0 20',
                             rowspan: 2
                         }, {

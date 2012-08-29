@@ -419,6 +419,13 @@
     <Content Include="Assets\resources\img\maphover.png" />
     <Content Include="Assets\resources\img\Patients.png" />
     <Content Include="Assets\resources\img\Patientshover.png" />
+    <Content Include="Assets\resources\img\ReportIcons\AdviceReport.png" />
+    <Content Include="Assets\resources\img\ReportIcons\DiagnosisReport.png" />
+    <Content Include="Assets\resources\img\ReportIcons\HealthFacilityReport.png" />
+    <Content Include="Assets\resources\img\ReportIcons\LocationReport.png" />
+    <Content Include="Assets\resources\img\ReportIcons\PatientReport.png" />
+    <Content Include="Assets\resources\img\ReportIcons\SummaryReport.png" />
+    <Content Include="Assets\resources\img\ReportIcons\TreatmentReport.png" />
     <Content Include="Assets\resources\img\summary.png" />
     <Content Include="Assets\resources\img\summaryhover.png" />
     <Content Include="Assets\resources\markerwithlabel.js" />
