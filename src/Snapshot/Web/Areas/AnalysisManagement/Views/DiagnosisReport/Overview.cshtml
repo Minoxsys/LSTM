@@ -69,18 +69,7 @@ Analysis: Diagnosis Report
             sorters: [{
                 property: 'Diagnosis',
                 direction: 'ASC'
-            }],
-            listeners: {
-                'load': function (store, records, options) {
-                    window.feature.chartStore.proxy.extraParams.countryId = window.feature.reportStore.proxy.extraParams.countryId;
-                    window.feature.chartStore.proxy.extraParams.regionId = window.feature.reportStore.proxy.extraParams.regionId;
-                    window.feature.chartStore.proxy.extraParams.districtId = window.feature.reportStore.proxy.extraParams.districtId;
-                    window.feature.chartStore.proxy.extraParams.startDate = window.feature.reportStore.proxy.extraParams.startDate;
-                    window.feature.chartStore.proxy.extraParams.endDate = window.feature.reportStore.proxy.extraParams.endDate;
-
-                    window.feature.chartStore.load();
-                }
-            }
+            }]
         });
 
         window.feature.chartStore = Ext.create('Ext.data.Store', {
@@ -113,6 +102,14 @@ Analysis: Diagnosis Report
             listeners: {
                 'load': function (store, records, options) {
                     DrawChart();
+
+                    window.feature.reportStore.proxy.extraParams.countryId = window.feature.chartStore.proxy.extraParams.countryId;
+                    window.feature.reportStore.proxy.extraParams.regionId = window.feature.chartStore.proxy.extraParams.regionId;
+                    window.feature.reportStore.proxy.extraParams.districtId = window.feature.chartStore.proxy.extraParams.districtId;
+                    window.feature.reportStore.proxy.extraParams.startDate = window.feature.chartStore.proxy.extraParams.startDate;
+                    window.feature.reportStore.proxy.extraParams.endDate = window.feature.chartStore.proxy.extraParams.endDate;
+
+                    window.feature.reportStore.load();
                 }
             }
         });
@@ -183,15 +180,15 @@ Analysis: Diagnosis Report
             var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
             districtCombobox.setValue(null);
 
-            window.feature.reportStore.proxy.extraParams.regionId = "";
-            window.feature.reportStore.proxy.extraParams.districtId = "";
+            window.feature.chartStore.proxy.extraParams.regionId = "";
+            window.feature.chartStore.proxy.extraParams.districtId = "";
         };
 
         function ResetRegionOverviewDependencies() {
             var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
             districtCombobox.setValue(null);
 
-            window.feature.reportStore.proxy.extraParams.districtId = "";
+            window.feature.chartStore.proxy.extraParams.districtId = "";
         };
 
         window.feature.countryCombobox = Ext.create('Ext.form.ComboBox', {
@@ -214,15 +211,15 @@ Analysis: Diagnosis Report
                     window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.regionStore.load();
 
-                    window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
-                    window.feature.reportStore.load();
+                    window.feature.chartStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.chartStore.load();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetCountryOverviewDependencies();
-                        window.feature.reportStore.proxy.extraParams.countryId = '';
-                        window.feature.reportStore.load();
+                        window.feature.chartStore.proxy.extraParams.countryId = '';
+                        window.feature.chartStore.load();
                     }
                 }
             }
@@ -247,15 +244,15 @@ Analysis: Diagnosis Report
                     window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.districtStore.load();
 
-                    window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
-                    window.feature.reportStore.load();
+                    window.feature.chartStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.chartStore.load();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         ResetRegionOverviewDependencies();
-                        window.feature.reportStore.proxy.extraParams.regionId = '';
-                        window.feature.reportStore.load();
+                        window.feature.chartStore.proxy.extraParams.regionId = '';
+                        window.feature.chartStore.load();
                     }
                 }
             }
@@ -276,14 +273,14 @@ Analysis: Diagnosis Report
             typeAhead: false,
             listeners: {
                 'select': function (combo, record) {
-                    window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
-                    window.feature.reportStore.load();
+                    window.feature.chartStore.proxy.extraParams.districtId = combo.getValue();
+                    window.feature.chartStore.load();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
-                        window.feature.reportStore.proxy.extraParams.districtId = '';
-                        window.feature.reportStore.load();
+                        window.feature.chartStore.proxy.extraParams.districtId = '';
+                        window.feature.chartStore.load();
                     }
                 }
             }
@@ -420,8 +417,8 @@ Analysis: Diagnosis Report
                                         window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
                                         window.feature.regionStore.load();
 
-                                        window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
-                                        window.feature.reportStore.load();
+                                        window.feature.chartStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.chartStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -430,7 +427,7 @@ Analysis: Diagnosis Report
                                             ResetCountryOverviewDependencies();
                                             me.down('#' + window.feature.modalRegionComboboxId).setValue(null);
                                             me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
-                                            window.feature.reportStore.load();
+                                            window.feature.chartStore.load();
                                         }
                                     }
                                 }
@@ -457,8 +454,8 @@ Analysis: Diagnosis Report
                                         window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
                                         window.feature.districtStore.load();
 
-                                        window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
-                                        window.feature.reportStore.load();
+                                        window.feature.chartStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.chartStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -466,7 +463,7 @@ Analysis: Diagnosis Report
                                             ResetRegionOverviewDependencies();
                                             regionOverviewCombobox.setValue(null);
                                             me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
-                                            window.feature.reportStore.load();
+                                            window.feature.chartStore.load();
                                         }
                                     }
                                 }
@@ -488,15 +485,15 @@ Analysis: Diagnosis Report
                                     'select': function (combo, record) {
                                         districtOverviewCombobox.setValue(combo.getValue());
 
-                                        window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
-                                        window.feature.reportStore.load();
+                                        window.feature.chartStore.proxy.extraParams.districtId = combo.getValue();
+                                        window.feature.chartStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                             field.setValue(null);
                                             districtOverviewCombobox.setValue(null);
-                                            window.feature.reportStore.proxy.extraParams.districtId = "";
-                                            window.feature.reportStore.load();
+                                            window.feature.chartStore.proxy.extraParams.districtId = "";
+                                            window.feature.chartStore.load();
                                         }
                                     }
                                 }
@@ -513,16 +510,16 @@ Analysis: Diagnosis Report
                                         var date = t.getValue();
                                         window.feature.exportStartDate = date;
                                         startDateOverviewCombobox.setValue(date);
-                                        window.feature.reportStore.proxy.extraParams.startDate = date;
-                                        window.feature.reportStore.load();
+                                        window.feature.chartStore.proxy.extraParams.startDate = date;
+                                        window.feature.chartStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                             field.setValue(null);
                                             startDateOverviewCombobox.setValue(null);
-                                            window.feature.reportStore.proxy.extraParams.startDate = "";
+                                            window.feature.chartStore.proxy.extraParams.startDate = "";
                                             window.feature.exportStartDate = "";
-                                            window.feature.reportStore.load();
+                                            window.feature.chartStore.load();
                                         }
                                     }
                                 }
@@ -539,16 +536,16 @@ Analysis: Diagnosis Report
                                         var date = t.getValue();
                                         window.feature.exportEndDate = date;
                                         endDateOverviewCombobox.setValue(date);
-                                        window.feature.reportStore.proxy.extraParams.endDate = date;
-                                        window.feature.reportStore.load();
+                                        window.feature.chartStore.proxy.extraParams.endDate = date;
+                                        window.feature.chartStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                             field.setValue(null);
                                             endDateOverviewCombobox.setValue(null);
-                                            window.feature.reportStore.proxy.extraParams.endDate = "";
+                                            window.feature.chartStore.proxy.extraParams.endDate = "";
                                             window.feature.exportEndDate = "";
-                                            window.feature.reportStore.load();
+                                            window.feature.chartStore.load();
                                         }
                                     }
                                 }
@@ -720,15 +717,15 @@ Analysis: Diagnosis Report
                             select: function (t, n, o) {
                                 var date = t.getValue();
                                 window.feature.exportStartDate = date;
-                                window.feature.reportStore.proxy.extraParams.startDate = date;
-                                window.feature.reportStore.load();
+                                window.feature.chartStore.proxy.extraParams.startDate = date;
+                                window.feature.chartStore.load();
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
-                                    window.feature.reportStore.proxy.extraParams.startDate = "";
+                                    window.feature.chartStore.proxy.extraParams.startDate = "";
                                     window.feature.exportStartDate = "";
-                                    window.feature.reportStore.load();
+                                    window.feature.chartStore.load();
                                 }
                             }
                         }
@@ -743,15 +740,15 @@ Analysis: Diagnosis Report
                             select: function (t, n, o) {
                                 var date = t.getValue();
                                 window.feature.exportEndDate = date;
-                                window.feature.reportStore.proxy.extraParams.endDate = date;
-                                window.feature.reportStore.load();
+                                window.feature.chartStore.proxy.extraParams.endDate = date;
+                                window.feature.chartStore.load();
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
-                                    window.feature.reportStore.proxy.extraParams.endDate = "";
+                                    window.feature.chartStore.proxy.extraParams.endDate = "";
                                     window.feature.exportEndDate = "";
-                                    window.feature.reportStore.load();
+                                    window.feature.chartStore.load();
                                 }
                             }
                         }
@@ -858,6 +855,6 @@ Analysis: Diagnosis Report
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
 
         mainContent.add(window.feature.container);
-        window.feature.reportStore.load();
+        window.feature.chartStore.load();
     });
 </script>
