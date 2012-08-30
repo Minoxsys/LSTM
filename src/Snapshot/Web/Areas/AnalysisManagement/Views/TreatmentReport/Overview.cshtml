@@ -847,6 +847,10 @@ Analysis: Treatment Report
                 if (sum > maxSum)
                     maxSum = sum;
             });
+
+            if (maxSum == 1)
+                maxSum = 2;
+
             return maxSum;
         }
 

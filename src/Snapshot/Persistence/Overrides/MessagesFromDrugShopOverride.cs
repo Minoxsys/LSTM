@@ -12,6 +12,7 @@ namespace Persistence.Overrides
         public void Override(FluentNHibernate.Automapping.AutoMapping<MessageFromDrugShop> mapping)
         {
             mapping.HasManyToMany(message => message.ServicesNeeded).Cascade.SaveUpdate();
+            mapping.HasManyToMany(message => message.Appointments).Cascade.SaveUpdate();
             mapping.Map(p => p.IDCode).Unique();
         }
     }

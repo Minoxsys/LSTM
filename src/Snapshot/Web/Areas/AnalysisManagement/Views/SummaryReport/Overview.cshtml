@@ -311,7 +311,7 @@ Analysis: Summary Report
                         width: 140,
                         height: 28,
                         renderer: function (storeItem, item) {
-                            this.setTitle(item.value[0] + " " + String(item.value[1]) + ' Patients');
+                            this.setTitle(String(item.value[1]) + ' Patients - ' + item.value[0]);
                         }
                     },
                     xField: 'Outpost',
@@ -796,6 +796,10 @@ Analysis: Summary Report
                 if (sum > maxSum)
                     maxSum = sum;
             });
+
+            if (maxSum == 1)
+                maxSum = 2;
+
             return maxSum;
         }
 
