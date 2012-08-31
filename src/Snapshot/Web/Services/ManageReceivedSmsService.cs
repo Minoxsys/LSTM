@@ -178,6 +178,12 @@ namespace Web.Services
             message.Gender = parsedLine[index].Substring(parsedLine[index].Length - 1, 1).ToUpper();
             string stringDate = parsedLine[index].Substring(parsedLine[index].Length - 7, 6);
             message.BirthDate = DateTime.ParseExact(stringDate, DateFormat, FormatProvider, DateTimeStyles.None);
+
+            if (message.BirthDate.Date > DateTime.Now.Date)
+            {
+                message.BirthDate = new DateTime(message.BirthDate.Year - 100, message.BirthDate.Month, message.BirthDate.Day);
+            }
+
             message.Initials = parsedLine[index].Substring(0, parsedLine[index].Length - 7).ToUpper();
             message.IDCode = GenerateIDCode();
             message.OutpostId = rawSmsReceived.OutpostId;
