@@ -131,7 +131,7 @@ namespace Web.Areas.ConditionManagement.Controllers
 
             }
 
-            var advice = new Advice();
+            var advice = QueryAdvice.Load(adviceInputModel.Id);
             CreateMappings();
             Mapper.Map(adviceInputModel, advice);
             advice.Client = this._client;

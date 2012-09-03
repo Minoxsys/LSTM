@@ -129,7 +129,7 @@ namespace Web.Areas.ConditionManagement.Controllers
 
             }
 
-            var treatment = new Treatment();
+            var treatment = QueryTreatments.Load(treatmentInputModel.Id);
             CreateMappings();
             Mapper.Map(treatmentInputModel, treatment);
             treatment.Client = this._client;

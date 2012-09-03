@@ -68,6 +68,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.TreatmentControllerTe
                 Description = "new description"
             };
             objectMother.queryTreatment.Expect(call => call.Query()).Return(new Treatment[] { objectMother.treatment }.AsQueryable());
+            objectMother.queryTreatment.Expect(call => call.Load(objectMother.treatment.Id)).Return(new Treatment {Messages= objectMother.treatment.Messages });
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Treatment>.Matches(p => p.Code != objectMother.treatment.Code)));
 
             //Act

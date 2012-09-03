@@ -68,6 +68,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.AppointmentController
                 Description = "new description"
             };
             objectMother.queryAppointment.Expect(call => call.Query()).Return(new Appointment[] { objectMother.appointment }.AsQueryable());
+            objectMother.queryAppointment.Expect(call => call.Load(objectMother.appointment.Id)).Return(new Appointment{Messages= objectMother.appointment.Messages});
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Appointment>.Matches(p => p.Code != objectMother.appointment.Code)));
 
             //Act

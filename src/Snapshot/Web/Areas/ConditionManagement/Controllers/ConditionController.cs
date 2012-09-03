@@ -129,7 +129,7 @@ namespace Web.Areas.ConditionManagement.Controllers
 
             }
 
-            var condition = new Condition();
+            var condition = QueryCondition.Load(conditionInputModel.Id);
             CreateMappings();
             Mapper.Map(conditionInputModel, condition);
             condition.Client = this._client;

@@ -68,6 +68,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.DiagnosisControllerTe
                 Description = "new description"
             };
             objectMother.queryDiagnosis.Expect(call => call.Query()).Return(new Diagnosis[] { objectMother.diagnosis }.AsQueryable());
+            objectMother.queryDiagnosis.Expect(call => call.Load(objectMother.diagnosis.Id)).Return(new Diagnosis{Messages = objectMother.diagnosis.Messages});
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Diagnosis>.Matches(p => p.Code != objectMother.diagnosis.Code)));
             
             //Act
@@ -76,6 +77,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.DiagnosisControllerTe
             //Assert
             objectMother.queryDiagnosis.VerifyAllExpectations();
             objectMother.saveCommand.VerifyAllExpectations();
+            
 
             var response = jsonResult.Data as JsonActionResponse;
             Assert.IsNotNull(response);

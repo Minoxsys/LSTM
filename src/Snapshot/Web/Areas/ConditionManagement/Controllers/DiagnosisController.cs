@@ -129,7 +129,7 @@ namespace Web.Areas.ConditionManagement.Controllers
 
             }
 
-            var diagnosis = new Diagnosis();
+            var diagnosis = QueryDiagnosis.Load(diagnosisInputModel.Id);
             CreateMappings();
             Mapper.Map(diagnosisInputModel, diagnosis);
             diagnosis.Client = this._client;

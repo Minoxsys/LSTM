@@ -68,6 +68,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.AdviceControllerTests
                 Description = "new description"
             };
             objectMother.queryAdvice.Expect(call => call.Query()).Return(new Advice[] { objectMother.advice }.AsQueryable());
+            objectMother.queryAdvice.Expect(call => call.Load(objectMother.advice.Id)).Return(new Advice { Messages = objectMother.advice.Messages});
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Advice>.Matches(p => p.Code != objectMother.advice.Code)));
 
             //Act

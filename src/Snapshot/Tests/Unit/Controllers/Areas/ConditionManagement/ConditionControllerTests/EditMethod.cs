@@ -56,6 +56,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.ConditionControllerTe
             Assert.IsNotNull(response);
             Assert.That(response.Status, Is.EqualTo("Error"));
         }
+
         [Test]
         public void Returns_JSON_With_SuccessMessage_When_Condition_HasBeenSaved()
         {
@@ -68,6 +69,7 @@ namespace Tests.Unit.Controllers.Areas.ConditionManagement.ConditionControllerTe
                 Description = "new description"
             };
             objectMother.queryCondition.Expect(call => call.Query()).Return(new Condition[] { objectMother.condition }.AsQueryable());
+            objectMother.queryCondition.Expect(call => call.Load(objectMother.condition.Id)).Return(new Condition{ Messages = objectMother.condition.Messages });
             objectMother.saveCommand.Expect(call => call.Execute(Arg<Condition>.Matches(p => p.Code != objectMother.condition.Code)));
 
             //Act

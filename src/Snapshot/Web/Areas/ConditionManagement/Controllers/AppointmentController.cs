@@ -129,7 +129,7 @@ namespace Web.Areas.ConditionManagement.Controllers
 
             }
 
-            var appointment = new Appointment();
+            var appointment = QueryAppointment.Load(appointmentInputModel.Id);
             CreateMappings();
             Mapper.Map(appointmentInputModel, appointment);
             appointment.Client = this._client;
