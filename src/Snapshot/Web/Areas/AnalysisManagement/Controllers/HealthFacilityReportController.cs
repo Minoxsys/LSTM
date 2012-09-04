@@ -28,6 +28,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public IQueryService<Country> QueryCountry { get; set; }
         public IQueryService<Region> QueryRegion { get; set; }
         public IQueryService<District> QueryDistrict { get; set; }
+        public IQueryService<OutpostType> QueryOutpostType { get; set; }
 
         private Client _client;
         private User _user;
@@ -221,7 +222,11 @@ namespace Web.Areas.AnalysisManagement.Controllers
             else
                 outputModel.districtId = " ";
 
-            outputModel.outpostType = model.outpostType;
+            var outpostType = QueryOutpostType.Query().Where(it => it.Type == Int32.Parse(model.outpostType)).FirstOrDefault();
+            if (outpostType != null)
+                outputModel.outpostType = outpostType.Name;
+            else
+                outputModel.outpostType = "";
             outputModel.startDate = model.startDate;
             outputModel.endDate = model.endDate;
 
