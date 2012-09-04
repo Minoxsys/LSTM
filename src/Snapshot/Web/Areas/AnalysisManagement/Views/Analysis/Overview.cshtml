@@ -61,16 +61,14 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/PatientReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
-                            margin: '20 20 0 20',
+                            autoEl: { html: "<a href='@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/PatientReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '10 20 0 20',
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patient Report' },
-                            margin: '70 30 10 0'
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patient Report' }
                         }, {
                             xtype: 'label',
-                            margin: '0 0 10 0',
                             text: 'In this report the user can see all information on patients.'
                         }]
                     }, {
@@ -82,16 +80,14 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/HealthFacilityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
-                            margin: '20 20 0 20',
+                            autoEl: { html: "<a href='@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/HealthFacilityReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '10 20 0 20',
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Health Facility Report' },
-                            margin: '70 30 10 0'
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Health Facility Report' }
                         }, {
                             xtype: 'label',
-                            margin: '0 0 10 0',
                             text: 'This report will show the number of patients received at Health Facilities with gender stratification.'
                         }]
                     }]
@@ -111,16 +107,14 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/DiagnosisReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
-                            margin: '20 20 0 20',
+                            autoEl: { html: "<a href='@(Url.RouteUrl<DiagnosisReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/DiagnosisReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '10 20 0 20',
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<DiagnosisReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Diagnosis Report' },
-                            margin: '70 30 10 0'
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<DiagnosisReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Diagnosis Report' }
                         }, {
                             xtype: 'label',
-                            margin: '0 0 10 0',
                             text: 'This report will show the number of patients who received a specific diagnosis at different health facilities.'
                         }]
                     }, {
@@ -132,16 +126,14 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/TreatmentReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
-                            margin: '20 20 0 20',
+                            autoEl: { html: "<a href= '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/TreatmentReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '10 20 0 20',
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Treatments Report' },
-                            margin: '70 30 10 0'
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Treatments Report' }
                         }, {
                             xtype: 'label',
-                            margin: '0 0 10 0',
                             text: 'This report will show the number of patients who received a specific treatment at different health facilities.'
                         }]
                     }]
@@ -161,16 +153,14 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/AdviceReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
-                            margin: '20 20 0 20',
+                            autoEl: { html: "<a href= '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/AdviceReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '10 20 0 20',
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Advice Report' },
-                            margin: '70 30 10 0'
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Advice Report' }
                         }, {
                             xtype: 'label',
-                            margin: '0 0 10 0',
                             text: 'This report will show the number of patients who received a specific advice at different health facilities.'
                         }]
                     }, {
@@ -182,16 +172,14 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/SummaryReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
-                            margin: '20 20 0 20',
+                            autoEl: { html: "<a href='@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/SummaryReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '10 20 0 20',
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Summary Report' },
-                            margin: '70 30 10 0'
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Summary Report' }
                         }, {
                             xtype: 'label',
-                            margin: '0 0 10 0',
                             text: 'This report will show the number of patients who failed to report at a certain dispensary, number of patients who obtained/ did not get treatment and the number of patients reported into the system at different dispensaries or health centers.'
                         }]
                     }]
@@ -211,16 +199,14 @@ Analysis
                         },
                         items: [{
                             xtype: 'image',
-                            autoEl: { html: "<img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/>" },
-                            margin: '20 20 0 20',
+                            autoEl: { html: "<a href = '@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))'><img height='60' src = '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/ReportIcons/LocationReport.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))'/></a>" },
+                            margin: '10 20 0 20',
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label', href: '@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Location Report' },
-                            margin: '70 30 10 0'
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Location Report' }
                         }, {
                             xtype: 'label',
-                            margin: '0 0 10 0',
                             text: 'This report will show the number of patients referred and treated at different health facilities.'
                         }]
                     }, {
