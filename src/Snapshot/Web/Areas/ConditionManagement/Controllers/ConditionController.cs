@@ -27,11 +27,11 @@ namespace Web.Areas.ConditionManagement.Controllers
         private User _user;
 
         public IPermissionsService PermissionService { get; set; }
-        private string ADD_PERMISSION = "Condition.Edit";
-        private string DELETE_PERMISSION = "Condition.Delete";
+        private string ADD_PERMISSION = "Symptom.Edit";
+        private string DELETE_PERMISSION = "Symptom.Delete";
 
         [HttpGet]
-        [Requires(Permissions = "Condition.View")]
+        [Requires(Permissions = "Symptom.View")]
         public ActionResult Overview()
         {
             ViewBag.HasNoRightsToAdd = (PermissionService.HasPermissionAssigned(ADD_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();

@@ -75,23 +75,27 @@
         window.feature.outpostEditId = "Outpost.Edit";
         window.feature.outpostDeleteId = "Outpost.Delete";
 
-        window.feature.productGroupViewId = "Condition.View";
-        window.feature.productGroupEditId = "Condition.Edit";
-        window.feature.productGroupDeleteId = "Condition.Delete";
+        window.feature.symptomViewId = "Symptom.View";
+        window.feature.symptomEditId = "Symptom.Edit";
+        window.feature.symptomDeleteId = "Symptom.Delete";
 
-        window.feature.productViewId = "Diagnosis.View";
-        window.feature.productEditId = "Diagnosis.Edit";
-        window.feature.productDeleteId = "Diagnosis.Delete";
+        window.feature.appointmentViewId = "Appointment.View";
+        window.feature.appointmentEditId = "Appointment.Edit";
+        window.feature.appointmentDeleteId = "Appointment.Delete";
 
-        window.feature.campaignViewId = "Treatment.View";
-        window.feature.campaignEditId = "Treatment.Edit";
-        window.feature.campaignDuplicateId = "Treatment.Delete";
+        window.feature.diagnosisViewId = "Diagnosis.View";
+        window.feature.diagnosisEditId = "Diagnosis.Edit";
+        window.feature.diagnosisDeleteId = "Diagnosis.Delete";
 
-        window.feature.automaticScheduleViewId = "Advice.View";
-        window.feature.automaticScheduleEditId = "Advice.Edit";
-        window.feature.automaticScheduleDeleteId = "Advice.Delete";
+        window.feature.treatmentViewId = "Treatment.View";
+        window.feature.treatmentEditId = "Treatment.Edit";
+        window.feature.treatmentDeleteId = "Treatment.Delete";
 
-        window.feature.productLevelRequestViewId = "Messages.View";
+        window.feature.adviceViewId = "Advice.View";
+        window.feature.adviceEditId = "Advice.Edit";
+        window.feature.adviceDeleteId = "Advice.Delete";
+
+        window.feature.messageViewId = "Messages.View";
 
         window.feature.clientViewId = "Client.View";
         window.feature.clientEditId = "Client.Edit";
@@ -113,14 +117,15 @@
             window.feature.regionViewId, window.feature.regionEditId, window.feature.regionDeleteId,
             window.feature.districtViewId, window.feature.districtEditId, window.feature.districtDeleteId,
             window.feature.outpostViewId, window.feature.outpostEditId, window.feature.outpostDeleteId,
-            window.feature.productGroupViewId, window.feature.productGroupEditId, window.feature.productGroupDeleteId,
-            window.feature.productViewId, window.feature.productEditId, window.feature.productDeleteId,
-            window.feature.campaignViewId, window.feature.campaignEditId, window.feature.campaignDuplicateId,
-            window.feature.automaticScheduleViewId, window.feature.automaticScheduleEditId, window.feature.automaticScheduleDeleteId,
+            window.feature.symptomViewId, window.feature.symptomEditId, window.feature.symptomDeleteId,
+            window.feature.appointmentViewId, window.feature.appointmentEditId, window.feature.appointmentDeleteId,
+            window.feature.diagnosisViewId, window.feature.diagnosisEditId, window.feature.diagnosisDeleteId,
+            window.feature.treatmentViewId, window.feature.treatmentEditId, window.feature.treatmentDeleteId,
+            window.feature.adviceViewId, window.feature.adviceEditId, window.feature.adviceDeleteId,
             window.feature.clientViewId, window.feature.clientEditId, window.feature.clientDeleteId,
             window.feature.userViewId, window.feature.userEditId, window.feature.userDeleteId,
             window.feature.roleViewId, window.feature.roleEditId, window.feature.roleDeleteId,
-            window.feature.productLevelRequestViewId,
+            window.feature.messageViewId,
             window.feature.reportViewId
         ];
 
@@ -212,22 +217,26 @@
                         { xtype: 'checkbox', id: window.feature.outpostViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.outpostEditId, padding: window.feature.editPadding },
                         { xtype: 'checkbox', id: window.feature.outpostDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Condition' },
-                        { xtype: 'checkbox', id: window.feature.productGroupViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.productGroupEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.productGroupDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Symptom' },
+                        { xtype: 'checkbox', id: window.feature.symptomViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.symptomEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.symptomDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'label', text: 'Appointment' },
+                        { xtype: 'checkbox', id: window.feature.appointmentViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.appointmentEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.appointmentDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Diagnosis' },
-                        { xtype: 'checkbox', id: window.feature.productViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.productEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.productDeleteId, padding: window.feature.deletePadding },
+                        { xtype: 'checkbox', id: window.feature.diagnosisViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.diagnosisEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.diagnosisDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Treatment' },
-                        { xtype: 'checkbox', id: window.feature.campaignViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.campaignEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.campaignDuplicateId, padding: window.feature.deletePadding },
+                        { xtype: 'checkbox', id: window.feature.treatmentViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.treatmentEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.treatmentDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Advice' },
-                        { xtype: 'checkbox', id: window.feature.automaticScheduleViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.automaticScheduleEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.automaticScheduleDeleteId, padding: window.feature.deletePadding },                   
+                        { xtype: 'checkbox', id: window.feature.adviceViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.adviceEditId, padding: window.feature.editPadding },
+                        { xtype: 'checkbox', id: window.feature.adviceDeleteId, padding: window.feature.deletePadding },                   
                         { xtype: 'label', text: 'Clients' },
                         { xtype: 'checkbox', id: window.feature.clientViewId, padding: window.feature.viewPadding },
                         { xtype: 'checkbox', id: window.feature.clientEditId, padding: window.feature.editPadding },
@@ -241,7 +250,7 @@
                         { xtype: 'checkbox', id: window.feature.roleEditId, padding: window.feature.editPadding },
                         { xtype: 'checkbox', id: window.feature.roleDeleteId, padding: window.feature.deletePadding },
                         { xtype: 'label', text: 'Messages' },
-                        { xtype: 'checkbox', id: window.feature.productLevelRequestViewId, padding: window.feature.viewPadding },
+                        { xtype: 'checkbox', id: window.feature.messageViewId, padding: window.feature.viewPadding },
                         { xtype: 'container' },
                         { xtype: 'container' },
                         { xtype: 'label', text: 'Reports' },
