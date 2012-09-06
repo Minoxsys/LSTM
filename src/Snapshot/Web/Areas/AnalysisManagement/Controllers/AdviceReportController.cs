@@ -59,7 +59,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 {
                     AdviceReportModel model = new AdviceReportModel();
                     model.Advice =  advice.Code;
-                    model.Outpost = dispensary.Name + " (" + dispensary.District.Name + ")";
+                    model.Outpost = dispensary.Name;
 
                     PatientsModel patients = GetNumberOfPatients(dispensary, inputModel.startDate, inputModel.endDate, advice);
                     model.Female = patients.Female;
@@ -143,7 +143,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 }
 
                 AdviceReportModel model = new AdviceReportModel();
-                model.Advice = advice.Code + " (" + advice.Keyword + ")";
+                model.Advice = advice.Code;
                 model.Female = female;
                 model.Male = male;
                 model.NumberOfPatients = total;
