@@ -72,6 +72,7 @@ Analysis: Diagnosis Report
             }]
         });
 
+        var myMask = '';
         window.feature.chartStore = Ext.create('Ext.data.Store', {
             fields: [
                 { name: 'Diagnosis' },
@@ -110,6 +111,12 @@ Analysis: Diagnosis Report
                     window.feature.reportStore.proxy.extraParams.endDate = window.feature.chartStore.proxy.extraParams.endDate;
 
                     window.feature.reportStore.load();
+                    myMask.hide();
+                },
+                'beforeload': function(store, operation, options){
+                    var cont = Ext.getCmp(window.feature.DivChartContainer);
+                    myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                    myMask.show();
                 }
             }
         });

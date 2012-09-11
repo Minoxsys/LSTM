@@ -51,6 +51,7 @@ Analysis: Summary Report
         window.feature.exportStartDate = "";
         window.feature.exportEndDate = "";
 
+        var myMask = '';
         window.feature.reportStore = Ext.create('Ext.data.Store', {
             fields: ['Outpost', 'Treated', 'NotTreated', 'FailedToReport', 'DistinctPatients'],
             proxy: {
@@ -77,6 +78,12 @@ Analysis: Summary Report
             listeners: {
                 'load': function (store, records, options) {
                     DrawChart();
+                    myMask.hide();
+                },
+                'beforeload': function(store, operation, options){
+                    var cont = Ext.getCmp('DivChartContainer');
+                    myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                    myMask.show();
                 }
             }
         });

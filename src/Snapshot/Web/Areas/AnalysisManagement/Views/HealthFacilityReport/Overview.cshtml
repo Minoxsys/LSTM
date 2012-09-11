@@ -53,6 +53,7 @@ Analysis: Health Facility Report
         window.feature.exportStartDate = "";
         window.feature.exportEndDate = "";
 
+        var myMask = '';
         window.feature.reportStore = Ext.create('Ext.data.Store', {
             fields: ['OutpostName', 'NumberOfPatients', 'Male', 'Female'],
             proxy: {
@@ -80,6 +81,12 @@ Analysis: Health Facility Report
             listeners: {
                 'load': function (store, records, options) {
                     DrawChart();
+                    myMask.hide();
+                },
+                'beforeload': function(store, operation, options){
+                    var cont = Ext.getCmp('DivChartContainer');
+                    myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                    myMask.show();
                 }
             }
         });
