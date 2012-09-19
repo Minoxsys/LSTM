@@ -156,6 +156,7 @@
     <Compile Include="Areas\AnalysisManagement\Controllers\DiagnosisReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\HealthFacilityReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\GoogleMapReportController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\PatientDemographicsController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\PatientsReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\SummaryReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\TreatmentReportController.cs" />
@@ -2161,6 +2162,7 @@
     <Content Include="Areas\AnalysisManagement\Views\SummaryReport\Overview.cshtml" />
     <Content Include="Areas\ConditionManagement\Views\Appointment\Overview.cshtml" />
     <Content Include="Areas\MessagesManagement\Views\SentMessages\Overview.cshtml" />
+    <Content Include="Areas\AnalysisManagement\Views\PatientDemographics\Overview.cshtml" />
     <None Include="Assets\resources\clientsreports\estimari.xlsx" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_core.scss" />
     <None Include="Assets\resources\themes\stylesheets\ext4\snapshot\core\_reset.scss" />

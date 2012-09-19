@@ -1,0 +1,1022 @@
+﻿@using Web.Areas.AnalysisManagement
+@section page_title{
+Analysis: Patient Demographics
+}
+
+@{
+    Html.RenderPartial("_EmptySubNavigation");
+    Html.RenderPartial("_AnalysisSideBar");
+}
+
+
+<script type="text/javascript">
+
+    Ext.onReady(function () {
+
+        var analysisBtnId = window.res.header.navigation.analysisAndReports;
+        var analysisBtn = Ext.getCmp(analysisBtnId);
+        analysisBtn.toggle(true);
+
+//        var reportBtnId = window.res.content.maincontent.sidebar.petientsreport;
+//        var reportBtn = Ext.getCmp(reportBtnId);
+//        reportBtn.toggle(true);
+    });
+
+</script>
+
+
+<script type="text/javascript">
+    var allowUserToClearValue = {
+        'load': function () {
+            //this.insert(0, {Id:'@Guid.Empty', Name:'All'});
+        }
+    };
+    Ext.onReady(function () {
+        window.feature = {};
+        window.feature.countryComboboxId = 'Overview-Combobox-Country-Patients-Report';
+        window.feature.regionComboboxId = 'Overview-Combobox-Region-Patients-Report';
+        window.feature.districtComboboxId = 'Overview-Combobox-District-Patients-Report';
+        window.feature.conditionComboboxId = 'Overview-Combobox-Service-Needed-Patients-Report';
+        window.feature.diagnosisComboboxId = 'Overview-Combobox-Diagnosis-Patients-Report';
+        window.feature.treatmentComboboxId = 'Overview-Combobox-Treatment-Patients-Report';
+        window.feature.adviceComboboxId = 'Overview-Combobox-Advice-Patients-Report';
+        window.feature.StartDateId = 'Start-Date-Patients-Report';
+        window.feature.EndDateId = 'End-Date-Patients-Report';
+        window.feature.gridHealthFacilityLevelId = "Grid-Patients-Report-Id";
+        window.feature.exportStartDate = "";
+        window.feature.exportEndDate = "";
+
+
+
+        Ext.override(Ext.chart.Legend, {        
+            createItems: function() {
+                var me = this,
+                    chart = me.chart,
+                    surface = chart.surface,
+                    items = me.items,
+                    padding = me.padding,
+                    itemSpacing = me.itemSpacing,
+                    spacingOffset = 2,
+                    itemWidth = 0,
+                    itemHeight = 0,
+                    totalWidth = 0,
+                    totalHeight = 0,
+                    vertical = me.isVertical,
+                    math = Math,
+                    mfloor = math.floor,
+                    mmax = math.max,
+                    index = 0,
+                    i = 0,
+                    len = items ? items.length : 0,
+                    x, y, item, bbox, height, width,
+                    // chart dimensions
+                    chartBBox = chart.chartBBox,
+                    chartInsets = chart.insetPadding,
+                    chartWidth = chartBBox.width - (chartInsets * 2),
+                    chartHeight = chartBBox.height,// - (chartInsets * 2),
+                    xOffset = 0, yOffset = 0,                    
+                    legendWidth = 0, legendHeight = 0,
+                    legendXOffset = 50, legendYOffset = 50,
+                    hSpacing, vSpacing;
+
+                //remove all legend items
+                if (len) {
+                    for (; i < len; i++) {
+                        items[i].destroy();
+                    }
+                }
+                
+                items.length = [];
+                                
+                // Create all the item labels, collecting their dimensions and positioning each one
+                // properly in relation to the previous item
+                chart.series.each(function(series, i) {
+                    if (series.showInLegend) {
+                        Ext.each([].concat(series.yField), function(field, j) {
+                            item = new Ext.chart.LegendItem({
+                                legend: this,
+                                series: series,
+                                surface: chart.surface,
+                                yFieldIndex: j,
+                            });
+                            bbox = item.getBBox();
+        
+                            width = bbox.width;
+                            height = bbox.height;
+                                   
+                            itemWidth = mmax(itemWidth, width);
+                            itemHeight = mmax(itemHeight, height);
+        
+                            items.push(item);
+                        }, this);                        
+
+                    }
+                }, me);
+                
+                vSpacing = itemSpacing / 2;
+                hSpacing = itemSpacing;
+                if (vertical) {
+                    if ( chartHeight - legendYOffset < items.length * (itemHeight + vSpacing) + 2 * padding + vSpacing) {
+                        legendHeight = chartHeight - legendYOffset;
+                        yOffset = mfloor((legendHeight - mfloor((legendHeight - 2 * padding - vSpacing) / (itemHeight + vSpacing)) * (itemHeight + vSpacing) ) / 2);
+                    }
+                    else {
+                        legendHeight = items.length * (itemHeight + vSpacing) + 2 * padding + vSpacing;
+                        yOffset = vSpacing + padding;
+                    }
+                    xOffset = hSpacing + padding;
+                    totalWidth = xOffset;
+                    totalHeight = yOffset;
+                }
+                else {
+                    if ( chartWidth - legendXOffset < items.length * (itemWidth + hSpacing) + 2 * padding + hSpacing) {
+                        legendWidth = chartWidth - legendXOffset;
+                        xOffset = mfloor((legendWidth - mfloor((legendWidth - 2 * padding - hSpacing) / (itemWidth + hSpacing)) * (itemWidth + hSpacing) ) / 2);
+                      }
+                    else {
+                        legendWidth = items.length * (itemWidth + hSpacing) + 2 * padding + hSpacing;
+                        xOffset = padding + hSpacing;
+                    }
+                    yOffset = padding + vSpacing;
+                    totalHeight = yOffset;
+                    totalWidth = xOffset;
+                }
+                
+                Ext.each(items, function(item, j) {                 
+                    if (vertical && (totalHeight + vSpacing + itemHeight > chartHeight - legendYOffset)) {
+                        totalHeight = yOffset;
+                        totalWidth += itemWidth + hSpacing;
+                    }
+                    else if (!vertical && (totalWidth + hSpacing + itemWidth > chartWidth - legendXOffset)) {
+                        totalWidth = xOffset;
+                        totalHeight += itemHeight + vSpacing;
+                    }
+                    item.x = totalWidth;
+                    item.y = mfloor(totalHeight + itemHeight / 2);
+
+                    // Collect cumulative dimensions
+                    if (vertical)
+                        totalHeight += itemHeight + vSpacing;
+                    else
+                        totalWidth += itemWidth + hSpacing;
+                                                
+                }, me);
+        
+                // Store the collected dimensions for later
+                me.width = mfloor(vertical ? totalWidth + itemWidth + xOffset : legendWidth);
+                me.height = mfloor(vertical ? legendHeight : totalHeight + itemHeight + yOffset );
+                me.itemHeight = itemHeight;
+                me.itemWidth = itemWidth;
+            }
+            
+        });
+
+
+        window.feature.reportStore = Ext.create('Ext.data.Store', {
+            fields: ['Initials', 'PatientID', 'Gender', 'Age', 'Drugshop', 'DrugshopDate', 'Condition', 'Dispensary', 'DispensaryDate', 'Diagnosis', 'Treatment', 'Advice'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetPatientsReport" })',
+                reader: {
+                    type: 'json',
+                    root: 'Patients',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    startDate: '',
+                    endDate: '',
+                    conditionId: '',
+                    diagnosisId: '',
+                    treatmentId: '',
+                    adviceId: '',
+                    gender: '',
+                    ageInterval: ''
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Initials',
+                direction: 'ASC'
+            }],
+            listeners: {
+                'load': function (store, records, options) {
+                    DrawChart();
+                }
+            }
+        });
+
+        window.feature.countryStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.LocationManagement.LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Region", action = "GetCountries" })',
+                reader: {
+                    type: 'json',
+                    root: 'Countries',
+                    totalProperty: 'TotalItems'
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.regionStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.LocationManagement.LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "District", action = "GetRegions" })',
+                reader: {
+                    type: 'json',
+                    root: 'regions',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { countryId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.districtStore = Ext.create('Ext.data.Store', {
+            remoteSort: true,
+            fields: ['Id', 'Name'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(Web.Areas.LocationManagement.LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "GetDistricts" })',
+                reader: {
+                    type: 'json',
+                    root: 'Districts',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: { regionId: '' },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Name',
+                direction: 'ASC'
+            }]
+        });
+
+        window.feature.conditionStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Code'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetCondition" })',
+                reader: {
+                    type: 'json',
+                    root: 'Service'
+                },
+                simpleSortMode: true
+            },
+            listeners: allowUserToClearValue
+        });
+
+        window.feature.diagnosisStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Code'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetDiagnosis" })',
+                reader: {
+                    type: 'json',
+                    root: 'Service'
+                },
+                simpleSortMode: true
+            },
+            listeners: allowUserToClearValue
+        });
+
+        window.feature.treatmentStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Code'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetTreatment" })',
+                reader: {
+                    type: 'json',
+                    root: 'Service'
+                },
+                simpleSortMode: true
+            },
+            listeners: allowUserToClearValue
+        });
+
+        window.feature.adviceStore = Ext.create('Ext.data.Store', {
+            fields: ['Id', 'Code'],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetAdvice" })',
+                reader: {
+                    type: 'json',
+                    root: 'Service'
+                },
+                simpleSortMode: true
+            },
+            listeners: allowUserToClearValue
+        });
+
+
+        function ResetCountryDependencies() {
+            var regionCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
+            regionCombobox.setValue(null);
+
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue(null);
+
+            window.feature.reportStore.proxy.extraParams.regionId = "";
+            window.feature.reportStore.proxy.extraParams.districtId = "";
+        };
+
+        function ResetRegionDependencies() {
+            var districtCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+            districtCombobox.setValue(null);
+
+            window.feature.reportStore.proxy.extraParams.districtId = "";
+        };
+
+        window.feature.country = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.countryComboboxId,
+            store: window.feature.countryStore,
+            labelAlign: 'top',
+            margin: '1 0 0 0',
+            fieldLabel: 'Selected Country',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'Country List',
+            editable: true,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    ResetCountryDependencies();
+
+                    window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.regionStore.load();
+
+                    window.feature.reportStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.reportStore.load();
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        ResetCountryDependencies();
+                        window.feature.reportStore.proxy.extraParams.countryId = '';
+                        window.feature.reportStore.load();
+                    }
+                }
+            }
+        });
+        window.feature.region = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.regionComboboxId,
+            store: window.feature.regionStore,
+            labelAlign: 'top',
+            margin: '1 0 0 0',
+            fieldLabel: 'Selected Region',
+            displayField: 'Name',
+            valueField: 'Id',
+            labelClsExtra: 'combo-label',
+            emptyText: 'Region List',
+            editable: true,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    ResetRegionDependencies();
+
+                    window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.districtStore.load();
+
+                    window.feature.reportStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.reportStore.load();
+
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        ResetRegionDependencies();
+                        window.feature.reportStore.proxy.extraParams.regionId = '';
+                        window.feature.reportStore.load();
+                    }
+                }
+            }
+        });
+
+        window.feature.district = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.districtComboboxId,
+            store: window.feature.districtStore,
+            labelAlign: 'top',
+            margin: '1 0 0 0',
+            fieldLabel: 'Selected District',
+            displayField: 'Name',
+            labelClsExtra: 'combo-label',
+            valueField: 'Id',
+            emptyText: 'District List',
+            editable: true,
+            typeAhead: false,
+            listeners: {
+                'select': function (combo, record) {
+                    window.feature.reportStore.proxy.extraParams.districtId = combo.getValue();
+                    window.feature.reportStore.load();
+                },
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        window.feature.reportStore.proxy.extraParams.districtId = '';
+                        window.feature.reportStore.load();
+                    }
+                }
+            }
+        });
+
+        window.feature.conditionCombobox = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.conditionComboboxId,
+            store: window.feature.conditionStore,
+            margin: '1 0 0 0',
+            queryMode: 'local',
+            displayField: 'Code',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Symptom',
+            labelClsExtra: 'combo-label',
+            initialValue: 0,
+            valueField: 'Id',
+            emptyText: 'Symptom List',
+            typeAhead: true,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        window.feature.reportStore.proxy.extraParams.conditionId = "";
+                        window.feature.reportStore.load();
+                    }
+                },
+                'select': function (combo, record) {
+                    window.feature.reportStore.proxy.extraParams.conditionId = combo.getValue();
+                    window.feature.reportStore.load();
+                }
+            }
+        });
+
+        window.feature.diagnosisCombobox = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.diagnosisComboboxId,
+            store: window.feature.diagnosisStore,
+            margin: '1 0 0 0',
+            queryMode: 'local',
+            displayField: 'Code',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Diagnosis',
+            labelClsExtra: 'combo-label',
+            initialValue: 0,
+            valueField: 'Id',
+            emptyText: 'Diagnosis List',
+            typeAhead: true,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        window.feature.reportStore.proxy.extraParams.diagnosisId = "";
+                        window.feature.reportStore.load();
+                    }
+                },
+                'select': function (combo, record) {
+                    window.feature.reportStore.proxy.extraParams.diagnosisId = combo.getValue();
+                    window.feature.reportStore.load();
+                }
+            }
+        });
+
+        window.feature.treatmentCombobox = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.treatmentComboboxId,
+            store: window.feature.treatmentStore,
+            margin: '1 0 0 0',
+            queryMode: 'local',
+            displayField: 'Code',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Treatment',
+            labelClsExtra: 'combo-label',
+            initialValue: 0,
+            valueField: 'Id',
+            emptyText: 'Treatment List',
+            typeAhead: true,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        window.feature.reportStore.proxy.extraParams.treatmentId = "";
+                        window.feature.reportStore.load();
+                    }
+                },
+                'select': function (combo, record) {
+                    window.feature.reportStore.proxy.extraParams.treatmentId = combo.getValue();
+                    window.feature.reportStore.load();
+                }
+            }
+        });
+
+        window.feature.adviceCombobox = Ext.create('Ext.form.ComboBox', {
+            xtype: 'combobox',
+            itemId: window.feature.adviceComboboxId,
+            store: window.feature.adviceStore,
+            margin: '1 0 0 0',
+            queryMode: 'local',
+            displayField: 'Code',
+            labelAlign: 'top',
+            fieldLabel: 'Selected Advice',
+            labelClsExtra: 'combo-label',
+            initialValue: 0,
+            valueField: 'Id',
+            emptyText: 'Advice List',
+            typeAhead: true,
+            listeners: {
+                specialkey: function (field, e) {
+                    if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                        field.setValue(null);
+                        window.feature.reportStore.proxy.extraParams.adviceId = "";
+                        window.feature.reportStore.load();
+                    }
+                },
+                'select': function (combo, record) {
+                    window.feature.reportStore.proxy.extraParams.adviceId = combo.getValue();
+                    window.feature.reportStore.load();
+                }
+            }
+        });
+
+
+        window.feature.chartContainerId = 'div-chart-container';
+
+        window.feature.chartContainer = Ext.create('Ext.container.Container', {
+            id: window.feature.chartContainerId,
+            layout: 'fit',//{type:'hbox', align:'stretch'},
+            scrollable:true,
+            autoScroll: true,
+//            minHeight:400,
+//            autoScroll:true,
+            items:[
+            ],
+        });
+
+
+
+
+        Ext.define('Ext.chart.theme.GenderTheme', {
+            extend: 'Ext.chart.theme.Base',
+            colors: ['rgb(255, 	130, 	171)', 'rgb(126, 	192, 	238)'],
+            constructor: function (config) {
+                this.callParent([Ext.apply({
+                    colors: this.colors
+                }, config)]);
+            }
+        });
+        
+
+        Ext.define('Ext.chart.theme.AgeTheme', {
+            extend: 'Ext.chart.theme.Base',
+            colors: [  'rgb(45, 117, 226)',     'rgb(154, 205, 50)',     'rgb(255, 80, 64 )',    'rgb(255, 123, 10)',      'rgb(255, 250, 106)',      
+                'rgb(248, 106, 190)',    'rgb(64, 224, 208)',     'rgb(202, 255, 68)',    'rgb(204, 162, 210)',     'rgb(247, 196, 203)',    
+                'rgb(148, 0, 211)',      'rgb( 170, 234, 238)',   'rgb(212, 40, 40)',     'rgb(255, 199, 114)',     'rgb(0, 100, 0)',       
+                'rgb(139, 69, 19)' ,    'rgb(190, 190, 190)',     'rgb(142, 35, 35)',      'rgb(255, 218, 185)',    'rgb(32, 178, 170)',
+            ],
+            constructor: function (config) {
+                this.callParent([Ext.apply({
+                    colors: this.colors
+                }, config)]);
+            }
+        });
+
+        var chartStore = Ext.create('Ext.data.JsonStore', {
+            fields: ['gender','total']
+        });
+        
+        var ageStore = Ext.create('Ext.data.JsonStore', {
+            fields: ['age','total']
+        });
+
+        function GenerateData() {
+            var dataStore = [
+                {
+                    'gender':'Female',
+                    'total': 0
+                },
+                {
+                    'gender': 'Male',
+                    'total': 0
+                },
+            ];
+            var rowNo = window.feature.reportStore.count();
+            var i = 0;
+            while (i < rowNo) {
+                if (window.feature.reportStore.getAt(i).get('Gender') == 'F')
+                    dataStore[0].total += 1;
+                else
+                    dataStore[1].total += 1;
+                i++;
+            }
+            return dataStore;
+        };
+        
+
+        function GenerateAgeDataStore(interval, max){
+            var dataStore = [];
+
+            for(var i=0; i<max; i+=interval)
+            {
+                var startAge = i,
+                    endAge = i + interval;
+                dataStore.push({ 'age': startAge + '-' + endAge, 'total':0, 'start':startAge, 'end':endAge });
+            }
+            
+            dataStore.push({ 'age': '>'+i, 'total':0, 'start':i, 'end':200 });
+
+            return dataStore;
+        }
+
+        //returns position of the interval if it is found, or -1 otherwise
+        function searchAgeStore(age, ageStore) {
+            var i = 0,
+                found = false;
+                
+            while(!found && i<ageStore.length) {
+                if (age >= ageStore[i].start && age < ageStore[i].end)
+                    found = true;
+                else i++;
+                
+
+                if(i>200) break;
+            }
+                
+            if(found) return i;
+            else {
+                console.log('age '+age+' not found in the age store.');
+                return -1;   
+            }
+        }
+
+
+        var interval = 5,
+            max = 80;
+
+        function GenerateAgeData() {
+            var dataStore = GenerateAgeDataStore(interval, max);
+
+            window.feature.reportStore.each(function(val, it) {
+                var pos = searchAgeStore(val.get('Age'), dataStore);
+                if(pos>=0) dataStore[pos].total += 1;
+            }, this);
+            
+            return dataStore;
+        };
+
+
+        
+
+
+        var chartMinHeight = 600,
+            chartMinWidth = 600;
+
+        function DrawChart() {
+            var cont = Ext.getCmp(window.feature.chartContainerId);
+            var chartGender = Ext.getCmp('chartGender');
+            var chartAge = Ext.getCmp('chartAge');
+            cont.remove(chartGender);
+            cont.remove(chartAge);
+
+            var myData = GenerateData();
+            var ageData = GenerateAgeData();
+            
+            chartStore.loadData(myData);
+            ageStore.loadData(ageData);
+
+            
+            
+            chartGender = new Ext.chart.Chart({
+                id: 'chartGender',
+                minHeight: chartMinHeight,
+                minWidth:chartMinWidth,
+                flex: 0.5,
+                animate: true,
+                store: chartStore,
+                shadow: true,
+                legend: {
+                    position: 'right'
+                },
+                insetPadding: 25,
+                theme: 'GenderTheme',
+                series: [{
+                    type: 'pie',
+                    field: 'total',
+                    showInLegend: true,
+                    highlight: {
+                      segment: {
+                        margin: 20
+                      }
+                    },
+                    label: {
+                        field: 'gender',
+                        display: 'horizontal',//'rotate',
+                        //contrast: true,
+                        font: '18px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
+                        renderer: function (name) {
+                            var total=name=='Female'?chartStore.getAt(0).raw.total:chartStore.getAt(1).raw.total;
+                            return total>0?name+"\n"+total:'';
+                        }
+                    },
+                    animate: true
+                }]
+            });
+            
+            chartAge = new Ext.chart.Chart({
+                id: 'chartAge',
+                minHeight: chartMinHeight,
+                minWidth:chartMinWidth,
+                flex: 0.5,
+                animate: true,
+                store: ageStore,
+                shadow: true,
+                legend: {
+                    position: 'right',
+                    itemSpacing: 3,
+                },
+                insetPadding: 25,
+                theme: 'AgeTheme',
+                series: [{
+                    type: 'pie',
+                    field: 'total',
+                    showInLegend: true,
+                    highlight: {
+                      segment: {
+                        margin: 20
+                      }
+                    },
+                    label: {
+                        field: 'age',
+                        display: 'horizontal',
+                        color:'#000',
+                        font: '14px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
+                        renderer: function (name) {
+                            var total,
+                                start = name.match(/(^\d+)|(>\d+)/g),
+                                end=name.match(/-\d+$/g);
+
+                            start = start == null ? 0 : start[0];
+                            start = parseInt(start.match(/>\d+/)!=null ? start.substr(1, start.length-1) : start);
+                            //end = end == null ? 200 : end[0];
+                            //end = parseInt(end.substr(1,end.length-1));
+
+                            var pos = searchAgeStore(start,ageData);
+                            
+                            total = pos<0 ? 0 : ageStore.getAt(pos).raw.total;
+                            
+                            
+
+                            return total>0?name+" ("+total+")":'';
+                        }
+                    },
+                    animate: true
+                }]
+            });
+            
+            cont.add(chartGender);
+            cont.add(chartAge);
+        };
+
+
+
+
+        window.feature.container = Ext.create('Ext.container.Container', {
+            margin: 10,
+            padding: '10 0 0 0',
+            autoScroll: true,
+            overflowY:'auto',
+            id: 'TopContainer',
+            layout: {
+                align: 'stretch',
+                type: 'vbox'
+            },
+            items: [{
+                xtype: 'container',
+                flex: 1,
+                layout: {
+                    align: 'stretch',
+                    type: 'vbox'
+                },
+                items: [{
+                    xtype: 'container',
+                    layout: {
+                        align: 'stretch',
+                        type: 'vbox'
+                    },
+                    height: 40,
+                    items: [
+                        {
+                            xtype: 'container',
+                            height: 40,
+                            layout: { type: 'hbox', align: 'stretch' },
+                            items: [
+                                {
+                                    xtype: 'container',
+                                    //height: 40,
+                                    flex:1,
+                                    layout: {
+                                        type: 'column'
+                                    },
+                                    items: [{
+                                        xtype: 'container',
+                                        height: 30,
+                                        width: 30,
+                                        html: '&nbsp;'
+                                    }, {
+                                        xtype: 'label',
+                                        cls: 'x-title-label',
+                                        text: 'Patient Demographics'
+                                    }, ]
+                                },
+                                {
+                                    xtype: 'container',
+                                    flex:1,
+                                    layout: {
+                                        type: 'hbox',
+                                        pack: 'end'
+                                    },
+                                    items: [{
+                                        xtype: 'button',
+                                        id: window.feature.pinButtonId,
+                                        margin: '0 5 0 0',
+                                        ui: 'snapshot-add-btn',
+                                        cls: 'x-add-button-gradient',
+                                        text: 'Patient Report',
+                                        handler: function () {
+                                            location.href = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "Overview" })';
+                                        }
+                                    },
+                                    {
+                                        xtype: 'container',
+                                        height: 30,
+                                        width: 30,
+                                        html: '&nbsp;'
+                                    }, ]
+                                },
+                            ]
+                        },
+                    ]
+                },
+                    {
+                    xtype:'container',
+                    layout:'fit',
+                    height:120,
+                    items: [
+                        
+                        {
+                        xtype:'container',
+                        layout: {
+                            type:'hbox',
+                            align:'stretch'
+                        },
+                    
+                        autoScroll: true,
+                        scrollable:true,
+                        items:[
+                            {
+                                xtype:'container',
+                                layout: {
+                                    type:'vbox',
+                                    align:'stretch'
+                                },
+                                minWidth:400,
+                                items:[
+                                    {
+                                        xtype: 'container',
+                                        flex: 1,
+                                        layout: {
+                                            type: 'hbox',
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                height: 30,
+                                                width: 30,
+                                                html: '&nbsp;'
+                                            }, 
+                                            window.feature.country,
+                                            window.feature.region,
+                                            window.feature.district,
+                                            {
+                                                xtype: 'datefield',
+                                                fieldLabel: 'Start Date',
+                                                format: 'd-M-Y',
+                                                labelAlign: 'top',
+                                                margin: '5 0 5 0',
+                                                itemId: window.feature.StartDateId,
+                                                listeners: {
+                                                    select: function (t, n, o) {
+                                                        var date = t.getValue();
+                                                        window.feature.reportStore.proxy.extraParams.startDate = date;
+                                                        window.feature.exportStartDate = date;
+                                                        window.feature.reportStore.load();
+                                                    },
+                                                    specialkey: function (field, e) {
+                                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                                            field.setValue(null);
+                                                            window.feature.reportStore.proxy.extraParams.startDate = "";
+                                                            window.feature.exportStartDate = "";
+                                                            window.feature.reportStore.load();
+                                                        }
+                                                    }
+                                                }
+                                            }, 
+                                            {
+                                                xtype: 'datefield',
+                                                fieldLabel: 'End Date',
+                                                labelAlign: 'top',
+                                                margin: '5 0 5 0',
+                                                format: 'd-M-Y',
+                                                itemId: window.feature.EndDateId,
+                                                listeners: {
+                                                    select: function (t, n, o) {
+                                                        var date = t.getValue();
+                                                        window.feature.reportStore.proxy.extraParams.endDate = date;
+                                                        window.feature.exportEndDate = date;
+                                                        window.feature.reportStore.load();
+                                                    },
+                                                    specialkey: function (field, e) {
+                                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                                            field.setValue(null);
+                                                            window.feature.reportStore.proxy.extraParams.endDate = "";
+                                                            window.feature.exportEndDate = "";
+                                                            window.feature.reportStore.load();
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                xtype: 'container',
+                                                height: 30,
+                                                width: 30,
+                                                html: '&nbsp;'
+                                            }, 
+                                        ]
+                                    }, 
+                                    {
+                                        xtype: 'container',
+                                        flex: 1,
+                                        layout: {
+                                            type: 'hbox'
+                                        },
+                                        items: [
+                                            {
+                                                xtype: 'container',
+                                                height: 30,
+                                                width: 30,
+                                                html: '&nbsp;'
+                                            }, 
+                                            window.feature.conditionCombobox,
+                                            window.feature.diagnosisCombobox,
+                                            window.feature.treatmentCombobox,
+                                            window.feature.adviceCombobox,
+                                            
+                                        ]
+                                    }
+                                ]
+                            }   
+                        ]
+                    
+                    }]
+                }, 
+                {
+                    xtype:'container',
+                    layout:'fit',
+                    flex:1,
+                    items:[
+                        window.feature.chartContainer
+                    ]
+                },
+                    
+                ]
+            }]
+        });
+
+
+        var contentRes = window.res.content;
+        var mainContent = Ext.getCmp(contentRes.maincontent.id);
+
+        mainContent.add(window.feature.container);
+        window.feature.conditionStore.load();
+        window.feature.diagnosisStore.load();
+        window.feature.treatmentStore.load();
+        window.feature.adviceStore.load();
+        window.feature.reportStore.load();
+
+    });
+</script>
