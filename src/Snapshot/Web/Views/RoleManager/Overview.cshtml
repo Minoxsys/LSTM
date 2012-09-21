@@ -176,15 +176,17 @@
             title: '',
             modal: true,
             ui: 'snapshot-popup-window',
-            height: 560,
-            width: 360,
+            height: 500,
+            width: 300,
             closeAction: 'hide',
             resizable: false,
             layout: { 
-                type: 'vbox',
-                align: 'strechmax'
+                type: 'hbox',
+                align:'stretch'
             },
-            items: [{
+            items: [
+                
+                {
                     xtype: 'container',
                     margin: '10 20 10 20',
                     flex: 1,
@@ -193,10 +195,8 @@
                         columns: 4
                     },
                     items: [
-                        { xtype: 'label', text: 'Role' },
-                        { xtype: 'textfield', colspan: 3, id: window.feature.roleNameId, componentCls: 'role-name', allowBlank: false },
-                        { xtype: 'label', text: 'Role Description' },
-                        { xtype: 'textfield', colspan: 3, id: window.feature.roleDescriptionId, componentCls: 'role-name', allowBlank: false },
+                        { xtype: 'textfield', colspan:4, fieldLabel:"Role", id: window.feature.roleNameId, allowBlank: false },
+                        { xtype: 'textfield', colspan:4, fieldLabel:'Role Description', id: window.feature.roleDescriptionId, allowBlank: false },
                         { xtype: 'label', text: 'Permissions' },
                         { xtype: 'label', text: 'View', padding: window.feature.viewLabelPadding },
                         { xtype: 'label', text: 'Edit', padding: window.feature.editLabelPadding },
