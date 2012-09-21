@@ -153,6 +153,7 @@
     <Compile Include="Areas\AnalysisManagement\AnalysisManagementAreaRegistration.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AdviceReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\AnalysisController.cs" />
+    <Compile Include="Areas\AnalysisManagement\Controllers\SymptomsReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\DiagnosisReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\HealthFacilityReportController.cs" />
     <Compile Include="Areas\AnalysisManagement\Controllers\GoogleMapReportController.cs" />
@@ -186,6 +187,9 @@
     <Compile Include="Areas\AnalysisManagement\Models\SummaryReport\SummaryIndexModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\SummaryReport\SummaryReportIndexOutputModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\SummaryReport\SummaryReportModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\SymptomsReport\SymptomsReportModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\SymptomsReport\SymptomsReportIndexOutputModel.cs" />
+    <Compile Include="Areas\AnalysisManagement\Models\SymptomsReport\SymptomsIndexModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\PatientsModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentIndexModel.cs" />
     <Compile Include="Areas\AnalysisManagement\Models\TreatmentReport\TreatmentReportIndexOutputModel.cs" />

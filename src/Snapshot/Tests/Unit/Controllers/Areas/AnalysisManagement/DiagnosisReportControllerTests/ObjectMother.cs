@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using Rhino.Mocks;
 using Domain;
@@ -39,6 +40,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         private const string CLIENT_NAME = "Ion";
         private const string USER_NAME = "IonPopescu";
 
+        public IPrincipal User;
+
         public void Init()
         {
             MockServices();
@@ -58,7 +61,8 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.DiagnosisReportControl
         {
             controller = new DiagnosisReportController();
 
-            FakeControllerContext.Builder.HttpContext.User = new FakePrincipal(new FakeIdentity(USER_NAME), new string[] { });
+            User = new FakePrincipal(new FakeIdentity(USER_NAME), new string[] { });
+            FakeControllerContext.Builder.HttpContext.User = User;
             FakeControllerContext.Initialize(controller);
 
             controller.QueryMessageFromDispensary = queryMessageFromDispensary;

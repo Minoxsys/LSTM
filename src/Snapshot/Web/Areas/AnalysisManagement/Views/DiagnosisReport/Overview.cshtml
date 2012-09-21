@@ -3,7 +3,7 @@
 @using Web.Areas.AnalysisManagement;
 
 @section page_title{
-Analysis: Diagnosis Report
+Analysis: Symptom and Diagnosis Report
 }
 
 @{
@@ -71,8 +71,38 @@ Analysis: Diagnosis Report
                 direction: 'ASC'
             }]
         });
+        
+        window.feature.symptomReportStore = Ext.create('Ext.data.Store', {
+            fields: ['Symptom', 'Outpost', 'Female', 'Male', 'NumberOfPatients'],
+            groupField: 'Symptom',
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "SymptomsReport", action = "GetSymptomsReport" })',
+                reader: {
+                    type: 'json',
+                    root: 'Symptoms',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    startDate: '',
+                    endDate: ''
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Symptom',
+                direction: 'ASC'
+            }]
+        });
 
-        var myMask = '';
+        var myMask = null,
+            maskIsShown = false,
+            dchartLoaded = false,
+            schartLoaded = false;
+        
         window.feature.chartStore = Ext.create('Ext.data.Store', {
             fields: [
                 { name: 'Diagnosis' },
@@ -111,15 +141,83 @@ Analysis: Diagnosis Report
                     window.feature.reportStore.proxy.extraParams.endDate = window.feature.chartStore.proxy.extraParams.endDate;
 
                     window.feature.reportStore.load();
-                    myMask.hide();
+                    if(schartLoaded)
+                        myMask.hide();
+
+                    dchartLoaded=true;
+                    maskIsShown = false;
                 },
                 'beforeload': function(store, operation, options){
                     var cont = Ext.getCmp(window.feature.DivChartContainer);
-                    myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
-                    myMask.show();
+                    dchartLoaded = false;
+                    if(!maskIsShown) {
+                        myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                        myMask.show();
+                        Ext.defer(myMask.hide, 10000, myMask);
+                        maskIsShown = true;
+                    }
                 }
             }
         });
+
+        
+        window.feature.symptomsStore = Ext.create('Ext.data.Store', {
+            fields: [
+                { name: 'Symptom' },
+                { name: 'Female', type: 'int' },
+                { name: 'Male', type: 'int' }
+            ],
+            proxy: {
+                type: 'ajax',
+                url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "SymptomsReport", action = "GetChartData" })',
+                reader: {
+                    type: 'json',
+                    root: 'Symptoms',
+                    totalProperty: 'TotalItems'
+                },
+                extraParams: {
+                    countryId: '',
+                    regionId: '',
+                    districtId: '',
+                    startDate: '',
+                    endDate: ''
+                },
+                simpleSortMode: true
+            },
+            sorters: [{
+                property: 'Symptom',
+                direction: 'ASC'
+            }],
+            listeners: {
+                'load': function (store, records, options) {
+                    DrawChart();
+
+                    window.feature.symptomReportStore.proxy.extraParams.countryId = window.feature.symptomsStore.proxy.extraParams.countryId;
+                    window.feature.symptomReportStore.proxy.extraParams.regionId =  window.feature.symptomsStore.proxy.extraParams.regionId;
+                    window.feature.symptomReportStore.proxy.extraParams.districtId =window.feature.symptomsStore.proxy.extraParams.districtId;
+                    window.feature.symptomReportStore.proxy.extraParams.startDate = window.feature.symptomsStore.proxy.extraParams.startDate;
+                    window.feature.symptomReportStore.proxy.extraParams.endDate =   window.feature.symptomsStore.proxy.extraParams.endDate;
+
+                    window.feature.symptomReportStore.load();
+                    if(dchartLoaded)
+                        myMask.hide();
+
+                    schartLoaded=true;
+                    maskIsShown = false;
+                },
+                'beforeload': function(store, operation, options){
+                    var cont = Ext.getCmp(window.feature.DivChartContainer);
+                    schartLoaded = false;
+                    if(!maskIsShown) {
+                        myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                        myMask.show();
+                        Ext.defer(myMask.hide, 10000, myMask);
+                        maskIsShown = true;
+                    }
+                }
+            }
+        });
+
 
         window.feature.countryStore = Ext.create('Ext.data.Store', {
             remoteSort: true,
@@ -189,6 +287,8 @@ Analysis: Diagnosis Report
 
             window.feature.chartStore.proxy.extraParams.regionId = "";
             window.feature.chartStore.proxy.extraParams.districtId = "";
+            window.feature.symptomsStore.proxy.extraParams.regionId = "";
+            window.feature.symptomsStore.proxy.extraParams.districtId = "";
         };
 
         function ResetRegionOverviewDependencies() {
@@ -196,6 +296,7 @@ Analysis: Diagnosis Report
             districtCombobox.setValue(null);
 
             window.feature.chartStore.proxy.extraParams.districtId = "";
+            window.feature.symptomsStore.proxy.extraParams.districtId = "";
         };
 
         window.feature.countryCombobox = Ext.create('Ext.form.ComboBox', {
@@ -209,17 +310,20 @@ Analysis: Diagnosis Report
             valueField: 'Id',
             labelClsExtra: 'combo-label',
             emptyText: 'Country List',
-            editable: false,
-            typeAhead: false,
+            editable: true,
+            typeAhead: true,
             listeners: {
                 'select': function (combo, record) {
                     ResetCountryOverviewDependencies();
 
                     window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.regionStore.load();
-
+                    
                     window.feature.chartStore.proxy.extraParams.countryId = combo.getValue();
                     window.feature.chartStore.load();
+                    
+                    window.feature.symptomsStore.proxy.extraParams.countryId = combo.getValue();
+                    window.feature.symptomsStore.load();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -227,6 +331,8 @@ Analysis: Diagnosis Report
                         ResetCountryOverviewDependencies();
                         window.feature.chartStore.proxy.extraParams.countryId = '';
                         window.feature.chartStore.load();
+                        window.feature.symptomsStore.proxy.extraParams.countryId = '';
+                        window.feature.symptomsStore.load();
                     }
                 }
             }
@@ -242,8 +348,8 @@ Analysis: Diagnosis Report
             valueField: 'Id',
             labelClsExtra: 'combo-label',
             emptyText: 'Region List',
-            editable: false,
-            typeAhead: false,
+            editable: true,
+            typeAhead: true,
             listeners: {
                 'select': function (combo, record) {
                     ResetRegionOverviewDependencies();
@@ -253,6 +359,8 @@ Analysis: Diagnosis Report
 
                     window.feature.chartStore.proxy.extraParams.regionId = combo.getValue();
                     window.feature.chartStore.load();
+                    window.feature.symptomsStore.proxy.extraParams.regionId = combo.getValue();
+                    window.feature.symptomsStore.load();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -260,6 +368,8 @@ Analysis: Diagnosis Report
                         ResetRegionOverviewDependencies();
                         window.feature.chartStore.proxy.extraParams.regionId = '';
                         window.feature.chartStore.load();
+                        window.feature.symptomsStore.proxy.extraParams.regionId = '';
+                        window.feature.symptomsStore.load();
                     }
                 }
             }
@@ -276,18 +386,22 @@ Analysis: Diagnosis Report
             labelClsExtra: 'combo-label',
             valueField: 'Id',
             emptyText: 'District List',
-            editable: false,
-            typeAhead: false,
+            editable: true,
+            typeAhead: true,
             listeners: {
                 'select': function (combo, record) {
                     window.feature.chartStore.proxy.extraParams.districtId = combo.getValue();
                     window.feature.chartStore.load();
+                    window.feature.symptomsStore.proxy.extraParams.districtId = combo.getValue();
+                    window.feature.symptomsStore.load();
                 },
                 specialkey: function (field, e) {
                     if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                         field.setValue(null);
                         window.feature.chartStore.proxy.extraParams.districtId = '';
                         window.feature.chartStore.load();
+                        window.feature.symptomsStore.proxy.extraParams.districtId = '';
+                        window.feature.symptomsStore.load();
                     }
                 }
             }
@@ -307,23 +421,30 @@ Analysis: Diagnosis Report
             var cont = Ext.getCmp(window.feature.DivChartContainer);
             var chart = Ext.getCmp('chartIdRemove');
             cont.remove(chart);
+            var chartS = Ext.getCmp('chartSymptoms');
+            cont.remove(chartS);
 
+            var chartHeight = 400,
+                chartWidth = 600;
+
+
+            
             cont.add({
-                id: 'chartIdRemove',
+                id: 'chartSymptoms',
                 xtype: 'chart',
                 animate: true,
                 shadow: true,
                 style: 'background:#fff',
-                minHeight: 600,
-                minWidth: 1070,
+                minHeight: chartHeight,
+                minWidth: chartWidth,
                 margin: '5 5 5 5',
-                store: window.feature.chartStore,
+                store: window.feature.symptomsStore,
                 theme: 'MyTheme',
                 axes: [{
                     type: 'Category',
                     position: 'bottom',
-                    fields: ['Diagnosis'],
-                    title: 'Diagnosis',
+                    fields: ['Symptom'],
+                    title: 'Symptoms',
                     label: {
                         orientation: 'horizontal',
                         rotate: {
@@ -337,8 +458,8 @@ Analysis: Diagnosis Report
                     title: 'Number of patients',
                     grid: true,
                     minimum: 0,
-                    maximum: GetTheBiggestValue(),
-                    majorTickSteps: GetTheBiggestValue() - 1
+                    maximum: GetMaxSymptomValue(),
+                    majorTickSteps: GetMaxSymptomValue() - 1
                 }],
                 series: [{
                     type: 'column',
@@ -351,6 +472,59 @@ Analysis: Diagnosis Report
                             this.setTitle(String(item.value[1]) + ' Patients - ' + item.value[0]);
                         }
                     },
+                    xField: 'Symptom',
+                    yField: ['Female', 'Male'],
+                    stacked: true
+                }],
+                legend: {
+                    position: 'right'
+                }
+            });
+            
+
+            cont.add({
+                id: 'chartIdRemove',
+                xtype: 'chart',
+                animate: true,
+                shadow: true,
+                style: 'background:#fff',
+                minHeight: chartHeight,
+                minWidth: chartWidth,
+                margin: '5 5 5 5',
+                store: window.feature.chartStore,
+                theme: 'MyTheme',
+                axes: [{
+                        type: 'Category',
+                        position: 'bottom',
+                        fields: ['Diagnosis'],
+                        title: 'Diagnosis',
+                        label: {
+                            orientation: 'horizontal',
+                            rotate: {
+                                degrees: 60,
+                            },
+                        },
+                    }, {
+                        type: 'Numeric',
+                        position: 'left',
+                        fields: ['Female', 'Male'],
+                        title: 'Number of patients',
+                        grid: true,
+                        minimum: 0,
+                        maximum: GetTheBiggestValue(),
+                        majorTickSteps: GetTheBiggestValue() - 1
+                    }],
+                series: [{
+                    type: 'column',
+                    axis: 'bottom',
+                    highlight: true,
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        renderer: function(storeItem, item) {
+                            this.setTitle(String(item.value[1]) + ' Patients - ' + item.value[0]);
+                        }
+                    },
                     xField: 'Diagnosis',
                     yField: ['Female', 'Male'],
                     stacked: true
@@ -359,6 +533,7 @@ Analysis: Diagnosis Report
                     position: 'right'
                 }
             });
+            
         };
 
         var showSummary = true;
@@ -411,8 +586,8 @@ Analysis: Diagnosis Report
                                 labelClsExtra: 'combo-label',
                                 emptyText: 'Country List',
                                 value: countryOverviewCombobox.getValue(),
-                                editable: false,
-                                typeAhead: false,
+                                editable: true,
+                                typeAhead: true,
                                 listeners: {
                                     'select': function (combo, record) {
                                         ResetCountryOverviewDependencies();
@@ -425,15 +600,18 @@ Analysis: Diagnosis Report
 
                                         window.feature.chartStore.proxy.extraParams.countryId = combo.getValue();
                                         window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.symptomsStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                             field.setValue(null);
-                                            countryOverviewCombobox.setValue(null)
+                                            countryOverviewCombobox.setValue(null);
                                             ResetCountryOverviewDependencies();
                                             me.down('#' + window.feature.modalRegionComboboxId).setValue(null);
                                             me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
                                             window.feature.chartStore.load();
+                                            window.feature.symptomsStore.load();
                                         }
                                     }
                                 }
@@ -449,8 +627,8 @@ Analysis: Diagnosis Report
                                 labelClsExtra: 'combo-label',
                                 emptyText: 'Region List',
                                 value: regionOverviewCombobox.getValue(),
-                                editable: false,
-                                typeAhead: false,
+                                editable: true,
+                                typeAhead: true,
                                 listeners: {
                                     'select': function (combo, record) {
                                         ResetRegionOverviewDependencies();
@@ -462,6 +640,8 @@ Analysis: Diagnosis Report
 
                                         window.feature.chartStore.proxy.extraParams.regionId = combo.getValue();
                                         window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.symptomsStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
@@ -470,6 +650,7 @@ Analysis: Diagnosis Report
                                             regionOverviewCombobox.setValue(null);
                                             me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
                                             window.feature.chartStore.load();
+                                            window.feature.symptomsStore.load();
                                         }
                                     }
                                 }
@@ -485,21 +666,25 @@ Analysis: Diagnosis Report
                                 valueField: 'Id',
                                 emptyText: 'District List',
                                 value: districtOverviewCombobox.getValue(),
-                                editable: false,
-                                typeAhead: false,
+                                editable: true,
+                                typeAhead: true,
                                 listeners: {
                                     'select': function (combo, record) {
                                         districtOverviewCombobox.setValue(combo.getValue());
 
                                         window.feature.chartStore.proxy.extraParams.districtId = combo.getValue();
                                         window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.districtId = combo.getValue();
+                                        window.feature.symptomsStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                             field.setValue(null);
                                             districtOverviewCombobox.setValue(null);
                                             window.feature.chartStore.proxy.extraParams.districtId = "";
-                                            window.feature.chartStore.load();
+                                            window.feature.chartStore.load(); 
+                                            window.feature.symptomsStore.proxy.extraParams.districtId = "";
+                                            window.feature.symptomsStore.load();
                                         }
                                     }
                                 }
@@ -518,14 +703,18 @@ Analysis: Diagnosis Report
                                         startDateOverviewCombobox.setValue(date);
                                         window.feature.chartStore.proxy.extraParams.startDate = date;
                                         window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.startDate = date;
+                                        window.feature.symptomsStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                             field.setValue(null);
                                             startDateOverviewCombobox.setValue(null);
                                             window.feature.chartStore.proxy.extraParams.startDate = "";
+                                            window.feature.symptomsStore.proxy.extraParams.startDate = "";
                                             window.feature.exportStartDate = "";
                                             window.feature.chartStore.load();
+                                            window.feature.symptomsStore.load();
                                         }
                                     }
                                 }
@@ -542,16 +731,21 @@ Analysis: Diagnosis Report
                                         var date = t.getValue();
                                         window.feature.exportEndDate = date;
                                         endDateOverviewCombobox.setValue(date);
+                                        
                                         window.feature.chartStore.proxy.extraParams.endDate = date;
                                         window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.endDate = date;
+                                        window.feature.symptomsStore.load();
                                     },
                                     specialkey: function (field, e) {
                                         if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                             field.setValue(null);
                                             endDateOverviewCombobox.setValue(null);
                                             window.feature.chartStore.proxy.extraParams.endDate = "";
+                                            window.feature.symptomsStore.proxy.extraParams.endDate = "";
                                             window.feature.exportEndDate = "";
                                             window.feature.chartStore.load();
+                                            window.feature.symptomsStore.load();
                                         }
                                     }
                                 }
@@ -637,6 +831,302 @@ Analysis: Diagnosis Report
                 me.callParent(arguments);
             }
         });
+        
+
+        window.feature.symptomModal = Ext.define('Ext.feature.SymptomReport.Modal', {
+            extend: 'Ext.window.Window',
+            modal: true,
+            ui: 'snapshot-popup-window',
+            title: 'Symptom Report',
+            height: 700,
+            width: 1055,
+            layout: {
+                align: 'stretch',
+                padding: 10,
+                type: 'vbox'
+            },
+
+            initComponent: function () {
+                var me = this;
+                var countryOverviewCombobox = window.feature.container.down('#' + window.feature.countryComboboxId);
+                var regionOverviewCombobox = window.feature.container.down('#' + window.feature.regionComboboxId);
+                var districtOverviewCombobox = window.feature.container.down('#' + window.feature.districtComboboxId);
+                var startDateOverviewCombobox = window.feature.container.down('#' + window.feature.StartDateId);
+                var endDateOverviewCombobox = window.feature.container.down('#' + window.feature.EndDateId);
+                var outpostTypeOverviewCombobox = window.feature.container.down('#' + window.feature.outpostTypeComboboxId);
+
+                Ext.applyIf(me, {
+                    items: [{
+                        xtype: 'container',
+                        height: 65,
+                        layout: 'fit',
+                        items: [{
+                            xtype: 'container',
+                            height: 65,
+                            autoScroll: true,
+                            scrollable:true,
+                            layout: {
+                                align: 'stretch',
+                                type: 'hbox'
+                            },
+                            padding: '0 0 0 7',
+                            items: [{
+                                xtype: 'combobox',
+                                itemId: window.feature.modalCountryComboboxId,
+                                store: window.feature.countryStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected Country',
+                                displayField: 'Name',
+                                valueField: 'Id',
+                                labelClsExtra: 'combo-label',
+                                emptyText: 'Country List',
+                                value: countryOverviewCombobox.getValue(),
+                                editable: true,
+                                typeAhead: true,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        ResetCountryOverviewDependencies();
+                                        countryOverviewCombobox.setValue(combo.getValue());
+                                        me.down('#' + window.feature.modalRegionComboboxId).setValue(null);
+                                        me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+
+                                        window.feature.regionStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.regionStore.load();
+
+                                        window.feature.chartStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.countryId = combo.getValue();
+                                        window.feature.symptomsStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            countryOverviewCombobox.setValue(null);
+                                            ResetCountryOverviewDependencies();
+                                            me.down('#' + window.feature.modalRegionComboboxId).setValue(null);
+                                            me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+                                            window.feature.chartStore.load();
+                                            window.feature.symptomsStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'combobox',
+                                itemId: window.feature.modalRegionComboboxId,
+                                store: window.feature.regionStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected Region',
+                                displayField: 'Name',
+                                valueField: 'Id',
+                                labelClsExtra: 'combo-label',
+                                emptyText: 'Region List',
+                                value: regionOverviewCombobox.getValue(),
+                                editable: true,
+                                typeAhead: true,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        ResetRegionOverviewDependencies();
+                                        regionOverviewCombobox.setValue(combo.getValue());
+                                        me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+
+                                        window.feature.districtStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.districtStore.load();
+
+                                        window.feature.chartStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.regionId = combo.getValue();
+                                        window.feature.symptomsStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            ResetRegionOverviewDependencies();
+                                            regionOverviewCombobox.setValue(null);
+                                            me.down('#' + window.feature.modalDistrictComboboxId).setValue(null);
+                                            window.feature.chartStore.load();
+                                            window.feature.symptomsStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'combobox',
+                                itemId: window.feature.modalDistrictComboboxId,
+                                store: window.feature.districtStore,
+                                width: 170,
+                                labelAlign: 'top',
+                                fieldLabel: 'Selected District',
+                                displayField: 'Name',
+                                labelClsExtra: 'combo-label',
+                                valueField: 'Id',
+                                emptyText: 'District List',
+                                value: districtOverviewCombobox.getValue(),
+                                editable: true,
+                                typeAhead: true,
+                                listeners: {
+                                    'select': function (combo, record) {
+                                        districtOverviewCombobox.setValue(combo.getValue());
+
+                                        window.feature.chartStore.proxy.extraParams.districtId = combo.getValue();
+                                        window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.districtId = combo.getValue();
+                                        window.feature.symptomsStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            districtOverviewCombobox.setValue(null);
+                                            window.feature.chartStore.proxy.extraParams.districtId = "";
+                                            window.feature.chartStore.load();
+                                            window.feature.symptomsStore.proxy.extraParams.districtId = "";
+                                            window.feature.symptomsStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'datefield',
+                                fieldLabel: 'Start Date',
+                                width: 170,
+                                format: 'd-M-Y',
+                                labelAlign: 'top',
+                                itemId: window.feature.modalStartDateId,
+                                value: startDateOverviewCombobox.getValue(),
+                                listeners: {
+                                    select: function (t, n, o) {
+                                        var date = t.getValue();
+                                        window.feature.exportStartDate = date;
+                                        startDateOverviewCombobox.setValue(date);
+                                        window.feature.chartStore.proxy.extraParams.startDate = date;
+                                        window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.startDate = date;
+                                        window.feature.symptomsStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            startDateOverviewCombobox.setValue(null);
+                                            window.feature.chartStore.proxy.extraParams.startDate = "";
+                                            window.feature.symptomsStore.proxy.extraParams.startDate = "";
+                                            window.feature.exportStartDate = "";
+                                            window.feature.chartStore.load();
+                                            window.feature.symptomsStore.load();
+                                        }
+                                    }
+                                }
+                            }, {
+                                xtype: 'datefield',
+                                fieldLabel: 'End Date',
+                                width: 170,
+                                labelAlign: 'top',
+                                format: 'd-M-Y',
+                                itemId: window.feature.modalEndDateId,
+                                value: endDateOverviewCombobox.getValue(),
+                                listeners: {
+                                    select: function (t, n, o) {
+                                        var date = t.getValue();
+                                        window.feature.exportEndDate = date;
+                                        endDateOverviewCombobox.setValue(date);
+                                        window.feature.chartStore.proxy.extraParams.endDate = date;
+                                        window.feature.chartStore.load();
+                                        window.feature.symptomsStore.proxy.extraParams.endDate = date;
+                                        window.feature.symptomsStore.load();
+                                    },
+                                    specialkey: function (field, e) {
+                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                            field.setValue(null);
+                                            endDateOverviewCombobox.setValue(null);
+                                            window.feature.chartStore.proxy.extraParams.endDate = "";
+                                            window.feature.symptomsStore.proxy.extraParams.endDate = "";
+                                            window.feature.exportEndDate = "";
+                                            window.feature.chartStore.load();
+                                            window.feature.symptomsStore.load();
+                                        }
+                                    }
+                                }
+                            }]
+                        }]
+                    },{
+                        xtype: 'gridpanel',
+                        cls: 'white-border',
+                        store: window.feature.symptomReportStore,
+                        loadMask: true,
+                        disableSelection: true,
+                        flex: 3,
+                        layout: 'fit',
+                        autoScroll: true,
+                        features: [{
+                            id: 'group',
+                            ftype: 'groupingsummary',
+                            enableGroupingMenu: false
+                        }],
+                        columns: [{
+                            header: "Stymptom / Health Facility",
+                            dataIndex: 'Outpost',
+                            flex: 2,
+                            minWidth: 200,
+                            menuDisabled: true,
+                            sortable: true
+                        }, {
+                            header: "Females",
+                            dataIndex: 'Female',
+                            flex: 1,
+                            minWidth: 100,
+                            menuDisabled: true,
+                            sortable: true,
+                            align: 'center',
+                            summaryType: 'sum',
+                            summaryRenderer: function (value, summaryData, dataIndex) {
+                                return value + ' females';
+                            },
+                            field: {
+                                xtype: 'numberfield'
+                            }
+                        }, {
+                            header: "Males",
+                            dataIndex: 'Male',
+                            flex: 1,
+                            minWidth: 100,
+                            menuDisabled: true,
+                            sortable: true,
+                            align: 'center',
+                            summaryType: 'sum',
+                            summaryRenderer: function (value, summaryData, dataIndex) {
+                                return value + ' males';
+                            },
+                            field: {
+                                xtype: 'numberfield'
+                            }
+                        }, {
+                            header: "Number Of Patients",
+                            dataIndex: 'NumberOfPatients',
+                            flex: 1,
+                            minWidth: 150,
+                            menuDisabled: true,
+                            sortable: true,
+                            align: 'center',
+                            summaryType: 'sum',
+                            summaryRenderer: function (value, summaryData, dataIndex) {
+                                return value + ' patients';
+                            },
+                            field: {
+                                xtype: 'numberfield'
+                            }
+                        }],
+                        bbar: [{
+                            xtype: 'button',
+                            text: 'Export to Excel',
+                            handler: function () {
+                                DownloadFile("symptom");
+                            }
+                        }]
+                    }]
+                });
+
+                me.callParent(arguments);
+            }
+        });
+
 
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 25 15 15',
@@ -669,7 +1159,7 @@ Analysis: Diagnosis Report
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Diagnosis Report'
+                        text: 'Symptom and Diagnosis Report'
                     }]
                 }, {
                     xtype: 'container',
@@ -678,17 +1168,29 @@ Analysis: Diagnosis Report
                         type: 'hbox',
                         pack: 'end'
                     },
-                    items: [{
-                        xtype: 'button',
-                        margin: '0 10 0 20',
-                        ui: 'snapshot-add-btn',
-                        cls: 'x-add-button-gradient',
-                        text: 'View Data Table',
-                        handler: function () {
-                            var winTabel = new window.feature.modal();
-                            winTabel.show();
-                        }
-                    }]
+                    items: [
+                        {
+                            xtype: 'button',
+                            margin: '0 10 0 20',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            text: 'View Symptom Table',
+                            handler: function () {
+                                var winTabel = new window.feature.symptomModal();
+                                winTabel.show();
+                            }
+                        },{
+                            xtype: 'button',
+                            margin: '0 10 0 20',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            text: 'View Diagnosis Table',
+                            handler: function () {
+                                var winTabel = new window.feature.modal();
+                                winTabel.show();
+                            }
+                        },
+                    ]
                 }]
             }, {
                 xtype: 'container',
@@ -725,13 +1227,17 @@ Analysis: Diagnosis Report
                                 window.feature.exportStartDate = date;
                                 window.feature.chartStore.proxy.extraParams.startDate = date;
                                 window.feature.chartStore.load();
+                                window.feature.symptomsStore.proxy.extraParams.startDate = date;
+                                window.feature.symptomsStore.load();
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.chartStore.proxy.extraParams.startDate = "";
+                                    window.feature.symptomsStore.proxy.extraParams.startDate = "";
                                     window.feature.exportStartDate = "";
                                     window.feature.chartStore.load();
+                                    window.feature.symptomsStore.load();
                                 }
                             }
                         }
@@ -748,13 +1254,17 @@ Analysis: Diagnosis Report
                                 window.feature.exportEndDate = date;
                                 window.feature.chartStore.proxy.extraParams.endDate = date;
                                 window.feature.chartStore.load();
+                                window.feature.symptomsStore.proxy.extraParams.endDate = date;
+                                window.feature.symptomsStore.load();
                             },
                             specialkey: function (field, e) {
                                 if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
                                     field.setValue(null);
                                     window.feature.chartStore.proxy.extraParams.endDate = "";
+                                    window.feature.symptomsStore.proxy.extraParams.endDate = "";
                                     window.feature.exportEndDate = "";
                                     window.feature.chartStore.load();
+                                    window.feature.symptomsStore.load();
                                 }
                             }
                         }
@@ -767,7 +1277,7 @@ Analysis: Diagnosis Report
                 items: [{
                     xtype: 'container',
                     id: window.feature.DivChartContainer,
-                    layout: 'fit',
+                    layout: 'hbox',
                     scrollable:true,
                     autoScroll: true,
                     items: []
@@ -778,7 +1288,7 @@ Analysis: Diagnosis Report
             }]
         });
 
-        function DownloadFile() {
+        function DownloadFile(type) {
             var body = Ext.getBody();
 
             var frame = body.createChild({
@@ -788,14 +1298,24 @@ Analysis: Diagnosis Report
                 name: 'iframe'
             });
 
-            var form = body.createChild({
-                tag: 'form',
-                cls: 'x-hidden',
-                id: 'form',
-                method: 'POST',
-                action: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "DiagnosisReport", action = "ExportToExcel" })',
-                target: 'iframe'
-            });
+
+            var url = '';
+            
+            if(type==null || type==undefined || type=="" || type=="diagnosis") {
+                url = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "DiagnosisReport", action = "ExportToExcel" })';
+            }
+            else if(type=="symptom") {
+                url = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "SymptomsReport", action = "ExportToExcel" })';
+            }
+            
+            var form=body.createChild({
+                    tag: 'form',
+                    cls: 'x-hidden',
+                    id: 'form',
+                    method: 'POST',
+                    action: url,
+                    target: 'iframe'
+                });
 
             var countryInput = form.createChild({
                 tag: 'input',
@@ -820,7 +1340,7 @@ Analysis: Diagnosis Report
 
             var startDateValue = "";
             if (window.feature.exportStartDate != "")
-                startDateValue = Ext.Date.format(window.feature.exportStartDate, 'd-M-Y')
+                startDateValue = Ext.Date.format(window.feature.exportStartDate, 'd-M-Y');
 
             var startDateInput = form.createChild({
                 tag: 'input',
@@ -831,7 +1351,7 @@ Analysis: Diagnosis Report
 
             var endDateValue = "";
             if (window.feature.exportEndDate != "")
-                endDateValue = Ext.Date.format(window.feature.exportEndDate, 'd-M-Y')
+                endDateValue = Ext.Date.format(window.feature.exportEndDate, 'd-M-Y');
 
             var endDateInput = form.createChild({
                 tag: 'input',
@@ -842,10 +1362,26 @@ Analysis: Diagnosis Report
 
             form.dom.submit();
         }
+        
+
 
         function GetTheBiggestValue() {
             var maxSum = 0;
             window.feature.chartStore.each(function (record) {
+                var sum = record.get('Male') + record.get('Female');
+                if (sum > maxSum)
+                    maxSum = sum;
+            });
+
+            if (maxSum == 1)
+                maxSum = 2;
+
+            return maxSum;
+        }
+        
+        function GetMaxSymptomValue() {
+            var maxSum = 0;
+            window.feature.symptomsStore.each(function (record) {
                 var sum = record.get('Male') + record.get('Female');
                 if (sum > maxSum)
                     maxSum = sum;
@@ -862,5 +1398,6 @@ Analysis: Diagnosis Report
 
         mainContent.add(window.feature.container);
         window.feature.chartStore.load();
+        window.feature.symptomsStore.load();
     });
 </script>

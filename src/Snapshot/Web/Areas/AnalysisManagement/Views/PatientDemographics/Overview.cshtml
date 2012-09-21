@@ -41,11 +41,13 @@ Analysis: Patient Demographics
         window.feature.StartDateId = 'Start-Date-Patients-Report';
         window.feature.EndDateId = 'End-Date-Patients-Report';
         window.feature.gridHealthFacilityLevelId = "Grid-Patients-Report-Id";
+        
+        window.feature.chartContainerId = 'div-chart-container';
         window.feature.exportStartDate = "";
         window.feature.exportEndDate = "";
         window.feature.DivChartContainer = 'Chart-Patients-Demographic-Report-Container-Id';
 
-
+        //for splitting legent into multiple columns
         Ext.override(Ext.chart.Legend, {        
             createItems: function() {
                 var me = this,
@@ -169,7 +171,7 @@ Analysis: Patient Demographics
             
         });
 
-        var myMask = '';
+        var mask = null;
         window.feature.reportStore = Ext.create('Ext.data.Store', {
             fields: ['Initials', 'PatientID', 'Gender', 'Age', 'Drugshop', 'DrugshopDate', 'Condition', 'Dispensary', 'DispensaryDate', 'Diagnosis', 'Treatment', 'Advice'],
             proxy: {
@@ -202,13 +204,14 @@ Analysis: Patient Demographics
             listeners: {
                 'load': function (store, records, options) {
                     DrawChart();
-                    myMask.hide();
+                    mask.hide();
                 },
                 'beforeload': function(store, operation, options){
-                    var cont = Ext.getCmp(window.feature.DivChartContainer);
-                    myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
-                    myMask.show();
-                }
+                    var cont = Ext.getCmp(window.feature.chartContainerId);
+                    mask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                    mask.show();
+                    Ext.defer(mask.hide, 10000, mask);
+                },
             }
         });
 
@@ -559,7 +562,6 @@ Analysis: Patient Demographics
         });
 
 
-        window.feature.chartContainerId = 'div-chart-container';
 
         window.feature.chartContainer = Ext.create('Ext.container.Container', {
             id: window.feature.chartContainerId,
