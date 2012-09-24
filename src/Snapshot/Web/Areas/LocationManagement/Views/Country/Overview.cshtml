@@ -237,6 +237,7 @@
                     menuDisabled:true,
                     dataIndex: 'Name',
                     flex: 1,
+                    minWidth: 150,
                     sortable: true,
                     processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
 						if (type == 'click'){
@@ -255,18 +256,25 @@
                     dataIndex: 'ISOCode',
                     align: 'center',
                     sortable: true,
-                    flex: 1
+                    flex: 1,
+                    minWidth: 100,
+                    maxWidth: 200,
                 },{
                     text: "Phone Prefix",
                     menuDisabled:true,
                     align: 'center',
                     dataIndex: 'PhonePrefix',
                     sortable: true,
-                    flex: 1
+                    flex: 1,
+                    minWidth: 100,
+                    maxWidth: 150,
                 },{
                     xtype: 'actioncolumn',
                     menuDisabled:true,
                     text: 'Actions',
+                    flex:1,
+                    minWidth: 50,
+                    maxWidth: 100,
                     items: [
                         {
                             icon:'@(Url.RouteUrl<Web.Controllers.AssetsController>(_ => _.Shared("img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',

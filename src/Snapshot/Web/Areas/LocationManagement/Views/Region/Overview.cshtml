@@ -275,6 +275,7 @@ Location Administration > Regions: Overview
                         text: "Name",
                         dataIndex: 'Name',
                         flex: 1,
+                        minWidth:150,
                         menuDisabled:true,
                         sortable: true,
                         processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
@@ -293,6 +294,8 @@ Location Administration > Regions: Overview
 			            text: 'Actions',
                         menuDisabled:true,
                         flex: 0.3,
+                        minWidth:150,
+                        maxWidth:200,
                         items: [{
                             icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
                             text: 'Edit',

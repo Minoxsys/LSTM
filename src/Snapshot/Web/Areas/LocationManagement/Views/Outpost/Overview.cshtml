@@ -919,6 +919,7 @@
                             text: "Health Facility Name",
                             dataIndex: 'Name',
                             flex: 1,
+                            minWidth:150,
                             menuDisabled: true,
                             sortable: true
                         },{
@@ -926,17 +927,23 @@
                             dataIndex: 'ContactMethod',
                             menuDisabled:true,
                             flex: 1,
+                            minWidth:50,
+                            maxWidth:100,
                             sortable: false
                         },{
                             text: "Coordinates",
                             dataIndex: 'Coordinates',
                             flex: 1,
+                            minWidth:200,
+                            maxWidth:500,
                             menuDisabled: true,
                             sortable: false
                         },{
                             text: "Type",
                             dataIndex: 'OutpostTypeName',
                             flex: 1,
+                            minWidth:50,
+                            maxWidth:150,
                             align:'center',
                             menuDisabled:true,
                             sortable: false
@@ -944,6 +951,8 @@
                             text: "Dispensary / Health Center",
                             dataIndex: 'WarehouseName',
                             flex: 1,
+                            minWidth:50,
+                            maxWidth:100,
                             align:'center',
                             menuDisabled:true,
                             sortable: false
@@ -951,7 +960,9 @@
                             xtype: 'actioncolumn',
                             text: 'Actions',
                             menuDisabled: true,
-                            flex: 1.3,
+                            flex: 1,
+                            minWidth:100,
+                            maxWidth:150,
                             items: [
                                 {
                                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  

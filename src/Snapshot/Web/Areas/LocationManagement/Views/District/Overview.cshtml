@@ -506,6 +506,7 @@ Location Administration > Districts: Overview
             disableSelection: true,
             cls: 'white-border',
             loadMask: true,
+            autoScroll:true,
             columns: [{
                 text: "Name",
                 dataIndex: 'Name',
@@ -513,6 +514,7 @@ Location Administration > Districts: Overview
                 sortable: true,
                 menuDisabled:true,
                 flex: 1,
+                minWidth: 150,
                 processEvent: function (type, view, cell, recordIndex, cellIndex, e) {
 					if (type == 'click'){
                         var rec = view.panel.store.getAt(recordIndex);
@@ -530,12 +532,16 @@ Location Administration > Districts: Overview
                 align:'center',
                 menuDisabled:true,
                 sortable: true,
-                flex: 1
+                flex: 1,
+                minWidth: 100,
+                maxWidth: 200,
             }, {
                 xtype: 'actioncolumn',
                 text: 'Actions',
                 menuDisabled:true,
-                flex: 0.7,
+                flex: 1,
+                minWidth: 150,
+                maxWidth: 200,
                 items: [{
                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
                     tooltip: _t('Edit this district'),

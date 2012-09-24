@@ -217,6 +217,8 @@ User Administration Clients: Overview
                     header: 'Client Name',
                     dataIndex: 'Name',
                     flex: 1,
+                    minWidth:150,
+                    maxWidth:400,
                     menuDisabled:true,
                     sortable: true
                 },{
@@ -224,12 +226,15 @@ User Administration Clients: Overview
                     dataIndex: 'NoOfUsers',
                     menuDisabled:true,
                     flex: 1,
+                    minWidth:50,
                     sortable: true
                 },{
                     xtype: 'actioncolumn',
 			        text: 'Actions',
                     menuDisabled:true,
-                    flex: 0.5,
+                    flex: 1,
+                    minWidth:150,
+                    maxWidth:200,
                     items: [{
                         icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))', 
                         handler: function(grid, rowIndex, colIndex) {
