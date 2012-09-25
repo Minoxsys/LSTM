@@ -38,7 +38,7 @@ Analysis
             autoScroll: true,
             items: [{
                 xtype: 'container',
-                width: 1200,
+                width: 1000,
                 height: 500,
                 autoScroll: true,
                 layout: {
@@ -54,7 +54,7 @@ Analysis
                     },
                     items: [{
                         xtype: 'container',
-                        flex: 1,
+                        width: 500,
                         layout: {
                             type: 'table',
                             columns: 2
@@ -65,18 +65,27 @@ Analysis
                             margin: '10 20 0 20',
                             rowspan: 2
                         }, {
-                            xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patient Report' }
+                            xtype: 'label',
+                            tdAttrs: {
+                                valign: 'middle'
+                            },              
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<PatientsReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Patient Report' },
                         }, {
                             xtype: 'label',
-                            text: 'In this report the user can see all information on patients.'
+                            text: 'In this report the user can see all information on patients.',
+                            tdAttrs: {
+                                valign: 'top'
+                            },              
                         }]
                     }, {
                         xtype: 'container',
-                        flex: 1,
+                        width: 500,
                         layout: {
                             type: 'table',
-                            columns: 2
+                            columns: 2,
+                            tdAttrs: {
+                                valign: 'top'
+                            },     
                         },
                         items: [{
                             xtype: 'image',
@@ -84,11 +93,17 @@ Analysis
                             margin: '10 20 0 20',
                             rowspan: 2
                         }, {
-                            xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Health Facility Report' }
+                            xtype: 'label',
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<HealthFacilityReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Health Facility Report' },
+                            tdAttrs: {
+                                valign: 'middle'
+                            },     
                         }, {
                             xtype: 'label',
-                            text: 'This report will show the number of patients received at Health Facilities with gender stratification.'
+                            text: 'This report will show the number of patients received at Health Facilities with gender stratification.',
+                            tdAttrs: {
+                                valign: 'top'
+                            },     
                         }]
                     }]
                 }, {
@@ -100,7 +115,7 @@ Analysis
                     },
                     items: [{
                         xtype: 'container',
-                        flex: 1,
+                        width: 500,
                         layout: {
                             type: 'table',
                             columns: 2
@@ -112,14 +127,20 @@ Analysis
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<DiagnosisReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Diagnosis Report' }
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<DiagnosisReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Diagnosis Report' },
+                            tdAttrs: {
+                                valign: 'middle'
+                            },     
                         }, {
                             xtype: 'label',
-                            text: 'This report will show the number of patients who received a specific diagnosis at different health facilities.'
+                            text: 'This report will show the number of patients who received a specific diagnosis at different health facilities.',
+                            tdAttrs: {
+                                valign: 'top'
+                            },     
                         }]
                     }, {
                         xtype: 'container',
-                        flex: 1,
+                        width: 500,
                         layout: {
                             type: 'table',
                             columns: 2
@@ -131,10 +152,16 @@ Analysis
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Treatments Report' }
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<TreatmentReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Treatments Report' },
+                            tdAttrs: {
+                                valign: 'middle'
+                            },     
                         }, {
                             xtype: 'label',
-                            text: 'This report will show the number of patients who received a specific treatment at different health facilities.'
+                            text: 'This report will show the number of patients who received a specific treatment at different health facilities.',
+                            tdAttrs: {
+                                valign: 'top'
+                            },     
                         }]
                     }]
                 }, {
@@ -146,7 +173,7 @@ Analysis
                     },
                     items: [{
                         xtype: 'container',
-                        flex: 1,
+                        width: 500,
                         layout: {
                             type: 'table',
                             columns: 2
@@ -158,14 +185,20 @@ Analysis
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Advice Report' }
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<AdviceReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Advice Report' },
+                            tdAttrs: {
+                                valign: 'middle'
+                            },     
                         }, {
                             xtype: 'label',
-                            text: 'This report will show the number of patients who received a specific advice at different health facilities.'
+                            text: 'This report will show the number of patients who received a specific advice at different health facilities.',
+                            tdAttrs: {
+                                valign: 'top'
+                            },     
                         }]
                     }, {
                         xtype: 'container',
-                        flex: 1,
+                        width: 500,
                         layout: {
                             type: 'table',
                             columns: 2
@@ -177,10 +210,16 @@ Analysis
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Summary Report' }
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<SummaryReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Summary Report' },
+                            tdAttrs: {
+                                valign: 'middle'
+                            },     
                         }, {
                             xtype: 'label',
-                            text: 'This report will show the number of patients who failed to report at a certain dispensary, number of patients who obtained/ did not get treatment and the number of patients reported into the system at different dispensaries or health centers.'
+                            text: 'This report will show the number of patients who failed to report at a certain dispensary, number of patients who obtained/ did not get treatment and the number of patients reported into the system at different dispensaries or health centers.',
+                            tdAttrs: {
+                                valign: 'top'
+                            },     
                         }]
                     }]
                 }, {
@@ -192,7 +231,7 @@ Analysis
                     },
                     items: [{
                         xtype: 'container',
-                        flex: 1,
+                        width: 500,
                         layout: {
                             type: 'table',
                             columns: 2
@@ -204,10 +243,16 @@ Analysis
                             rowspan: 2
                         }, {
                             xtype: 'box',
-                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Location Report' }
+                            autoEl: { tag: 'a', cls: 'blue-label analysis-label', href: '@(Url.RouteUrl<GoogleMapReportController>(x=>x.Overview(),AnalysisManagementAreaRegistration.DEFAULT_ROUTE))', html: 'Location Report' },
+                            tdAttrs: {
+                                valign: 'middle'
+                            },     
                         }, {
                             xtype: 'label',
-                            text: 'This report will show the number of patients referred and treated at different health facilities.'
+                            text: 'This report will show the number of patients referred and treated at different health facilities.',
+                            tdAttrs: {
+                                valign: 'top'
+                            },     
                         }]
                     }, {
                         xtype: 'container',
