@@ -718,14 +718,24 @@ Analysis: Patient Demographics
                         margin: 20
                       }
                     },
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        renderer: function (storeItem, item) { 
+                            var total=storeItem.get('gender')=='Female'?chartStore.getAt(0).raw.total:chartStore.getAt(1).raw.total;
+                            var label = total>0?total + " - " + storeItem.get('gender')+"(s)":'';
+
+                            this.setTitle(label + "");
+                        }
+                    },
                     label: {
                         field: 'gender',
                         display: 'horizontal',//'rotate',
                         //contrast: true,
-                        font: '16px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
+                        font: '14px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
                         renderer: function (name) {
                             var total=name=='Female'?chartStore.getAt(0).raw.total:chartStore.getAt(1).raw.total;
-                            return total>0?name+"\n"+total:'';
+                            return total>0?name:'';
                         }
                     },
                     animate: true
@@ -753,11 +763,31 @@ Analysis: Patient Demographics
                         margin: 20
                       }
                     },
+                    tips: {
+                        trackMouse: true,
+                        width: 140,
+                        renderer: function (storeItem, item) { 
+                            var total,
+                                start = storeItem.get('age').match(/(^\d+)|(>\d+)/g),
+                                end= storeItem.get('age').match(/-\d+$/g);
+
+                            start = start == null ? 0 : start[0];
+                            start = parseInt(start.match(/>\d+/)!=null ? start.substr(1, start.length-1) : start);
+
+                            var pos = searchAgeStore(start,ageData);
+                            
+                            total = pos<0 ? 0 : ageStore.getAt(pos).raw.total;
+                            
+                            var label = total>0?total+" Patients - (" + storeItem.get('age') + ")":'';
+
+                            this.setTitle(label + "");
+                        }
+                    },
                     label: {
                         field: 'age',
                         display: 'horizontal',
                         color:'#000',
-                        font: '16px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
+                        font: '14px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
                         renderer: function (name) {
                             var total,
                                 start = name.match(/(^\d+)|(>\d+)/g),
@@ -765,16 +795,10 @@ Analysis: Patient Demographics
 
                             start = start == null ? 0 : start[0];
                             start = parseInt(start.match(/>\d+/)!=null ? start.substr(1, start.length-1) : start);
-                            //end = end == null ? 200 : end[0];
-                            //end = parseInt(end.substr(1,end.length-1));
-
                             var pos = searchAgeStore(start,ageData);
-                            
-                            total = pos<0 ? 0 : ageStore.getAt(pos).raw.total;
-                            
-                            
 
-                            return total>0?name+" ("+total+")":'';
+                            total = pos<0 ? 0 : ageStore.getAt(pos).raw.total;
+                            return total>0?name:'';
                         }
                     },
                     animate: true
