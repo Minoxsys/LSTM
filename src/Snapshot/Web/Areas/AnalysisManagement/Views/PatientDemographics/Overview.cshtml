@@ -43,7 +43,7 @@ Analysis: Patient Demographics
         window.feature.gridHealthFacilityLevelId = "Grid-Patients-Report-Id";
         window.feature.exportStartDate = "";
         window.feature.exportEndDate = "";
-
+        window.feature.DivChartContainer = 'Chart-Patients-Demographic-Report-Container-Id';
 
 
         Ext.override(Ext.chart.Legend, {        
@@ -169,7 +169,7 @@ Analysis: Patient Demographics
             
         });
 
-
+        var myMask = '';
         window.feature.reportStore = Ext.create('Ext.data.Store', {
             fields: ['Initials', 'PatientID', 'Gender', 'Age', 'Drugshop', 'DrugshopDate', 'Condition', 'Dispensary', 'DispensaryDate', 'Diagnosis', 'Treatment', 'Advice'],
             proxy: {
@@ -202,6 +202,12 @@ Analysis: Patient Demographics
             listeners: {
                 'load': function (store, records, options) {
                     DrawChart();
+                    myMask.hide();
+                },
+                'beforeload': function(store, operation, options){
+                    var cont = Ext.getCmp(window.feature.DivChartContainer);
+                    myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                    myMask.show();
                 }
             }
         });
@@ -718,24 +724,21 @@ Analysis: Patient Demographics
                         margin: 20
                       }
                     },
+                    donut: 30,
                     tips: {
                         trackMouse: true,
                         width: 140,
                         renderer: function (storeItem, item) { 
                             var total=storeItem.get('gender')=='Female'?chartStore.getAt(0).raw.total:chartStore.getAt(1).raw.total;
-                            var label = total>0?total + " - " + storeItem.get('gender')+"(s)":'';
+                            var label = total>0?total + " " + storeItem.get('gender')+"(s)":'';
 
                             this.setTitle(label + "");
                         }
                     },
                     label: {
                         field: 'gender',
-                        display: 'horizontal',//'rotate',
-                        //contrast: true,
-                        font: '14px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
                         renderer: function (name) {
-                            var total=name=='Female'?chartStore.getAt(0).raw.total:chartStore.getAt(1).raw.total;
-                            return total>0?name:'';
+                            return '';
                         }
                     },
                     animate: true
@@ -763,6 +766,7 @@ Analysis: Patient Demographics
                         margin: 20
                       }
                     },
+                    donut: 30,
                     tips: {
                         trackMouse: true,
                         width: 140,
@@ -785,20 +789,8 @@ Analysis: Patient Demographics
                     },
                     label: {
                         field: 'age',
-                        display: 'horizontal',
-                        color:'#000',
-                        font: '14px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
                         renderer: function (name) {
-                            var total,
-                                start = name.match(/(^\d+)|(>\d+)/g),
-                                end=name.match(/-\d+$/g);
-
-                            start = start == null ? 0 : start[0];
-                            start = parseInt(start.match(/>\d+/)!=null ? start.substr(1, start.length-1) : start);
-                            var pos = searchAgeStore(start,ageData);
-
-                            total = pos<0 ? 0 : ageStore.getAt(pos).raw.total;
-                            return total>0?name:'';
+                            return '';
                         }
                     },
                     animate: true
@@ -1010,6 +1002,7 @@ Analysis: Patient Demographics
                     flex:1,
                     items:[{
                         xtype:'container',
+                        id: window.feature.DivChartContainer,
                         flex: 1,
                         layout: 'fit',
                         scrollable:true,
