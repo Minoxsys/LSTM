@@ -426,7 +426,7 @@ Analysis: Patient Report
 
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 25 15 15',
-            padding: '5 5 0 5',
+            padding: '20 0 0 20',
             autoScroll: true,
             id: 'TopContainer',
             layout: {
@@ -451,11 +451,14 @@ Analysis: Patient Report
                         {
                             xtype: 'container',
                             height: 40,
-                            layout: { type: 'hbox', align: 'stretch' },
+                            layout: { 
+                                type: 'hbox', 
+                                align: 'stretch' 
+                            },
                             items: [
                                 {
                                     xtype: 'container',
-                                    //height: 40,
+                                    height: 40,
                                     flex:1,
                                     layout: {
                                         type: 'column'
@@ -473,7 +476,7 @@ Analysis: Patient Report
                                 },
                                 {
                                     xtype: 'container',
-                                    //height: 40,
+                                    height: 40,
                                     flex:1,
                                     layout: {
                                         type: 'hbox',
@@ -482,19 +485,13 @@ Analysis: Patient Report
                                     items: [{
                                         xtype: 'button',
                                         id: window.feature.pinButtonId,
-                                        margin: '0 0 15 0',
+                                        margin: '0 10 0 20',
                                         ui: 'snapshot-add-btn',
                                         cls: 'x-add-button-gradient',
                                         text: 'Patient Demographics',
                                         handler: function () {
                                             location.href = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientDemographics", action = "Overview" })';
                                         }
-                                    },
-                                    {
-                                        xtype: 'container',
-                                        height: 30,
-                                        width: 30,
-                                        html: '&nbsp;'
                                     }]
                                 },
                             ]
@@ -654,7 +651,7 @@ Analysis: Patient Report
                     flex: 3,
                     layout: 'fit',
                     autoScroll: true,
-                    padding:'5 0 0 0',
+                    padding: '3 10 0 0',
                     columns: [{
                         header: "Initials",
                         dataIndex: 'Initials',

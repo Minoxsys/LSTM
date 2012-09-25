@@ -17,9 +17,7 @@ Analysis: Patient Demographics
         var analysisBtn = Ext.getCmp(analysisBtnId);
         analysisBtn.toggle(true);
 
-//        var reportBtnId = window.res.content.maincontent.sidebar.petientsreport;
-//        var reportBtn = Ext.getCmp(reportBtnId);
-//        reportBtn.toggle(true);
+
     });
 
 </script>
@@ -559,13 +557,17 @@ Analysis: Patient Demographics
 
         window.feature.chartContainer = Ext.create('Ext.container.Container', {
             id: window.feature.chartContainerId,
-            layout: 'fit',//{type:'hbox', align:'stretch'},
+            minHeight: 600,
+            minWidth: 1100,
+            layout: {
+                align: 'stretch',
+                type: 'hbox'
+            },
             scrollable:true,
             autoScroll: true,
-//            minHeight:400,
-//            autoScroll:true,
             items:[
-            ],
+                
+            ]
         });
 
 
@@ -680,12 +682,6 @@ Analysis: Patient Demographics
         };
 
 
-        
-
-
-        var chartMinHeight = 600,
-            chartMinWidth = 600;
-
         function DrawChart() {
             var cont = Ext.getCmp(window.feature.chartContainerId);
             var chartGender = Ext.getCmp('chartGender');
@@ -703,16 +699,15 @@ Analysis: Patient Demographics
             
             chartGender = new Ext.chart.Chart({
                 id: 'chartGender',
-                minHeight: chartMinHeight,
-                minWidth:chartMinWidth,
-                flex: 0.5,
+                flex: 1,
                 animate: true,
                 store: chartStore,
                 shadow: true,
                 legend: {
-                    position: 'right'
+                    position: 'right',
+                    itemSpacing: 1
                 },
-                insetPadding: 25,
+                insetPadding: 20,
                 theme: 'GenderTheme',
                 series: [{
                     type: 'pie',
@@ -727,7 +722,7 @@ Analysis: Patient Demographics
                         field: 'gender',
                         display: 'horizontal',//'rotate',
                         //contrast: true,
-                        font: '18px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
+                        font: '16px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
                         renderer: function (name) {
                             var total=name=='Female'?chartStore.getAt(0).raw.total:chartStore.getAt(1).raw.total;
                             return total>0?name+"\n"+total:'';
@@ -739,9 +734,7 @@ Analysis: Patient Demographics
             
             chartAge = new Ext.chart.Chart({
                 id: 'chartAge',
-                minHeight: chartMinHeight,
-                minWidth:chartMinWidth,
-                flex: 0.5,
+                flex: 1,
                 animate: true,
                 store: ageStore,
                 shadow: true,
@@ -749,7 +742,7 @@ Analysis: Patient Demographics
                     position: 'right',
                     itemSpacing: 3,
                 },
-                insetPadding: 25,
+                insetPadding: 20,
                 theme: 'AgeTheme',
                 series: [{
                     type: 'pie',
@@ -764,7 +757,7 @@ Analysis: Patient Demographics
                         field: 'age',
                         display: 'horizontal',
                         color:'#000',
-                        font: '14px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
+                        font: '16px "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif',
                         renderer: function (name) {
                             var total,
                                 start = name.match(/(^\d+)|(>\d+)/g),
@@ -793,11 +786,9 @@ Analysis: Patient Demographics
         };
 
 
-
-
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: 10,
-            padding: '10 0 0 0',
+            margin: '15 25 15 15',
+            padding: '20 0 0 20',
             autoScroll: true,
             overflowY:'auto',
             id: 'TopContainer',
@@ -827,7 +818,7 @@ Analysis: Patient Demographics
                             items: [
                                 {
                                     xtype: 'container',
-                                    //height: 40,
+                                    height: 40,
                                     flex:1,
                                     layout: {
                                         type: 'column'
@@ -853,23 +844,17 @@ Analysis: Patient Demographics
                                     items: [{
                                         xtype: 'button',
                                         id: window.feature.pinButtonId,
-                                        margin: '0 5 0 0',
+                                        margin: '0 10 0 20',
                                         ui: 'snapshot-add-btn',
                                         cls: 'x-add-button-gradient',
                                         text: 'Patient Report',
                                         handler: function () {
                                             location.href = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "Overview" })';
                                         }
-                                    },
-                                    {
-                                        xtype: 'container',
-                                        height: 30,
-                                        width: 30,
-                                        html: '&nbsp;'
-                                    }, ]
-                                },
+                                    }]
+                                }
                             ]
-                        },
+                        }
                     ]
                 },
                     {
@@ -997,13 +982,19 @@ Analysis: Patient Demographics
                 {
                     xtype:'container',
                     layout:'fit',
+                    padding: '3 10 0 0',
                     flex:1,
-                    items:[
-                        window.feature.chartContainer
-                    ]
-                },
-                    
-                ]
+                    items:[{
+                        xtype:'container',
+                        flex: 1,
+                        layout: 'fit',
+                        scrollable:true,
+                        autoScroll: true,
+                        items:[
+                            window.feature.chartContainer
+                        ]
+                    }]
+                }]
             }]
         });
 
