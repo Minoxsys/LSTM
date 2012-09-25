@@ -462,6 +462,23 @@ Analysis: Location Report
                         infowindow.close(map, marker);
                     });
 
+                    google.maps.event.addListener(marker, 'click', function () {
+                        var countryId = window.feature.container.down('#' + window.feature.countryComboboxId).getValue();
+                        var regionId = window.feature.container.down('#' + window.feature.regionComboboxId).getValue();
+                        var districtId = window.feature.container.down('#' + window.feature.districtComboboxId).getValue();
+
+                        var map = googleMapPanel.getMap();
+                        var zoomLevel = map.getZoom();
+
+                        var link = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthFacilityReport", action = "FromGoogleMap" })';
+                        link = link + "?id=" + marker.id;
+                        link = link + "&location=" + GetLocation(zoomLevel);
+                        link = link + "&type=" + GetType(marker);
+
+                        navigateTo(link);
+
+                    });
+
                     markerArray[i] = marker;
                     i = i + 1;
                 }, this);
