@@ -635,7 +635,10 @@ Analysis: Summary Report
                         cls: 'x-add-button-gradient',
                         text: 'View Data Table',
                         handler: function () {
-                            var winTabel = new window.feature.modal();
+                            var winTabel = new window.feature.modal({
+                                    height: $(window).height()*80/100,
+                                    width: $(window).width()*80/100,
+                            });
                             winTabel.show();
                         }
                     }]

@@ -1176,7 +1176,10 @@ Analysis: Symptom and Diagnosis Report
                             cls: 'x-add-button-gradient',
                             text: 'View Symptom Table',
                             handler: function () {
-                                var winTabel = new window.feature.symptomModal();
+                                var winTabel = new window.feature.symptomModal({
+                                    height: $(window).height()*80/100,
+                                    width: $(window).width()*80/100,
+                                });
                                 winTabel.show();
                             }
                         },{
@@ -1186,7 +1189,10 @@ Analysis: Symptom and Diagnosis Report
                             cls: 'x-add-button-gradient',
                             text: 'View Diagnosis Table',
                             handler: function () {
-                                var winTabel = new window.feature.modal();
+                                var winTabel = new window.feature.modal({
+                                    height: $(window).height()*80/100,
+                                    width: $(window).width()*80/100,
+                                });
                                 winTabel.show();
                             }
                         },

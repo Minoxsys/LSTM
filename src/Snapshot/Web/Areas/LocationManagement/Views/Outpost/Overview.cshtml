@@ -342,8 +342,6 @@
             extend: 'Ext.window.Window',
             modal:true,
             ui: 'snapshot-popup-window',
-            height: 650,
-            width: 830,
             bodyPadding: 10,
             bodyStyle: 'background-color:#fff',
             layout: {
@@ -687,10 +685,13 @@
                                                 if (!window.feature.googleMapWindow){
                                                     window.feature.googleMapWindow = Ext.create('Ext.feature.GoogleMapWindow', {
                                                         zoom: 5,
+                                                                modal:true,
                                                         closeAction: 'hide',
                                                         selectLocationHandler: Ext.emptyFn 
                                                     });
                                                 }
+
+                                                        window.feature.googleMapWindow.setSize($(window).width()*70/100, $(window).height()*80/100);
     
                                                 window.feature.googleMapWindow.getSelectButton().handler = function() {
                                                     window.feature.googleMapWindow.close();
@@ -702,7 +703,7 @@
                                                 if (coordinatesTextField.getValue() !== null && $.trim(coordinatesTextField.getValue()) !== '') {
                                                     var markerOptions = {};
                                                     markerOptions.position = getGooglePositionFromText(coordinatesTextField.getValue());
-	
+    
                                                     markerOptions.title = outpostNameTextField.getValue();
     
                                                     window.feature.googleMapWindow.setMarker(markerOptions);
@@ -740,7 +741,7 @@
                                                 Ext.getCmp('SaveButtonOutpost').disable();
                                                 Ext.getCmp('CancelButtonOutpost').disable();
 
-                                                window.feature.modal 
+                                        //window.feature.modal 
     
                                                 // Create a record instance through the ModelManager
                                                 var r = new window.feature.ContactModel({
@@ -758,7 +759,7 @@
                                 }
                             ],
                             height:50
-	
+    
                         },
                         me.contactsGrid
     
@@ -768,7 +769,7 @@
                 me.callParent(arguments);
             }
         });
-	
+    
         window.feature.container = Ext.create('Ext.container.Container', {
             margin: '15 25 15 15',
             padding:'20 20 0 20',
@@ -823,6 +824,8 @@
                                             cls: 'x-add-button-gradient',
                                             handler: function(){
                                                 var winAdd = new window.feature.modal({
+                                                    height: $(window).height()*80/100,
+                                                    width: $(window).width()*80/100,
                                                     url: '@Url.RouteUrl(LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Create" })'
                                                 });
 
@@ -978,6 +981,8 @@
                                         else{
                                             var rec = grid.getStore().getAt(rowIndex);
                                             var winEdit = new window.feature.modal({
+                                                height: $(window).height()*80/100,
+                                                width: $(window).width()*80/100,
                                                 entityId: rec.get('Id'),
                                                 listeners:{
                                                     'beforeshow':function(win){
@@ -1043,7 +1048,7 @@
                                                     var action = $.post(postToUrl, {
                                                         outpostId : rec.get('Id')
                                                     });
-	
+    
                                                     action.success(function(serverResponse){
                                                         if (serverResponse.Status !== 'Success') {
                                                             var msgAlert = Ext.Msg;
@@ -1052,7 +1057,7 @@
                                                         }
                                                         window.feature.outpostsStore.loadPage(1);
                                                     });
-	
+    
                                                 }											
                                             });
                                         }
@@ -1081,7 +1086,7 @@
             });
             return ok;
         };
-	
+    
         var contentRes = window.res.content;
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add(window.feature.container);
