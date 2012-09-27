@@ -28,7 +28,7 @@ namespace Web.Services
             mail.CC.Add(new MailAddress(AppSettings.SendEmailCC));
             mail.From = new MailAddress(AppSettings.SendEmailFrom);
 
-            mail.Subject = "Ongezeko la muundo usio sahihi";
+            mail.Subject = "Incorrect message format";
             mail.IsBodyHtml = true;
             mail.Body = CreateBodyMessage(rawSmsReceived);
 
@@ -41,11 +41,11 @@ namespace Web.Services
             if (rawSmsReceived.OutpostId != Guid.Empty)
                 outpost = queryServiceOutpost.Load(rawSmsReceived.OutpostId).Name;
 
-            string body = "Ndugu John <br/>";
-            body += "Alama maalum  ya siri inayofuata (" + outpost + ", " + rawSmsReceived.Sender + ") ina matatizo katika kugawa mawasiliano.Wamejaribu mara tatu bila mafanikio. <br/>";
-            body += "Hali hii inahitaji kurekebishwa haraka iwezekanavyo.<br/>";
-            body += "Wako,<br/>";
-            body += "Jopo  la wasaidizi  la  intHEC.";
+            string body = "Dear  John <br/>";
+            body += "The following health facility (" + outpost + ", " + rawSmsReceived.Sender + ") is having difficulty in supplying their information. They have tried unsuccessfully 3 times.<br/>";
+            body += "This situation needs to be rectified as soon as possible please.<br/>";
+            body += "Regards,<br/>";
+            body += "The IntHEC Support Team.";
 
             return body;
         }
