@@ -43,6 +43,7 @@ Analysis: Symptom and Diagnosis Report
         window.feature.modalStartDateId = 'Overview-Window-Start-Date-Diagnosis-Report';
         window.feature.modalEndDateId = 'Overview-Window-End-Date-Diagnosis-Report';
         window.feature.DivChartContainer = 'Chart-Diagnosis-Report-Container-Id';
+        window.feature.chartContainerId = 'div-chart-container-diagnosis-symptom';
         window.feature.exportStartDate = "";
         window.feature.exportEndDate = "";
 
@@ -417,27 +418,34 @@ Analysis: Symptom and Diagnosis Report
             }
         });
 
+        window.feature.chartContainer = Ext.create('Ext.container.Container', {
+            id: window.feature.chartContainerId,
+            minHeight: 600,
+            minWidth: 1100,
+            layout: {
+                align: 'stretch',
+                type: 'hbox'
+            },
+            scrollable:true,
+            autoScroll: true,
+            items:[
+                
+            ]
+        });
+
         function DrawChart() {
-            var cont = Ext.getCmp(window.feature.DivChartContainer);
+            var cont = Ext.getCmp(window.feature.chartContainerId);
             var chart = Ext.getCmp('chartIdRemove');
             cont.remove(chart);
             var chartS = Ext.getCmp('chartSymptoms');
             cont.remove(chartS);
 
-            var chartHeight = 400,
-                chartWidth = 600;
-
-
-            
             cont.add({
                 id: 'chartSymptoms',
                 xtype: 'chart',
                 animate: true,
                 shadow: true,
-                style: 'background:#fff',
-                minHeight: chartHeight,
-                minWidth: chartWidth,
-                margin: '5 5 5 5',
+                flex: 1,
                 store: window.feature.symptomsStore,
                 theme: 'MyTheme',
                 axes: [{
@@ -485,12 +493,9 @@ Analysis: Symptom and Diagnosis Report
             cont.add({
                 id: 'chartIdRemove',
                 xtype: 'chart',
+                flex: 1,
                 animate: true,
                 shadow: true,
-                style: 'background:#fff',
-                minHeight: chartHeight,
-                minWidth: chartWidth,
-                margin: '5 5 5 5',
                 store: window.feature.chartStore,
                 theme: 'MyTheme',
                 axes: [{
@@ -1283,10 +1288,13 @@ Analysis: Symptom and Diagnosis Report
                 items: [{
                     xtype: 'container',
                     id: window.feature.DivChartContainer,
-                    layout: 'hbox',
+                    flex: 1,
+                    layout: 'fit',
                     scrollable:true,
                     autoScroll: true,
-                    items: []
+                    items:[
+                            window.feature.chartContainer
+                        ]
                 }]
             }, {
                 xtype: 'container',
