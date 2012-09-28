@@ -43,7 +43,8 @@ Analysis: Symptom and Diagnosis Report
         window.feature.modalStartDateId = 'Overview-Window-Start-Date-Diagnosis-Report';
         window.feature.modalEndDateId = 'Overview-Window-End-Date-Diagnosis-Report';
         window.feature.DivChartContainer = 'Chart-Diagnosis-Report-Container-Id';
-        window.feature.chartContainerId = 'div-chart-container-diagnosis-symptom';
+        window.feature.chartSymptomContainerId = 'div-chart-container-symptom';
+        window.feature.chartDiagnosisContainerId = 'div-chart-container-diagnosis';
         window.feature.exportStartDate = "";
         window.feature.exportEndDate = "";
 
@@ -99,11 +100,7 @@ Analysis: Symptom and Diagnosis Report
             }]
         });
 
-        var myMask = null,
-            maskIsShown = false,
-            dchartLoaded = false,
-            schartLoaded = false;
-        
+        var myDiagMask = '';
         window.feature.chartStore = Ext.create('Ext.data.Store', {
             fields: [
                 { name: 'Diagnosis' },
@@ -142,26 +139,17 @@ Analysis: Symptom and Diagnosis Report
                     window.feature.reportStore.proxy.extraParams.endDate = window.feature.chartStore.proxy.extraParams.endDate;
 
                     window.feature.reportStore.load();
-                    if(schartLoaded)
-                        myMask.hide();
-
-                    dchartLoaded=true;
-                    maskIsShown = false;
+                    myDiagMask.hide();
                 },
                 'beforeload': function(store, operation, options){
-                    var cont = Ext.getCmp(window.feature.DivChartContainer);
-                    dchartLoaded = false;
-                    if(!maskIsShown) {
-                        myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
-                        myMask.show();
-                        Ext.defer(myMask.hide, 10000, myMask);
-                        maskIsShown = true;
-                    }
+                    var cont = Ext.getCmp(window.feature.chartDiagnosisContainerId);
+                    myDiagMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                    myDiagMask.show();
                 }
             }
         });
 
-        
+        var mySympMask = '';
         window.feature.symptomsStore = Ext.create('Ext.data.Store', {
             fields: [
                 { name: 'Symptom' },
@@ -200,21 +188,13 @@ Analysis: Symptom and Diagnosis Report
                     window.feature.symptomReportStore.proxy.extraParams.endDate =   window.feature.symptomsStore.proxy.extraParams.endDate;
 
                     window.feature.symptomReportStore.load();
-                    if(dchartLoaded)
-                        myMask.hide();
 
-                    schartLoaded=true;
-                    maskIsShown = false;
+                    mySympMask.hide();
                 },
                 'beforeload': function(store, operation, options){
-                    var cont = Ext.getCmp(window.feature.DivChartContainer);
-                    schartLoaded = false;
-                    if(!maskIsShown) {
-                        myMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
-                        myMask.show();
-                        Ext.defer(myMask.hide, 10000, myMask);
-                        maskIsShown = true;
-                    }
+                    var cont = Ext.getCmp(window.feature.chartSymptomContainerId);
+                    mySympMask = new Ext.LoadMask(cont, { msg: 'Please wait...' });
+                    mySympMask.show();
                 }
             }
         });
@@ -419,7 +399,6 @@ Analysis: Symptom and Diagnosis Report
         });
 
         window.feature.chartContainer = Ext.create('Ext.container.Container', {
-            id: window.feature.chartContainerId,
             minHeight: 600,
             minWidth: 1100,
             layout: {
@@ -428,19 +407,35 @@ Analysis: Symptom and Diagnosis Report
             },
             scrollable:true,
             autoScroll: true,
-            items:[
-                
-            ]
+            items:[{
+                xtype: 'container',
+                flex: 1,
+                id: window.feature.chartSymptomContainerId,
+                layout: {
+                    type: 'fit'
+                },
+                items: []
+            }, {
+                xtype: 'container',
+                flex: 1,
+                id: window.feature.chartDiagnosisContainerId,
+                layout: {
+                    type: 'fit'
+                },
+                items: []
+            }]
         });
 
         function DrawChart() {
-            var cont = Ext.getCmp(window.feature.chartContainerId);
+            var symcont = Ext.getCmp(window.feature.chartSymptomContainerId);
             var chart = Ext.getCmp('chartIdRemove');
-            cont.remove(chart);
-            var chartS = Ext.getCmp('chartSymptoms');
-            cont.remove(chartS);
+            symcont.remove(chart);
 
-            cont.add({
+            var diagcont = Ext.getCmp(window.feature.chartDiagnosisContainerId);
+            var chartS = Ext.getCmp('chartSymptoms');
+            diagcont.remove(chartS);
+
+            symcont.add({
                 id: 'chartSymptoms',
                 xtype: 'chart',
                 animate: true,
@@ -490,7 +485,7 @@ Analysis: Symptom and Diagnosis Report
             });
             
 
-            cont.add({
+            diagcont.add({
                 id: 'chartIdRemove',
                 xtype: 'chart',
                 flex: 1,
@@ -1164,7 +1159,7 @@ Analysis: Symptom and Diagnosis Report
                     }, {
                         xtype: 'label',
                         cls: 'x-title-label',
-                        text: 'Symptom and Diagnosis Report'
+                        text: 'Symptom & Diagnosis Report'
                     }]
                 }, {
                     xtype: 'container',
