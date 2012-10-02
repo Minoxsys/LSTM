@@ -49,18 +49,21 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             foreach (var symptom in querySymptoms.ToList())
             {
-                foreach (var dispensary in outpostList)
+                foreach (var drugshop in outpostList)
                 {
-                    SymptomsReportModel model = new SymptomsReportModel();
-                    model.Symptom = symptom.Code;
-                    model.Outpost = dispensary.Name + " (" + dispensary.District.Name + ")";
+                    if (drugshop != null)
+                    {
+                        SymptomsReportModel model = new SymptomsReportModel();
+                        model.Symptom = symptom.Code;
+                        model.Outpost = drugshop.Name + " (" + drugshop.District.Name + ")";
 
-                    PatientsModel patients = GetNumberOfPatients(dispensary, inputModel.startDate, inputModel.endDate, symptom);
-                    model.Female = patients.Female;
-                    model.Male = patients.Male;
-                    model.NumberOfPatients = patients.TotalNumber;
+                        PatientsModel patients = GetNumberOfPatients(drugshop, inputModel.startDate, inputModel.endDate, symptom);
+                        model.Female = patients.Female;
+                        model.Male = patients.Male;
+                        model.NumberOfPatients = patients.TotalNumber;
 
-                    SymptomsList.Add(model);
+                        SymptomsList.Add(model);
+                    }
                 }
             }
 
@@ -83,25 +86,25 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private PatientsModel GetNumberOfPatients(Outpost outpost, string startDate, string endDate, Condition symptom)
         {
             
-            var dispensaryQuery = QueryMessageFromDrugShop.Query().Where(it => it.ServicesNeeded.Contains(symptom));
+            var drugshopQuery = QueryMessageFromDrugShop.Query().Where(it => it.ServicesNeeded.Contains(symptom));
             if (outpost != null)
-                dispensaryQuery = dispensaryQuery.Where(it => it.OutpostId == outpost.Id);
+                drugshopQuery = drugshopQuery.Where(it => it.OutpostId == outpost.Id);
             
-            //var dispensaryQuery = symptom.Messages.Where(it=>it.OutpostId==outpost.Id);
+            //var drugshopQuery = symptom.Messages.Where(it=>it.OutpostId==outpost.Id);
 
             DateTime outputStartDate;
             if (!string.IsNullOrEmpty(startDate))
                 if (DateTime.TryParse(startDate, out outputStartDate))
-                    dispensaryQuery = dispensaryQuery.Where(it => it.SentDate >= outputStartDate);
+                    drugshopQuery = drugshopQuery.Where(it => it.SentDate >= outputStartDate);
 
             DateTime outputEndDate;
             if (!string.IsNullOrEmpty(endDate))
                 if (DateTime.TryParse(endDate, out outputEndDate))
-                    dispensaryQuery = dispensaryQuery.Where(it => it.SentDate <= outputEndDate);
+                    drugshopQuery = drugshopQuery.Where(it => it.SentDate <= outputEndDate);
 
-            int numberOfFemales = dispensaryQuery.Count(it => it.Gender.ToUpper() == "F");
-            int numberOfMales = dispensaryQuery.Count(it => it.Gender.ToUpper() == "M");
-            int numberOfPatients = dispensaryQuery.Count();
+            int numberOfFemales = drugshopQuery.Count(it => it.Gender.ToUpper() == "F");
+            int numberOfMales = drugshopQuery.Count(it => it.Gender.ToUpper() == "M");
+            int numberOfPatients = drugshopQuery.Count();
 
             return new PatientsModel { Female = numberOfFemales, Male = numberOfMales, TotalNumber = numberOfPatients };
         }
@@ -131,12 +134,15 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 int male = 0;
                 int total = 0;
 
-                foreach (var dispensary in outpostList)
+                foreach (var drugshop in outpostList)
                 {
-                    PatientsModel patients = GetNumberOfPatients(dispensary, inputModel.startDate, inputModel.endDate, symptom);
-                    female += patients.Female;
-                    male += patients.Male;
-                    total += patients.TotalNumber;
+                    if (drugshop != null)
+                    {
+                        PatientsModel patients = GetNumberOfPatients(drugshop, inputModel.startDate, inputModel.endDate, symptom);
+                        female += patients.Female;
+                        male += patients.Male;
+                        total += patients.TotalNumber;
+                    }
                 }
 
                 SymptomsReportModel model = new SymptomsReportModel();

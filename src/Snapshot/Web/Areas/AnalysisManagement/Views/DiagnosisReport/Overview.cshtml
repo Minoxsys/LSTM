@@ -138,7 +138,6 @@ Analysis: Symptom and Diagnosis Report
                     window.feature.reportStore.proxy.extraParams.startDate = window.feature.chartStore.proxy.extraParams.startDate;
                     window.feature.reportStore.proxy.extraParams.endDate = window.feature.chartStore.proxy.extraParams.endDate;
 
-                    window.feature.reportStore.load();
                     myDiagMask.hide();
                 },
                 'beforeload': function(store, operation, options){
@@ -186,8 +185,6 @@ Analysis: Symptom and Diagnosis Report
                     window.feature.symptomReportStore.proxy.extraParams.districtId =window.feature.symptomsStore.proxy.extraParams.districtId;
                     window.feature.symptomReportStore.proxy.extraParams.startDate = window.feature.symptomsStore.proxy.extraParams.startDate;
                     window.feature.symptomReportStore.proxy.extraParams.endDate =   window.feature.symptomsStore.proxy.extraParams.endDate;
-
-                    window.feature.symptomReportStore.load();
 
                     mySympMask.hide();
                 },
@@ -1176,6 +1173,7 @@ Analysis: Symptom and Diagnosis Report
                             cls: 'x-add-button-gradient',
                             text: 'View Symptom Table',
                             handler: function () {
+                                window.feature.symptomReportStore.load();
                                 var winTabel = new window.feature.symptomModal({
                                     height: $(window).height()*80/100,
                                     width: $(window).width()*80/100,
@@ -1189,6 +1187,7 @@ Analysis: Symptom and Diagnosis Report
                             cls: 'x-add-button-gradient',
                             text: 'View Diagnosis Table',
                             handler: function () {
+                                window.feature.reportStore.load();
                                 var winTabel = new window.feature.modal({
                                     height: $(window).height()*80/100,
                                     width: $(window).width()*80/100,
