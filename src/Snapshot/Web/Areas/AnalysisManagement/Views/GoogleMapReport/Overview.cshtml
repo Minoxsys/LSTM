@@ -20,10 +20,11 @@ Analysis: Location Report
         var analysisBtnId = window.res.header.navigation.analysisAndReports;
         var analysisBtn = Ext.getCmp(analysisBtnId);
         analysisBtn.toggle(true);
-
-        var reportBtnId = window.res.content.maincontent.sidebar.googlemaps;
-        var reportBtn = Ext.getCmp(reportBtnId);
-        reportBtn.toggle(true);
+        if(window.res.content.maincontent.sidebar.googlemaps){
+            var reportBtnId = window.res.content.maincontent.sidebar.googlemaps;
+            var reportBtn = Ext.getCmp(reportBtnId);
+            reportBtn.toggle(true);
+        }
     });
 
 </script>

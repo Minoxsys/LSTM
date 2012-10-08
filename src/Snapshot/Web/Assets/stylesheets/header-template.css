@@ -6,21 +6,14 @@ Syntax error: File to import not found or unreadable: ext4/default/all.
                 C:/Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/compass/stylesheets
                 Compass::SpriteImporter
         on line 69 of C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass/header-template.scss
-        from line 1 of C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass/button-template.scss
 
 Backtrace:
 C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass/header-template.scss:69
-C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass/button-template.scss:1
 C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:64:in `rescue in import'
 C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:42:in `import'
 C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:25:in `imported_file'
 C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:148:in `rescue in visit_import'
 C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:153:in `visit_import'
-C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:37:in `visit'
-C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:18:in `visit'
-C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:145:in `block in visit_import'
-C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:145:in `map'
-C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:145:in `visit_import'
 C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:37:in `visit'
 C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:18:in `visit'
 C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:53:in `block in visit_children'
@@ -65,4 +58,4 @@ C:/Ruby192/bin/compass:19:in `<main>'
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Syntax error: File to import not found or unreadable: ext4/default/all.\A               Load paths:\A                 C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass\A                 C:/Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/blueprint/stylesheets\A                 C:/Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/compass/stylesheets\A                 Compass::SpriteImporter\A         on line 69 of C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass/header-template.scss\A         from line 1 of C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass/button-template.scss"; }
+  content: "Syntax error: File to import not found or unreadable: ext4/default/all.\A               Load paths:\A                 C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass\A                 C:/Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/blueprint/stylesheets\A                 C:/Ruby192/lib/ruby/gems/1.9.1/gems/compass-0.12.alpha.0/frameworks/compass/stylesheets\A                 Compass::SpriteImporter\A         on line 69 of C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass/header-template.scss"; }

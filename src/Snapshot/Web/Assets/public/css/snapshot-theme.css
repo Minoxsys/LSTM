@@ -1,0 +1,69 @@
+/*
+Syntax error: File to import not found or unreadable: compass.
+              Load paths:
+                C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets
+                C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass
+        on line 68 of sass/header-template.scss
+        from line 1 of sass/snapshot-theme.scss
+
+63: .x-userMenu-label {
+64: 	font-family: $global2-font-family;
+65: 	font-weight: $font_weight-normal;
+66: 	font-size: $font_size-normal;
+67: 	color: $black-font-color;
+68: 	text-decoration: none;
+69: }
+70: 
+71: .x-title-label {
+72: 	font-family: $global-font-family;
+73: 	font-weight: $font_weight-normal;
+
+Backtrace:
+sass/header-template.scss:68
+sass/snapshot-theme.scss:1
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:64:in `rescue in import'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:42:in `import'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/import_node.rb:25:in `imported_file'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:148:in `rescue in visit_import'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:153:in `visit_import'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:37:in `visit'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:18:in `visit'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:145:in `block in visit_import'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:145:in `map'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:145:in `visit_import'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:37:in `visit'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:18:in `visit'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:53:in `block in visit_children'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:53:in `map'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:53:in `visit_children'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:27:in `block in visit_children'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:39:in `with_environment'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:26:in `visit_children'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:37:in `block in visit'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:47:in `visit_root'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/base.rb:37:in `visit'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:18:in `visit'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/visitors/perform.rb:7:in `visit'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/tree/root_node.rb:20:in `render'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/engine.rb:293:in `_render'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/engine.rb:240:in `render'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/plugin/compiler.rb:319:in `update_stylesheet'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/plugin/compiler.rb:181:in `block (2 levels) in update_stylesheets'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/plugin/compiler.rb:175:in `each'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/plugin/compiler.rb:175:in `block in update_stylesheets'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/plugin/compiler.rb:173:in `each'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/plugin/compiler.rb:173:in `update_stylesheets'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/plugin/compiler.rb:214:in `watch'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/plugin.rb:111:in `method_missing'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/exec.rb:408:in `watch_or_update'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/exec.rb:294:in `process_result'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/exec.rb:41:in `parse'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/lib/sass/exec.rb:21:in `parse!'
+C:/Ruby192/lib/ruby/gems/1.9.1/gems/sass-3.1.7/bin/sass:8:in `<top (required)>'
+C:/Ruby192/bin/sass:19:in `load'
+C:/Ruby192/bin/sass:19:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Syntax error: File to import not found or unreadable: compass.\A               Load paths:\A                 C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets\A                 C:/wamp/www/lstm/lstmproject/src/Snapshot/Web/Assets/sass\A         on line 68 of sass/header-template.scss\A         from line 1 of sass/snapshot-theme.scss\A \A 63: .x-userMenu-label {\A 64: 	font-family: $global2-font-family;\A 65: 	font-weight: $font_weight-normal;\A 66: 	font-size: $font_size-normal;\A 67: 	color: $black-font-color;\A 68: 	text-decoration: none;\A 69: }\A 70: \A 71: .x-title-label {\A 72: 	font-family: $global-font-family;\A 73: 	font-weight: $font_weight-normal;"; }
