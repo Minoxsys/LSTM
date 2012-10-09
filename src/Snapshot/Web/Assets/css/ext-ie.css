@@ -3378,7 +3378,7 @@ table.x-datepicker-inner {
   zoom: 1;
   padding: 0;
   border: 1px solid #99bce8;
-  height: 60px; }
+  height: 32px; }
 
 /* line 60, ../themes/stylesheets/ext4/snapshot/widgets/_grid.scss */
 .x-accordion-item .x-grid-header-ct {
@@ -3427,10 +3427,11 @@ table.x-datepicker-inner {
   border-right-color: #aaccf6; }
 
 /* line 122, ../themes/stylesheets/ext4/snapshot/widgets/_grid.scss */
-/*.x-nlg .x-grid-header-ct,
+.x-nlg .x-grid-header-ct,
 .x-nlg .x-column-header {
   background: repeat-x 0 top;
   background-image: url('../../resources/themes/images/snapshot/grid/column-header-bg.gif'); }
+  /*
  line 129, ../themes/stylesheets/ext4/snapshot/widgets/_grid.scss 
 .x-nlg .x-column-header-over,
 .x-nlg .x-column-header-sort-ASC,
@@ -8523,9 +8524,9 @@ textarea.x-form-invalid-field {
 .x-btn-snapshot-sidebar-btn-small-pressed{
   background-color: white !important;
 }
-.x-grid-header-row{
+/*.x-grid-header-row{
   height: 21px;
-}
+}*/
 .x-btn-snapshot-sidebar-btn-small{
   border: 1px solid #b8bcc0 !important;
   border-left-width: 0px !important;
