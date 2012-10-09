@@ -826,6 +826,7 @@
                                                 var winAdd = new window.feature.modal({
                                                     height: $(window).height()*80/100,
                                                     width: $(window).width()*80/100,
+                                                    maxWidth: 900,
                                                     url: '@Url.RouteUrl(LocationManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "Outpost", action = "Create" })'
                                                 });
 
@@ -921,7 +922,7 @@
                         {
                             text: "Health Facility Name",
                             dataIndex: 'Name',
-                            flex: 1,
+                            flex: 1.5,
                             minWidth:150,
                             menuDisabled: true,
                             sortable: true
@@ -929,14 +930,14 @@
                             text: "Contact method",
                             dataIndex: 'ContactMethod',
                             menuDisabled:true,
-                            flex: 1,
-                            minWidth:50,
-                            maxWidth:100,
+                            flex: 1.5,
+                            minWidth:150,
+                            maxWidth:170,
                             sortable: false
                         },{
                             text: "Coordinates",
                             dataIndex: 'Coordinates',
-                            flex: 1,
+                            flex: 2,
                             minWidth:200,
                             maxWidth:500,
                             menuDisabled: true,
@@ -945,7 +946,7 @@
                             text: "Type",
                             dataIndex: 'OutpostTypeName',
                             flex: 1,
-                            minWidth:50,
+                            minWidth:100,
                             maxWidth:150,
                             align:'center',
                             menuDisabled:true,
@@ -953,9 +954,9 @@
                         },{
                             text: "Dispensary / Health Center",
                             dataIndex: 'WarehouseName',
-                            flex: 1,
-                            minWidth:50,
-                            maxWidth:100,
+                            flex: 1.5,
+                            minWidth:150,
+                            maxWidth:200,
                             align:'center',
                             menuDisabled:true,
                             sortable: false
@@ -963,9 +964,9 @@
                             xtype: 'actioncolumn',
                             text: 'Actions',
                             menuDisabled: true,
-                            flex: 1,
-                            minWidth:100,
-                            maxWidth:150,
+                            flex: 1.5,
+                            minWidth:150,
+                            maxWidth:170,
                             items: [
                                 {
                                     icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',  
@@ -983,6 +984,7 @@
                                             var winEdit = new window.feature.modal({
                                                 height: $(window).height()*80/100,
                                                 width: $(window).width()*80/100,
+                                                maxWidth: 900,
                                                 entityId: rec.get('Id'),
                                                 listeners:{
                                                     'beforeshow':function(win){
