@@ -1026,6 +1026,10 @@
     <Content Include="Assets\resources\themes\images\snapshot\btn\btn-default-toolbar-small-pressed-corners.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\btn\btn-default-toolbar-small-pressed-sides.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\btn\btn-default-toolbar-small-sides.gif" />
+    <Content Include="Assets\resources\themes\images\snapshot\btn\btn-snapshot-navigation-btn-small-disabled-bg.gif" />
+    <Content Include="Assets\resources\themes\images\snapshot\btn\btn-snapshot-navigation-btn-small-focus-bg.gif" />
+    <Content Include="Assets\resources\themes\images\snapshot\btn\btn-snapshot-navigation-btn-small-over-bg.gif" />
+    <Content Include="Assets\resources\themes\images\snapshot\btn\btn-snapshot-navigation-btn-small-pressed-bg.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\button\arrow.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\button\btn.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\button\group-cs.gif" />
@@ -1074,9 +1078,6 @@
     <Content Include="Assets\resources\themes\images\snapshot\grid\col-move-bottom.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\col-move-top.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\column-header-bg.gif" />
-    <Content Include="Assets\resources\themes\images\snapshot\grid\column-header-bg.png" />
-    <Content Include="Assets\resources\themes\images\snapshot\grid\column-header-over-bg.gif" />
-    <Content Include="Assets\resources\themes\images\snapshot\grid\column-header-over-bg.png" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\columns.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\dd-insert-arrow-left.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\grid\dd-insert-arrow-left.png" />
@@ -1147,6 +1148,7 @@
     <Content Include="Assets\resources\themes\images\snapshot\menu\menu-parent.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\menu\menu.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\menu\unchecked.gif" />
+    <Content Include="Assets\resources\themes\images\snapshot\nav\nav-snapshot-gradient-bg.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\panel-header\panel-header-default-bottom-bg.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\panel-header\panel-header-default-framed-bottom-bg.gif" />
     <Content Include="Assets\resources\themes\images\snapshot\panel-header\panel-header-default-framed-bottom-corners.gif" />
