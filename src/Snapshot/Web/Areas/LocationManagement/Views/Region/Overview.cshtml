@@ -136,7 +136,7 @@ Location Administration > Regions: Overview
         };  
 
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: '15 25 15 15',
+            margin: '15 15 15 15',
             padding:'20 20 0 20',
             id:'TopContainer',
             layout: {
@@ -150,7 +150,7 @@ Location Administration > Regions: Overview
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    height: 130,
+                    height: 110,
                     items: [
                     {
                         xtype: 'container',
@@ -158,14 +158,16 @@ Location Administration > Regions: Overview
                         layout: {
                             type: 'column'
                         },
+                        height: 50,
                         items: [{
                             xtype: 'container',
                             height: 30,
                             width: 30,
                             html:'&nbsp;'
-                        },{xtype: 'image',
+                        },{
+                            xtype: 'image',
                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                           margin: '0 10 10 10'
+                           margin: '0 10 10 0'
                         },{
                             xtype: 'label',
                             cls: 'x-title-label',
@@ -180,8 +182,8 @@ Location Administration > Regions: Overview
                             handler: function(){
                                 var winAdd = new window.feature.modal({
                                     title: 'Add New Region',
-                                    buttons: [
-                                        { text: 'Cancel',
+                                    buttons: [{ 
+                                        text: 'Cancel',
                                         margin: '10 10 20 0',
                                         ui: 'snapshot-cancel-btn',
                                         cls: 'x-add-button-gradient',
@@ -239,8 +241,8 @@ Location Administration > Regions: Overview
 						    items: [
 						    {
 							    xtype: 'container',
-							    height: 30,
-							    width: 65,
+							    height: 65,
+                                margin: '0 0 0 30',
 							    html:'&nbsp;'
 						    },{ 
                                 xtype: 'combobox',

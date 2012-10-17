@@ -430,7 +430,6 @@ Location Administration > Districts: Overview
             labelClsExtra: 'combo-label',
             fieldLabel: 'Selected Country',
             valueField: 'Id',
-            margin: '0 0 0 30',
             emptyText: _t('Selected country'),
             listeners: {
                 select: function (combo, record, index) {
@@ -455,7 +454,6 @@ Location Administration > Districts: Overview
             labelClsExtra: 'combo-label',
             fieldLabel: 'Selected Region',
             id: window.feature.comboboxRegionsId,
-            margin: '0 0 0 20',
             emptyText: _t('Selected region'),
             listeners: {
                 select: function (combo, record, index) {
@@ -655,134 +653,133 @@ Location Administration > Districts: Overview
         var mainContent = Ext.getCmp(contentRes.maincontent.id);
         mainContent.add({
             xtype: 'container',
-            margin: '15 25 15 15',
+            margin: '15 15 15 15',
             padding:'20 20 0 20',
 			id:'TopContainer',
 			layout: {
 				align: 'stretch',
 				type: 'vbox'
 			},
-			items: [
-				{
-					xtype: 'container',
-					layout: {
-						align: 'stretch',
-						type: 'vbox'
-					},
-					height: 130,
-					items: [{
-							xtype: 'container',
-							flex: 1,
-                            layout: {
-                                type: 'hbox'
-                            },
-                            items: [{
-                                xtype: 'container',
-                                flex: 2,
-							    layout: {
-								    type: 'column'
-							    },
-							    items: [{
-									xtype: 'container',
-									height: 30,
-									width: 30,
-									html:'&nbsp;'
-								},{xtype: 'image',
-                                src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                margin: '0 10 10 10'
-                                },{
-									xtype: 'label',
-                                    cls: 'x-title-label',
-									text: 'District Administration'
-								},{
-									xtype: 'button',
-                                    ui: 'snapshot-add-btn',
-                                    cls: 'x-add-button-gradient',
-                                    margin: '0 0 0 20',
-                                    disabled: @(ViewBag.HasNoRightsToAdd),
-                                    text: 'Add New District',
-                                    handler: function () {
-                                        var districtModal = new window.feature.modal();
-                                        districtModal.show();
-                                    }
-								}]
-                            },{
-                                xtype: 'container',
-                                flex: 1,
-							    layout: {
-								    type: 'hbox',
-                                    pack:'end'
-							    },
-                                items: [{
-                                    xtype: 'textfield',
-                                    id: window.feature.searchTextFieldId,
-                                    width: 200,
-                                    frame: true,
-                                    emptyText: 'Search District',
-                                    enableKeyEvents: true,
-                                    listeners: {
-                                        specialkey: function (field, e) {
-                                            if (e.getKey() == Ext.EventObject.ESC) {
-                                                var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                                                var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
-                                                var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
-                                                window.feature.store.proxy.extraParams.searchName = '';
-
-                                                Ext.getCmp(window.feature.searchTextFieldId).setValue('');
-                                                if (selectedRegionId) {
-                                                    GetStoreWithDistrictsSpecificToRegionWith(selectedRegionId)
-                                                } else {
-                                                    if (selectedCountryId) {
-                                                        GetStoreWithDistrictsSpecificToCountryWith(selectedCountryId)
-                                                    } else {
-                                                        window.feature.store.loadPage(1);
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        keyup: function () {
-
-                                            var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
-                                            var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
-                                            var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
-
-                                            window.feature.store.proxy.extraParams.searchName = searchByName;
-
-                                            clearTimeout(timeout);
-                                            timeout = setTimeout(function () {
-
-                                                if (selectedRegionId) {
-                                                    GetStoreWithDistrictsByNameSpecificToRegionWith(selectedRegionId, searchByName);
-                                                } else {
-                                                    if (selectedCountryId) {
-                                                        GetStoreWithDistrictsByNameSpecificToCountryWith(selectedCountryId, searchByName);
-                                                    }
-                                                    else {
-                                                        GetStoreWithDistrictsByName(searchByName);
-                                                    }
-                                                }
-                                            }, 1000);
-
-
-                                        }
-                                    }            
-                                }]
-                            }]
-						},{
-							xtype: 'container',
-                            margin: '0 0 0 30',
-							flex: 1,
-							layout: {
-								type: 'column'
-							},
-							items: [
-								window.feature.comboBoxCountries,
-                                window.feature.comboBoxRegions
-							]
-						}
-					]
+			items: [{
+				xtype: 'container',
+				layout: {
+					align: 'stretch',
+					type: 'vbox'
 				},
-					window.feature.grid
+				height: 110,
+				items: [{
+					xtype: 'container',
+                    layout: {
+                        type: 'hbox'
+                    },
+                    height: 55,
+                    items: [{
+                        xtype: 'container',
+                        flex: 1,
+						layout: {
+							type: 'column'
+						},
+						items: [{
+							xtype: 'container',
+							height: 30,
+							width: 30,
+							html:'&nbsp;'
+						},{
+                            xtype: 'image',
+                            src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/pinIcon.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                            margin: '0 10 10 0'
+                        },{
+							xtype: 'label',
+                            cls: 'x-title-label',
+							text: 'District Administration'
+						},{
+							xtype: 'button',
+                            ui: 'snapshot-add-btn',
+                            cls: 'x-add-button-gradient',
+                            margin: '0 0 0 20',
+                            disabled: @(ViewBag.HasNoRightsToAdd),
+                            text: 'Add New District',
+                            handler: function () {
+                                var districtModal = new window.feature.modal();
+                                districtModal.show();
+                            }
+						}]
+                    },{
+                        xtype: 'container',
+                        flex: 1,
+						layout: {
+							type: 'hbox',
+                            pack:'end'
+						},
+                        items: [{
+                            xtype: 'textfield',
+                            id: window.feature.searchTextFieldId,
+                            width: 200,
+                            frame: true,
+                            emptyText: 'Search District',
+                            enableKeyEvents: true,
+                            listeners: {
+                                specialkey: function (field, e) {
+                                    if (e.getKey() == Ext.EventObject.ESC) {
+                                        var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
+                                        var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
+                                        var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+                                        window.feature.store.proxy.extraParams.searchName = '';
+
+                                        Ext.getCmp(window.feature.searchTextFieldId).setValue('');
+                                        if (selectedRegionId) {
+                                            GetStoreWithDistrictsSpecificToRegionWith(selectedRegionId)
+                                        } else {
+                                            if (selectedCountryId) {
+                                                GetStoreWithDistrictsSpecificToCountryWith(selectedCountryId)
+                                            } else {
+                                                window.feature.store.loadPage(1);
+                                            }
+                                        }
+                                    }
+                                },
+                                keyup: function () {
+
+                                    var selectedCountryId = Ext.getCmp(window.feature.comboboxCountriesId).getValue();
+                                    var selectedRegionId = Ext.getCmp(window.feature.comboboxRegionsId).getValue();
+                                    var searchByName = Ext.getCmp(window.feature.searchTextFieldId).getValue();
+
+                                    window.feature.store.proxy.extraParams.searchName = searchByName;
+
+                                    clearTimeout(timeout);
+                                    timeout = setTimeout(function () {
+
+                                        if (selectedRegionId) {
+                                            GetStoreWithDistrictsByNameSpecificToRegionWith(selectedRegionId, searchByName);
+                                        } else {
+                                            if (selectedCountryId) {
+                                                GetStoreWithDistrictsByNameSpecificToCountryWith(selectedCountryId, searchByName);
+                                            }
+                                            else {
+                                                GetStoreWithDistrictsByName(searchByName);
+                                            }
+                                        }
+                                    }, 1000);
+
+
+                                }
+                            }            
+                        }]
+                    }]
+				},{
+					xtype: 'container',
+                    margin: '0 0 0 30',
+					height: 65,
+					layout: {
+						type: 'column'
+					},
+					items: [
+						window.feature.comboBoxCountries,
+                        window.feature.comboBoxRegions
+					]
+				}]
+			},
+			window.feature.grid
 			]
         });
 

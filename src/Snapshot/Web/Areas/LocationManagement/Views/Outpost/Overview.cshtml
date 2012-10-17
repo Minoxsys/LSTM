@@ -245,7 +245,6 @@
             xtype: 'combobox',
             itemId: window.feature.regionOverviewComboId,
             store: window.feature.regionsStore,
-            margin: '0 0 0 20',
             queryMode:'local',
             displayField: 'Name',
             labelAlign: 'top',
@@ -263,7 +262,6 @@
             xtype: 'combobox',
             itemId: window.feature.districtOverviewComboId,
             store: window.feature.districtsStore,
-            margin: '0 0 0 20',
             queryMode:'local',
             displayField: 'Name',
             labelAlign: 'top',
@@ -282,7 +280,6 @@
             xtype: 'combobox',
             itemId: window.feature.outpostTypeOverviewComboId,
             store: window.feature.outpostTypeStore,
-            margin: '0 0 0 20',
             queryMode:'local',
             displayField: 'Name',
             labelAlign: 'top',
@@ -771,7 +768,7 @@
         });
     
         window.feature.container = Ext.create('Ext.container.Container', {
-            margin: '15 25 15 15',
+            margin: '15 15 15 15',
             padding:'20 20 0 20',
             autoScroll:true,
             id:'TopContainer',
@@ -786,7 +783,7 @@
                         align: 'stretch',
                         type: 'vbox'
                     },
-                    height: 130,
+                    height: 110,
                     items: [
                         {
                             xtype: 'container',
@@ -794,6 +791,7 @@
                             layout: {
                                 type: 'hbox'
                             },
+                            height: 50,
                             items:[
                                 {
                                     xtype: 'container',
@@ -810,7 +808,7 @@
                                         },{
                                             xtype: 'image',
                                             src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/outpost.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                                            margin: '0 10 10 10'
+                                            margin: '0 10 10 0'
                                         },{
                                             xtype: 'label',
                                             cls: 'x-title-label',
@@ -898,8 +896,8 @@
                             items: [
                                 {
                                     xtype: 'container',
-                                    height: 30,
-                                    margin: '0 0 0 75',
+                                    height: 65,
+                                    margin: '0 0 0 30',
                                     html:'&nbsp;'
                                 },
                                 window.feature.comboBoxFilters.country,
