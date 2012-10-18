@@ -7,34 +7,7 @@
     Html.RenderPartial("_SubNavigation");
     Html.RenderPartial("_UserAdministrationSideBar");
 }
-<style type="text/css">
-    /*
-    .x-table-layout-cell 
-    {
-        text-align: left;
-        width: 90px;
-        height: 35px;
-    }
-    .x-table-layout-cell table
-    {
-        width: 90px;
-        height: 35px;
-        margin: 0;
-        border: 0;
-        padding: 0;
-        text-align: center;
-    }
-    label.permissions-header
-    {
-        margin-left: 30px;
-    }
-    .x-table-layout-cell table.role-name
-    {
-        width: 250px;
-        margin-left: 30px;
-    }
-    */
-</style>
+
 <script type="text/javascript">
     Ext.onReady(function () {
         var administrationBtnId = window.res.header.navigation.administration;
@@ -132,9 +105,9 @@
         window.feature.viewLabelPadding = '0 0 0 10';
         window.feature.editLabelPadding = '0 0 0 20';
         window.feature.deleteLabelPadding = '0 0 0 20';
-        window.feature.viewPadding = '0 0 0 17';
-        window.feature.editPadding = '0 0 0 25';
-        window.feature.deletePadding = '0 0 0 31';
+        window.feature.viewPadding = '0 0 0 60';
+        window.feature.editPadding = '0 0 0 40';
+        window.feature.deletePadding = '0 0 0 40';
 
         window.feature.role = null;
 
@@ -171,124 +144,309 @@
                 }
             ]
         });
+
     
         window.feature.modal = Ext.create('Ext.window.Window', {
             title: '',
             modal: true,
             ui: 'snapshot-popup-window',
-            height: 500,
-            width: 300,
+            height: 560,
+            width: 400,
             closeAction: 'hide',
             resizable: false,
             layout: { 
                 type: 'vbox',
                 align:'stretch'
             },
-            items: [
-                
-                {
-                    xtype: 'container',
-                    margin: '10 20 10 20',
-                    flex: 1,
-                    layout: {
-                        type: 'table',
-                        columns: 4
-                    },
-                    items: [
-                        { xtype: 'textfield', colspan:4, fieldLabel:"Role", id: window.feature.roleNameId, allowBlank: false },
-                        { xtype: 'textfield', colspan:4, fieldLabel:'Role Description', id: window.feature.roleDescriptionId, allowBlank: false },
-                        { xtype: 'label', text: 'Permissions' },
-                        { xtype: 'label', text: 'View', padding: window.feature.viewLabelPadding },
-                        { xtype: 'label', text: 'Edit', padding: window.feature.editLabelPadding },
-                        { xtype: 'label', text: 'Delete',  padding: window.feature.deleteLabelPadding},
-                        { xtype: 'label', text: 'Country' },
-                        { xtype: 'checkbox', id: window.feature.countryViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.countryEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.countryDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Region' },
-                        { xtype: 'checkbox', id: window.feature.regionViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.regionEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.regionDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'District' },
-                        { xtype: 'checkbox', id: window.feature.districtViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.districtEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.districtDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Outpost' },
-                        { xtype: 'checkbox', id: window.feature.outpostViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.outpostEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.outpostDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Symptom' },
-                        { xtype: 'checkbox', id: window.feature.symptomViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.symptomEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.symptomDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Appointment' },
-                        { xtype: 'checkbox', id: window.feature.appointmentViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.appointmentEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.appointmentDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Diagnosis' },
-                        { xtype: 'checkbox', id: window.feature.diagnosisViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.diagnosisEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.diagnosisDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Treatment' },
-                        { xtype: 'checkbox', id: window.feature.treatmentViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.treatmentEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.treatmentDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Advice' },
-                        { xtype: 'checkbox', id: window.feature.adviceViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.adviceEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.adviceDeleteId, padding: window.feature.deletePadding },                   
-                        { xtype: 'label', text: 'Clients' },
-                        { xtype: 'checkbox', id: window.feature.clientViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.clientEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.clientDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Users' },
-                        { xtype: 'checkbox', id: window.feature.userViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.userEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.userDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Roles' },
-                        { xtype: 'checkbox', id: window.feature.roleViewId, padding: window.feature.viewPadding },
-                        { xtype: 'checkbox', id: window.feature.roleEditId, padding: window.feature.editPadding },
-                        { xtype: 'checkbox', id: window.feature.roleDeleteId, padding: window.feature.deletePadding },
-                        { xtype: 'label', text: 'Messages' },
-                        { xtype: 'checkbox', id: window.feature.messageViewId, padding: window.feature.viewPadding },
-                        { xtype: 'container' },
-                        { xtype: 'container' },
-                        { xtype: 'label', text: 'Reports' },
-                        { xtype: 'checkbox', id: window.feature.reportViewId, padding: window.feature.viewPadding },
-                        { xtype: 'container' },
-                        { xtype: 'container' }
-                    ]
+            items: [{
+                xtype: 'container',
+                layout: {
+                    type: 'column'
+                },
+                margin: '10 0 10 20',
+                height: 60,
+                items: [{
+                    xtype: 'textfield', 
+                    fieldLabel:"Role", 
+                    id: window.feature.roleNameId, 
+                    columnWidth: 1,
+                    allowBlank: false
+                }, {
+                    xtype: 'textfield', 
+                    fieldLabel:'Role Description', 
+                    id: window.feature.roleDescriptionId, 
+                    columnWidth: 1,
+                    allowBlank: false
+                }]
+            }, {
+                xtype: 'container',
+                layout: {
+                    type: 'table',
+                    columns: 4
+                },
+                margin: '10 0 0 15',
+                height: 20,
+                items: [{
+                    xtype: 'label', 
+                    text: 'Permissions',
+                    style: 'font-weight: bold',
+                    padding: '0 0 0 3',
+                }, {
+                    xtype: 'label', 
+                    text: 'View', 
+                    padding: '0 0 0 57',
+                    style: 'font-weight: bold'
+                }, {
+                    xtype: 'label', 
+                    text: 'Edit', 
+                    padding: '0 0 0 25',
+                    style: 'font-weight: bold'
+                }, {
+                    xtype: 'label', 
+                    text: 'Delete',  
+                    padding: '0 0 0 22',
+                    style: 'font-weight: bold'
+                }]
+            }, {
+                xtype: 'container',
+                layout: {
+                    type: 'table',
+                    columns: 4
+                },
+                margin: '10 0 10 20',
+                flex: 1,
+                items: [{ 
+                    xtype: 'label', 
+                    text: 'Country'
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.countryViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.countryEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.countryDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Region' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.regionViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.regionEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.regionDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'District' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.districtViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.districtEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.districtDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Outpost' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.outpostViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.outpostEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.outpostDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Symptom' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.symptomViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.symptomEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.symptomDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Appointment' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.appointmentViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.appointmentEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.appointmentDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Diagnosis' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.diagnosisViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.diagnosisEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.diagnosisDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Treatment' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.treatmentViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.treatmentEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.treatmentDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Advice' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.adviceViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.adviceEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.adviceDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {                   
+                    xtype: 'label', 
+                    text: 'Clients' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.clientViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.clientEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.clientDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Users' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.userViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.userEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.userDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Roles' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.roleViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.roleEditId, 
+                    padding: window.feature.editPadding 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.roleDeleteId, 
+                    padding: window.feature.deletePadding 
+                }, {
+                    xtype: 'label', 
+                    text: 'Messages' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.messageViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'container'
+                }, { 
+                    xtype: 'container'
+                }, {
+                    xtype: 'label', 
+                    text: 'Reports' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.reportViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'container'
+                }, { 
+                    xtype: 'container' 
+                }]
             }],
-            buttons: [
-                {
-                    text: 'Cancel',
-                    margin: '10 10 20 0',
-                    ui: 'snapshot-cancel-btn',
-                    handler: function () {
-                        window.feature.modal.hide();
-                    }
-                },{
-                    text: 'Add',
-                    margin: '0 20 20 10',
-                    ui: 'snapshot-add-btn',
-                    cls: 'x-add-button-gradient',
-                    id: window.feature.saveButtonId, handler: function () {
-                        var roleNameTextBox = Ext.getCmp(window.feature.roleNameId);
-                        var roleDescriptionTextBox = Ext.getCmp(window.feature.roleDescriptionId);
-                        var permissions = GetSelectedPermissionsFromUi();
-                        var ok = isValid(roleNameTextBox, roleDescriptionTextBox, permissions);
-                        if (ok) {
-                            var role = {
-                                Id: window.feature.role != null ? window.feature.role.get('Id') : "",
-                                Name: roleNameTextBox.getValue(),
-                                Description: roleDescriptionTextBox.getValue(),
-                                PermissionNames: permissions
-                            };
-                            SaveRoleData(role);
-                        }
+            buttons: [{
+                text: 'Cancel',
+                margin: '10 10 20 0',
+                ui: 'snapshot-cancel-btn',
+                handler: function () {
+                    window.feature.modal.hide();
+                }
+            },{
+                text: 'Add',
+                margin: '0 20 20 10',
+                ui: 'snapshot-add-btn',
+                cls: 'x-add-button-gradient',
+                id: window.feature.saveButtonId, handler: function () {
+                    var roleNameTextBox = Ext.getCmp(window.feature.roleNameId);
+                    var roleDescriptionTextBox = Ext.getCmp(window.feature.roleDescriptionId);
+                    var permissions = GetSelectedPermissionsFromUi();
+                    var ok = isValid(roleNameTextBox, roleDescriptionTextBox, permissions);
+                    if (ok) {
+                        var role = {
+                            Id: window.feature.role != null ? window.feature.role.get('Id') : "",
+                            Name: roleNameTextBox.getValue(),
+                            Description: roleDescriptionTextBox.getValue(),
+                            PermissionNames: permissions
+                        };
+                        SaveRoleData(role);
                     }
                 }
-            ]
+            }]
         });
     
         window.feature.rolesAdministrationHeader = Ext.create('Ext.container.Container', {
@@ -296,75 +454,72 @@
             anchor: '100% 5%',
             height: 50,
             items: [{
+                xtype: 'container',
+                flex: 1,
+                layout: 'column',
+                items: [{
                     xtype: 'container',
-                    flex: 1,
-                    layout: 'column',
-                    items: [{
-                        xtype: 'container',
-                        height: 30,
-                        width: 30,
-                        html:'&nbsp;'
-                    },{
-                        xtype: 'image',
-                        src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/Users.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                        margin: '0 10 10 0'
-                    },{
-                        xtype: 'label',
-                        cls: 'x-title-label',
-                        text: 'Roles Administration',
-                        margin: '0 0 0 10'
-                    },{
-                        xtype: 'button',
-                        text: 'Add New Role',
-                        ui: 'snapshot-add-btn',
-                        disabled: @(ViewBag.HasNoRightsToAdd),
-                        cls: 'x-add-button-gradient',
-                        margin: '0 0 0 20',
-                        handler: function () {
-                            window.feature.role = null;
-                            InitUiRoleData();
-                            window.feature.modal.setTitle('Add a New Role');
-                            Ext.getCmp(window.feature.saveButtonId).setText('ADD');
-                            window.feature.modal.show();
-                        }
-                    }]
+                    height: 30,
+                    width: 30,
+                    html:'&nbsp;'
                 },{
-                    xtype: 'container',
-                    height: 50,
-                    layout: {
-                        type: 'hbox',
-                        pack: 'end'
-                    },
-                    flrex: 1,
-                    items: [
-                        {
-                            xtype: 'textfield',
-                            itemId: window.feature.searchRoleId,
-                            padding: '0 0 0 0',
-                            width: 200,
-                            frame: true,
-                            emptyText: 'Role Search',
-                            enableKeyEvents: true,
-                            listeners: {
-                                'specialkey': function (field, e) {
-                                        if (e.getKey() == Ext.EventObject.ESC) {
-                                            window.feature.container.down('#'+window.feature.searchRoleId).setValue('');;
-                                            window.feature.store.proxy.extraParams.searchValue = '';
-                                            window.feature.doSearch.delay(500);
-                                    }
-                                 },
-                                'keyup': {
-                                    fn: function (key) {
-                                        var searchValue = window.feature.container.down('#' + window.feature.searchRoleId).getValue();
-                                        window.feature.store.proxy.extraParams.searchValue = searchValue;
-                                        window.feature.doSearch.delay(500);
-                                    }
-                                }
+                    xtype: 'image',
+                    src: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/Administration/Content/Users.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    margin: '0 10 10 0'
+                },{
+                    xtype: 'label',
+                    cls: 'x-title-label',
+                    text: 'Roles Administration',
+                    margin: '0 0 0 10'
+                },{
+                    xtype: 'button',
+                    text: 'Add New Role',
+                    ui: 'snapshot-add-btn',
+                    disabled: @(ViewBag.HasNoRightsToAdd),
+                    cls: 'x-add-button-gradient',
+                    margin: '0 0 0 20',
+                    handler: function () {
+                        window.feature.role = null;
+                        InitUiRoleData();
+                        window.feature.modal.setTitle('Add a New Role');
+                        Ext.getCmp(window.feature.saveButtonId).setText('ADD');
+                        window.feature.modal.show();
+                    }
+                }]
+            },{
+                xtype: 'container',
+                height: 50,
+                layout: {
+                    type: 'hbox',
+                    pack: 'end'
+                },
+                flrex: 1,
+                items: [{
+                    xtype: 'textfield',
+                    itemId: window.feature.searchRoleId,
+                    padding: '0 0 0 0',
+                    width: 200,
+                    frame: true,
+                    emptyText: 'Role Search',
+                    enableKeyEvents: true,
+                    listeners: {
+                        'specialkey': function (field, e) {
+                                if (e.getKey() == Ext.EventObject.ESC) {
+                                    window.feature.container.down('#'+window.feature.searchRoleId).setValue('');;
+                                    window.feature.store.proxy.extraParams.searchValue = '';
+                                    window.feature.doSearch.delay(500);
+                            }
+                            },
+                        'keyup': {
+                            fn: function (key) {
+                                var searchValue = window.feature.container.down('#' + window.feature.searchRoleId).getValue();
+                                window.feature.store.proxy.extraParams.searchValue = searchValue;
+                                window.feature.doSearch.delay(500);
                             }
                         }
-                    ]
-                }
-            ]
+                    }
+                }]
+            }]
         });
     
         window.feature.doSearch = new Ext.util.DelayedTask(function () {
@@ -378,90 +533,86 @@
             disableSelection: true,
             flex: 3,
             autoScroll: true,
-            columns: [
-                {
-                    header: 'Role',
-                    dataIndex: 'Name',
-                    flex: 1,
-                    minWidth:150,
-                    maxWidth:400,
-                    menuDisabled: true,
-                    sortable: true
+            columns: [{
+                header: 'Role',
+                dataIndex: 'Name',
+                flex: 1,
+                minWidth:150,
+                maxWidth:400,
+                menuDisabled: true,
+                sortable: true
+            },{
+                header: 'Number of Users',
+                dataIndex: 'NumberOfUsers',
+                flex: 1,
+                minWidth:50,
+                menuDisabled: true,
+                sortable: false
+            },{
+                xtype: 'actioncolumn',
+                text: 'Actions',
+                menuDisabled: true,
+                flex: 1,
+                minWidth:150,
+                maxWidth:200,
+                items: [{
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    handler: function (grid, rowIndex, colIndex) {
+                        if (@(ViewBag.HasNoRightsToAdd) === true){
+                            var msgAlert = Ext.Msg;
+                            msgAlert.ui = 'snapshot-popup-window';
+                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                            msgAlert.alert("Alert", "You have no rights for this action!");
+                        }
+                        else{
+                            window.feature.role = grid.getStore().getAt(rowIndex);
+                            LoadUiRoleData(window.feature.role);
+                        }
+                    }
                 },{
-                    header: 'Number of Users',
-                    dataIndex: 'NumberOfUsers',
-                    flex: 1,
-                    minWidth:50,
-                    menuDisabled: true,
-                    sortable: false
-                },{
-                    xtype: 'actioncolumn',
-                    text: 'Actions',
-                    menuDisabled: true,
-                    flex: 1,
-                    minWidth:150,
-                    maxWidth:200,
-                    items: [
-                        {
-                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/edit.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                            handler: function (grid, rowIndex, colIndex) {
-                                if (@(ViewBag.HasNoRightsToAdd) === true){
-                                    var msgAlert = Ext.Msg;
-                                    msgAlert.ui = 'snapshot-popup-window';
-                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                    msgAlert.alert("Alert", "You have no rights for this action!");
-                                }
-                                else{
-                                    window.feature.role = grid.getStore().getAt(rowIndex);
-                                    LoadUiRoleData(window.feature.role);
-                                }
-                            }
-                        },{
-                            icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
-                            handler: function (grid, rowIndex, colIndex) {
-                                if (@(ViewBag.HasNoRightsToDelete) === true){
-                                    var msgAlert = Ext.Msg;
-                                    msgAlert.ui = 'snapshot-popup-window';
-                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                    msgAlert.alert("Alert", "You have no rights for this action!");
-                                }
-                                else{
-                                    var rec = grid.getStore().getAt(rowIndex);
-                                    var msgConfirm = Ext.Msg;
-                                    msgConfirm.ui = 'snapshot-popup-window';
-                                    msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
-                                    msgConfirm.msgButtons['no'].margin = '10 10 20 0';
-                                    msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
-                                    msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                    msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
-                                    msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function (btn) {
-                                        if (btn == 'yes') {
-                                            var values = { roleId: rec.get('Id') };
-                                            var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "Delete" })';
-                                            var action = $.post(postToUrl, values);
+                    icon: '@(Url.RouteUrl<Web.Controllers.AssetsController>(it => it.Shared("/img/delete.png"), Web.Bootstrap.Routes.AssetRoutesRegistrar.SHARED))',
+                    handler: function (grid, rowIndex, colIndex) {
+                        if (@(ViewBag.HasNoRightsToDelete) === true){
+                            var msgAlert = Ext.Msg;
+                            msgAlert.ui = 'snapshot-popup-window';
+                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                            msgAlert.alert("Alert", "You have no rights for this action!");
+                        }
+                        else{
+                            var rec = grid.getStore().getAt(rowIndex);
+                            var msgConfirm = Ext.Msg;
+                            msgConfirm.ui = 'snapshot-popup-window';
+                            msgConfirm.msgButtons['no'].ui = 'snapshot-cancel-btn';
+                            msgConfirm.msgButtons['no'].margin = '10 10 20 0';
+                            msgConfirm.msgButtons['yes'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].ui = 'snapshot-add-btn';
+                            msgConfirm.msgButtons['ok'].margin = '10 10 20 0';
+                            msgConfirm.confirm('Warning', Ext.String.format('Are you sure you want to delete {0} ?', rec.get('Name')), function (btn) {
+                                if (btn == 'yes') {
+                                    var values = { roleId: rec.get('Id') };
+                                    var postToUrl = '@Url.RouteUrl(Web.Bootstrap.Routes.DefaultRouteRegistrar.DEFAULT_ROUTE, new { controller = "RoleManager", action = "Delete" })';
+                                    var action = $.post(postToUrl, values);
     
-                                            action.success(function (serverResponse) {
-                                                if (serverResponse.Status === "Error") {
-                                                    var msgAlert = Ext.Msg;
-                                                    msgAlert.ui = 'snapshot-popup-window';
-                                                    msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
-                                                    msgAlert.msgButtons['ok'].margin = '10 10 20 0';
-                                                    msgAlert.alert(serverResponse.Status, serverResponse.Message);
+                                    action.success(function (serverResponse) {
+                                        if (serverResponse.Status === "Error") {
+                                            var msgAlert = Ext.Msg;
+                                            msgAlert.ui = 'snapshot-popup-window';
+                                            msgAlert.msgButtons['ok'].ui = 'snapshot-add-btn';
+                                            msgAlert.msgButtons['ok'].margin = '10 10 20 0';
+                                            msgAlert.alert(serverResponse.Status, serverResponse.Message);
 
-                                                }
-                                                window.feature.store.load();
-                                            });
                                         }
-    
+                                        window.feature.store.load();
                                     });
                                 }
-                            }
+    
+                            });
                         }
-                    ]
-                }
-            ],
+                    }
+                }]
+            }],
             bbar: Ext.create('Ext.PagingToolbar', {
                 store: window.feature.store,
                 displayInfo: true,
