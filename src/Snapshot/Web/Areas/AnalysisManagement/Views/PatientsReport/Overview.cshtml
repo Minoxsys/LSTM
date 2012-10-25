@@ -753,6 +753,7 @@ Analysis: Patient Report
                     bbar: [{
                         xtype: 'button',
                         text: 'Export to Excel',
+                        disabled: @(ViewBag.HasNoRightsToExport),
                         handler: function () {
                             DownloadFile();
                         }

@@ -9,6 +9,7 @@ using Domain;
 using Core.Domain;
 using Web.Security;
 using System.IO;
+using Core.Security;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -31,10 +32,14 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private Client _client;
         private User _user;
 
+        public IPermissionsService PermissionService { get; set; }
+        private const String REPORT_EXPORT_PERMISSION = "ExportToExcel.View";
+
         [HttpGet]
         [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToExport = (PermissionService.HasPermissionAssigned(REPORT_EXPORT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
             return View();
         }
 

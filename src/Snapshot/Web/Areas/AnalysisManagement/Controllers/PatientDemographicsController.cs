@@ -26,8 +26,6 @@ namespace Web.Areas.AnalysisManagement.Controllers
             return View();
         }
 
-
-
         private void LoadUserAndClient()
         {
             var loggedUser = User.Identity.Name;

@@ -83,6 +83,7 @@
         window.feature.roleDeleteId = "Role.Delete";
 
         window.feature.reportViewId = "Report.View";
+        window.feature.exportToExcelViewId = "ExportToExcel.View";
 
         window.feature.checkBoxControls = [];
         window.feature.checkBoxControlIds = [
@@ -99,7 +100,8 @@
             window.feature.userViewId, window.feature.userEditId, window.feature.userDeleteId,
             window.feature.roleViewId, window.feature.roleEditId, window.feature.roleDeleteId,
             window.feature.messageViewId,
-            window.feature.reportViewId
+            window.feature.reportViewId,
+            window.feature.exportToExcelViewId
         ];
 
         window.feature.viewLabelPadding = '0 0 0 10';
@@ -150,7 +152,7 @@
             title: '',
             modal: true,
             ui: 'snapshot-popup-window',
-            height: 560,
+            height: 600,
             width: 400,
             closeAction: 'hide',
             resizable: false,
@@ -412,6 +414,17 @@
                 }, {
                     xtype: 'checkbox', 
                     id: window.feature.reportViewId, 
+                    padding: window.feature.viewPadding 
+                }, {
+                    xtype: 'container'
+                }, { 
+                    xtype: 'container' 
+                }, {
+                    xtype: 'label', 
+                    text: 'Export to excel' 
+                }, {
+                    xtype: 'checkbox', 
+                    id: window.feature.exportToExcelViewId,
                     padding: window.feature.viewPadding 
                 }, {
                     xtype: 'container'

@@ -817,8 +817,26 @@ INSERT INTO [Permissions]
 			,GETDATE()
            )
 end
-GO          
-	   
+GO  
+
+if not exists(select [Name] from Permissions where [Name]=N'ExportToExcel.View')
+begin
+
+
+INSERT INTO [Permissions]
+           ([Id]
+           ,[Name]
+           ,[Created]
+           )
+     VALUES
+           (
+			'7E508FF1-D448-4151-9C8B-906AF73505A3'
+			,'ExportToExcel.View'
+			,GETDATE()
+           )
+end
+GO         
+	  
 		
 -- PermissionRoles
 GO
@@ -1229,5 +1247,14 @@ INSERT INTO PermissionRoles
            ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
 end
 GO
-
+if not exists(select [Permission_FK], [Role_FK] from [PermissionRoles] where [Permission_FK]='7E508FF1-D448-4151-9C8B-906AF73505A3' and [Role_FK] ='461e581b-e60b-4dfd-a5a8-88229f14379b')
+begin
+INSERT INTO PermissionRoles
+           (Permission_FK
+           ,Role_FK)
+     VALUES
+           ('7E508FF1-D448-4151-9C8B-906AF73505A3'
+           ,'461e581b-e60b-4dfd-a5a8-88229f14379b')
+end
+GO
 

@@ -15,6 +15,7 @@ using System.Web.UI;
 using System.Net;
 using System.Web.UI.WebControls;
 using Web.Security;
+using Core.Security;
 
 namespace Web.Areas.AnalysisManagement.Controllers
 {
@@ -33,10 +34,15 @@ namespace Web.Areas.AnalysisManagement.Controllers
         private Client _client;
         private User _user;
 
+        public IPermissionsService PermissionService { get; set; }
+        private const String REPORT_EXPORT_PERMISSION = "ExportToExcel.View";
+
         [HttpGet]
         [Requires(Permissions = "Report.View")]
         public ActionResult Overview()
         {
+            ViewBag.HasNoRightsToExport = (PermissionService.HasPermissionAssigned(REPORT_EXPORT_PERMISSION, User.Identity.Name) == true) ? false.ToString().ToLowerInvariant() : true.ToString().ToLowerInvariant();
+
             Guid? countryId = (Guid?)TempData["GoogleMapCountryId"];
             Guid? regionId = (Guid?)TempData["GoogleMapRegionId"];
             Guid? districtId = (Guid?)TempData["GoogleMapDistrictId"];

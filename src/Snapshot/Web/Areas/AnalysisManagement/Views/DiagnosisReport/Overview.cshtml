@@ -818,6 +818,7 @@ Analysis: Symptom and Diagnosis Report
                         bbar: [{
                             xtype: 'button',
                             text: 'Export to Excel',
+                            disabled: @(ViewBag.HasNoRightsToExport),
                             handler: function () {
                                 DownloadFile();
                             }
@@ -1113,6 +1114,7 @@ Analysis: Symptom and Diagnosis Report
                         bbar: [{
                             xtype: 'button',
                             text: 'Export to Excel',
+                            disabled: @(ViewBag.HasNoRightsToExport),
                             handler: function () {
                                 DownloadFile("symptom");
                             }
