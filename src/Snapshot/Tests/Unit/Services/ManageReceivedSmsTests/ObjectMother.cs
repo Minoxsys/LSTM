@@ -34,6 +34,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public const string WRONGDATEMESSAGEFROMDRUGSHOP = "AFYA XY231398F RX1 RX2";
         public const string WRONGSERVICEMESSAGEFROMDRUGSHOP = "AFYA XY230498F RX1 RX2";
         public const string CORRECTMESSAGEFROMDRUGSHOP = "AFYA XYXX230498F    S1 S5  S6  H1 H2 ";
+        public const string CORRECTMESSAGEFROMDRUGSHOP_WITH_PHONE_NUMBER = "AFYA XYXX230498F    S1 S5  S6  H1 H2 00255123456789";
         public const string WRONGIDCODEMESSAGEDISPENSARY = "AFYA 12343214 TR1 TR2";
         public const string WRONGSERVICECODEFORDISPENSARYMESSAGE = "AFYA 10000008 DIAG1 TREAT1 ADV1";
         public const string CORRECTMESSAGEFROMDISPENSARY = "AFYA 10000008  D1  D2     T4  T3 A1        ";
@@ -46,6 +47,7 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public Outpost outpost;
         public Guid rawSmsReceivedId;
         public RawSmsReceived rawSmsReceived;
+        public RawSmsReceived rawSmsReceivedWithPhoneNumber;
         public Guid messageFromDrugShopId;
         public MessageFromDrugShop messageFromDrugShop;
         public Guid outpostTypeId;
@@ -54,7 +56,19 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
         public RawSmsReceived rawSmsReceivedFromDispensary;
         public Guid rawSmsReceivedForActivationId;
         public RawSmsReceived rawSmsReceivedForActivation;
-        
+
+        public const string CorrectContentWithInvalidPhoneNumber = "AFYA XYXX230498F    S1 S5  S6  H1 H2 +255123123hhh";
+        public const string CorrectContentWithInvalidPhoneNumberNoPlusSign = "AFYA XYXX230498F    S1 S5  S6  H1 H2 00255123123hhh";
+        public const string CorrectContentWithValidPhoneNumberPlusSignBeforeCountryCode = "AFYA XYXX230498F    S1 S5  S6  H1 H2 +255123456789";
+        public const string CorrectContentWithInvalidPhoneNumberPlusSignBeforeCountryCodeButWrongCountryCode = "AFYA XYXX230498F    S1 S5  S6  H1 H2 +111123456789";
+        public const string CorrectContentWithValidPhoneNumberDoubleZeroBeforeCountryCode = "AFYA XYXX230498F    S1 S5  S6  H1 H2 00255123456789";
+        public const string CorrectContentWithInvalidPhoneNumberDoubleZeroBeforeCountryCodeButWrongCountryCode = "AFYA XYXX230498F    S1 S5  S6  H1 H2 00111123456789";
+        public const string CorrectContentWithValidPhoneNumberNothingBeforeCountryCode = "AFYA XYXX230498F    S1 S5  S6  H1 H2 255123456789";
+        public const string CorrectContentWithInvalidPhoneNumberNothingBeforeCountryCodeButWrongCountryCode = "AFYA XYXX230498F    S1 S5  S6  H1 H2 111123456789";
+      //public const string CorrectContentWithValidPhoneNumberWithoutCountryCodeStartWith7 = "AFYA XYXX230498F    S1 S5  S6  H1 H2 712345678";
+      //public const string CorrectContentWithValidPhoneNumberWithoutCountryCodeStartWith6 = "AFYA XYXX230498F    S1 S5  S6  H1 H2 612345678";
+      //public const string CorrectContentWithInValidPhoneNumberWithoutCountryCodeStartWithNon6Or7 = "AFYA XYXX230498F    S1 S5  S6  H1 H2 012345678";
+        public const string CorrectContentWithValidPhoneNumberWithoutCountryCode = "AFYA XYXX230498F    S1 S5  S6  H1 H2 012345678";
 
         public void Init()
         {
@@ -94,6 +108,17 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             rawSmsReceived.ParseSucceeded = true;
             rawSmsReceived.ReceivedDate = DateTime.UtcNow;
             rawSmsReceived.Sender = MOBILE_NUMBER;
+
+            rawSmsReceivedId = Guid.NewGuid();
+            rawSmsReceivedWithPhoneNumber = MockRepository.GeneratePartialMock<RawSmsReceived>();
+            rawSmsReceivedWithPhoneNumber.Stub(c => c.Id).Return(rawSmsReceivedId);
+            rawSmsReceivedWithPhoneNumber.Content = CORRECTMESSAGEFROMDRUGSHOP_WITH_PHONE_NUMBER;
+            rawSmsReceivedWithPhoneNumber.OutpostType = 1;
+            rawSmsReceivedWithPhoneNumber.OutpostId = outpostId;
+            rawSmsReceivedWithPhoneNumber.ParseErrorMessage = null;
+            rawSmsReceivedWithPhoneNumber.ParseSucceeded = true;
+            rawSmsReceivedWithPhoneNumber.ReceivedDate = DateTime.UtcNow;
+            rawSmsReceivedWithPhoneNumber.Sender = MOBILE_NUMBER;
 
             rawSmsReceivedFromDispensaryId = Guid.NewGuid();
             rawSmsReceivedFromDispensary = MockRepository.GeneratePartialMock<RawSmsReceived>();

@@ -100,11 +100,22 @@ namespace Web.Services
                 {
                     if (!string.IsNullOrEmpty(parsedLine[i]))
                     {
-                        var existCondition = queryCondition.Query().Where(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper()).Any();
-                        var existAppointment = queryAppointment.Query().Where(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper()).Any();
+                        var existCondition = queryCondition.Query().Any(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper());
+                        var existAppointment = queryAppointment.Query().Any(it => it.Code.ToUpper() == parsedLine[i].Trim().ToUpper());
 
                         if (!existCondition && !existAppointment)
                         {
+                            if (i == parsedLine.Count() - 1)//last token
+                            {
+                                if (!IsValidPhoneNumber(parsedLine[i]))
+                                {
+                                    rawSmsReceived.ParseSucceeded = false;
+                                    rawSmsReceived.ParseErrorMessage = "The patient's phone number has incorrect format.";
+                                    return rawSmsReceived;
+                                }
+                                rawSmsReceived.ParseSucceeded = true;
+                                return rawSmsReceived;
+                            }
                             rawSmsReceived.ParseSucceeded = false;
                             rawSmsReceived.ParseErrorMessage = "Service " + parsedLine[i].Trim() + " is incorect.";
                             return rawSmsReceived;
@@ -119,6 +130,11 @@ namespace Web.Services
             rawSmsReceived.ParseSucceeded = false;
             rawSmsReceived.ParseErrorMessage = "The format of the message is incorrect.";
             return rawSmsReceived;
+        }
+
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+            return Regex.IsMatch(phoneNumber, @"^((?:\+|00|)255)?([0-9]{2})([0-9]{7})$");
         }
 
         public Domain.RawSmsReceived ParseRawSmsReceivedFromDispensary(Domain.RawSmsReceived rawSmsReceived)
@@ -165,7 +181,7 @@ namespace Web.Services
             return rawSmsReceived;
         }
 
-        public Domain.MessageFromDrugShop CreateMessageFromDrugShop(Domain.RawSmsReceived rawSmsReceived)
+        public MessageFromDrugShop CreateMessageFromDrugShop(RawSmsReceived rawSmsReceived)
         {
             MessageFromDrugShop message = new MessageFromDrugShop();
 
@@ -191,16 +207,40 @@ namespace Web.Services
 
             for (var i = index + 1; i < parsedLine.Count(); i++)
             {
-                var condition = queryCondition.Query().Where(it => it.Code == parsedLine[i]).FirstOrDefault();
-                var appointment = queryAppointment.Query().Where(it => it.Code == parsedLine[i]).FirstOrDefault();
+                var condition = queryCondition.Query().FirstOrDefault(it => it.Code == parsedLine[i]);
+                var appointment = queryAppointment.Query().FirstOrDefault(it => it.Code == parsedLine[i]);
 
                 if (condition != null)
                     message.ServicesNeeded.Add(condition);
                 if (appointment != null)
                     message.Appointments.Add(appointment);
+
+                if (condition == null || appointment == null)
+                {
+                    if (i == parsedLine.Count() - 1)
+                    {
+                        if (IsValidPhoneNumber(parsedLine[i]))
+                        {
+                            message.PatientPhoneNumber = FormatPhoneNumberForStorage(parsedLine[i]);
+                        }
+                    }
+                }
             }
 
             return message;
+        }
+
+        private string FormatPhoneNumberForStorage(string phoneNumber)
+        {
+            if (phoneNumber.Length == 9)
+            {
+                return "+255" + phoneNumber;
+            }
+            if (phoneNumber.StartsWith("00"))
+            {
+                return "+" + phoneNumber.Substring(2);
+            }
+            return phoneNumber;
         }
 
         public MessageFromDispensary CreateMessageFromDispensary(Domain.RawSmsReceived rawSmsReceived)

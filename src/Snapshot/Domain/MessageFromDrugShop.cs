@@ -14,6 +14,7 @@ namespace Domain
         public virtual Guid OutpostId { get; set; }
         public virtual DateTime SentDate { get; set; }
         public virtual string IDCode { get; set; }
+        public virtual string PatientPhoneNumber { get; set; }
         public virtual IList<Condition> ServicesNeeded { get; set; }
         public virtual IList<Appointment> Appointments { get; set; }
 
