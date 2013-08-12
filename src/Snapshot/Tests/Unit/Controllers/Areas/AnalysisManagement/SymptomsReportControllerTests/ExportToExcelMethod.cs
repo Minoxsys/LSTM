@@ -38,9 +38,9 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.SymptomsReportControll
             var stream = new MemoryStream();
 
 
-            context.Expect(ctx => ctx.Response).Returns(response.Object);
-            context.Expect(ctx => ctx.Response.OutputStream).Returns(stream);
-            context.Expect(ctx => ctx.User).Returns(objectMother.User);
+            context.Setup(ctx => ctx.Response).Returns(response.Object);
+            context.Setup(ctx => ctx.Response.OutputStream).Returns(stream);
+            context.Setup(ctx => ctx.User).Returns(objectMother.User);
             
             objectMother.controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), objectMother.controller);
 
@@ -91,9 +91,9 @@ namespace Tests.Unit.Controllers.Areas.AnalysisManagement.SymptomsReportControll
             var stream = new MemoryStream();
 
 
-            context.Expect(ctx => ctx.Response).Returns(response.Object);
-            context.Expect(ctx => ctx.Response.OutputStream).Returns(stream);
-            context.Expect(ctx => ctx.User).Returns(objectMother.User);
+            context.Setup(ctx => ctx.Response).Returns(response.Object);
+            context.Setup(ctx => ctx.Response.OutputStream).Returns(stream);
+            context.Setup(ctx => ctx.User).Returns(objectMother.User);
             
             objectMother.controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), objectMother.controller);
 
