@@ -140,6 +140,7 @@ namespace Web.Controllers
                 {
                     string password = GeneratePassword();
                     responseMessage = SendMessageToDrugShopWithPassword(password, rawSmsReceived);
+                    SendMessageToPatientWithPassword(password, drugshopMessage.PatientPhoneNumber, rawSmsReceived);
                     SendMessageToDispensary(password, rawSmsReceived, drugshopMessage);
                 }
             }
@@ -149,6 +150,12 @@ namespace Web.Controllers
             }
 
             return responseMessage;
+        }
+
+        private void SendMessageToPatientWithPassword(string password, string patientPhoneNumber, RawSmsReceived rawSmsReceived)
+        {
+            string messageForDrugShop = password + " for " + rawSmsReceived.Content;
+            SmsRequestService.SendMessage(messageForDrugShop, patientPhoneNumber);
         }
 
         private string ProcessWrongMessage(RawSmsReceived rawSmsReceived)

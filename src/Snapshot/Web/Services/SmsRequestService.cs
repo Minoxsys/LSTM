@@ -32,22 +32,7 @@ namespace Web.Services
 
         public bool SendMessage(string message, RawSmsReceived response)
         {
-            string phoneNumber = response.Sender.Trim('+');
-            string postData = GeneratePostData(message, phoneNumber);
-            string responseString = "";
-
-            try
-            {
-                responseString = this.httpService.Post(postData);
-                SaveMessage("+" + phoneNumber, message, responseString);
-
-                return true;
-            }
-            catch (Exception ext)
-            {
-                SaveMessage("+" + phoneNumber, message, ext.Message);
-                return false;
-            }
+            return SendMessage(message, response.Sender);
         }
 
         private void SaveMessage(string sender, string message, string responseString)
@@ -72,6 +57,25 @@ namespace Web.Services
             catch (Exception ext)
             {
                 SaveMessage("+" + phoneNumber, message, ext.Message);
+                return false;
+            }
+        }
+
+        public bool SendMessage(string message, string phoneNumber)
+        {
+            string number = phoneNumber.Trim('+');
+            string postData = GeneratePostData(message, number);
+
+            try
+            {
+                string responseString = httpService.Post(postData);
+                SaveMessage("+" + number, message, responseString);
+
+                return true;
+            }
+            catch (Exception ext)
+            {
+                SaveMessage("+" + number, message, ext.Message);
                 return false;
             }
         }
