@@ -110,7 +110,7 @@ namespace Web.Services
                                 if (!IsValidPhoneNumber(parsedLine[i]))
                                 {
                                     rawSmsReceived.ParseSucceeded = false;
-                                    rawSmsReceived.ParseErrorMessage = "The patient's phone number has incorrect format.";
+                                    rawSmsReceived.ParseErrorMessage = "The patient's phone number is not valid.";
                                     return rawSmsReceived;
                                 }
                                 rawSmsReceived.ParseSucceeded = true;
