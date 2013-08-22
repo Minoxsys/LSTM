@@ -163,27 +163,36 @@ namespace Web.Controllers
 
         private string ProcessWrongMessage(RawSmsReceived rawSmsReceived)
         {
-            string responseMessage = "";
-
+            string responseMessage = string.Empty;
             int noOfWrongMessages = SaveWrongMessage(rawSmsReceived);
+
             if (noOfWrongMessages % 3 == 1)
             {
-                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE1, rawSmsReceived);
-                responseMessage = INVALIDFORMATERRORMESSAGE1;
+                responseMessage = IsInvalidPatientPhoneNumber(rawSmsReceived)
+                                      ? Resources.Resources.InvalidPatientTelphoneDescriptiveMessage
+                                      : INVALIDFORMATERRORMESSAGE1;
             }
+
             if (noOfWrongMessages % 3 == 2)
             {
-                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE2, rawSmsReceived);
-                responseMessage = INVALIDFORMATERRORMESSAGE2;
+                responseMessage = IsInvalidPatientPhoneNumber(rawSmsReceived)
+                                      ? Resources.Resources.InvalidPatientTelphoneDescriptiveMessage
+                                      : INVALIDFORMATERRORMESSAGE2;
             }
             if (noOfWrongMessages % 3 == 0)
             {
                 responseMessage = INVALIDFORMATERRORMESSAGE3;
-                SmsRequestService.SendMessage(INVALIDFORMATERRORMESSAGE3, rawSmsReceived);
                 EmailMessageService.SendEmail(rawSmsReceived);
             }
 
+            SmsRequestService.SendMessage(responseMessage, rawSmsReceived);
+
             return responseMessage;
+        }
+
+        private bool IsInvalidPatientPhoneNumber(RawSmsReceived rawSmsReceived)
+        {
+            return String.Compare(rawSmsReceived.ParseErrorMessage, Resources.Resources.InvalidPatientPhoneNumber, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         private MessageFromDrugShop SaveDrugShopMessage(RawSmsReceived rawSmsReceived)
