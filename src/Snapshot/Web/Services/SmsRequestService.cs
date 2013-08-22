@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using Domain;
@@ -63,6 +64,9 @@ namespace Web.Services
 
         public bool SendMessage(string message, string phoneNumber)
         {
+            if (string.IsNullOrEmpty(phoneNumber))
+                throw new ArgumentNullException("phoneNumber");
+
             string number = phoneNumber.Trim('+');
             string postData = GeneratePostData(message, number);
 

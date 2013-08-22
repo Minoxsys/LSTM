@@ -37,6 +37,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         public const string WRONGPHONENUMBER = "00000000012";
         public const string CORRECTPHONENUMBER = "0123456789";
         public const string CORRECTMESSAGEFROMDRUGSHOP = "AFYA XY120387F RR";
+        public const string CORRECTMESSAGEFROMDRUGSHOPWithoutPhoneNumber = "AFYA XY120387F S1";
         public const string CORRECTMESSAGEFROMDRUGSHOPWithPhoneNumber = "AFYA XY120387F S1 123456789";
         public const string INCORRECTMESSAGEFROMDRUGSHOP = "AFYA XYY1215F S1";
         public const string CORRECTMESSAGEFROMDISPENSARY = "AFYA 10000008Shop1 D1 T1 A1";
@@ -50,6 +51,8 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         public Outpost outpost;
         public Guid messageFromDrugShopId;
         public MessageFromDrugShop messageFromDrugShop;
+        public Guid messageFromDrugShopIdNoPatientNumber;
+        public MessageFromDrugShop messageFromDrugShopNoPatientNumber;
         public Guid messageFromDispensaryId;
         public MessageFromDispensary messageFromDispensary;
 
@@ -95,6 +98,15 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             messageFromDrugShop.Initials = "XY";
             messageFromDrugShop.Gender = "F";
             messageFromDrugShop.PatientPhoneNumber = "+255123456789";
+
+            messageFromDrugShopIdNoPatientNumber = Guid.NewGuid();
+            messageFromDrugShopNoPatientNumber = MockRepository.GeneratePartialMock<MessageFromDrugShop>();
+            messageFromDrugShopNoPatientNumber.Stub(c => c.Id).Return(messageFromDrugShopIdNoPatientNumber);
+            messageFromDrugShopNoPatientNumber.OutpostId = outpostId;
+            messageFromDrugShopNoPatientNumber.IDCode = "12345678";
+            messageFromDrugShopNoPatientNumber.Initials = "XY";
+            messageFromDrugShopNoPatientNumber.Gender = "F";
+            messageFromDrugShopNoPatientNumber.PatientPhoneNumber = string.Empty;
 
             messageFromDispensaryId = Guid.NewGuid();
             messageFromDispensary = MockRepository.GeneratePartialMock<MessageFromDispensary>();

@@ -39,6 +39,25 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.smsRequestService.AssertWasCalled(s => s.SendMessage(Arg<string>.Is.Anything, Arg<string>.Matches(dest => dest == "+255123456789")));
         }
 
+        [Test]
+        public void WhenAStandardMessageWasParssedSuccessfull_WithoutPatientPhoneNumber_ThePatientShouldNotReceiveAConfirmationSMS()
+        {
+            //arrange
+            objectMother.manageReceivedSmsService.Stub(s => s.DoesMessageStartWithKeyword(Arg<string>.Is.Anything)).Return(true);
+            objectMother.manageReceivedSmsService.Stub(call => call.DoesMessageStartWithKeyword(Arg<string>.Is.Anything)).Return(true);
+            objectMother.manageReceivedSmsService.Stub(call => call.AssignOutpostToRawSmsReceivedBySenderNumber(Arg<RawSmsReceived>.Is.Anything))
+                        .Return(objectMother.rawSmsCorerctFormatDrugShop);
+            objectMother.manageReceivedSmsService.Stub(call => call.ParseRawSmsReceivedFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop))
+                        .Return(objectMother.rawSmsCorerctFormatDrugShop);
+            objectMother.manageReceivedSmsService.Stub(call => call.CreateMessageFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop))
+                        .Return(objectMother.messageFromDrugShopNoPatientNumber);
+
+            //Act
+            objectMother.controller.ReceiveSms(ObjectMother.CORRECTMESSAGEFROMDRUGSHOPWithoutPhoneNumber, ObjectMother.CORRECTPHONENUMBER);
+
+            objectMother.smsRequestService.AssertWasNotCalled(s => s.SendMessage(Arg<string>.Is.Anything, Arg<string>.Matches(dest => dest == "+255123456789")));
+        }
+
 
         [Test]
         public void WhenMessage_DoesNotStart_WithKeyword_ItShouldReturn_EmptyResult()

@@ -140,7 +140,10 @@ namespace Web.Controllers
                 {
                     string password = GeneratePassword();
                     responseMessage = SendMessageToDrugShopWithPassword(password, rawSmsReceived);
-                    SendMessageToPatientWithPassword(password, drugshopMessage.PatientPhoneNumber, rawSmsReceived);
+                    if (!string.IsNullOrEmpty(drugshopMessage.PatientPhoneNumber))
+                    {
+                        SendMessageToPatientWithPassword(password, drugshopMessage.PatientPhoneNumber, rawSmsReceived);
+                    }
                     SendMessageToDispensary(password, rawSmsReceived, drugshopMessage);
                 }
             }
