@@ -77,5 +77,14 @@ namespace Web.Resources {
                 return ResourceManager.GetString("InvalidPatientTelphoneDescriptiveMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have just been referred to the health facility. If you go for treatment, you will receive free airtime of 100TZS. Ref: {0}, Dispensary: {1}.
+        /// </summary>
+        internal static string PatientConfirmationSmsText {
+            get {
+                return ResourceManager.GetString("PatientConfirmationSmsText", resourceCulture);
+            }
+        }
     }
 }

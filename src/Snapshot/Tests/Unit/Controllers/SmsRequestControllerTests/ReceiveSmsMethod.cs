@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Persistence.Queries.Outposts;
 using Rhino.Mocks;
 using NUnit.Framework;
 using System.Web.Mvc;
@@ -21,7 +22,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         }
 
         [Test]
-        public void WhenAStandardMessageWasParssedSuccessfull_ThePatientShouldReceiveTheSameConfirmationMessageASTheDrugShop()
+        public void WhenAStandardMessageWasParssedSuccessfull_ThePatientShouldReceiveAConfirmationMessage_WithTheDispensaryNameInIt()
         {
             //arrange
             objectMother.manageReceivedSmsService.Stub(s => s.DoesMessageStartWithKeyword(Arg<string>.Is.Anything)).Return(true);
@@ -32,11 +33,13 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
                         .Return(objectMother.rawSmsCorerctFormatDrugShop);
             objectMother.manageReceivedSmsService.Stub(call => call.CreateMessageFromDrugShop(objectMother.rawSmsCorerctFormatDrugShop))
                         .Return(objectMother.messageFromDrugShop);
+            objectMother.queryOutpostsMock.Stub(m => m.GetWarehouse(Arg<Guid>.Is.Anything)).Return(new Outpost { Name = "abc" });
 
             //Act
             objectMother.controller.ReceiveSms(ObjectMother.CORRECTMESSAGEFROMDRUGSHOPWithPhoneNumber, ObjectMother.CORRECTPHONENUMBER);
 
-            objectMother.smsRequestService.AssertWasCalled(s => s.SendMessage(Arg<string>.Is.Anything, Arg<string>.Matches(dest => dest == "+255123456789")));
+            objectMother.smsRequestService.AssertWasCalled(
+                s => s.SendMessage(Arg<string>.Matches(msg => msg.Contains("abc")), Arg<string>.Matches(dest => dest == "+255123456789")));
         }
 
         [Test]
@@ -235,6 +238,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             objectMother.manageReceivedSmsService.Expect(call => call.DoesMessageContainRRCode(Arg<MessageFromDrugShop>.Is.Anything)).Return(false);
             objectMother.smsRequestService.Expect(call => call.SendMessageToDispensary(Arg<string>.Is.Anything, Arg<RawSmsReceived>.Is.Anything)).Return(true);
             objectMother.manageReceivedSmsService.Expect(call => call.CreateMessageToBeSentToDispensary(Arg<MessageFromDrugShop>.Is.Anything)).Return("Simbad");
+            objectMother.queryOutpostsMock.Stub(m => m.GetWarehouse(Arg<Guid>.Is.Anything)).Return(new Outpost());
 
             objectMother.saveCommandRawSmsReceived.Expect(call => call.Execute(Arg<RawSmsReceived>.Matches(
                 p => p.OutpostId == objectMother.outpostId &&

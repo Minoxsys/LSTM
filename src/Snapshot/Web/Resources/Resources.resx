@@ -123,4 +123,7 @@
   <data name="InvalidPatientTelphoneDescriptiveMessage" xml:space="preserve">
     <value>The patient’s number you just sent is wrong, please check the number and send it again.</value>
   </data>
+  <data name="PatientConfirmationSmsText" xml:space="preserve">
+    <value>You have just been referred to the health facility. If you go for treatment, you will receive free airtime of 100TZS. Ref: {0}, Dispensary: {1}</value>
+  </data>
 </root>

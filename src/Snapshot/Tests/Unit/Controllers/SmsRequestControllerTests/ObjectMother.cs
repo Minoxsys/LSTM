@@ -33,6 +33,8 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
         public IQueryService<WrongMessage> queryWrongMessage;
 
         public IDeleteCommand<MessageFromDispensary> deleteCommand;
+
+        public IQueryOutposts queryOutpostsMock;
         
         public const string WRONGPHONENUMBER = "00000000012";
         public const string CORRECTPHONENUMBER = "0123456789";
@@ -174,6 +176,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             queryMessageFromDispensary = MockRepository.GenerateMock<IQueryService<MessageFromDispensary>>();
             deleteCommand = MockRepository.GenerateMock<IDeleteCommand<MessageFromDispensary>>();
             queryWrongMessage = MockRepository.GenerateMock<IQueryService<WrongMessage>>();
+            queryOutpostsMock = MockRepository.GenerateMock<IQueryOutposts>();
 
         }
 
@@ -191,6 +194,7 @@ namespace Tests.Unit.Controllers.SmsRequestControllerTests
             controller.EmailMessageService = emailMessageService;
             controller.QueryWrongMessage = queryWrongMessage;
             controller.SaveCommandWrongMessage = saveCommandWrongMessage;
+            controller.queryOutposts = queryOutpostsMock;
 
             var response = MockRepository.GenerateMock<HttpResponseBase>();
             var controllerContext = MockRepository.GenerateMock<ControllerContext>();

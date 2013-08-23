@@ -31,6 +31,7 @@ namespace Web.Controllers
         public IQueryService<MessageFromDispensary> QueryMessageFromDispensary { get; set; }
         public IQueryService<WrongMessage> QueryWrongMessage { get; set; }
         public IDeleteCommand<MessageFromDispensary> DeleteCommand { get; set; }
+        public IQueryOutposts queryOutposts { get; set; }
 
         private const string INVALIDNUMBERERRORMESSAGE = "Namba ya simu uliotumia haijasajiliwa na waongozi wa mtandao huu. Tafadhali wasiliana na utawala au tuma tena kwa kutumia namba ya simu iliyosajiliwa.Ahsante.";
         private const string INVALIDFORMATERRORMESSAGE1 = "Ujumbe wako sio sahihi, soma kwa makini kadi ya maelekezo, andika ujumbe sahihi, uhakiki ujumbe na utume tena.";
@@ -142,7 +143,8 @@ namespace Web.Controllers
                     responseMessage = SendMessageToDrugShopWithPassword(password, rawSmsReceived);
                     if (!string.IsNullOrEmpty(drugshopMessage.PatientPhoneNumber))
                     {
-                        SendMessageToPatientWithPassword(password, drugshopMessage.PatientPhoneNumber, rawSmsReceived);
+                        Outpost warehouse = queryOutposts.GetWarehouse(rawSmsReceived.OutpostId);
+                        SendMessageToPatientWithPassword(password, drugshopMessage.PatientPhoneNumber, warehouse.Name);
                     }
                     SendMessageToDispensary(password, rawSmsReceived, drugshopMessage);
                 }
@@ -155,9 +157,9 @@ namespace Web.Controllers
             return responseMessage;
         }
 
-        private void SendMessageToPatientWithPassword(string password, string patientPhoneNumber, RawSmsReceived rawSmsReceived)
+        private void SendMessageToPatientWithPassword(string password, string patientPhoneNumber, string dispensaryName)
         {
-            string messageForDrugShop = password + " for " + rawSmsReceived.Content;
+            string messageForDrugShop = string.Format(Resources.Resources.PatientConfirmationSmsText, password, dispensaryName);
             SmsRequestService.SendMessage(messageForDrugShop, patientPhoneNumber);
         }
 
