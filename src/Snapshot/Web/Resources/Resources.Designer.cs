@@ -70,7 +70,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The patient’s telephone number is incorrect. Please review and resend the whole message..
+        ///   Looks up a localized string similar to The patient’s number you just sent is wrong, please check the number and send it again..
         /// </summary>
         internal static string InvalidPatientTelphoneDescriptiveMessage {
             get {

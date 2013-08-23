@@ -121,6 +121,6 @@
     <value>The patient's phone number is not valid.</value>
   </data>
   <data name="InvalidPatientTelphoneDescriptiveMessage" xml:space="preserve">
-    <value>The patient’s telephone number is incorrect. Please review and resend the whole message.</value>
+    <value>The patient’s number you just sent is wrong, please check the number and send it again.</value>
   </data>
 </root>
