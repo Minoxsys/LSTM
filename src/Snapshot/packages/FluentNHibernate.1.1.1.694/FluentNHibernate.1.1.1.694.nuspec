@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>FluentNHibernate</id>
+    <version>1.1.1.694</version>
+    <title>Fluent NHibernate</title>
+    <authors>James Gregory</authors>
+    <owners>James Gregory</owners>
+    <licenseUrl>http://github.com/jagregory/fluent-nhibernate/raw/master/LICENSE.txt</licenseUrl>
+    <projectUrl>http://fluentnhibernate.org</projectUrl>
+    <iconUrl>https://nugetgallery.blob.core.windows.net/icons/FluentNHibernate.1.1.1.694.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Fluent, XML-less, compile safe, automated,  convention-based mappings for NHibernate.  Get your fluent on.</description>
+    <summary>Fluent, XML-less, compile safe, automated,  convention-based mappings for NHibernate.  Get your fluent on.</summary>
+    <copyright>James Gregory and Contributors 2008-2011</copyright>
+    <dependencies>
+      <dependency id="NHibernate" version="3.0.0.2001" />
+    </dependencies>
+  </metadata>
+</package>

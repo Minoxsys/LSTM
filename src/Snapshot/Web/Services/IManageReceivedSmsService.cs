@@ -18,5 +18,6 @@ namespace Web.Services
         bool DoesMessageContainRRCode(MessageFromDrugShop drugshopMessage);
         bool IsMessageForActivation(RawSmsReceived rawSmsReceived);
         void ActivateThePhoneNumber(RawSmsReceived rawSmsReceived);
+        bool IsAttendingReminderAnswer(string message, string sender, out int answer);
     }
 }

@@ -135,6 +135,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             PatientReportModel patientmodel = new PatientReportModel();
             patientmodel.ReportModel.Initials = message.Initials;
             patientmodel.ReportModel.PatientID = message.IDCode;
+            patientmodel.ReportModel.DidNotAttendReason = CreateNotAttendReason(message);
             patientmodel.ReportModel.Gender = message.Gender;
             patientmodel.ReportModel.Age = DateTime.UtcNow.Date < message.BirthDate.AddYears((DateTime.UtcNow.Year - message.BirthDate.Year)) ? (DateTime.UtcNow.Year - message.BirthDate.Year - 1).ToString() : (DateTime.UtcNow.Year - message.BirthDate.Year).ToString();
             patientmodel.Outpost = QueryOutpost.Load(message.OutpostId);
@@ -161,6 +162,24 @@ namespace Web.Areas.AnalysisManagement.Controllers
             }
 
             return patientmodel;
+        }
+
+        private string CreateNotAttendReason(MessageFromDrugShop message)
+        {
+            switch (message.ReminderAnswer)
+            {
+                case 1:
+                    return Resources.Resources.I_will_go_tomorrow;
+                case 2:
+                    return Resources.Resources.I_have_already_gone;
+                case 3:
+                    return Resources.Resources.The_health_facility_is_too_far;
+                case 4:
+                    return Resources.Resources.I_bought_drugs_from_somewhere_else;
+                case 5:
+                    return Resources.Resources.I_am_no_longer_sick;
+            }
+            return string.Empty;
         }
 
         [HttpGet]

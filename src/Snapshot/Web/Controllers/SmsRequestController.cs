@@ -29,6 +29,7 @@ namespace Web.Controllers
         public ISaveOrUpdateCommand<MessageFromDispensary> SaveCommandMessageFromDispensary { get; set; }
         public ISaveOrUpdateCommand<WrongMessage> SaveCommandWrongMessage { get; set; }
         public IQueryService<MessageFromDispensary> QueryMessageFromDispensary { get; set; }
+        public IQueryService<MessageFromDrugShop> QueryMessageFromDrugShop { get; set; }
         public IQueryService<WrongMessage> QueryWrongMessage { get; set; }
         public IDeleteCommand<MessageFromDispensary> DeleteCommand { get; set; }
         public IQueryOutposts queryOutposts { get; set; }
@@ -64,8 +65,16 @@ namespace Web.Controllers
 
             if (ManageReceivedSmsService.DoesMessageStartWithKeyword(message) == false)
             {
-                Response.Write("Wrong keyword.");
-                return new EmptyResult();
+                int answer;
+                if (ManageReceivedSmsService.IsAttendingReminderAnswer(message, msisdn, out answer))
+                {
+                    SaveAnswer(answer, msisdn);
+                }
+                else
+                {
+                    Response.Write("Wrong keyword.");
+                    return new EmptyResult();
+                }
             }
 
             RawSmsReceived rawSmsReceived = new RawSmsReceived { Content = message, Sender = msisdn, ReceivedDate = DateTime.UtcNow };
@@ -96,6 +105,23 @@ namespace Web.Controllers
                 string responseMessage = ProcessMessageFromDispensary(rawSmsReceived);
                 Response.Write(responseMessage);
                 return new EmptyResult();
+            }
+        }
+
+        private void SaveAnswer(int answer, string sender)
+        {
+            var drugShopMessage = QueryMessageFromDrugShop.Query()
+                                                          .Where(
+                                                              m =>
+                                                              m.PatientPhoneNumber == sender && m.PatientReferralConsumed == false &&
+                                                              m.PatientReferralReminderSentDate.HasValue)
+                                                          .OrderByDescending(msg => msg.PatientReferralReminderSentDate)
+                                                          .FirstOrDefault();
+            //always target the most recent doctor reservation (for previous ones it is considered the patient did not want to answer)
+            if (drugShopMessage != null)
+            {
+                drugShopMessage.ReminderAnswer = answer;
+                SaveCommandMessageFromDrugShop.Execute(drugShopMessage);
             }
         }
 
@@ -144,7 +170,7 @@ namespace Web.Controllers
                     if (!string.IsNullOrEmpty(drugshopMessage.PatientPhoneNumber))
                     {
                         Outpost warehouse = queryOutposts.GetWarehouse(rawSmsReceived.OutpostId);
-                        SendMessageToPatientWithPassword(password, drugshopMessage.PatientPhoneNumber, warehouse.Name);
+                        SendMessageToPatientWithPassword(password, drugshopMessage.PatientPhoneNumber, warehouse != null ? warehouse.Name : string.Empty);
                     }
                     SendMessageToDispensary(password, rawSmsReceived, drugshopMessage);
                 }
@@ -272,6 +298,7 @@ namespace Web.Controllers
             if (existingMessage != null)
                 DeleteCommand.Execute(existingMessage);
 
+            dispensaryMessage.MessageFromDrugShop.PatientReferralConsumed = true;
             SaveCommandMessageFromDispensary.Execute(dispensaryMessage);
             return dispensaryMessage.MessageFromDrugShop.IDCode;
         }

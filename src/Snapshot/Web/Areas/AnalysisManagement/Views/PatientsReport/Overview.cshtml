@@ -48,7 +48,7 @@ Analysis: Patient Report
         window.feature.exportEndDate = "";
 
         window.feature.reportStore = Ext.create('Ext.data.Store', {
-            fields: ['Initials', 'PatientID', 'Gender', 'Age', 'Drugshop', 'DrugshopDate', 'Condition', 'Dispensary', 'DispensaryDate', 'Diagnosis', 'Treatment', 'Advice'],
+            fields: ['Initials', 'PatientID', 'Gender', 'Age', 'Drugshop', 'DrugshopDate', 'Condition', 'Dispensary', 'DispensaryDate', 'Diagnosis', 'Treatment', 'Advice', 'DidNotAttendReason'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetPatientsReport" })',
@@ -441,324 +441,334 @@ Analysis: Patient Report
                     type: 'vbox'
                 },
                 items: [{
-                    xtype: 'container',
-                    layout: {
-                        align: 'stretch',
-                        type: 'vbox'
-                    },
-                    height: 40,
-                    items: [
-                        {
-                            xtype: 'container',
-                            height: 40,
-                            layout: { 
-                                type: 'hbox', 
-                                align: 'stretch' 
-                            },
-                            items: [
-                                {
-                                    xtype: 'container',
-                                    height: 40,
-                                    flex:1,
-                                    layout: {
-                                        type: 'column'
-                                    },
-                                    items: [{
-                                        xtype: 'container',
-                                        height: 30,
-                                        width: 30,
-                                        html: '&nbsp;'
-                                    }, {
-                                        xtype: 'label',
-                                        cls: 'x-title-label',
-                                        text: 'Patient Report'
-                                    }, ]
-                                },
-                                {
-                                    xtype: 'container',
-                                    height: 40,
-                                    flex:1,
-                                    layout: {
-                                        type: 'hbox',
-                                        pack: 'end'
-                                    },
-                                    items: [{
-                                        xtype: 'button',
-                                        id: window.feature.pinButtonId,
-                                        margin: '0 10 0 20',
-                                        ui: 'snapshot-add-btn',
-                                        cls: 'x-add-button-gradient',
-                                        text: 'Patient Demographics',
-                                        handler: function () {
-                                            location.href = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientDemographics", action = "Overview" })';
-                                        }
-                                    }]
-                                },
-                            ]
-                        },
-                ]
-            }, {
-                    xtype:'container',
-                    layout:'fit',
-                    height:120,
-                    items: [
-                        
-                        {
-                        xtype:'container',
+                        xtype: 'container',
                         layout: {
-                            type:'hbox',
-                            align:'stretch'
+                            align: 'stretch',
+                            type: 'vbox'
                         },
-                    
-                        autoScroll: true,
-                        scrollable:true,
-                        items:[
+                        height: 40,
+                        items: [
                             {
-                                xtype:'container',
+                                xtype: 'container',
+                                height: 40,
                                 layout: {
-                                    type:'vbox',
-                                    align:'stretch'
+                                    type: 'hbox',
+                                    align: 'stretch'
                                 },
-                                minWidth:400,
-                                items:[
+                                items: [
                                     {
                                         xtype: 'container',
+                                        height: 40,
+                                        flex: 1,
+                                        layout: {
+                                            type: 'column'
+                                        },
+                                        items: [{
+                                                xtype: 'container',
+                                                height: 30,
+                                                width: 30,
+                                                html: '&nbsp;'
+                                            }, {
+                                                xtype: 'label',
+                                                cls: 'x-title-label',
+                                                text: 'Patient Report'
+                                            },]
+                                    },
+                                    {
+                                        xtype: 'container',
+                                        height: 40,
                                         flex: 1,
                                         layout: {
                                             type: 'hbox',
+                                            pack: 'end'
                                         },
+                                        items: [{
+                                            xtype: 'button',
+                                            id: window.feature.pinButtonId,
+                                            margin: '0 10 0 20',
+                                            ui: 'snapshot-add-btn',
+                                            cls: 'x-add-button-gradient',
+                                            text: 'Patient Demographics',
+                                            handler: function() {
+                                                location.href = '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientDemographics", action = "Overview" })';
+                                            }
+                                        }]
+                                    },
+                                ]
+                            },
+                        ]
+                    }, {
+                        xtype: 'container',
+                        layout: 'fit',
+                        height: 120,
+                        items: [                        
+                            {
+                                xtype: 'container',
+                                layout: {
+                                    type: 'hbox',
+                                    align: 'stretch'
+                                },
+
+                                autoScroll: true,
+                                scrollable: true,
+                                items: [
+                                    {
+                                        xtype: 'container',
+                                        layout: {
+                                            type: 'vbox',
+                                            align: 'stretch'
+                                        },
+                                        minWidth: 400,
                                         items: [
                                             {
                                                 xtype: 'container',
-                                                height: 30,
-                                                width: 30,
-                                                html: '&nbsp;'
-                                            }, 
-                                            window.feature.country,
-                                            window.feature.region,
-                                            window.feature.district,
-                                            {
-                                                xtype: 'datefield',
-                                                fieldLabel: 'Start Date',
-                                                format: 'd-M-Y',
-                                                labelAlign: 'top',
-                                                margin: '5 0 5 0',
-                                                itemId: window.feature.StartDateId,
-                                                listeners: {
-                                                    select: function (t, n, o) {
-                                                        var date = t.getValue();
-                                                        window.feature.reportStore.proxy.extraParams.startDate = date;
-                                                        window.feature.exportStartDate = date;
-                                                        window.feature.reportStore.load();
+                                                flex: 1,
+                                                layout: {
+                                                    type: 'hbox',
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'container',
+                                                        height: 30,
+                                                        width: 30,
+                                                        html: '&nbsp;'
                                                     },
-                                                    specialkey: function (field, e) {
-                                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                                            field.setValue(null);
-                                                            window.feature.reportStore.proxy.extraParams.startDate = "";
-                                                            window.feature.exportStartDate = "";
-                                                            window.feature.reportStore.load();
+                                                    window.feature.country,
+                                                    window.feature.region,
+                                                    window.feature.district,
+                                                    {
+                                                        xtype: 'datefield',
+                                                        fieldLabel: 'Start Date',
+                                                        format: 'd-M-Y',
+                                                        labelAlign: 'top',
+                                                        margin: '5 0 5 0',
+                                                        itemId: window.feature.StartDateId,
+                                                        listeners: {
+                                                            select: function(t, n, o) {
+                                                                var date = t.getValue();
+                                                                window.feature.reportStore.proxy.extraParams.startDate = date;
+                                                                window.feature.exportStartDate = date;
+                                                                window.feature.reportStore.load();
+                                                            },
+                                                            specialkey: function(field, e) {
+                                                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                                                    field.setValue(null);
+                                                                    window.feature.reportStore.proxy.extraParams.startDate = "";
+                                                                    window.feature.exportStartDate = "";
+                                                                    window.feature.reportStore.load();
+                                                                }
+                                                            }
                                                         }
-                                                    }
-                                                }
-                                            }, 
-                                            {
-                                                xtype: 'datefield',
-                                                fieldLabel: 'End Date',
-                                                labelAlign: 'top',
-                                                margin: '5 0 5 0',
-                                                format: 'd-M-Y',
-                                                itemId: window.feature.EndDateId,
-                                                listeners: {
-                                                    select: function (t, n, o) {
-                                                        var date = t.getValue();
-                                                        window.feature.reportStore.proxy.extraParams.endDate = date;
-                                                        window.feature.exportEndDate = date;
-                                                        window.feature.reportStore.load();
                                                     },
-                                                    specialkey: function (field, e) {
-                                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                                            field.setValue(null);
-                                                            window.feature.reportStore.proxy.extraParams.endDate = "";
-                                                            window.feature.exportEndDate = "";
-                                                            window.feature.reportStore.load();
+                                                    {
+                                                        xtype: 'datefield',
+                                                        fieldLabel: 'End Date',
+                                                        labelAlign: 'top',
+                                                        margin: '5 0 5 0',
+                                                        format: 'd-M-Y',
+                                                        itemId: window.feature.EndDateId,
+                                                        listeners: {
+                                                            select: function(t, n, o) {
+                                                                var date = t.getValue();
+                                                                window.feature.reportStore.proxy.extraParams.endDate = date;
+                                                                window.feature.exportEndDate = date;
+                                                                window.feature.reportStore.load();
+                                                            },
+                                                            specialkey: function(field, e) {
+                                                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                                                    field.setValue(null);
+                                                                    window.feature.reportStore.proxy.extraParams.endDate = "";
+                                                                    window.feature.exportEndDate = "";
+                                                                    window.feature.reportStore.load();
+                                                                }
+                                                            }
                                                         }
-                                                    }
-                                                }
+                                                    },
+                                                    {
+                                                        xtype: 'container',
+                                                        height: 30,
+                                                        width: 30,
+                                                        html: '&nbsp;'
+                                                    },
+                                                ]
                                             },
                                             {
                                                 xtype: 'container',
-                                                height: 30,
-                                                width: 30,
-                                                html: '&nbsp;'
-                                            }, 
-                                        ]
-                                    }, 
-                                    {
-                                        xtype: 'container',
-                                        flex: 1,
-                                        layout: {
-                                            type: 'hbox'
-                                        },
-                                        items: [
-                                            {
-                                                xtype: 'container',
-                                                height: 30,
-                                                width: 30,
-                                                html: '&nbsp;'
-                                            }, 
-                                            window.feature.conditionCombobox,
-                                            window.feature.diagnosisCombobox,
-                                            window.feature.treatmentCombobox,
-                                            window.feature.adviceCombobox,
-                                            {
-                                                xtype: 'combo',
-                                                typeAhead: true,
-                                                queryMode: 'local',
-                                                triggerAction: 'all',
-                                                fieldLabel: 'Patient Gender',
-                                                margin: '5 0 5 0',
-                                                labelAlign: 'top',
-                                                store: [['M', 'Male'], ['F', 'Female']],
-                                                listeners: {
-                                                    specialkey: function (field, e) {
-                                                        if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
-                                                            field.setValue(null);
-                                                            window.feature.reportStore.proxy.extraParams.gender = "";
-                                                            window.feature.reportStore.load();
-                                                        }
+                                                flex: 1,
+                                                layout: {
+                                                    type: 'hbox'
+                                                },
+                                                items: [
+                                                    {
+                                                        xtype: 'container',
+                                                        height: 30,
+                                                        width: 30,
+                                                        html: '&nbsp;'
                                                     },
-                                                    'select': function (combo, record) {
-                                                        window.feature.reportStore.proxy.extraParams.gender = combo.getValue();
-                                                        window.feature.reportStore.load();
+                                                    window.feature.conditionCombobox,
+                                                    window.feature.diagnosisCombobox,
+                                                    window.feature.treatmentCombobox,
+                                                    window.feature.adviceCombobox,
+                                                    {
+                                                        xtype: 'combo',
+                                                        typeAhead: true,
+                                                        queryMode: 'local',
+                                                        triggerAction: 'all',
+                                                        fieldLabel: 'Patient Gender',
+                                                        margin: '5 0 5 0',
+                                                        labelAlign: 'top',
+                                                        store: [['M', 'Male'], ['F', 'Female']],
+                                                        listeners: {
+                                                            specialkey: function(field, e) {
+                                                                if (e.getKey() == e.BACKSPACE || e.getKey() == e.DELETE) {
+                                                                    field.setValue(null);
+                                                                    window.feature.reportStore.proxy.extraParams.gender = "";
+                                                                    window.feature.reportStore.load();
+                                                                }
+                                                            },
+                                                            'select': function(combo, record) {
+                                                                window.feature.reportStore.proxy.extraParams.gender = combo.getValue();
+                                                                window.feature.reportStore.load();
+                                                            }
+                                                        }
                                                     }
-                                                }
+                                                ]
                                             }
                                         ]
                                     }
-                                ]
-                            }   
-                        ]
-                    
+                                ]                    
+                            }]
+                    },                    
+                    {
+                        xtype: 'gridpanel',
+                        cls: 'white-border',
+                        store: window.feature.reportStore,
+                        loadMask: true,
+                        disableSelection: true,
+                        flex: 3,
+                        layout: 'fit',
+                        autoScroll: true,
+                        padding: '3 10 0 0',
+                        columns: [{
+                                header: "Initials",
+                                dataIndex: 'Initials',
+                                flex: 0.8,
+                                minWidth: 80,
+                                menuDisabled: true,
+                                sortable: true,
+                                tdCls: 'wrap'
+                            }, {
+                                header: "ID",
+                                dataIndex: 'PatientID',
+                                flex: 1,
+                                minWidth: 100,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true,
+                                tdCls: 'wrap'
+                            }, {
+                                header: "Gender",
+                                dataIndex: 'Gender',
+                                flex: 0.8,
+                                minWidth: 82,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Age",
+                                dataIndex: 'Age',
+                                flex: 0.7,
+                                minWidth: 70,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Shop/ADDO",
+                                dataIndex: 'Drugshop',
+                                flex: 1.2,
+                                minWidth: 120,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Date of arrival",
+                                dataIndex: 'DrugshopDate',
+                                flex: 1.3,
+                                minWidth: 130,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Symptom",
+                                dataIndex: 'Condition',
+                                flex: 1.3,
+                                minWidth: 130,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Dispensary",
+                                dataIndex: 'Dispensary',
+                                flex: 1.2,
+                                minWidth: 120,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Date of arrival",
+                                dataIndex: 'DispensaryDate',
+                                flex: 1.3,
+                                minWidth: 130,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Diagnosis",
+                                dataIndex: 'Diagnosis',
+                                flex: 1.3,
+                                minWidth: 130,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Treatment",
+                                dataIndex: 'Treatment',
+                                flex: 1.3,
+                                minWidth: 130,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Advice",
+                                dataIndex: 'Advice',
+                                flex: 1.3,
+                                minWidth: 130,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Reason for DNA",
+                                dataIndex: 'DidNotAttendReason',
+                                flex: 1.3,
+                                minWidth: 200,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: false
+                            }],
+                        bbar: [{
+                                xtype: 'button',
+                                text: 'Export to Excel',
+                                disabled: @(ViewBag.HasNoRightsToExport),
+                                handler: function() {
+                                    DownloadFile();
+                                }
+                            },
+                            {
+                                xtype: 'label',
+                                text: "*DNA = Did Not Attend",
+                                align: 'right'
+                            }]
                     }]
-                },
-                    
-                {
-                    xtype: 'gridpanel',
-                    cls: 'white-border',
-                    store: window.feature.reportStore,
-                    loadMask: true,
-                    disableSelection: true,
-                    flex: 3,
-                    layout: 'fit',
-                    autoScroll: true,
-                    padding: '3 10 0 0',
-                    columns: [{
-                        header: "Initials",
-                        dataIndex: 'Initials',
-                        flex: 0.8,
-                        minWidth: 80,
-                        menuDisabled: true,
-                        sortable: true,
-                        tdCls: 'wrap'
-                    }, {
-                        header: "ID",
-                        dataIndex: 'PatientID',
-                        flex: 1,
-                        minWidth: 100,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true,
-                        tdCls: 'wrap'
-                    }, {
-                        header: "Gender",
-                        dataIndex: 'Gender',
-                        flex: 0.8,
-                        minWidth: 82,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Age",
-                        dataIndex: 'Age',
-                        flex: 0.7,
-                        minWidth: 70,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Shop/ADDO",
-                        dataIndex: 'Drugshop',
-                        flex: 1.2,
-                        minWidth: 120,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Date of arrival",
-                        dataIndex: 'DrugshopDate',
-                        flex: 1.3,
-                        minWidth: 130,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Symptom",
-                        dataIndex: 'Condition',
-                        flex: 1.3,
-                        minWidth: 130,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Dispensary",
-                        dataIndex: 'Dispensary',
-                        flex: 1.2,
-                        minWidth: 120,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Date of arrival",
-                        dataIndex: 'DispensaryDate',
-                        flex: 1.3,
-                        minWidth: 130,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Diagnosis",
-                        dataIndex: 'Diagnosis',
-                        flex: 1.3,
-                        minWidth: 130,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Treatment",
-                        dataIndex: 'Treatment',
-                        flex: 1.3,
-                        minWidth: 130,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }, {
-                        header: "Advice",
-                        dataIndex: 'Advice',
-                        flex: 1.3,
-                        minWidth: 130,
-                        align: 'center',
-                        menuDisabled: true,
-                        sortable: true
-                    }],
-                    bbar: [{
-                        xtype: 'button',
-                        text: 'Export to Excel',
-                        disabled: @(ViewBag.HasNoRightsToExport),
-                        handler: function () {
-                            DownloadFile();
-                        }
-                    }]
-                }]
             }]
         });
 

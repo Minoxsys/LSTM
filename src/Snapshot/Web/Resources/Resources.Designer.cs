@@ -61,6 +61,56 @@ namespace Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have not yet gone to the health facility for treatment after referral. Please reply by selecting a number representing your situation:
+        ///1.     I will go tomorrow (reply with 1)
+        ///2.     But I have already gone (reply with 2)
+        ///3.     The health facility is too far (reply with 3)
+        ///4.     I bought drugs from somewhere else (reply with 4)
+        ///5.     I am no longer sick (reply with 5).
+        /// </summary>
+        internal static string DidNotAttendSmsText {
+            get {
+                return ResourceManager.GetString("DidNotAttendSmsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I am no longer sick.
+        /// </summary>
+        internal static string I_am_no_longer_sick {
+            get {
+                return ResourceManager.GetString("I_am_no_longer_sick", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I bought drugs from somewhere else.
+        /// </summary>
+        internal static string I_bought_drugs_from_somewhere_else {
+            get {
+                return ResourceManager.GetString("I_bought_drugs_from_somewhere_else", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to But I have already gone.
+        /// </summary>
+        internal static string I_have_already_gone {
+            get {
+                return ResourceManager.GetString("I_have_already_gone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I will go tomorrow.
+        /// </summary>
+        internal static string I_will_go_tomorrow {
+            get {
+                return ResourceManager.GetString("I_will_go_tomorrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The patient&apos;s phone number is not valid..
         /// </summary>
         internal static string InvalidPatientPhoneNumber {
@@ -84,6 +134,15 @@ namespace Web.Resources {
         internal static string PatientConfirmationSmsText {
             get {
                 return ResourceManager.GetString("PatientConfirmationSmsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The health facility is too far.
+        /// </summary>
+        internal static string The_health_facility_is_too_far {
+            get {
+                return ResourceManager.GetString("The_health_facility_is_too_far", resourceCulture);
             }
         }
     }

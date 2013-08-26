@@ -17,6 +17,9 @@ namespace Domain
         public virtual string PatientPhoneNumber { get; set; }
         public virtual IList<Condition> ServicesNeeded { get; set; }
         public virtual IList<Appointment> Appointments { get; set; }
+        public virtual bool PatientReferralConsumed { get; set; }
+        public virtual DateTime? PatientReferralReminderSentDate { get; set; }
+        public virtual int ReminderAnswer { get; set; }
 
         public MessageFromDrugShop()
         {

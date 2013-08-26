@@ -310,6 +310,8 @@ namespace Web.Services
 
         public bool DoesMessageStartWithKeyword(string message)
         {
+            if (message.Trim().Length < KEYWORD.Length)
+                return false;
             return message.Substring(0, 4).ToUpper() == KEYWORD;
         }
 
@@ -342,6 +344,36 @@ namespace Web.Services
 
             saveCommandContact.Execute(contact);
 
+        }
+
+        public bool IsAttendingReminderAnswer(string message, string sender, out int answer)
+        {
+            string cleanMsg = message.Trim();
+            int result;
+            if (int.TryParse(cleanMsg, out result))
+            {
+                if (result >= 1 && result <= 5)
+                {
+                    if (ThereIsAQuestionToAnswer(sender))
+                    {
+                        answer = result;
+                        return true;
+                    }
+                }
+            }
+
+            answer = result;
+            return false;
+        }
+
+        private bool ThereIsAQuestionToAnswer(string sender)
+        {
+            //has the patient received a question sms asking for his reason of not attending?
+            return
+                queryMessageFromDrugShop.Query()
+                                        .Any(
+                                            m => m.PatientPhoneNumber == sender && m.PatientReferralConsumed == false &&
+                                                 m.PatientReferralReminderSentDate != null);
         }
     }
 }

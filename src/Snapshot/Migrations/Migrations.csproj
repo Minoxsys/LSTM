@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="10_AddPatientPhoneNumber.cs" />
+    <Compile Include="11_AddPatientReferralFlag.cs" />
     <Compile Include="3_InsertWorldCountryRecords.cs" />
     <Compile Include="2_OutpostAdministration.cs" />
     <Compile Include="1_BasicAuthenticationInfrastructure.cs" />

@@ -283,6 +283,7 @@
     <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageIndexOuputModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessageModel.cs" />
     <Compile Include="Areas\MessagesManagement\Models\SentMessages\SentMessagesIndexModel.cs" />
+    <Compile Include="BackgroundJobs\PatientActivityJob.cs" />
     <Compile Include="Bootstrap\Container\ServicesConventionsRegistrar.cs" />
     <Compile Include="Controllers\AccountOptionsController.cs" />
     <Compile Include="Controllers\SendMessageController.cs" />
@@ -2474,7 +2475,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>58254</DevelopmentServerPort>
+          <DevelopmentServerPort>55150</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/lstm</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

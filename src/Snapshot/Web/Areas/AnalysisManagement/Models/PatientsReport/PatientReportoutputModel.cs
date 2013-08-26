@@ -19,5 +19,6 @@ namespace Web.Areas.AnalysisManagement.Models.PatientsReport
         public string Diagnosis { get; set; }
         public string Treatment { get; set; }
         public string Advice { get; set; }
+        public string DidNotAttendReason { get; set; }
     }
 }

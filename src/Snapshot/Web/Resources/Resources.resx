@@ -117,6 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DidNotAttendSmsText" xml:space="preserve">
+    <value>You have not yet gone to the health facility for treatment after referral. Please reply by selecting a number representing your situation:
+1.     I will go tomorrow (reply with 1)
+2.     But I have already gone (reply with 2)
+3.     The health facility is too far (reply with 3)
+4.     I bought drugs from somewhere else (reply with 4)
+5.     I am no longer sick (reply with 5)</value>
+  </data>
   <data name="InvalidPatientPhoneNumber" xml:space="preserve">
     <value>The patient's phone number is not valid.</value>
   </data>
@@ -125,5 +133,20 @@
   </data>
   <data name="PatientConfirmationSmsText" xml:space="preserve">
     <value>You have just been referred to the health facility. If you go for treatment, you will receive free airtime of 100TZS. Ref: {0}, Dispensary: {1}</value>
+  </data>
+  <data name="I_will_go_tomorrow" xml:space="preserve">
+    <value>I will go tomorrow</value>
+  </data>
+  <data name="I_have_already_gone" xml:space="preserve">
+    <value>But I have already gone</value>
+  </data>
+  <data name="The_health_facility_is_too_far" xml:space="preserve">
+    <value>The health facility is too far</value>
+  </data>
+  <data name="I_bought_drugs_from_somewhere_else" xml:space="preserve">
+    <value>I bought drugs from somewhere else</value>
+  </data>
+  <data name="I_am_no_longer_sick" xml:space="preserve">
+    <value>I am no longer sick</value>
   </data>
 </root>
