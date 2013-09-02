@@ -28,25 +28,33 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    var cutoffDate = DateTime.UtcNow.AddMinutes(-12);
-                    List<MessageFromDrugShop> referrals =
-                        _drugShopMsgQuery()
-                            .Query()
-                            .Where(
-                                m => m.PatientReferralConsumed == false && //did not went to the health facility
-                                     m.PatientPhoneNumber != null && //is a recent entry (after this change request upgrade)
-                                     m.ReminderAnswer == 0 && //it is not answered already
-                                     m.PatientReferralReminderSentDate == null &&
-                                     m.SentDate < cutoffDate // the message is older than 48 hours
-                            ).ToList();
-
-                    foreach (var messageFromDrugShop in referrals)
+                    try
                     {
-                        if (_smsService().SendMessage(Resources.Resources.DidNotAttendSmsText, messageFromDrugShop.PatientPhoneNumber))
+                        var cutoffDate = DateTime.UtcNow.AddMinutes(-12);
+                        List<MessageFromDrugShop> referrals =
+                            _drugShopMsgQuery()
+                                .Query()
+                                .Where(
+                                    m => m.PatientReferralConsumed == false && //did not went to the health facility
+                                         m.PatientPhoneNumber != null && //is a recent entry (after this change request upgrade)
+                                         m.ReminderAnswer == 0 && //it is not answered already
+                                         m.PatientReferralReminderSentDate == null &&
+                                         m.SentDate < cutoffDate // the message is older than 48 hours
+                                ).ToList();
+
+                        _smsService().SendMessage("ref cnt=" + referrals.Count.ToString(), "___");
+
+                        foreach (var messageFromDrugShop in referrals)
                         {
-                            messageFromDrugShop.PatientReferralReminderSentDate = DateTime.UtcNow;
-                            _saveDrugShopMsgCmd().Execute(messageFromDrugShop);
+                            if (_smsService().SendMessage(Resources.Resources.DidNotAttendSmsText, messageFromDrugShop.PatientPhoneNumber))
+                            {
+                                messageFromDrugShop.PatientReferralReminderSentDate = DateTime.UtcNow;
+                                _saveDrugShopMsgCmd().Execute(messageFromDrugShop);
+                            }
                         }
+                    }
+                    catch (Exception)
+                    {
                     }
                 });
         }
