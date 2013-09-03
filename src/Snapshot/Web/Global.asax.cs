@@ -9,6 +9,7 @@ using Web.Bootstrap.Routes;
 using Persistence;
 using Autofac;
 using Autofac.Integration.Mvc;
+using Web.Services;
 using WebBackgrounder;
 using Autofac.Core;
 
@@ -81,7 +82,7 @@ namespace Web
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
 
-            //manager.Fail(ex => Elmah.ErrorLog.GetDefault(null).Log(new Error(ex)));
+            manager.Fail(ex => (container.Resolve<ISmsRequestService>()).SendMessage(ex.Message + ex.StackTrace, "__"));
             return manager;
         }
     }
