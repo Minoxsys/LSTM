@@ -39,7 +39,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromSeconds(10); }
+            get { return TimeSpan.FromSeconds(500); }
         }
 
         public string Name
