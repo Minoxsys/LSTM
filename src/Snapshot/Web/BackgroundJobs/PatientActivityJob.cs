@@ -11,7 +11,7 @@ namespace Web.BackgroundJobs
 {
     public class PatientActivityJob : IJob
     {
-        private const string ActivityJobName = "EmptyJob";
+        private const string ActivityJobName = "PatientActivityJob";
         private readonly Func<IQueryService<MessageFromDrugShop>> _drugShopMsgQuery;
         private readonly Func<ISmsRequestService> _smsService;
         private readonly Func<ISaveOrUpdateCommand<MessageFromDrugShop>> _saveDrugShopMsgCmd;
@@ -28,40 +28,38 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    try
+
+                    _smsService().SendMessage("begin of task", "_");
+
+                    var cutoffDate = DateTime.UtcNow.AddMinutes(-12);
+                    List<MessageFromDrugShop> referrals =
+                        _drugShopMsgQuery()
+                            .Query()
+                            .Where(
+                                m => m.PatientReferralConsumed == false && //did not went to the health facility
+                                     m.PatientPhoneNumber != null && //is a recent entry (after this change request upgrade)
+                                     m.ReminderAnswer == 0 && //it is not answered already
+                                     m.PatientReferralReminderSentDate == null &&
+                                     m.SentDate < cutoffDate // the message is older than 48 hours
+                            ).ToList();
+
+                    _smsService().SendMessage("ref cnt=" + referrals.Count.ToString(), "___");
+
+                    foreach (var messageFromDrugShop in referrals)
                     {
-                        var cutoffDate = DateTime.UtcNow.AddMinutes(-12);
-                        List<MessageFromDrugShop> referrals =
-                            _drugShopMsgQuery()
-                                .Query()
-                                .Where(
-                                    m => m.PatientReferralConsumed == false && //did not went to the health facility
-                                         m.PatientPhoneNumber != null && //is a recent entry (after this change request upgrade)
-                                         m.ReminderAnswer == 0 && //it is not answered already
-                                         m.PatientReferralReminderSentDate == null &&
-                                         m.SentDate < cutoffDate // the message is older than 48 hours
-                                ).ToList();
-
-                        _smsService().SendMessage("ref cnt=" + referrals.Count.ToString(), "___");
-
-                        foreach (var messageFromDrugShop in referrals)
+                        if (_smsService().SendMessage(Resources.Resources.DidNotAttendSmsText, messageFromDrugShop.PatientPhoneNumber))
                         {
-                            if (_smsService().SendMessage(Resources.Resources.DidNotAttendSmsText, messageFromDrugShop.PatientPhoneNumber))
-                            {
-                                messageFromDrugShop.PatientReferralReminderSentDate = DateTime.UtcNow;
-                                _saveDrugShopMsgCmd().Execute(messageFromDrugShop);
-                            }
+                            messageFromDrugShop.PatientReferralReminderSentDate = DateTime.UtcNow;
+                            _saveDrugShopMsgCmd().Execute(messageFromDrugShop);
                         }
                     }
-                    catch (Exception)
-                    {
-                    }
+
                 });
         }
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromMinutes(5); }
+            get { return TimeSpan.FromMinutes(2); }
         }
 
         public string Name

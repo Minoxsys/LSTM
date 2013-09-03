@@ -24,10 +24,7 @@ namespace Web
 
         IContainer IContainerAccessor.Container
         {
-            get
-            {
-                return container;
-            }
+            get { return container; }
         }
 
 
@@ -63,7 +60,7 @@ namespace Web
         protected static void InitializeContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            builder.RegisterControllers(typeof (MvcApplication).Assembly);
             ContainerRegistrar.Register(builder);
             container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
@@ -72,17 +69,17 @@ namespace Web
         private static JobManager CreateJobWorkersManager()
         {
             var jobs = new IJob[]
-            {
-                container.Resolve<Web.BackgroundJobs.EmptyJob>(),
-                container.Resolve<BackgroundJobs.PatientActivityJob>()
+                {
+                    container.Resolve<BackgroundJobs.EmptyJob>(),
+                    container.Resolve<BackgroundJobs.PatientActivityJob>()
                 
-                //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
-                /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
-                //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
-            };
+                    //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
+                    /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
+                    //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
+                };
 
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
-            var manager = new JobManager(jobs, coordinator);
+            var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
 
             //manager.Fail(ex => Elmah.ErrorLog.GetDefault(null).Log(new Error(ex)));
             return manager;
