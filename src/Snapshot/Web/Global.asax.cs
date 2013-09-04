@@ -61,15 +61,18 @@ namespace Web
             try
             {
                 var ex = Server.GetLastError();
-                var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
-                var sentsms = new SentSms()
-                    {
-                        Message = ex.Message + ex.StackTrace,
-                        PhoneNumber = "000",
-                        SentDate = DateTime.UtcNow,
-                        Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
-                    };
-                service.Execute(sentsms);
+                if (ex != null)
+                {
+                    var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
+                    var sentsms = new SentSms()
+                        {
+                            Message = ex.Message + ex.StackTrace,
+                            PhoneNumber = "000",
+                            SentDate = DateTime.UtcNow,
+                            Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
+                        };
+                    service.Execute(sentsms);
+                }
             }
             catch (Exception)
             {
@@ -98,7 +101,7 @@ namespace Web
         {
             var jobs = new IJob[]
                 {
-                  //  container.Resolve<BackgroundJobs.EmptyJob>(),
+                    //  container.Resolve<BackgroundJobs.EmptyJob>(),
                     container.Resolve<BackgroundJobs.PatientActivityJob>()
                 
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
@@ -109,7 +112,7 @@ namespace Web
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
 
-          //  manager.Fail(ex => (container.Resolve<ISmsRequestService>()).SendMessage(ex.Message + ex.StackTrace, "__"));
+            manager.Fail(ex => { throw new Exception("fail from manager", ex); });
             return manager;
         }
     }
