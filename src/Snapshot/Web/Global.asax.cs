@@ -115,7 +115,8 @@ namespace Web
 
 
             var repo = new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession());
-            repo.CreateWorkItem("1", new PatientActivityJob(null, null, null));
+            repo.CreateWorkItem("c50cc8e3-47c6-4b1a-be28-c9b92506c481", new PatientActivityJob(null, null, null));
+            repo.Dispose();
             //manager.Fail(ex =>
             //    {
             //        var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
