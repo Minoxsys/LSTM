@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Core.Persistence;
 using Domain;
+using Web.BackgroundJobs;
 using Web.Bootstrap.Container;
 using Web.Bootstrap.Routes;
 using Persistence;
@@ -112,18 +113,21 @@ namespace Web
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
 
-            manager.Fail(ex =>
-                {
-                    var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
-                    var sentsms = new SentSms()
-                    {
-                        Message = ex.Message + ex.StackTrace,
-                        PhoneNumber = "0",
-                        SentDate = DateTime.UtcNow,
-                        Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
-                    };
-                    service.Execute(sentsms);
-                });
+
+            var repo = new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession());
+            repo.CreateWorkItem("1", new PatientActivityJob(null, null, null));
+            //manager.Fail(ex =>
+            //    {
+            //        var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
+            //        var sentsms = new SentSms()
+            //        {
+            //            Message = ex.Message + ex.StackTrace,
+            //            PhoneNumber = "0",
+            //            SentDate = DateTime.UtcNow,
+            //            Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
+            //        };
+            //        service.Execute(sentsms);
+            //    });
             return manager;
         }
     }
