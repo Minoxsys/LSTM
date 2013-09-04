@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Core.Persistence;
+using Domain;
 using Web.Bootstrap.Container;
 using Web.Bootstrap.Routes;
 using Persistence;
@@ -53,6 +55,29 @@ namespace Web
         }
 
 
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            try
+            {
+                var ex = Server.GetLastError();
+                var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
+                var sentsms = new SentSms()
+                    {
+                        Message = ex.Message + ex.StackTrace,
+                        PhoneNumber = "000",
+                        SentDate = DateTime.UtcNow,
+                        Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
+                    };
+                service.Execute(sentsms);
+            }
+            catch (Exception)
+            {
+                // failed to record exception
+            }
+        }
+
+
         /// <summary>
         /// Instantiate the container and add all Controllers that derive from 
         /// UnityController to the container.  Also associate the Controller 
@@ -66,6 +91,8 @@ namespace Web
             container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
         }
+
+
 
         private static JobManager CreateJobWorkersManager()
         {
@@ -82,7 +109,7 @@ namespace Web
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
 
-            manager.Fail(ex => (container.Resolve<ISmsRequestService>()).SendMessage(ex.Message + ex.StackTrace, "__"));
+          //  manager.Fail(ex => (container.Resolve<ISmsRequestService>()).SendMessage(ex.Message + ex.StackTrace, "__"));
             return manager;
         }
     }
