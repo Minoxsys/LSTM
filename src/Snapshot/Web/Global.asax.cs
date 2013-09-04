@@ -129,7 +129,7 @@ namespace Web
                     //    Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
                     //};
                     //service.Execute(sentsms);
-                    throw new Exception("nnnnn", ex);
+                  //  throw new Exception("nnnnn", ex);
 
                 });
             return manager;
