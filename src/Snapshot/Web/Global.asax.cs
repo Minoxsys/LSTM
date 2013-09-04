@@ -57,29 +57,29 @@ namespace Web
 
 
 
-        protected void Application_Error(object sender, EventArgs e)
-        {
-            try
-            {
-                var ex = Server.GetLastError();
-                if (ex != null)
-                {
-                    var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
-                    var sentsms = new SentSms()
-                        {
-                            Message = ex.Message + ex.StackTrace,
-                            PhoneNumber = "000",
-                            SentDate = DateTime.UtcNow,
-                            Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
-                        };
-                    service.Execute(sentsms);
-                }
-            }
-            catch (Exception)
-            {
-                // failed to record exception
-            }
-        }
+        //protected void Application_Error(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        var ex = Server.GetLastError();
+        //        if (ex != null)
+        //        {
+        //            var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
+        //            var sentsms = new SentSms()
+        //                {
+        //                    Message = ex.Message + ex.StackTrace,
+        //                    PhoneNumber = "000",
+        //                    SentDate = DateTime.UtcNow,
+        //                    Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
+        //                };
+        //            service.Execute(sentsms);
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        // failed to record exception
+        //    }
+        //}
 
 
         /// <summary>
@@ -112,23 +112,26 @@ namespace Web
 
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
+            
 
 
-            var repo = new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession());
-            repo.CreateWorkItem("c50cc8e3-47c6-4b1a-be28-c9b92506c481", new PatientActivityJob(null, null, null));
-            repo.Dispose();
-            //manager.Fail(ex =>
-            //    {
-            //        var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
-            //        var sentsms = new SentSms()
-            //        {
-            //            Message = ex.Message + ex.StackTrace,
-            //            PhoneNumber = "0",
-            //            SentDate = DateTime.UtcNow,
-            //            Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
-            //        };
-            //        service.Execute(sentsms);
-            //    });
+            //var repo = new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession());
+            //repo.CreateWorkItem("c50cc8e3-47c6-4b1a-be28-c9b92506c481", new PatientActivityJob(null, null, null));
+            //repo.Dispose();
+            manager.Fail(ex =>
+                {
+                    //var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
+                    //var sentsms = new SentSms()
+                    //{
+                    //    Message = ex.Message + ex.StackTrace,
+                    //    PhoneNumber = "0",
+                    //    SentDate = DateTime.UtcNow,
+                    //    Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
+                    //};
+                    //service.Execute(sentsms);
+                    throw new Exception("nnnnn", ex);
+
+                });
             return manager;
         }
     }
