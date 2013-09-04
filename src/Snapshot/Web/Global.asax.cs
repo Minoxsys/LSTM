@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using Core.Persistence;
-using Domain;
+﻿using System.Web.Mvc;
 using Web.BackgroundJobs;
 using Web.Bootstrap.Container;
 using Web.Bootstrap.Routes;
 using Persistence;
 using Autofac;
 using Autofac.Integration.Mvc;
-using Web.Services;
 using WebBackgrounder;
-using Autofac.Core;
 
 namespace Web
 {
@@ -22,13 +13,13 @@ namespace Web
     // visit http://go.microsoft.com/?LinkId=9394801
     public class MvcApplication : System.Web.HttpApplication, IContainerAccessor
     {
-        private static JobManager jobManager;
+        private static JobManager _jobManager;
 
-        private static IContainer container;
+        private static IContainer _container;
 
         IContainer IContainerAccessor.Container
         {
-            get { return container; }
+            get { return _container; }
         }
 
 
@@ -41,8 +32,8 @@ namespace Web
         {
             InitializeContainer();
 
-            jobManager = CreateJobWorkersManager();
-            jobManager.Start();
+            _jobManager = CreateJobWorkersManager();
+            _jobManager.Start();
 
             AreaRegistration.RegisterAllAreas();
 
@@ -52,35 +43,8 @@ namespace Web
 
         protected void Application_Stop()
         {
-            jobManager.Stop();
+            _jobManager.Stop();
         }
-
-
-
-        //protected void Application_Error(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        var ex = Server.GetLastError();
-        //        if (ex != null)
-        //        {
-        //            var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
-        //            var sentsms = new SentSms()
-        //                {
-        //                    Message = ex.Message + ex.StackTrace,
-        //                    PhoneNumber = "000",
-        //                    SentDate = DateTime.UtcNow,
-        //                    Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
-        //                };
-        //            service.Execute(sentsms);
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        // failed to record exception
-        //    }
-        //}
-
 
         /// <summary>
         /// Instantiate the container and add all Controllers that derive from 
@@ -92,46 +56,25 @@ namespace Web
             var builder = new ContainerBuilder();
             builder.RegisterControllers(typeof (MvcApplication).Assembly);
             ContainerRegistrar.Register(builder);
-            container = builder.Build();
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            _container = builder.Build();
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(_container));
         }
-
-
 
         private static JobManager CreateJobWorkersManager()
         {
             var jobs = new IJob[]
                 {
-                    //  container.Resolve<BackgroundJobs.EmptyJob>(),
-                    container.Resolve<BackgroundJobs.PatientActivityJob>()
+                    _container.Resolve<EmptyJob>(),
+                    _container.Resolve<PatientActivityJob>()
                 
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
                     /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
                     //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
                 };
 
-            var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
+            var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
-            
 
-
-            //var repo = new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession());
-            //repo.CreateWorkItem("c50cc8e3-47c6-4b1a-be28-c9b92506c481", new PatientActivityJob(null, null, null));
-            //repo.Dispose();
-            manager.Fail(ex =>
-                {
-                    //var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
-                    //var sentsms = new SentSms()
-                    //{
-                    //    Message = ex.Message + ex.StackTrace,
-                    //    PhoneNumber = "0",
-                    //    SentDate = DateTime.UtcNow,
-                    //    Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
-                    //};
-                    //service.Execute(sentsms);
-                  //  throw new Exception("nnnnn", ex);
-
-                });
             return manager;
         }
     }
