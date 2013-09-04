@@ -71,7 +71,7 @@ namespace Web
         {
             var jobs = new IJob[]
                 {
-                    container.Resolve<BackgroundJobs.EmptyJob>(),
+                  //  container.Resolve<BackgroundJobs.EmptyJob>(),
                     container.Resolve<BackgroundJobs.PatientActivityJob>()
                 
                     //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
