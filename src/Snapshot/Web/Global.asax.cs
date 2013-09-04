@@ -112,7 +112,18 @@ namespace Web
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => container.Resolve<INHibernateSessionFactory>().CreateSession()));
             var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
 
-            manager.Fail(ex => { throw new Exception("fail from manager", ex); });
+            manager.Fail(ex =>
+                {
+                    var service = container.Resolve<ISaveOrUpdateCommand<SentSms>>();
+                    var sentsms = new SentSms()
+                    {
+                        Message = ex.Message + ex.StackTrace,
+                        PhoneNumber = "0",
+                        SentDate = DateTime.UtcNow,
+                        Response = ex.InnerException != null ? ex.InnerException.ToString() : ""
+                    };
+                    service.Execute(sentsms);
+                });
             return manager;
         }
     }
