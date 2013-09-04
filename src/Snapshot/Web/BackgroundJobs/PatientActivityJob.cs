@@ -28,8 +28,8 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-
-                    _smsService().SendMessage("begin of task", "_");
+                    _saveDrugShopMsgCmd().Execute(new MessageFromDrugShop() { IDCode = "123"});
+                    //_smsService().SendMessage("begin of task", "_");
 
                     var cutoffDate = DateTime.UtcNow.AddMinutes(-12);
                     List<MessageFromDrugShop> referrals =
@@ -43,7 +43,7 @@ namespace Web.BackgroundJobs
                                      m.SentDate < cutoffDate // the message is older than 48 hours
                             ).ToList();
 
-                    _smsService().SendMessage("ref cnt=" + referrals.Count.ToString(), "___");
+                   // _smsService().SendMessage("ref cnt=" + referrals.Count.ToString(), "___");
 
                     foreach (var messageFromDrugShop in referrals)
                     {
