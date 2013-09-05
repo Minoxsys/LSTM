@@ -69,12 +69,12 @@ namespace Web.Controllers
                 if (ManageReceivedSmsService.IsAttendingReminderAnswer(message, msisdn, out answer))
                 {
                     SaveAnswer(answer, msisdn);
-                }
-                else
-                {
-                    Response.Write("Wrong keyword.");
+                    Response.Write("Thank you for your answer.");
                     return new EmptyResult();
                 }
+
+                Response.Write("Wrong keyword.");
+                return new EmptyResult();
             }
 
             RawSmsReceived rawSmsReceived = new RawSmsReceived { Content = message, Sender = msisdn, ReceivedDate = DateTime.UtcNow };

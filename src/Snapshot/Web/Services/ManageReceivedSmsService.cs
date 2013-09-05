@@ -240,7 +240,8 @@ namespace Web.Services
             {
                 return "+" + phoneNumber.Substring(2);
             }
-            return phoneNumber;
+
+            return "+" + phoneNumber.Trim(new[] {'+'});
         }
 
         public MessageFromDispensary CreateMessageFromDispensary(Domain.RawSmsReceived rawSmsReceived)
@@ -354,7 +355,8 @@ namespace Web.Services
             {
                 if (result >= 1 && result <= 5)
                 {
-                    if (ThereIsAQuestionToAnswer(sender))
+                    string fullFormatNumber = "+" + sender.TrimStart(new[] {'+'});
+                    if (ThereIsAQuestionToAnswer(fullFormatNumber))
                     {
                         answer = result;
                         return true;
