@@ -66,10 +66,6 @@ namespace Web
                 {
                   //  _container.Resolve<EmptyJob>(),
                     _container.Resolve<PatientActivityJob>()
-                
-                    //new SampleJob(TimeSpan.FromSeconds(35), TimeSpan.FromSeconds(60)),
-                    /* new ExceptionJob(TimeSpan.FromSeconds(15)), */
-                    //new WorkItemCleanupJob(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), new WorkItemsContext())
                 };
 
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
