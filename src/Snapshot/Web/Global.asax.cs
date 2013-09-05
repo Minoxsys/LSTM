@@ -73,7 +73,10 @@ namespace Web
                 };
 
             var coordinator = new WebFarmJobCoordinator(new NHibernateWorkItemRepository(() => _container.Resolve<INHibernateSessionFactory>().CreateSession()));
-            var manager = new JobManager(jobs, coordinator) {RestartSchedulerOnFailure = true};
+            var manager = new JobManager(jobs, coordinator)
+                {
+                    RestartSchedulerOnFailure = true
+                };
 
             return manager;
         }
