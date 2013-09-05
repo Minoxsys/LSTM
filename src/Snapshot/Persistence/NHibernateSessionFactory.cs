@@ -41,7 +41,7 @@ namespace Persistence
             config.Database(
 
                 MsSqlConfiguration.MsSql2008
-                    .ConnectionString(c => c.FromConnectionStringWithKey("DbConnection"))
+                    .ConnectionString(c => c.FromConnectionStringWithKey("dbcon"))
 					.AdoNetBatchSize(250)
                     .ShowSql()
                     )
@@ -49,20 +49,6 @@ namespace Persistence
                     c.UseQueryCache().ProviderClass<HashtableCacheProvider>());
 
         }
-        
-        private static void ConnectWithMySql(FluentConfiguration config)
-        {
-            config.Database(
-               MySQLConfiguration.
-               Standard.
-               ConnectionString(c => c.FromConnectionStringWithKey("MySqlDbConnection"))
-               //.ShowSql()
-                );
-
-            //config.ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true));
-
-        }
-
 
 
         public ISession CreateSession()
