@@ -28,8 +28,6 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    _saveDrugShopMsgCmd().Execute(new MessageFromDrugShop {IDCode = "123", SentDate = DateTime.UtcNow, BirthDate = DateTime.UtcNow});
-
                     var cutoffDate = DateTime.UtcNow.AddMinutes(-12);
                     List<MessageFromDrugShop> referrals =
                         _drugShopMsgQuery()
@@ -56,7 +54,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromMinutes(2); }
+            get { return TimeSpan.FromMinutes(5); }
         }
 
         public string Name

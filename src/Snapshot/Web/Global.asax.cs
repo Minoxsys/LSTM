@@ -64,7 +64,7 @@ namespace Web
         {
             var jobs = new IJob[]
                 {
-                  //  _container.Resolve<EmptyJob>(),
+                    _container.Resolve<EmptyJob>(),
                     _container.Resolve<PatientActivityJob>()
                 };
 
