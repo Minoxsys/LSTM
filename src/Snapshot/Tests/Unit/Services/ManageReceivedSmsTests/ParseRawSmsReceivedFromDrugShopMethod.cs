@@ -35,7 +35,6 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("The patient's phone number is not valid.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -54,7 +53,6 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("The patient's phone number is not valid.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -149,7 +147,6 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("The patient's phone number is not valid.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -168,7 +165,6 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("The patient's phone number is not valid.", result.ParseErrorMessage);
         }
 
         [Test]
@@ -187,7 +183,6 @@ namespace Tests.Unit.Services.ManageReceivedSmsTests
             //Assert
             Assert.IsInstanceOf<RawSmsReceived>(result);
             Assert.AreEqual(false, result.ParseSucceeded);
-            Assert.AreEqual("The patient's phone number is not valid.", result.ParseErrorMessage);
         }
 
 
