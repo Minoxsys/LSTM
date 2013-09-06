@@ -448,7 +448,7 @@ Analysis: Location Report
                         labelClass: item.get('Type'),
                         title: item.get('Name'),
                         id: item.get('Id'),
-                        animation: google.maps.Animation.DROP
+                        //animation: google.maps.Animation.DROP
                     });
 
                     var infowindow = new google.maps.InfoWindow({
@@ -456,11 +456,11 @@ Analysis: Location Report
                     });
 
                     google.maps.event.addListener(marker, 'mouseover', function () {
-                        infowindow.open(map, marker);
+                     //   infowindow.open(map, marker);
                     });
 
                     google.maps.event.addListener(marker, 'mouseout', function () {
-                        infowindow.close(map, marker);
+                     //   infowindow.close(map, marker);
                     });
 
                     google.maps.event.addListener(marker, 'click', function () {
