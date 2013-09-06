@@ -240,6 +240,10 @@ namespace Web.Services
             {
                 return "+" + phoneNumber.Substring(2);
             }
+            if (phoneNumber.StartsWith("0") && phoneNumber.Length == 10)
+            {
+                return "+" + phoneNumber.Substring(1);
+            }
 
             return "+" + phoneNumber.Trim(new[] {'+'});
         }
