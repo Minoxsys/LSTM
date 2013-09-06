@@ -29,7 +29,7 @@ namespace Web.BackgroundJobs
         {
             return new Task(() =>
                 {
-                    var cutoffDate = DateTime.UtcNow.AddMinutes(-12);
+                    var cutoffDate = DateTime.UtcNow.AddHours(-48);
                     List<MessageFromDrugShop> referrals =
                         _drugShopMsgQuery()
                             .Query()
@@ -57,7 +57,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromMinutes(5); }
+            get { return TimeSpan.FromMinutes(10); }
         }
 
         public string Name

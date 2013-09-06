@@ -40,7 +40,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Interval
         {
-            get { return TimeSpan.FromSeconds(300); }
+            get { return TimeSpan.FromMinutes(15); }
         }
 
         public string Name
@@ -50,7 +50,7 @@ namespace Web.BackgroundJobs
 
         public TimeSpan Timeout
         {
-            get { return TimeSpan.FromMinutes(2); }
+            get { return TimeSpan.FromMinutes(5); }
         }
     }
 }
