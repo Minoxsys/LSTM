@@ -134,7 +134,7 @@ namespace Web.Services
 
         private bool IsValidPhoneNumber(string phoneNumber)
         {
-            return Regex.IsMatch(phoneNumber, @"^((?:\+|00|)255)?([0-9]{2})([0-9]{7})$");
+            return Regex.IsMatch(phoneNumber, @"^(?:(?:\+|00|)255|0|)?([0-9]{9})$");
         }
 
         public Domain.RawSmsReceived ParseRawSmsReceivedFromDispensary(Domain.RawSmsReceived rawSmsReceived)
@@ -242,7 +242,7 @@ namespace Web.Services
             }
             if (phoneNumber.StartsWith("0") && phoneNumber.Length == 10)
             {
-                return "+" + phoneNumber.Substring(1);
+                return "+255" + phoneNumber.Substring(1);
             }
 
             return "+" + phoneNumber.Trim(new[] {'+'});
