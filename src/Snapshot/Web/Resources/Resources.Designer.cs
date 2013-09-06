@@ -61,12 +61,13 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have not yet gone to the health facility for treatment after referral. Please reply by selecting a number representing your situation:
-        ///1.     I will go tomorrow (reply with 1)
-        ///2.     But I have already gone (reply with 2)
-        ///3.     The health facility is too far (reply with 3)
-        ///4.     I bought drugs from somewhere else (reply with 4)
-        ///5.     I am no longer sick (reply with 5).
+        ///   Looks up a localized string similar to Bado haujakwenda kwenye kituo cha afya baada ya kupewa rufaa. Tafadhali jibu kwa kuandika namba inayowakilisha hali yako:
+        ///1.     Nitakwenda kesho (jibu kwa kutumia 1)
+        ///2.     Nimekwishakwenda tayari (jibu kwa kutumia 2)
+        ///3.     Kituo cha afya kiko mbali (jibu kwa kutumia 3)
+        ///4.     Nilinunua dawa kutoka sehemu nyingine (jibu kwa kutumia 4)
+        ///5.     Siumwi tena kwa sasa (jibu kwa kutumia 5)
+        ///Tuma jibu lako kwa: {0}.
         /// </summary>
         internal static string DidNotAttendSmsText {
             get {
@@ -75,7 +76,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I am no longer sick.
+        ///   Looks up a localized string similar to Siumwi tena kwa sasa.
         /// </summary>
         internal static string I_am_no_longer_sick {
             get {
@@ -84,7 +85,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I bought drugs from somewhere else.
+        ///   Looks up a localized string similar to Nilinunua dawa kutoka sehemu nyingine.
         /// </summary>
         internal static string I_bought_drugs_from_somewhere_else {
             get {
@@ -93,7 +94,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to But I have already gone.
+        ///   Looks up a localized string similar to Nimekwishakwenda tayari.
         /// </summary>
         internal static string I_have_already_gone {
             get {
@@ -102,7 +103,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to I will go tomorrow.
+        ///   Looks up a localized string similar to Nitakwenda kesho.
         /// </summary>
         internal static string I_will_go_tomorrow {
             get {
@@ -111,7 +112,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The patient&apos;s phone number is not valid..
+        ///   Looks up a localized string similar to Simu ya mgonjwa simu si halali..
         /// </summary>
         internal static string InvalidPatientPhoneNumber {
             get {
@@ -120,7 +121,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The patient’s number you just sent is wrong, please check the number and send it again..
+        ///   Looks up a localized string similar to Namba ya mgonjwa uliyotuma siyo sahihi, tafadhali angalia namba hiyo na utume tena..
         /// </summary>
         internal static string InvalidPatientTelphoneDescriptiveMessage {
             get {
@@ -129,7 +130,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have just been referred to the health facility. If you go for treatment, you will receive free airtime of 100TZS. Ref: {0}, Dispensary: {1}.
+        ///   Looks up a localized string similar to Umepewa refaa. Kama utakwenda kituo cha afya utapokea muda wa maongezi kwa simu yako. Neno la siri: {0} Zahanati: {1}.
         /// </summary>
         internal static string PatientConfirmationSmsText {
             get {
@@ -138,7 +139,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The health facility is too far.
+        ///   Looks up a localized string similar to Kituo cha afya kiko mbali.
         /// </summary>
         internal static string The_health_facility_is_too_far {
             get {

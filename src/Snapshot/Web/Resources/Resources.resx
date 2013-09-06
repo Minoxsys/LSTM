@@ -118,35 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DidNotAttendSmsText" xml:space="preserve">
-    <value>You have not yet gone to the health facility for treatment after referral. Please reply by selecting a number representing your situation:
-1.     I will go tomorrow (reply with 1)
-2.     But I have already gone (reply with 2)
-3.     The health facility is too far (reply with 3)
-4.     I bought drugs from somewhere else (reply with 4)
-5.     I am no longer sick (reply with 5)</value>
+    <value>Bado haujakwenda kwenye kituo cha afya baada ya kupewa rufaa. Tafadhali jibu kwa kuandika namba inayowakilisha hali yako:
+1.     Nitakwenda kesho (jibu kwa kutumia 1)
+2.     Nimekwishakwenda tayari (jibu kwa kutumia 2)
+3.     Kituo cha afya kiko mbali (jibu kwa kutumia 3)
+4.     Nilinunua dawa kutoka sehemu nyingine (jibu kwa kutumia 4)
+5.     Siumwi tena kwa sasa (jibu kwa kutumia 5)
+Tuma jibu lako kwa: {0}</value>
   </data>
   <data name="InvalidPatientPhoneNumber" xml:space="preserve">
-    <value>The patient's phone number is not valid.</value>
+    <value>Simu ya mgonjwa simu si halali.</value>
   </data>
   <data name="InvalidPatientTelphoneDescriptiveMessage" xml:space="preserve">
-    <value>The patient’s number you just sent is wrong, please check the number and send it again.</value>
+    <value>Namba ya mgonjwa uliyotuma siyo sahihi, tafadhali angalia namba hiyo na utume tena.</value>
   </data>
   <data name="PatientConfirmationSmsText" xml:space="preserve">
-    <value>You have just been referred to the health facility. If you go for treatment, you will receive free airtime of 100TZS. Ref: {0}, Dispensary: {1}</value>
+    <value>Umepewa refaa. Kama utakwenda kituo cha afya utapokea muda wa maongezi kwa simu yako. Neno la siri: {0} Zahanati: {1}</value>
   </data>
   <data name="I_will_go_tomorrow" xml:space="preserve">
-    <value>I will go tomorrow</value>
+    <value>Nitakwenda kesho</value>
   </data>
   <data name="I_have_already_gone" xml:space="preserve">
-    <value>But I have already gone</value>
+    <value>Nimekwishakwenda tayari</value>
   </data>
   <data name="The_health_facility_is_too_far" xml:space="preserve">
-    <value>The health facility is too far</value>
+    <value>Kituo cha afya kiko mbali</value>
   </data>
   <data name="I_bought_drugs_from_somewhere_else" xml:space="preserve">
-    <value>I bought drugs from somewhere else</value>
+    <value>Nilinunua dawa kutoka sehemu nyingine</value>
   </data>
   <data name="I_am_no_longer_sick" xml:space="preserve">
-    <value>I am no longer sick</value>
+    <value>Siumwi tena kwa sasa</value>
   </data>
 </root>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Persistence;
 using Domain;
+using Web.Bootstrap;
 using Web.Services;
 using WebBackgrounder;
 
@@ -42,7 +43,9 @@ namespace Web.BackgroundJobs
 
                     foreach (var messageFromDrugShop in referrals)
                     {
-                        if (_smsService().SendMessage(Resources.Resources.DidNotAttendSmsText, messageFromDrugShop.PatientPhoneNumber))
+                        if (_smsService()
+                            .SendMessage(string.Format(Resources.Resources.DidNotAttendSmsText, AppSettings.SmsGatewayShortcode),
+                                         messageFromDrugShop.PatientPhoneNumber))
                         {
                             messageFromDrugShop.PatientReferralReminderSentDate = DateTime.UtcNow;
                             _saveDrugShopMsgCmd().Execute(messageFromDrugShop);
