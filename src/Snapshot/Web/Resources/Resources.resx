@@ -133,7 +133,7 @@ Tuma jibu lako kwa: {0}</value>
     <value>Namba ya mgonjwa uliyotuma siyo sahihi, tafadhali angalia namba hiyo na utume tena.</value>
   </data>
   <data name="PatientConfirmationSmsText" xml:space="preserve">
-    <value>Umepewa refaa. Kama utakwenda kituo cha afya utapokea muda wa maongezi kwa simu yako. Neno la siri: {0}. Zahanati: {1}</value>
+    <value>Umepewa rufaa. Kama utakwenda kituo cha afya utapokea muda wa maongezi kwa simu yako. Neno la siri: {0}. Zahanati: {1}</value>
   </data>
   <data name="I_will_go_tomorrow" xml:space="preserve">
     <value>Nitakwenda kesho</value>

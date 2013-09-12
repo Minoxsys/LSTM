@@ -130,7 +130,7 @@ namespace Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Umepewa refaa. Kama utakwenda kituo cha afya utapokea muda wa maongezi kwa simu yako. Neno la siri: {0}. Zahanati: {1}.
+        ///   Looks up a localized string similar to Umepewa rufaa. Kama utakwenda kituo cha afya utapokea muda wa maongezi kwa simu yako. Neno la siri: {0}. Zahanati: {1}.
         /// </summary>
         internal static string PatientConfirmationSmsText {
             get {
