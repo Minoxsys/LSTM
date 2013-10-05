@@ -25,7 +25,7 @@ namespace Web.Services
             MailMessage mail = new MailMessage();
 
             mail.To.Add(new MailAddress(AppSettings.SendEmailTo));
-            mail.CC.Add(new MailAddress(AppSettings.SendEmailCC));
+            BuildUpCC(mail);
             mail.From = new MailAddress(AppSettings.SendEmailFrom);
 
             mail.Subject = "Incorrect message format";
@@ -33,6 +33,19 @@ namespace Web.Services
             mail.Body = CreateBodyMessage(rawSmsReceived);
 
             return (emailService.SendMail(mail) == "Email has been sent");
+        }
+
+        private void BuildUpCC(MailMessage mail)
+        {
+            string[] ccs = AppSettings.SendEmailCC.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var cc in ccs)
+            {
+                string ccEntry = cc.Trim();
+                if (!string.IsNullOrWhiteSpace(ccEntry))
+                {
+                    mail.CC.Add(ccEntry);
+                }
+            }
         }
 
         private string CreateBodyMessage(RawSmsReceived rawSmsReceived)

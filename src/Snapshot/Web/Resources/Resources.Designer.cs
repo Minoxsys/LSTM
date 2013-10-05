@@ -67,7 +67,8 @@ namespace Web.Resources {
         ///3.     Kituo cha afya kiko mbali (jibu kwa kutumia 3)
         ///4.     Nilinunua dawa kutoka sehemu nyingine (jibu kwa kutumia 4)
         ///5.     Siumwi tena kwa sasa (jibu kwa kutumia 5)
-        ///Tuma jibu lako kwa: {0}.
+        ///Tuma jibu lako kwa: {0}
+        ///HUDUMA HII NI YA BURE.
         /// </summary>
         internal static string DidNotAttendSmsText {
             get {
