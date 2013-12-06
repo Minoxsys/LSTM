@@ -1,9 +1,8 @@
 ﻿@using Web.Areas.MessagesManagement;
-@using Web.Areas.MessagesManagement.Controllers;
 @using Microsoft.Web.Mvc;
 
 @section page_title{
-    Health Center Item: Overview
+Health Center Item: Overview
 }
 @{
     Html.RenderPartial("_EmptySubNavigation");
@@ -33,7 +32,7 @@
             fields: ['Id', 'Sender', 'OutpostName', 'Date', 'Content', 'ParseSucceeded', 'ParseErrorMessage'],
             proxy: {
                 type: 'ajax',
-                url: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthCenter", action = "GetMessagesFromHealthCenter" })',
+                url: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "HealthCenter", action = "GetMessagesFromHealthCenter"})',
                 reader: {
                     type: 'json',
                     root: 'Messages',
@@ -88,6 +87,16 @@
                         xtype: 'label',
                         cls: 'x-title-label',
                         text: 'Messages received from Health Center'
+                    }, {
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        disabled: false,
+                        text: 'Export To Excel',
+                        handler: function () {
+                            DownloadFile();
+                        }
                     }]
                 }, {
                     xtype: 'container',
@@ -190,5 +199,27 @@
         mainContent.add(window.feature.container);
         window.feature.messageFromHealthcenterStore.loadPage(1);
     });
+
+    function DownloadFile() {
+        var body = Ext.getBody();
+
+        var frame = body.createChild({
+            tag: 'iframe',
+            cls: 'x-hidden',
+            id: 'iframe',
+            name: 'iframe'
+        });
+
+        var form = body.createChild({
+            tag: 'form',
+            cls: 'x-hidden',
+            id: 'form',
+            method: 'POST',
+            action: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ExcelExport", action = "ExportToExcel", outpostType = 2 })',
+            target: 'iframe'
+        });
+
+        form.dom.submit();
+    }
 
 </script>

@@ -88,6 +88,16 @@
                         xtype: 'label',
                         cls: 'x-title-label',
                         text: 'Messages received from Shop/ADDO'
+                    }, {
+                        xtype: 'button',
+                        margin: '0 0 0 20',
+                        ui: 'snapshot-add-btn',
+                        cls: 'x-add-button-gradient',
+                        disabled: false,
+                        text: 'Export To Excel',
+                        handler: function () {
+                            DownloadFile();
+                        }
                     }]
                 }, {
                     xtype: 'container',
@@ -190,5 +200,27 @@
         mainContent.add(window.feature.container);
         window.feature.messageFromDrugShop.loadPage(1);
     });
+
+    function DownloadFile() {
+        var body = Ext.getBody();
+
+        var frame = body.createChild({
+            tag: 'iframe',
+            cls: 'x-hidden',
+            id: 'iframe',
+            name: 'iframe'
+        });
+
+        var form = body.createChild({
+            tag: 'form',
+            cls: 'x-hidden',
+            id: 'form',
+            method: 'POST',
+            action: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "DrugShop", action = "ExportToExcel" })',
+            target: 'iframe'
+        });
+
+        form.dom.submit();
+    }
 
 </script>
