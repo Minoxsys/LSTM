@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Core.Persistence;
 using Domain;
-using Web.Security;
 using Web.Areas.MessagesManagement.Models.SentMessages;
+using Web.Security;
 
 namespace Web.Areas.MessagesManagement.Controllers
 {
@@ -25,7 +24,7 @@ namespace Web.Areas.MessagesManagement.Controllers
         public JsonResult GetSentMessages(SentMessagesIndexModel indexModel)
         {
             var pageSize = indexModel.limit.Value;
-            var rawDataQuery = this.QuerySms.Query();
+            var rawDataQuery = QuerySms.Query();
 
             var orderByColumnDirection = new Dictionary<string, Func<IQueryable<SentSms>>>()
             {

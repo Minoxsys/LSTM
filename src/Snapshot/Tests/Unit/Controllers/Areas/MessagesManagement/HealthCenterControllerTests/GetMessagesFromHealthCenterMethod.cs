@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using NUnit.Framework;
-using Web.Areas.MessagesManagement.Models.Messages;
 using Rhino.Mocks;
+using Web.Areas.MessagesManagement.Controllers;
+using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Services;
 
 namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterControllerTests
 {
     [TestFixture]
     public class GetMessagesFromHealthCenterMethod
     {
-        public ObjectMother objectMother = new ObjectMother();
+        private readonly ObjectMother _objectMother = new ObjectMother();
+        private HealthCenterController _ctrl;
 
         [SetUp]
-        public void BeforeAll()
+        public void BeforeEach()
         {
-            objectMother.Init();
+            _objectMother.Init();
+            _ctrl = new HealthCenterController {MessagesService = new MessagesService(_objectMother.queryRawSms, _objectMother.queryOutposts)};
         }
 
         [Test]
@@ -31,14 +32,14 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 start = 0,
                 sort = "Sender"
             };
-            var pageOfData = objectMother.PageOfData(indexModel);
-            objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = _objectMother.PageOfData(indexModel);
+            _objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromHealthCenter(indexModel);
+            var jsonResult = _ctrl.GetMessagesFromHealthCenter(indexModel);
 
             //Assert
-            objectMother.queryRawSms.VerifyAllExpectations();
+            _objectMother.queryRawSms.VerifyAllExpectations();
 
             Assert.IsInstanceOf<MessageIndexOuputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
@@ -59,20 +60,20 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 start = 0,
                 sort = "Sender"
             };
-            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
-            objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = _objectMother.PageOfDrugShopData(indexModel);
+            _objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromHealthCenter(indexModel);
+            var jsonResult = _ctrl.GetMessagesFromHealthCenter(indexModel);
 
             //Assert
-            objectMother.queryRawSms.VerifyAllExpectations();
+            _objectMother.queryRawSms.VerifyAllExpectations();
 
             Assert.IsInstanceOf<MessageIndexOuputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
             Assert.IsNotNull(jsonData);
 
-            Assert.AreEqual(pageOfData.Count() / 3, jsonData.TotalItems);
+            Assert.AreEqual(pageOfData.Count()/3, jsonData.TotalItems);
         }
 
         [Test]
@@ -87,18 +88,20 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 start = 0,
                 sort = "Content"
             };
-            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
-            objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = _objectMother.PageOfDrugShopData(indexModel);
+            _objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromHealthCenter(indexModel);
+            var jsonResult = _ctrl.GetMessagesFromHealthCenter(indexModel);
 
             //Assert
-            objectMother.queryRawSms.VerifyAllExpectations();
+            _objectMother.queryRawSms.VerifyAllExpectations();
 
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
-            Assert.That(jsonData.Messages[0].Content, Is.EqualTo(objectMother.rawSms.Content + "-8"));
+            Assert.NotNull(jsonData);
+            Assert.That(jsonData.Messages[0].Content, Is.EqualTo(_objectMother.rawSms.Content + "-8"));
         }
+
         [Test]
         public void Returns_OnlyMessagesFromHealthCenter_WhereContentContains_SearchValue()
         {
@@ -113,14 +116,14 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.HealthCenterController
                 searchValue = "-8"
             };
 
-            var pageOfData = objectMother.PageOfDrugShopData(indexModel);
-            objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = _objectMother.PageOfDrugShopData(indexModel);
+            _objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromHealthCenter(indexModel);
+            var jsonResult = _ctrl.GetMessagesFromHealthCenter(indexModel);
 
             //Assert
-            objectMother.queryRawSms.VerifyAllExpectations();
+            _objectMother.queryRawSms.VerifyAllExpectations();
 
             Assert.IsInstanceOf<MessageIndexOuputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as MessageIndexOuputModel;

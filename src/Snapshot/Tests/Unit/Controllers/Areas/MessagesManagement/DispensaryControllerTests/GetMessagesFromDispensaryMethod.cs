@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Web.Areas.MessagesManagement.Models.Messages;
+﻿using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Web.Areas.MessagesManagement.Controllers;
+using Web.Areas.MessagesManagement.Models.Messages;
+using Web.Services;
 
 namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTests
 {
     [TestFixture]
     public class GetMessagesFromDispensaryMethod
     {
-        public ObjectMother objectMother = new ObjectMother();
+        private readonly ObjectMother _objectMother = new ObjectMother();
+        private DispensaryController _ctrl;
 
         [SetUp]
         public void BeforeAll()
         {
-            objectMother.Init();
+            _objectMother.Init();
+            _ctrl = new DispensaryController {MessagesService = new MessagesService(_objectMother.queryRawSms, _objectMother.queryOutposts)};
         }
 
         [Test]
@@ -31,14 +32,14 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 start = 0,
                 sort = "Sender"
             };
-            var pageOfData = objectMother.PageOfData(indexModel);
-            objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = _objectMother.PageOfData(indexModel);
+            _objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDispensary(indexModel);
+            var jsonResult = _ctrl.GetMessagesFromDispensary(indexModel);
 
             //Assert
-            objectMother.queryRawSms.VerifyAllExpectations();
+            _objectMother.queryRawSms.VerifyAllExpectations();
 
             Assert.IsInstanceOf<MessageIndexOuputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
@@ -59,20 +60,20 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 start = 0,
                 sort = "Sender"
             };
-            var pageOfData = objectMother.PageOfDispensaryData(indexModel);
-            objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = _objectMother.PageOfDispensaryData(indexModel);
+            _objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDispensary(indexModel);
+            var jsonResult = _ctrl.GetMessagesFromDispensary(indexModel);
 
             //Assert
-            objectMother.queryRawSms.VerifyAllExpectations();
+            _objectMother.queryRawSms.VerifyAllExpectations();
 
             Assert.IsInstanceOf<MessageIndexOuputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
             Assert.IsNotNull(jsonData);
 
-            Assert.AreEqual(pageOfData.Count() / 2, jsonData.TotalItems);
+            Assert.AreEqual(pageOfData.Count()/2, jsonData.TotalItems);
         }
 
         [Test]
@@ -87,18 +88,20 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 start = 0,
                 sort = "Content"
             };
-            var pageOfData = objectMother.PageOfDispensaryData(indexModel);
-            objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = _objectMother.PageOfDispensaryData(indexModel);
+            _objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDispensary(indexModel);
+            var jsonResult = _ctrl.GetMessagesFromDispensary(indexModel);
 
             //Assert
-            objectMother.queryRawSms.VerifyAllExpectations();
+            _objectMother.queryRawSms.VerifyAllExpectations();
 
             var jsonData = jsonResult.Data as MessageIndexOuputModel;
+            Assert.NotNull(jsonData);
             Assert.That(jsonData.Messages[0].Content, Is.EqualTo("123456 Tr1 Tr2-9"));
         }
+
         [Test]
         public void Returns_OnlyMessagesFromDispensaries_WhereContentContains_SearchValue()
         {
@@ -113,14 +116,14 @@ namespace Tests.Unit.Controllers.Areas.MessagesManagement.DispensaryControllerTe
                 searchValue = "-9"
             };
 
-            var pageOfData = objectMother.PageOfDispensaryData(indexModel);
-            objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
+            var pageOfData = _objectMother.PageOfDispensaryData(indexModel);
+            _objectMother.queryRawSms.Expect(call => call.Query()).Return(pageOfData);
 
             //Act
-            var jsonResult = objectMother.controller.GetMessagesFromDispensary(indexModel);
+            var jsonResult = _ctrl.GetMessagesFromDispensary(indexModel);
 
             //Assert
-            objectMother.queryRawSms.VerifyAllExpectations();
+            _objectMother.queryRawSms.VerifyAllExpectations();
 
             Assert.IsInstanceOf<MessageIndexOuputModel>(jsonResult.Data);
             var jsonData = jsonResult.Data as MessageIndexOuputModel;

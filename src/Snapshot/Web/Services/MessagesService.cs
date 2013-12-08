@@ -27,36 +27,13 @@ namespace Web.Services
         {
             var rawDataQuery = _queryRawSmsReceived.Query().Where(it => it.OutpostType == outpostType);
 
-            int totalItems = 0;
+            int totalItems;
             if (indexModel != null)
             {
-                var pageSize = indexModel.limit.Value;
-
-
-                var orderByColumnDirection = new Dictionary<string, Func<IQueryable<RawSmsReceived>>>
-                {
-                    {"Sender-ASC", () => rawDataQuery.OrderBy(c => c.Sender)},
-                    {"Sender-DESC", () => rawDataQuery.OrderByDescending(c => c.Sender)},
-                    {"Date-ASC", () => rawDataQuery.OrderBy(c => c.ReceivedDate)},
-                    {"Date-DESC", () => rawDataQuery.OrderByDescending(c => c.ReceivedDate)},
-                    {"Content-ASC", () => rawDataQuery.OrderBy(c => c.Content)},
-                    {"Content-DESC", () => rawDataQuery.OrderByDescending(c => c.Content)},
-                    {"ParseSucceeded-ASC", () => rawDataQuery.OrderBy(c => c.ParseSucceeded)},
-                    {"ParseSucceeded-DESC", () => rawDataQuery.OrderByDescending(c => c.ParseSucceeded)},
-                    {"ParseErrorMessage-ASC", () => rawDataQuery.OrderBy(c => c.ParseErrorMessage)},
-                    {"ParseErrorMessage-DESC", () => rawDataQuery.OrderByDescending(c => c.ParseErrorMessage)}
-                };
-
-                rawDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
-
-                if (!string.IsNullOrEmpty(indexModel.searchValue))
-                    rawDataQuery = rawDataQuery.Where(it => it.Content.Contains(indexModel.searchValue));
-
+                rawDataQuery = SortMessages(indexModel, rawDataQuery);
+                rawDataQuery = ApplySearchFilter(indexModel, rawDataQuery);
                 totalItems = rawDataQuery.Count();
-
-                rawDataQuery = rawDataQuery
-                    .Take(pageSize)
-                    .Skip(indexModel.start.Value);
+                rawDataQuery = ApplyPaging(indexModel, rawDataQuery);
             }
             else
             {
@@ -79,6 +56,45 @@ namespace Web.Services
                 Messages = messagesModelListProjection,
                 TotalItems = totalItems
             };
+        }
+
+        private IQueryable<RawSmsReceived> ApplyPaging(MessagesIndexModel indexModel, IQueryable<RawSmsReceived> rawDataQuery)
+        {
+            if (indexModel.limit != null && indexModel.start != null)
+            {
+                var pageSize = indexModel.limit.Value;
+
+                rawDataQuery = rawDataQuery
+                    .Take(pageSize)
+                    .Skip(indexModel.start.Value);
+            }
+            return rawDataQuery;
+        }
+
+        private IQueryable<RawSmsReceived> ApplySearchFilter(MessagesIndexModel indexModel, IQueryable<RawSmsReceived> rawDataQuery)
+        {
+            if (!string.IsNullOrEmpty(indexModel.searchValue))
+                rawDataQuery = rawDataQuery.Where(it => it.Content.Contains(indexModel.searchValue));
+            return rawDataQuery;
+        }
+
+        private IQueryable<RawSmsReceived> SortMessages(MessagesIndexModel indexModel, IQueryable<RawSmsReceived> rawDataQuery)
+        {
+            var orderByColumnDirection = new Dictionary<string, Func<IQueryable<RawSmsReceived>>>
+            {
+                {"Sender-ASC", () => rawDataQuery.OrderBy(c => c.Sender)},
+                {"Sender-DESC", () => rawDataQuery.OrderByDescending(c => c.Sender)},
+                {"Date-ASC", () => rawDataQuery.OrderBy(c => c.ReceivedDate)},
+                {"Date-DESC", () => rawDataQuery.OrderByDescending(c => c.ReceivedDate)},
+                {"Content-ASC", () => rawDataQuery.OrderBy(c => c.Content)},
+                {"Content-DESC", () => rawDataQuery.OrderByDescending(c => c.Content)},
+                {"ParseSucceeded-ASC", () => rawDataQuery.OrderBy(c => c.ParseSucceeded)},
+                {"ParseSucceeded-DESC", () => rawDataQuery.OrderByDescending(c => c.ParseSucceeded)},
+                {"ParseErrorMessage-ASC", () => rawDataQuery.OrderBy(c => c.ParseErrorMessage)},
+                {"ParseErrorMessage-DESC", () => rawDataQuery.OrderByDescending(c => c.ParseErrorMessage)}
+            };
+            rawDataQuery = orderByColumnDirection[String.Format("{0}-{1}", indexModel.sort, indexModel.dir)].Invoke();
+            return rawDataQuery;
         }
     }
 }

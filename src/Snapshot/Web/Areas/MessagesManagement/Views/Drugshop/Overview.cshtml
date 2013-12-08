@@ -3,7 +3,7 @@
 @using Microsoft.Web.Mvc;
 
 @section page_title{
-    Shop/ADDO Item: Overview
+Shop/ADDO Item: Overview
 }
 @{
     Html.RenderPartial("_EmptySubNavigation");
@@ -216,7 +216,7 @@
             cls: 'x-hidden',
             id: 'form',
             method: 'POST',
-            action: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "DrugShop", action = "ExportToExcel" })',
+            action: '@Url.RouteUrl(MessagesManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "ExcelExport", action = "ExportToExcel", outpostType = 0 })',
             target: 'iframe'
         });
 
