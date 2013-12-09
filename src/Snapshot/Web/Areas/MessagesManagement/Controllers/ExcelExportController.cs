@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Web.Areas.MessagesManagement.Models.Messages;
 using Web.Services;
 
 namespace Web.Areas.MessagesManagement.Controllers
@@ -43,9 +44,9 @@ namespace Web.Areas.MessagesManagement.Controllers
             Response.Clear();
             Response.ContentType = "application/vnd.xls";
             Response.AddHeader("Content-disposition",
-                "attachment; filename=" + fileName + DateTime.UtcNow.ToShortDateString() + ".xls");
+                "attachment; filename=" + fileName + DateTime.UtcNow.ToShortDateString() + ".xlsx");
 
-            var reportData = MessagesService.GetMessagesFromOutpost(null, outpostType).Messages;
+            var reportData = MessagesService.GetMessagesFromOutpost(new MessagesIndexModel { sort = "Date", dir = "DESC"}, outpostType).Messages;
 
             using (ExcelPackage pck = new ExcelPackage())
             {
