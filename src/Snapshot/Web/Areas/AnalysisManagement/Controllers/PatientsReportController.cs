@@ -141,7 +141,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             patientmodel.Outpost = QueryOutpost.Load(message.OutpostId);
             if (patientmodel.Outpost != null)
                 patientmodel.ReportModel.Drugshop = patientmodel.Outpost.Name;
-            patientmodel.ReportModel.DrugshopDate = message.SentDate.ToString("dd MM yyyy");
+            patientmodel.ReportModel.DrugshopDate = message.SentDate.ToString("dd/MM/yyyy");
             patientmodel.ConditionList = message.ServicesNeeded;
             patientmodel.ReportModel.Condition = message.ServicesNeeded.ToString();
 
@@ -152,7 +152,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
                 var outpostDispensary = QueryOutpost.Load(messageDispensary.OutpostId);
                 if (outpostDispensary != null)
                     patientmodel.ReportModel.Dispensary = outpostDispensary.Name;
-                patientmodel.ReportModel.DispensaryDate = messageDispensary.SentDate.ToString("dd MM yyyy");
+                patientmodel.ReportModel.DispensaryDate = messageDispensary.SentDate.ToString("dd/MM/yyyy");
                 patientmodel.ReportModel.Diagnosis = messageDispensary.Diagnosises.ToString();
                 patientmodel.DiagnosisList = messageDispensary.Diagnosises;
                 patientmodel.ReportModel.Treatment = messageDispensary.Treatments.ToString();
