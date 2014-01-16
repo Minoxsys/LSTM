@@ -48,7 +48,7 @@ Analysis: Patient Report
         window.feature.exportEndDate = "";
 
         window.feature.reportStore = Ext.create('Ext.data.Store', {
-            fields: ['Initials', 'PatientID', 'Gender', 'Age', 'Drugshop', 'DrugshopDate', 'Condition', 'Dispensary', 'DispensaryDate', 'Diagnosis', 'Treatment', 'Advice', 'DidNotAttendReason'],
+            fields: ['Initials', 'PatientID', 'Gender', 'Age', 'Drugshop', 'DrugshopDate', 'Condition', 'Dispensary', 'DispensaryDate', 'Diagnosis', 'Treatment', 'Advice', 'DidNotAttendReason','Appointment'],
             proxy: {
                 type: 'ajax',
                 url: '@Url.RouteUrl(AnalysisManagementAreaRegistration.DEFAULT_ROUTE, new { controller = "PatientsReport", action = "GetPatientsReport" })',
@@ -693,6 +693,14 @@ Analysis: Patient Report
                             }, {
                                 header: "Date of arrival",
                                 dataIndex: 'DrugshopDate',
+                                flex: 1.3,
+                                minWidth: 130,
+                                align: 'center',
+                                menuDisabled: true,
+                                sortable: true
+                            }, {
+                                header: "Appointment",
+                                dataIndex: 'Appointment',
                                 flex: 1.3,
                                 minWidth: 130,
                                 align: 'center',

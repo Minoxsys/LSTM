@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+﻿
 namespace Web.Areas.AnalysisManagement.Models.PatientsReport
 {
     public class PatientReportoutputModel
@@ -13,6 +9,7 @@ namespace Web.Areas.AnalysisManagement.Models.PatientsReport
         public string Age { get; set; }
         public string Drugshop { get; set; }
         public string DrugshopDate { get; set; }
+        public string Appointment { get; set; }
         public string Condition { get; set; }
         public string Dispensary { get; set; }
         public string DispensaryDate { get; set; }

@@ -144,6 +144,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
             patientmodel.ReportModel.DrugshopDate = message.SentDate.ToString("dd/MM/yyyy");
             patientmodel.ConditionList = message.ServicesNeeded;
             patientmodel.ReportModel.Condition = message.ServicesNeeded.ToString();
+            patientmodel.ReportModel.Appointment = message.Appointments.ToString();
 
             var dispensary = QueryMessageFromDispensary.Query().Where(it => it.MessageFromDrugShop.Id == message.Id);
             if (dispensary.Any())
