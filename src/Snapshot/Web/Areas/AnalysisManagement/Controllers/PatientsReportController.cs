@@ -46,7 +46,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
         public JsonResult GetPatientsReport(PatientReportIndexModel model)
         {
             var listDataReport = GetDataForReport(model);
-            
+
             return Json(new PatientReportIndexOutputModel
             {
                 Patients = listDataReport.ToArray(),
@@ -280,7 +280,7 @@ namespace Web.Areas.AnalysisManagement.Controllers
 
             var reportData = GetDataForReport(model);
             PatientReportIndexModel outputDataModel = GetFiltersForExcel(model);
-            
+
             StreamWriter writer = new StreamWriter(Response.OutputStream);
 
             writer.WriteLine("Country:\t" + outputDataModel.countryId + "\t \t");
@@ -296,11 +296,14 @@ namespace Web.Areas.AnalysisManagement.Controllers
             writer.WriteLine(" ");
             writer.WriteLine(" ");
 
-            writer.WriteLine("Patient initials\t" + "Patient ID\t" + "Gender\t" + "Age\t" + "Drugshop\t" + "Drugshop Date\t" + "Appointment\t" + "Condition\t" + "Dispensary\t" + "Dispensary Date\t" + "Diagnosis\t" + "Treatment\t" + "Advice\t \t");
+            writer.WriteLine("Patient initials\t" + "Patient ID\t" + "Gender\t" + "Age\t" + "Drugshop\t" + "Drugshop Date\t" + "Appointment\t" + "Condition\t" + "Dispensary\t" + "Dispensary Date\t" + "Diagnosis\t" + "Treatment\t" + "Advice\t" + "Reason for DNA\t \t");
 
             foreach (var item in reportData)
             {
-                writer.WriteLine(item.Initials + "\t" + item.PatientID + "\t" + item.Gender + "\t" + item.Age + "\t" + item.Drugshop + "\t" + item.DrugshopDate + "\t" + item.Appointment + "\t" + item.Condition + "\t" + item.Dispensary + "\t" + item.DispensaryDate + "\t" + item.Diagnosis + "\t" + item.Treatment + "\t" + item.Advice + "\t \t");
+                writer.WriteLine(item.Initials + "\t" + item.PatientID + "\t" + item.Gender + "\t" + item.Age + "\t" + item.Drugshop + "\t" + item.DrugshopDate +
+                                 "\t" +
+                                 item.Appointment + "\t" + item.Condition + "\t" + item.Dispensary + "\t" + item.DispensaryDate + "\t" + item.Diagnosis + "\t" +
+                                 item.Treatment + "\t" + item.Advice + "\t" + item.DidNotAttendReason + "\t \t");
             }
             writer.Close();
 
